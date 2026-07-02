@@ -1,55 +1,66 @@
-// src/components/Shared/DashboardLayout.jsx
-import React, { useState } from 'react';
-import { LayoutDashboard, Wallet, Settings, Menu, X, Bell } from 'lucide-react';
+import { useState } from "react";
+import { Outlet } from "react-router-dom";
 
-export default function DashboardLayout({ children }) {
-  const [isOpen, setIsOpen] = useState(true);
+import Sidebar from "../dashboard/Sidebar";
+import Navbar from "../dashboard/Navbar";
 
-  const menuItems = [
-    { name: 'Overview', icon: <LayoutDashboard size={20} /> },
-    { name: 'Transactions', icon: <Wallet size={20} /> },
-    { name: 'Settings', icon: <Settings size={20} /> },
-  ];
+const DashboardLayout = ({ children }) => {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="flex h-screen bg-gray-50 text-gray-800">
+    <div className="min-h-screen bg-slate-100">
+      {/* Mobile Backdrop */}
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm lg:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+
       {/* Sidebar */}
-      <aside className={`bg-slate-900 text-white w-64 p-4 flex flex-col space-y-6 transition-all ${isOpen ? 'block' : 'hidden'} md:block`}>
-        <div className="flex justify-between items-center px-2">
-          <h1 className="text-xl font-bold tracking-wider text-emerald-400">BizbitsNow+</h1>
-          <button className="md:hidden" onClick={() => setIsOpen(false)}><X size={20} /></button>
-        </div>
-        
-        <nav className="flex-1 space-y-2">
-          {menuItems.map((item, index) => (
-            <a key={index} href="#" className="flex items-center space-x-3 px-4 py-2.5 rounded-lg hover:bg-slate-800 transition duration-200">
-              {item.icon}
-              <span>{item.name}</span>
-            </a>
-          ))}
-        </nav>
+      <aside
+        className={`
+          fixed
+          top-0
+          left-0
+          z-50
+          h-screen
+          w-72
+          transform
+          transition-transform
+          duration-300
+          ease-in-out
+          lg:translate-x-0
+          ${
+            sidebarOpen
+              ? "translate-x-0"
+              : "-translate-x-full"
+          }
+        `}
+      >
+        <Sidebar
+          closeSidebar={() => setSidebarOpen(false)}
+        />
       </aside>
 
-      {/* Main Content Area */}
-      <div className="flex-1 flex flex-col overflow-y-auto">
+      {/* Main Area */}
+      <div className="flex min-h-screen flex-col lg:ml-72">
         {/* Navbar */}
-        <header className="bg-white shadow-sm h-16 flex items-center justify-between px-6 border-b border-gray-100">
-          <button onClick={() => setIsOpen(!isOpen)} className="text-gray-600 focus:outline-none">
-            <Menu size={24} />
-          </button>
-          <div className="flex items-center space-x-4">
-            <Bell size={20} className="text-gray-500 cursor-pointer hover:text-gray-700" />
-            <div className="w-8 h-8 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold">
-              U
-            </div>
-          </div>
+        <header className="sticky top-0 z-30">
+          <Navbar
+            openSidebar={() => setSidebarOpen(true)}
+          />
         </header>
 
-        {/* Dynamic Page Content */}
-        <main className="p-6">
-          {children}
+        {/* Content */}
+        <main className="flex-1 overflow-x-hidden">
+          <div className="mx-auto w-full max-w-[1700px] px-4 py-5 sm:px-6 lg:px-8 xl:px-10">
+{children || <Outlet />}
+          </div>
         </main>
       </div>
     </div>
   );
-}
+};
+
+export default DashboardLayout;

@@ -108,7 +108,7 @@ export default function Login() {
               <div>
                 <label className="text-xs font-bold text-slate-700 uppercase tracking-wider block mb-1.5">Registered Email</label>
                 <div className="relative">
-                  <Mail className="absolute left-3.5 top-3.5 text-gray-400" size={16} />
+                  <Mail className="absolute left-3.5 top-3.5 text-black-400" size={16} />
                   <input 
                     type="email" 
                     name="email" 
@@ -127,7 +127,7 @@ export default function Login() {
                   <label className="text-xs font-bold text-slate-700 uppercase tracking-wider block">Security Access PIN</label>
                 </div>
                 <div className="relative">
-                  <Lock className="absolute left-3.5 top-3.5 text-gray-400" size={16} />
+                  <Lock className="absolute left-3.5 top-3.5 text-black-400" size={16} />
                   <input 
                     type="password" 
                     name="pin" 

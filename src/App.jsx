@@ -3,7 +3,7 @@ import React from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import Login from './pages/Auth/Login';
 import { RegisterSeller } from './pages/Auth/RegisterSeller';
-import SellerDashboard from './pages/Dashboards/SellerDashboard';
+import SellerDashboard from './pages/Dashboards/Seller/SellerDashboard';
 import CustomerDashboard from './pages/Dashboards/CustomerDashboard';
 
 export default function App() {
