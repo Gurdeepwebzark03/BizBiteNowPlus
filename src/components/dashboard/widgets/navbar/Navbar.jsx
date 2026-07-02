@@ -18,36 +18,29 @@ const pageTitles = {
   "/seller/settings": "Settings",
 };
 
-export default function Navbar({
-  openSidebar,
-  collapsed,
-}) {
+export default function Navbar({ openSidebar }) {
   const location = useLocation();
 
   const pageTitle =
     pageTitles[location.pathname] || "Seller Dashboard";
 
   return (
-<header
-  className="
-
-    top-0
-    z-30
-    flex
-    h-[72px]
-    items-center
-    justify-between
-    border-b
-    border-slate-200/70
-    bg-white/80
-    backdrop-blur-[3px]
-    px-4
-    md:px-6
-  "
-  style={{
-    left: collapsed ? "80px" : "288px",
-  }}
->
+    <header
+      className="
+        sticky
+        top-0
+        z-30
+        flex
+        h-[72px]
+        items-center
+        justify-between
+        border-b
+        border-slate-200
+        bg-white
+        px-4
+        md:px-6
+      "
+    >
       {/* Left */}
       <div className="flex items-center gap-4">
 
