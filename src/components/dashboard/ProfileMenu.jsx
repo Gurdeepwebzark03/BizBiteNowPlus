@@ -6,7 +6,7 @@ import {
   LogOut,
   ChevronDown,
 } from "lucide-react";
-
+import { AnimatePresence, motion } from "framer-motion";
 export default function ProfileMenu({
   seller = {
     name: "Gurdeep Singh",
@@ -61,63 +61,82 @@ export default function ProfileMenu({
       </button>
 
       {/* Dropdown */}
-      {open && (
-        <div
-          className="
-            absolute
-            right-0
-            mt-3
-            w-64
-            overflow-hidden
-            rounded-2xl
-            border
-            border-slate-200
-            bg-white
-            shadow-xl
-            z-50
-          "
-        >
-          {/* Header */}
-          <div className="border-b border-slate-200 p-5">
-            <h3 className="font-semibold text-slate-900">
-              {seller.name}
-            </h3>
+     <AnimatePresence>
+  {open && (
+    <motion.div
+      initial={{
+        opacity: 0,
+        y: -10,
+        scale: 0.96,
+      }}
+      animate={{
+        opacity: 1,
+        y: 0,
+        scale: 1,
+      }}
+      exit={{
+        opacity: 0,
+        y: -10,
+        scale: 0.96,
+      }}
+      transition={{
+        duration: 0.2,
+        ease: "easeOut",
+      }}
+      className="
+        absolute
+        right-0
+        mt-3
+        w-64
+        overflow-hidden
+        rounded-2xl
+        border
+        border-slate-200
+        bg-white
+        shadow-xl
+        z-50
+        origin-top-right
+      "
+    >
+      {/* Header */}
+      <div className="border-b border-slate-200 p-5">
+        <h3 className="font-semibold text-slate-900">
+          {seller.name}
+        </h3>
 
-            <p className="mt-1 text-sm text-slate-500">
-              {seller.role}
-            </p>
-          </div>
+        <p className="mt-1 text-sm text-slate-500">
+          {seller.role}
+        </p>
+      </div>
 
-          {/* Menu */}
+      {/* Menu */}
+      <div className="py-2">
+        <MenuItem
+          icon={User}
+          title="My Profile"
+        />
 
-          <div className="py-2">
+        <MenuItem
+          icon={Settings}
+          title="Settings"
+        />
 
-            <MenuItem
-              icon={User}
-              title="My Profile"
-            />
+        <MenuItem
+          icon={HelpCircle}
+          title="Help Center"
+        />
 
-            <MenuItem
-              icon={Settings}
-              title="Settings"
-            />
+        <div className="my-2 border-t border-slate-200" />
 
-            <MenuItem
-              icon={HelpCircle}
-              title="Help Center"
-            />
-
-            <div className="my-2 border-t border-slate-200" />
-
-            <MenuItem
-              icon={LogOut}
-              title="Logout"
-              danger
-            />
-
-          </div>
-        </div>
-      )}
+        <MenuItem
+          icon={LogOut}
+          title="Logout"
+          danger
+        />
+      </div>
+    </motion.div>
+  )}
+</AnimatePresence>
     </div>
   );
 }

@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { Bell } from "lucide-react";
 import NotificationPanel from "./NotificationPanel";
-
+import { AnimatePresence, motion } from "framer-motion";
 import { notifications } from "./notificationData";
 
 export default function NotificationButton() {
@@ -65,7 +65,33 @@ export default function NotificationButton() {
         )}
       </button>
 
-      {open && <NotificationPanel />}
+     <AnimatePresence>
+  {open && (
+    <motion.div
+      initial={{
+        opacity: 0,
+        y: -10,
+        scale: 0.96,
+      }}
+      animate={{
+        opacity: 1,
+        y: 0,
+        scale: 1,
+      }}
+      exit={{
+        opacity: 0,
+        y: -10,
+        scale: 0.96,
+      }}
+      transition={{
+        duration: 0.2,
+      }}
+      className="absolute right-0 top-[calc(100%+12px)] z-50"
+    >
+      <NotificationPanel />
+    </motion.div>
+  )}
+</AnimatePresence>
     </div>
   );
 }
