@@ -2,39 +2,53 @@
 // Seller Dashboard Mock Data
 // Replace with API data later
 // ==============================
+import {
+  IndianRupee,
+  ShoppingCart,
+  Package,
+  Users,
+} from "lucide-react";
 
 export const stats = [
   {
     id: 1,
     title: "Today's Revenue",
     value: "₹18,540",
-    change: "+12.5%",
-    trend: "up",
-    color: "emerald",
+    trend: 12.5,
+    subtitle: "vs yesterday",
+    icon: IndianRupee,
+    iconBg: "bg-green-100",
+    iconColor: "text-green-600",
   },
   {
     id: 2,
     title: "Orders",
     value: "42",
-    change: "+8.2%",
-    trend: "up",
-    color: "blue",
+    trend: 8.2,
+    subtitle: "vs yesterday",
+    icon: ShoppingCart,
+    iconBg: "bg-blue-100",
+    iconColor: "text-blue-600",
   },
   {
     id: 3,
     title: "Products",
     value: "126",
-    change: "+6",
-    trend: "up",
-    color: "amber",
+    trend: 6,
+    subtitle: "this week",
+    icon: Package,
+    iconBg: "bg-amber-100",
+    iconColor: "text-amber-600",
   },
   {
     id: 4,
     title: "Customers",
     value: "318",
-    change: "+15",
-    trend: "up",
-    color: "purple",
+    trend: 15,
+    subtitle: "this month",
+    icon: Users,
+    iconBg: "bg-purple-100",
+    iconColor: "text-purple-600",
   },
 ];
 
@@ -97,22 +111,34 @@ export const topProducts = [
   {
     id: 1,
     name: "Cheese Pizza",
+    image: "https://placehold.co/80x80?text=🍕",
     sold: 182,
+    revenue: 82400,
+    stock: "In Stock",
   },
   {
     id: 2,
     name: "Chicken Burger",
+    image: "https://placehold.co/80x80?text=🍔",
     sold: 154,
+    revenue: 63500,
+    stock: "Low Stock",
   },
   {
     id: 3,
     name: "Veg Wrap",
+    image: "https://placehold.co/80x80?text=🌯",
     sold: 121,
+    revenue: 45600,
+    stock: "In Stock",
   },
   {
     id: 4,
     name: "Cold Coffee",
+    image: "https://placehold.co/80x80?text=☕",
     sold: 118,
+    revenue: 28800,
+    stock: "Out of Stock",
   },
 ];
 

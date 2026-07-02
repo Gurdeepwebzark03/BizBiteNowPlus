@@ -1,13 +1,14 @@
 import DashboardLayout from "../../../components/Shared/DashboardLayout";
 
 // Components
-import StatCard from "../../../components/dashboard/StatCard";
-import SalesChart from "../../../components/dashboard/SalesChart";
-import RecentOrders from "../../../components/dashboard/RecentOrders";
-import TopProducts from "../../../components/dashboard/TopProducts";
-import LowStock from "../../../components/dashboard/LowStock";
-import RecentActivity from "../../../components/dashboard/RecentActivity";
-import QuickActions from "../../../components/dashboard/QuickActions";
+import DashboardHero from "../../../components/dashboard/DashboardHero";
+import StatsCard from "../../../components/dashboard/StatsCard.jsx";
+import SalesChart from "../../../components/dashboard/analytics/SalesChart";
+import RecentOrders from "../../../components/dashboard/widgets/RecentOrders/RecentOrders.jsx";
+import TopProducts from "../../../components/dashboard/widgets/TopProducts/TopProducts.jsx";
+import LowStock from "../../../components/dashboard/widgets/LowStock/LowStock.jsx";
+import RecentActivity from "../../../components/dashboard/widgets/RecentActivity/RecentActivity.jsx";
+import QuickActions from "../../../components/dashboard/widgets/QuickActions/QuickActions.jsx";
 
 // Demo Data
 import {
@@ -20,20 +21,13 @@ export default function SellerDashboard() {
       <div className="space-y-8">
 
         {/* Page Header */}
-        <section>
-          <h1 className="text-3xl lg:text-4xl font-bold text-slate-900">
-            Dashboard
-          </h1>
-
-          <p className="mt-2 text-slate-600">
-            Monitor your business performance, orders, inventory and delivery from one place.
-          </p>
-        </section>
+        <DashboardHero
+        />
 
         {/* Statistics */}
         <section className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
           {stats.map((item) => (
-            <StatCard
+            <StatsCard
               key={item.id}
               {...item}
             />

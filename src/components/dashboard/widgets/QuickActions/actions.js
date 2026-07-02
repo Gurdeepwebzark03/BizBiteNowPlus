@@ -1,0 +1,59 @@
+import {
+  PackagePlus,
+  ShoppingBag,
+  Boxes,
+  ChartColumn,
+  Megaphone,
+  Settings,
+} from "lucide-react";
+
+export const QUICK_ACTIONS = [
+  {
+    id: 1,
+    title: "Add Product",
+    description: "Create a new product",
+    icon: PackagePlus,
+    to: "/seller/products",
+    color: "bg-green-100 text-green-700",
+  },
+  {
+    id: 2,
+    title: "Orders",
+    description: "Manage orders",
+    icon: ShoppingBag,
+    to: "/seller/orders",
+    color: "bg-blue-100 text-blue-700",
+  },
+  {
+    id: 3,
+    title: "Inventory",
+    description: "Update stock",
+    icon: Boxes,
+    to: "/seller/inventory",
+    color: "bg-orange-100 text-orange-700",
+  },
+  {
+    id: 4,
+    title: "Analytics",
+    description: "View reports",
+    icon: ChartColumn,
+    to: "/seller/analytics",
+    color: "bg-purple-100 text-purple-700",
+  },
+  {
+    id: 5,
+    title: "Marketing",
+    description: "Campaigns",
+    icon: Megaphone,
+    to: "/seller/marketing",
+    color: "bg-pink-100 text-pink-700",
+  },
+  {
+    id: 6,
+    title: "Settings",
+    description: "Store settings",
+    icon: Settings,
+    to: "/seller/settings",
+    color: "bg-gray-100 text-gray-700",
+  },
+];

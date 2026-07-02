@@ -1,29 +1,69 @@
+import React from "react";
+
 const Card = ({
+  title,
+  subtitle,
+  action,
+  footer,
   children,
   className = "",
-  hover = true,
+  padding = "p-6",
+  hover = false,
+  bordered = true,
+  shadow = "shadow-sm",
+  onClick,
 }) => {
+  const clickable = !!onClick;
+
   return (
     <div
+      onClick={onClick}
       className={`
-        rounded-3xl
-        border
-        border-white/20
-        bg-white/70
-        backdrop-blur-xl
-        shadow-xl
-        p-6
-        transition-all
-        duration-300
+        bg-white
+        rounded-2xl
+        ${padding}
+        ${shadow}
+        ${bordered ? "border border-gray-200" : ""}
         ${
           hover
-            ? "hover:-translate-y-1 hover:shadow-2xl"
+            ? "transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
             : ""
         }
+        ${clickable ? "cursor-pointer" : ""}
         ${className}
       `}
     >
-      {children}
+      {(title || subtitle || action) && (
+        <div className="flex items-start justify-between mb-5">
+          <div>
+            {title && (
+              <h3 className="text-lg font-semibold text-[#1A4D2E]">
+                {title}
+              </h3>
+            )}
+
+            {subtitle && (
+              <p className="text-sm text-gray-500 mt-1">
+                {subtitle}
+              </p>
+            )}
+          </div>
+
+          {action && (
+            <div className="ml-4">
+              {action}
+            </div>
+          )}
+        </div>
+      )}
+
+      <div>{children}</div>
+
+      {footer && (
+        <div className="mt-6 pt-4 border-t border-gray-200">
+          {footer}
+        </div>
+      )}
     </div>
   );
 };

@@ -1,73 +1,46 @@
-import { useState } from "react";
-import OrderTabs from "../../components/UI/OrdersTab";
-import OrderGrid from "../../components/UI/OrderGrid";
-import useOrders from "../../hooks/useOrders";
-import LoadingOrderCard from "../../components/UI/LoadingCard";
-import OrderCard from "../../components/UI/OrderCard";
-
-import PaginatedList from "../../components/UI/Pagination";
+import React from "react";
+import Card from "../../../components/ui/Card";
 
 const Orders = () => {
-  const [activeTab, setActiveTab] = useState("new");
-
-  const { orders, loading, error, markAsDelivered } = useOrders();
-
-  // helper function to filter todays orders
-  const isToday = (date) => {
-    const today = new Date();
-    const orderDate = new Date(date);
-
-    return (
-      today.getFullYear() === orderDate.getFullYear() &&
-      today.getMonth() === orderDate.getMonth() &&
-      today.getDate() === orderDate.getDate()
-    );
-  };
-
-  // filtering orders as new orders and delivered orders
-  const filteredOrders = orders.filter((order) => {
-    if (activeTab === "new") {
-      return order.status === "NEW";
-    }
-
-    return order.status === "DELIVERED" && isToday(order.createdAt);
-  });
-
-  if (loading) {
-    return (
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
-        {Array.from({ length: 6 }).map((_, index) => (
-          <LoadingOrderCard key={index} />
-        ))}
-      </div>
-    );
-  }
-
-  if (error) {
-    return <p>{error}</p>;
-  }
-
   return (
-    <div className="mx-auto max-w-7xl p-6">
-      <OrderTabs activeTab={activeTab} setActiveTab={setActiveTab} />
-      <div className="mt-6">
-        <PaginatedList
-          data={filteredOrders}
-          renderItem={(order) => (
-            <OrderCard
-              order={order}
-              activeTab={activeTab}
-              markAsDelivered={markAsDelivered}
-            />
-          )}
-        />
+    <div className="space-y-6">
+      {/* Page Header */}
+      <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
+        <div>
+          <h1 className="text-3xl font-bold text-[#1A4D2E]">
+            Orders
+          </h1>
+
+          <p className="mt-1 text-gray-500">
+            Manage customer orders, payments, and deliveries.
+          </p>
+        </div>
       </div>
 
-      {/* <OrderGrid
-        orders={filteredOrders}
-        activeTab={activeTab}
-        markAsDelivered={markAsDelivered}
-      /> */}
+      {/* Statistics */}
+      <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
+        <Card className="h-32 animate-pulse" />
+        <Card className="h-32 animate-pulse" />
+        <Card className="h-32 animate-pulse" />
+        <Card className="h-32 animate-pulse" />
+      </div>
+
+      {/* Filters Placeholder */}
+      <Card>
+        <div className="h-16 animate-pulse rounded-xl bg-gray-100" />
+      </Card>
+
+      {/* Orders Table Placeholder */}
+      <Card>
+        <div className="space-y-3">
+          {[...Array(6)].map((_, index) => (
+            <div
+              key={index}
+              className="h-12 animate-pulse rounded-lg bg-gray-100"
+            />
+          ))}
+        </div>
+      </Card>
     </div>
   );
 };

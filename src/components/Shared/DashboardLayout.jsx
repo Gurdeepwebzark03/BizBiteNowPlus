@@ -2,17 +2,18 @@ import { useState } from "react";
 import { Outlet } from "react-router-dom";
 
 import Sidebar from "../dashboard/Sidebar";
-import Navbar from "../dashboard/Navbar";
+import Navbar from "../dashboard/widgets/navbar/Navbar";
 
 const DashboardLayout = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [collapsed, setCollapsed] = useState(false);
 
   return (
     <div className="min-h-screen bg-slate-100">
-      {/* Mobile Backdrop */}
+      {/* Mobile Overlay */}
       {sidebarOpen && (
         <div
-          className="fixed inset-0 z-40 bg-black/50 backdrop-blur-sm lg:hidden"
+          className="fixed inset-0 z-40 bg-black/40 backdrop-blur-sm lg:hidden"
           onClick={() => setSidebarOpen(false)}
         />
       )}
@@ -21,41 +22,48 @@ const DashboardLayout = ({ children }) => {
       <aside
         className={`
           fixed
-          top-0
+          inset-y-0
           left-0
           z-50
-          h-screen
-          w-72
-          transform
           transition-transform
           duration-300
-          ease-in-out
           lg:translate-x-0
           ${
             sidebarOpen
               ? "translate-x-0"
-              : "-translate-x-full"
+              : "-translate-x-full lg:translate-x-0"
           }
         `}
       >
         <Sidebar
+          collapsed={collapsed}
+          setCollapsed={setCollapsed}
           closeSidebar={() => setSidebarOpen(false)}
         />
       </aside>
 
-      {/* Main Area */}
-      <div className="flex min-h-screen flex-col lg:ml-72">
+      {/* Main Layout */}
+      <div
+        className={`
+          bg-slate-100
+          min-h-screen
+          transition-[margin]
+          duration-300
+          ease-in-out
+          ${collapsed ? "lg:ml-20" : "lg:ml-72"}
+        `}
+      >
         {/* Navbar */}
-        <header className="sticky top-0 z-30">
-          <Navbar
-            openSidebar={() => setSidebarOpen(true)}
-          />
-        </header>
+        <Navbar
+          className="position-fixed border-b border-slate-200 bg-white"
+          collapsed={collapsed}
+          openSidebar={() => setSidebarOpen(true)}
+        />
 
         {/* Content */}
-        <main className="flex-1 overflow-x-hidden">
-          <div className="mx-auto w-full max-w-[1700px] px-4 py-5 sm:px-6 lg:px-8 xl:px-10">
-{children || <Outlet />}
+        <main className="p-4 sm:p-6 lg:p-8">
+          <div className="mx-auto max-w-[1700px]">
+            {children || <Outlet />}
           </div>
         </main>
       </div>
