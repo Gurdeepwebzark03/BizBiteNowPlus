@@ -111,7 +111,7 @@ export default function Sidebar({ collapsed, setCollapsed }) {
           <SidebarItem
             title="Storefront"
             icon={Store}
-            to="/seller/store"
+            to="/seller/storefront"
             collapsed={collapsed}
           />
 

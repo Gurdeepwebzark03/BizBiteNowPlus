@@ -1,6 +1,10 @@
-import { Plus, Download, Upload } from "lucide-react";
+import {
+  Plus,
+  Download,
+  Upload,
+} from "lucide-react";
 
-export default function ProductsHeader() {
+export default function ProductsHeader({ onAdd }) {
   return (
     <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
       {/* Left */}
@@ -16,6 +20,7 @@ export default function ProductsHeader() {
 
       {/* Right */}
       <div className="flex flex-wrap items-center gap-3">
+
         <button
           className="
             inline-flex
@@ -61,6 +66,7 @@ export default function ProductsHeader() {
         </button>
 
         <button
+          onClick={onAdd}
           className="
             inline-flex
             items-center
@@ -79,6 +85,7 @@ export default function ProductsHeader() {
           <Plus size={18} />
           Add Product
         </button>
+
       </div>
     </div>
   );

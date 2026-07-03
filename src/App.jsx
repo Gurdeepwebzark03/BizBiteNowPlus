@@ -2,7 +2,7 @@ import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 
 import Login from "./pages/Auth/Login";
-import { RegisterSeller } from "./pages/Auth/RegisterSeller";
+import RegisterSeller from "./pages/Auth/RegisterSeller";
 import DashboardLayout from "./components/Shared/DashboardLayout";
 import Orders from "./pages/Dashboards/Seller/Orders";
 import OrderDetails from "./pages/Dashboards/Seller/OrderDetails";
@@ -12,7 +12,9 @@ import Earnings from "./pages/Dashboards/Seller/Earnings";
 import Profile from "./pages/Dashboards/Seller/profile";
 import Products from "./pages/Dashboards/Seller/Products";
 import Settings from "./pages/Dashboards/Seller/Settings";
+import RegisterSuccess from "./pages/Auth/RegisterSuccess";
 
+import Analytics from "./pages/Dashboards/Seller/Analytics";
 // Future Modules
 // import Orders from "./pages/Dashboards/Seller/Orders";
 // import Customers from "./pages/Dashboards/Seller/Customers";
@@ -26,26 +28,25 @@ export default function App() {
         <Route path="/" element={<Navigate to="/login" replace />} />
 
         {/* Authentication */}
-        <Route path="/login" element={<Login />} />
-        <Route path="/register/seller" element={<RegisterSeller />} />
+        <Route path="/seller/login" element={<Login />} />
+        <Route path="/seller/register" element={<RegisterSeller />} />
+        <Route path="/seller/register-success" element={<RegisterSuccess />} />
 
         {/* Customer */}
-        <Route path="/storefront" element={<CustomerDashboard />} />
+     
 
         {/* Seller Dashboard */}
 
-<Route path="/seller" element={<DashboardLayout />}>
-  {/* Redirect /seller → /seller/dashboard */}
-  <Route index element={<Navigate to="dashboard" replace />} />
-
-  <Route path="dashboard" element={<SellerDashboard />} />
-  <Route path="orders" element={<Orders />} />
-  <Route path="orders/:orderId" element={<OrderDetails />} />
-  <Route path="settings" element={<Settings />} />
-  <Route path="products" element={<Products />} />
-  <Route path="earnings" element={<Earnings />} />
-  <Route path="profile" element={<Profile />} />
-</Route>
+        <Route path="/seller" element={<DashboardLayout />}>
+          <Route index element={<Navigate to="dashboard" replace />} />
+          <Route path="dashboard" element={<SellerDashboard />} />
+          <Route path="orders" element={<Orders />} />
+          <Route path="orders/:orderId" element={<OrderDetails />} />
+          <Route path="settings" element={<Settings />} />
+          <Route path="products" element={<Products />} />
+          <Route path="analytics" element={<Analytics />} />
+          <Route path="profile" element={<Profile />} />
+        </Route>
         {/* Registration Success */}
         <Route
           path="/register-success"
@@ -91,7 +92,7 @@ export default function App() {
         />
 
         {/* 404 */}
-        <Route path="*" element={<Navigate to="/login" replace />} />
+        <Route path="*" element={<Navigate to="/seller/register" replace />} />
       </Routes>
     </div>
   );

@@ -1,15 +1,14 @@
 import { Search, LayoutGrid, List } from "lucide-react";
 import { categories } from "../../data/productsData";
-import { useState } from "react";
 
 export default function ProductFilters({
   search,
   setSearch,
   category,
   setCategory,
+  view,
+  setView,
 }) {
-  const [view, setView] = useState("grid");
-
   return (
     <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
@@ -71,10 +70,7 @@ export default function ProductFilters({
             "
           >
             {categories.map((item) => (
-              <option
-                key={item}
-                value={item}
-              >
+              <option key={item} value={item}>
                 {item}
               </option>
             ))}
@@ -131,6 +127,7 @@ export default function ProductFilters({
           </button>
 
         </div>
+
       </div>
     </div>
   );
