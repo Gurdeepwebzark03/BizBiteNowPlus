@@ -17,7 +17,7 @@ export default function Products() {
   const [category, setCategory] = useState("All");
 
   return (
-    <DashboardLayout>
+  
       <div className="space-y-8">
 
         <ProductsHeader />
@@ -38,6 +38,6 @@ export default function Products() {
         />
 
       </div>
-    </DashboardLayout>
+
   );
 }

@@ -1,80 +1,39 @@
-import { Settings as SettingsIcon, ShieldCheck } from "lucide-react";
+import PageHeader from "../../../components/dashboard/PageHeader";
+import StoreProfileCard from "../../../components/dashboard/settings/StoreProfileCard";
+import BusinessInformationCard from "../../../components/dashboard/settings/BusinessInformationCard";
+import ContactInformationCard from "../../../components/dashboard/settings/ContactInformationCard";
+import BusinessHoursCard from "../../../components/dashboard/settings/BusinessHoursCard";
+import DeliverySettingsCard from "../../../components/dashboard/settings/DeliverySettingsCard";
+import PaymentSettingsCard from "../../../components/dashboard/settings/PaymentSettingsCard";
+import TaxComplianceCard from "../../../components/dashboard/settings/TaxComplianceCard";
+import NotificationsCard from "../../../components/dashboard/settings/NotificationsCard";
+import SecurityCard from "../../../components/dashboard/settings/SecurityCard";
 
-import Card from "../../components/UI/Card";
-import SectionTitle from "../../components/UI/SectionTitle";
-import { motion } from "framer-motion";
-import StoreInformation from "../../components/settings/StoreInformation";
-import StoreStatus from "../../components/settings/StoreStatus";
-import Branding from "../../components/settings/Branding";
-import Security from "../../components/settings/Security";
-
-const Settings = () => {
+export default function Settings() {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 15 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4 }}
-    >
-      <div className="space-y-8">
-        {/* Hero Banner */}
+    <div className="space-y-8">
+      <PageHeader
+        title="Store Settings"
+        subtitle="Manage every aspect of your restaurant from one place."
+      />
 
-        <Card
-          hover={false}
-          className="relative overflow-hidden bg-gradient-to-r from-[#1A4D2E] via-[#205C38] to-[#2D6A4F] text-white border-none"
-        >
-          <div className="absolute -top-20 -right-20 w-72 h-72 rounded-full bg-white/10 blur-3xl"></div>
+      <StoreProfileCard />
 
-          <div className="absolute -bottom-20 -left-20 w-72 h-72 rounded-full bg-white/5 blur-3xl"></div>
+      <BusinessInformationCard />
 
-          <div className="relative flex flex-col lg:flex-row justify-between gap-8">
-            <div>
-              <div className="flex items-center gap-3 mb-5">
-                <SettingsIcon size={34} />
+      <ContactInformationCard />
 
-                <h1 className="text-4xl font-bold">Store Settings</h1>
-              </div>
+      <BusinessHoursCard />
 
-              <p className="text-green-100 max-w-2xl leading-7">
-                Manage your store information, branding, business status and
-                account security from one place.
-              </p>
-            </div>
+      <DeliverySettingsCard />
 
-            <div className="flex items-center">
-              <div className="rounded-2xl border border-white/20 bg-white/15 backdrop-blur-lg p-5">
-                <div className="flex items-center gap-3">
-                  <ShieldCheck className="text-emerald-300" />
+      <PaymentSettingsCard />
 
-                  <div>
-                    <p className="text-sm text-green-100">Account Status</p>
+      <TaxComplianceCard />
 
-                    <h3 className="text-xl font-bold">Verified</h3>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </Card>
+      <NotificationsCard />
 
-        <SectionTitle
-          title="Settings"
-          subtitle="Manage your store information and account preferences."
-        />
-
-        <div className="grid xl:grid-cols-3 gap-6">
-          <div className="xl:col-span-2">
-            <StoreInformation />
-          </div>
-
-          <StoreStatus />
-        </div>
-
-        <Branding />
-
-        <Security />
-      </div>
-    </motion.div>
+      <SecurityCard />
+    </div>
   );
-};
-
-export default Settings;
+}

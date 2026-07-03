@@ -1,28 +1,31 @@
-import React from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import React from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
 
-import Login from './pages/Auth/Login';
-import { RegisterSeller } from './pages/Auth/RegisterSeller';
+import Login from "./pages/Auth/Login";
+import { RegisterSeller } from "./pages/Auth/RegisterSeller";
+import DashboardLayout from "./components/Shared/DashboardLayout";
+import Orders from "./pages/Dashboards/Seller/Orders";
+import OrderDetails from "./pages/Dashboards/Seller/OrderDetails";
+import SellerDashboard from "./pages/Dashboards/Seller/SellerDashboard";
+import CustomerDashboard from "./pages/Dashboards/CustomerDashboard";
+import Earnings from "./pages/Dashboards/Seller/Earnings";
+import Profile from "./pages/Dashboards/Seller/profile";
+import Products from "./pages/Dashboards/Seller/Products";
+import Settings from "./pages/Dashboards/Seller/Settings";
 
-import SellerDashboard from './pages/Dashboards/Seller/SellerDashboard';
-import CustomerDashboard from './pages/Dashboards/CustomerDashboard';
-
-// Seller Modules
-import Product from './pages/Dashboards/Seller/Products'  ;
-// import Orders from './pages/Dashboards/Seller/Orders';
-// import Customers from './pages/Dashboards/Seller/Customers';
-// import Analytics from './pages/Dashboards/Seller/Analytics';
-// import Settings from './pages/Dashboards/Seller/Settings';
+// Future Modules
+// import Orders from "./pages/Dashboards/Seller/Orders";
+// import Customers from "./pages/Dashboards/Seller/Customers";
+// import Analytics from "./pages/Dashboards/Seller/Analytics";
 
 export default function App() {
   return (
     <div className="w-full min-h-screen bg-slate-950 m-0 p-0 box-border overflow-x-hidden">
       <Routes>
-
         {/* Default */}
         <Route path="/" element={<Navigate to="/login" replace />} />
 
-        {/* Auth */}
+        {/* Authentication */}
         <Route path="/login" element={<Login />} />
         <Route path="/register/seller" element={<RegisterSeller />} />
 
@@ -30,18 +33,19 @@ export default function App() {
         <Route path="/storefront" element={<CustomerDashboard />} />
 
         {/* Seller Dashboard */}
-        <Route path="/seller-dashboard" element={<SellerDashboard />}>
-          <Route index element={<Navigate to="products" replace />} />
 
-          <Route path="products" element={<Product />} />
+<Route path="/seller" element={<DashboardLayout />}>
+  {/* Redirect /seller → /seller/dashboard */}
+  <Route index element={<Navigate to="dashboard" replace />} />
 
-          {/* Uncomment when created */}
-          {/* <Route path="orders" element={<Orders />} /> */}
-          {/* <Route path="customers" element={<Customers />} /> */}
-          {/* <Route path="analytics" element={<Analytics />} /> */}
-          {/* <Route path="settings" element={<Settings />} /> */}
-        </Route>
-
+  <Route path="dashboard" element={<SellerDashboard />} />
+  <Route path="orders" element={<Orders />} />
+  <Route path="orders/:orderId" element={<OrderDetails />} />
+  <Route path="settings" element={<Settings />} />
+  <Route path="products" element={<Products />} />
+  <Route path="earnings" element={<Earnings />} />
+  <Route path="profile" element={<Profile />} />
+</Route>
         {/* Registration Success */}
         <Route
           path="/register-success"
@@ -60,7 +64,7 @@ export default function App() {
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                      d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 1118 0 9 9 0 0118 0z"
                     />
                   </svg>
                 </div>
@@ -71,8 +75,7 @@ export default function App() {
                   </h3>
 
                   <p className="text-slate-400 font-medium">
-                    Aapka account pipeline setup backend se successfully
-                    handshake kar chuka hai.
+                    Your seller account has been created successfully.
                   </p>
                 </div>
 
@@ -89,7 +92,6 @@ export default function App() {
 
         {/* 404 */}
         <Route path="*" element={<Navigate to="/login" replace />} />
-
       </Routes>
     </div>
   );

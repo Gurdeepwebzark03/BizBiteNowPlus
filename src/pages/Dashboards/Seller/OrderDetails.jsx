@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
-import Card from "../../components/UI/Card";
-import Button from "../../components/UI/Button";
+import Card from "../../../components/UI/Card";
+import Button from "../../../components/UI/Button";
 import {
   ArrowLeft,
   User,
