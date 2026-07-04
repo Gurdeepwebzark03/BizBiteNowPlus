@@ -37,6 +37,7 @@ export default function App() {
         {/* Default */}
         <Route path="/" element={<Navigate to="/storefront" replace />} />
 
+
         {/* Authentication */}
         <Route path="/seller/login" element={<Login />} />
         <Route path="/seller/register" element={<RegisterSeller />} />

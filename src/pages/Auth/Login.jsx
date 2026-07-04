@@ -27,42 +27,69 @@ export default function Login() {
       [e.target.name]: e.target.value,
     });
   };
-
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    setError("");
-    setLoading(true);
+  setError("");
+  setLoading(true);
 
-    try {
-      const response = await API.post("/seller/login", {
-        email: formData.email,
-        pin: formData.pin,
-        fcm_token: formData.fcm_token,
-      });
+  // Demo login
+  setTimeout(() => {
+    const demoSeller = {
+      id: 1,
+      name: "Demo Seller",
+      email: formData.email || "demo@bizbitenow.com",
+      role: "SELLER",
+      shopName: "Demo Restaurant",
+    };
 
-      if (response.data.token && response.data.seller) {
-        localStorage.setItem("token", response.data.token);
-        localStorage.setItem(
-          "user",
-          JSON.stringify(response.data.seller)
-        );
+    const demoToken = "demo-token-123456";
 
-        login(response.data.seller, response.data.token);
+    localStorage.setItem("token", demoToken);
+    localStorage.setItem("user", JSON.stringify(demoSeller));
 
-        setLoading(false);
+    login(demoSeller, demoToken);
 
-        navigate("/seller-dashboard");
-      }
-    } catch (err) {
-      setLoading(false);
+    setLoading(false);
+    navigate("/seller/dashboard");
+  }, 800);
+};
 
-      setError(
-        err.response?.data?.message ||
-          "Invalid Credentials! Access Gateway pipeline declined."
-      );
-    }
-  };
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+
+  //   setError("");
+  //   setLoading(true);
+
+  //   try {
+  //     const response = await API.post("/seller/login", {
+  //       email: formData.email,
+  //       pin: formData.pin,
+  //       fcm_token: formData.fcm_token,
+  //     });
+
+  //     if (response.data.token && response.data.seller) {
+  //       localStorage.setItem("token", response.data.token);
+  //       localStorage.setItem(
+  //         "user",
+  //         JSON.stringify(response.data.seller)
+  //       );
+
+  //       login(response.data.seller, response.data.token);
+
+  //       setLoading(false);
+
+  //       navigate("/seller-dashboard");
+  //     }
+  //   } catch (err) {
+  //     setLoading(false);
+
+  //     setError(
+  //       err.response?.data?.message ||
+  //         "Invalid Credentials! Access Gateway pipeline declined."
+  //     );
+  //   }
+  // };
 
 
   return (
