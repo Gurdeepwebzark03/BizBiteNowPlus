@@ -3,7 +3,7 @@ import { Mail, Lock, ArrowRight, KeyRound } from 'lucide-react';
 import { useNavigate, Link } from 'react-router-dom';
 import logoHorizontal from '../../assets/bizbite_logo_horizontal.png';
 import { useAuth } from '../../context/AuthContext';
-import API from '../../api/axios';
+// import API from '../../api/axios';
 
 export default function Login() {
   const navigate = useNavigate();
@@ -23,34 +23,29 @@ export default function Login() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError('');
-    setLoading(true);
+  e.preventDefault();
+  setError("");
+  setLoading(true);
 
-    try {
-      // 🌐 Live hitting: http://localhost:3000/api/seller/login
-      const response = await API.post('/seller/login', {
-        email: formData.email,
-        pin: formData.pin,
-        fcm_token: formData.fcm_token
-      });
-      
-      if (response.data.token && response.data.seller) {
-        // 🔑 Pipeline synchronization
-        localStorage.setItem('token', response.data.token);
-        localStorage.setItem('user', JSON.stringify(response.data.seller));
-        
-        // Context configuration lock
-        login(response.data.seller, response.data.token);
-        
-        setLoading(false);
-        navigate('/seller-dashboard');
-      }
-    } catch (err) {
-      setLoading(false);
-      setError(err.response?.data?.message || 'Invalid Credentials! Access Gateway pipeline declined.');
-    }
-  };
+  // Fake loading
+  setTimeout(() => {
+    const demoUser = {
+      id: 1,
+      name: "Demo Seller",
+      email: formData.email || "demo@bizbitenow.com",
+      role: "SELLER",
+      shopName: "Demo Restaurant",
+    };
+
+    const demoToken = "demo-jwt-token-123456";
+
+    localStorage.setItem("token", demoToken);
+    localStorage.setItem("user", JSON.stringify(demoUser));
+
+    setLoading(false);
+    navigate("/seller-dashboard");
+  }, 800);
+};
 
   return (
     <div className="min-h-screen w-full bg-slate-900 flex items-center justify-center m-0 p-0 overflow-x-hidden">

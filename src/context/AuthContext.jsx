@@ -1,55 +1,100 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import API from '../api/axios';
+import React, { createContext, useContext, useState, useEffect } from "react";
 
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [token, setToken] = useState(localStorage.getItem('token') || null);
-  const [authLoading, setAuthLoading] = useState(true);
+  const [user, setUser] = useState(
+    JSON.parse(localStorage.getItem("user")) || null
+  );
+
+  const [token, setToken] = useState(
+    localStorage.getItem("token") || null
+  );
+
+  const [authLoading, setAuthLoading] = useState(false);
 
   useEffect(() => {
     if (token) {
-      localStorage.setItem('token', token);
-      // Inject token into every axios request automatically
-      API.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      localStorage.setItem("token", token);
     } else {
-      localStorage.removeItem('token');
-      delete API.defaults.headers.common['Authorization'];
+      localStorage.removeItem("token");
     }
-    setAuthLoading(false);
-  }, [token]);
 
-  const loginSessionEngine = async (phone, password) => {
-    // API match with backend auth controller keys
-    const res = await API.post('/auth/login', { phone, password });
-    if (res.data?.token) {
-      setToken(res.data.token);
-      setUser(res.data.user);
-      return res.data;
+    if (user) {
+      localStorage.setItem("user", JSON.stringify(user));
+    } else {
+      localStorage.removeItem("user");
     }
-    throw new Error("Invalid credentials payload match failure.");
+  }, [user, token]);
+
+  // Demo Login
+  const login = (userData, tokenData) => {
+    setUser(userData);
+    setToken(tokenData);
   };
 
+  // Dummy Login API
+  const loginSessionEngine = async (email, pin) => {
+    const demoUser = {
+      id: 1,
+      name: "Demo Seller",
+      email,
+      role: "SELLER",
+      shopName: "Demo Restaurant",
+    };
+
+    const demoToken = "demo-jwt-token";
+
+    login(demoUser, demoToken);
+
+    return {
+      token: demoToken,
+      user: demoUser,
+    };
+  };
+
+  // Dummy Register
   const registerSellerSessionEngine = async (payload) => {
-    const res = await API.post('/auth/register/seller', payload);
-    if (res.data?.token) {
-      setToken(res.data.token);
-      setUser(res.data.user);
-      return res.data;
-    }
-    return res.data;
+    const demoUser = {
+      id: 2,
+      name: payload.name || "Demo Seller",
+      email: payload.email,
+      role: "SELLER",
+      shopName: payload.shopName || "Demo Shop",
+    };
+
+    const demoToken = "demo-register-token";
+
+    login(demoUser, demoToken);
+
+    return {
+      success: true,
+      token: demoToken,
+      user: demoUser,
+    };
   };
 
   const logout = () => {
-    setToken(null);
     setUser(null);
-    localStorage.removeItem('token');
+    setToken(null);
+
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, loginSessionEngine, registerSellerSessionEngine, logout, authLoading }}>
-      {!authLoading && children}
+    <AuthContext.Provider
+      value={{
+        user,
+        token,
+        login,
+        loginSessionEngine,
+        registerSellerSessionEngine,
+        logout,
+        authLoading,
+      }}
+    >
+      {children}
     </AuthContext.Provider>
   );
 };
