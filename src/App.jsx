@@ -13,7 +13,12 @@ import Profile from "./pages/Dashboards/Seller/profile";
 import Products from "./pages/Dashboards/Seller/Products";
 import Settings from "./pages/Dashboards/Seller/Settings";
 import RegisterSuccess from "./pages/Auth/RegisterSuccess";
+
+import DeliveryDashboard from "./pages/Dashboards/DeliveryDashboard/DeliveryDashboard"
+
+=======
 import FestiveMenu from "./pages/Dashboards/Seller/FestiveMenu";
+
 import Analytics from "./pages/Dashboards/Seller/Analytics";
 
 import StoreFront from "./pages/customer/StoreFront";
@@ -111,6 +116,7 @@ export default function App() {
           <Route path="dashboard" element={<SellerDashboard />} />
           <Route path="orders" element={<Orders />} />
           <Route path="orders/:orderId" element={<OrderDetails />} />
+          <Route path="delivery" element={<DeliveryDashboard />} />
           <Route path="settings" element={<Settings />} />
           <Route path="products" element={<Products />} />
           <Route path="analytics" element={<Analytics />} />
