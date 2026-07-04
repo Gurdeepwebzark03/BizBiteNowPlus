@@ -15,7 +15,7 @@ import Settings from "./pages/Dashboards/Seller/Settings";
 import RegisterSuccess from "./pages/Auth/RegisterSuccess";
 import FestiveMenu from "./pages/Dashboards/Seller/FestiveMenu";
 import Analytics from "./pages/Dashboards/Seller/Analytics";
-
+import CreateFestiveMenu from "./pages/Dashboards/Seller/CreateFestiveMenu";
 import StoreFront from "./pages/customer/StoreFront";
 import AllMenu from "./pages/customer/AllMenu";
 import Cart from "./pages/customer/Cart";

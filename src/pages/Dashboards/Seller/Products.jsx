@@ -1,7 +1,5 @@
 import { useState } from "react";
 
-import DashboardLayout from "../../../components/Shared/DashboardLayout";
-
 import ProductsHeader from "../../../components/products/ProductsHeader";
 import ProductStats from "../../../components/products/ProductStats";
 import ProductFilters from "../../../components/products/ProductFilters";
@@ -18,8 +16,8 @@ import {
 export default function Products() {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
+  const [status, setStatus] = useState("All");
 
-  // Shared Grid/List view state
   const [view, setView] = useState("grid");
 
   const [selectedProduct, setSelectedProduct] = useState(null);
@@ -30,11 +28,10 @@ export default function Products() {
 
   const [modalMode, setModalMode] = useState("add");
 
-  // Later this will come from API
   const [productList, setProductList] = useState(products);
 
   // =========================
-  // View Product
+  // View
   // =========================
 
   const handleView = (product) => {
@@ -43,7 +40,7 @@ export default function Products() {
   };
 
   // =========================
-  // Add Product
+  // Add
   // =========================
 
   const handleAdd = () => {
@@ -53,7 +50,7 @@ export default function Products() {
   };
 
   // =========================
-  // Edit Product
+  // Edit
   // =========================
 
   const handleEdit = (product) => {
@@ -63,7 +60,7 @@ export default function Products() {
   };
 
   // =========================
-  // Delete Product
+  // Delete
   // =========================
 
   const handleDelete = (product) => {
@@ -73,14 +70,19 @@ export default function Products() {
 
   const confirmDelete = () => {
     setProductList((prev) =>
-      prev.filter((item) => item.id !== selectedProduct.id)
+      prev.filter(
+        (item) => item.id !== selectedProduct.id
+      )
     );
 
     setDeleteOpen(false);
     setSelectedProduct(null);
   };
 
-  // Filtered Products
+  // =========================
+  // Filters
+  // =========================
+
   const filteredProducts = productList.filter((product) => {
     const matchesSearch = product.name
       .toLowerCase()
@@ -90,61 +92,67 @@ export default function Products() {
       category === "All" ||
       product.category === category;
 
-    return matchesSearch && matchesCategory;
+    const matchesStatus =
+      status === "All" ||
+      product.status === status;
+
+    return (
+      matchesSearch &&
+      matchesCategory &&
+      matchesStatus
+    );
   });
-console.log(filteredProducts);
-console.log(productList);
+
   return (
-    
-      <div className="space-y-8">
-        <ProductsHeader
-          onAdd={handleAdd}
-        />
+    <div className="space-y-8">
 
-        <ProductStats
-          stats={productStats}
-        />
+      <ProductsHeader
+        onAdd={handleAdd}
+      />
 
-        <ProductFilters
-          search={search}
-          setSearch={setSearch}
-          category={category}
-          setCategory={setCategory}
-          view={view}
-          setView={setView}
-        />
+      <ProductStats
+        stats={productStats}
+      />
 
-        <ProductGrid
-          products={filteredProducts}
-          view={view}
-          onView={handleView}
-          onEdit={handleEdit}
-          onDelete={handleDelete}
-        />
+      <ProductFilters
+        search={search}
+        setSearch={setSearch}
+        category={category}
+        setCategory={setCategory}
+        status={status}
+        setStatus={setStatus}
+        view={view}
+        setView={setView}
+      />
 
-        {/* Product Details */}
-        <ProductDrawer
-          open={drawerOpen}
-          onClose={() => setDrawerOpen(false)}
-          product={selectedProduct}
-        />
+      <ProductGrid
+        products={filteredProducts}
+        view={view}
+        onView={handleView}
+        onEdit={handleEdit}
+        onDelete={handleDelete}
+      />
 
-        {/* Add / Edit Product */}
-        <ProductModal
-          open={modalOpen}
-          onClose={() => setModalOpen(false)}
-          mode={modalMode}
-          product={selectedProduct}
-        />
+      <ProductDrawer
+        open={drawerOpen}
+        onClose={() => setDrawerOpen(false)}
+        product={selectedProduct}
+      />
 
-        {/* Delete Product */}
-        <DeleteProductModal
-          open={deleteOpen}
-          onClose={() => setDeleteOpen(false)}
-          onDelete={confirmDelete}
-          product={selectedProduct}
-        />
-      </div>
-    
+      <ProductModal
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        mode={modalMode}
+        product={selectedProduct}
+      />
+
+      <DeleteProductModal
+        open={deleteOpen}
+        onClose={() => setDeleteOpen(false)}
+        onDelete={confirmDelete}
+        product={selectedProduct}
+      />
+
+    </div>
   );
 }
