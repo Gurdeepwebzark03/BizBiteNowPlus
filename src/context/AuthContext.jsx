@@ -60,17 +60,13 @@ export const AuthProvider = ({ children }) => {
     throw new Error("Invalid credentials.");
   };
 
-  // =========================
-  // Backend Register
-  // =========================
   const registerSellerSessionEngine = async (payload) => {
-    const res = await API.post("/auth/register/seller", payload);
-
+    const res = await API.post('/auth/register/seller', payload);
     if (res.data?.token) {
-      login(res.data.user, res.data.token);
+      setToken(res.data.token);
+      setUser(res.data.user);
       return res.data;
     }
-
     return res.data;
   };
 
@@ -80,25 +76,12 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     setUser(null);
     setToken(null);
-
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
-
-    delete API.defaults.headers.common.Authorization;
+    setUser(null);
+    localStorage.removeItem('token');
   };
 
   return (
-    <AuthContext.Provider
-      value={{
-        user,
-        token,
-        login,
-        loginSessionEngine,
-        registerSellerSessionEngine,
-        logout,
-        authLoading,
-      }}
-    >
+    <AuthContext.Provider value={{ user, token, loginSessionEngine, registerSellerSessionEngine, logout, authLoading }}>
       {!authLoading && children}
     </AuthContext.Provider>
   );

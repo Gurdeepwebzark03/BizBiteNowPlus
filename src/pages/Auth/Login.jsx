@@ -5,6 +5,7 @@ import logoHorizontal from "../../assets/bizbite_logo_horizontal.png";
 import { useAuth } from "../../context/AuthContext";
 import { motion } from "framer-motion";
 
+
 export default function Login() {
   const navigate = useNavigate();
   const { login } = useAuth();
@@ -26,33 +27,41 @@ export default function Login() {
     });
   };
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
   setError("");
   setLoading(true);
 
-  // Simulate API delay
-  await new Promise((resolve) => setTimeout(resolve, 1000));
+    try {
+      const response = await API.post("/seller/login", {
+        email: formData.email,
+        pin: formData.pin,
+        fcm_token: formData.fcm_token,
+      });
 
-  const mockSeller = {
-    id: 1,
-    name: "Gurdeep Singh",
-    role: "Plus Seller",
-    email: formData.email,
+      if (response.data.token && response.data.seller) {
+        localStorage.setItem("token", response.data.token);
+        localStorage.setItem(
+          "user",
+          JSON.stringify(response.data.seller)
+        );
+
+        login(response.data.seller, response.data.token);
+
+        setLoading(false);
+
+        navigate("/seller-dashboard");
+      }
+    } catch (err) {
+      setLoading(false);
+
+      setError(
+        err.response?.data?.message ||
+          "Invalid Credentials! Access Gateway pipeline declined."
+      );
+    }
   };
-
-  const mockToken = "mock_seller_token";
-
-  localStorage.setItem("token", mockToken);
-  localStorage.setItem("user", JSON.stringify(mockSeller));
-
-  login(mockSeller, mockToken);
-
-  setLoading(false);
-
-  navigate("/seller/dashboard");
-};
 
   return (
     <div className="relative h-screen overflow-hidden bg-gradient-to-br from-[#0b2b18] via-[#16522d] to-[#07140d]">

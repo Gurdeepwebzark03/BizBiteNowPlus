@@ -7,23 +7,37 @@ import DashboardLayout from "./components/Shared/DashboardLayout";
 import Orders from "./pages/Dashboards/Seller/Orders";
 import OrderDetails from "./pages/Dashboards/Seller/OrderDetails";
 import SellerDashboard from "./pages/Dashboards/Seller/SellerDashboard";
-import CustomerDashboard from "./pages/Dashboards/CustomerDashboard";
-import Earnings from "./pages/Dashboards/Seller/Earnings";
+// import CustomerDashboard from "./pages/Dashboards/CustomerDashboard";
+// import Earnings from "./pages/Dashboards/Seller/Earnings";
 import Profile from "./pages/Dashboards/Seller/profile";
 import Products from "./pages/Dashboards/Seller/Products";
 import Settings from "./pages/Dashboards/Seller/Settings";
 import RegisterSuccess from "./pages/Auth/RegisterSuccess";
 import FestiveMenu from "./pages/Dashboards/Seller/FestiveMenu";
 import Analytics from "./pages/Dashboards/Seller/Analytics";
-import CreateFestiveMenu from "./pages/Dashboards/Seller/CreateFestiveMenu";
 
+import StoreFront from "./pages/customer/StoreFront";
+import AllMenu from "./pages/customer/AllMenu";
+import Cart from "./pages/customer/Cart";
+import ProductDetail from "./pages/customer/ProductDetail";
+import Checkout from "./pages/customer/Checkout";
+import OrderConfirmation from "./pages/customer/OrderConfirmation";
+import CustomerProfile from "./pages/customer/Profile";
+import CustomerOnboarding from "./pages/customer/CustomerOnboarding";
+import CustomerGate from "./components/customer/CustomerGate";
+
+// Future Modules
+// import Orders from './pages/Dashboards/Seller/Orders';
+// import Customers from './pages/Dashboards/Seller/Customers';
+// import Analytics from './pages/Dashboards/Seller/Analytics';
 
 export default function App() {
   return (
     <div className="w-full min-h-screen bg-slate-950 m-0 p-0 box-border overflow-x-hidden">
       <Routes>
         {/* Default */}
-        <Route path="/" element={<Navigate to="/login" replace />} />
+        <Route path="/" element={<Navigate to="/storefront" replace />} />
+
 
         {/* Authentication */}
         <Route path="/seller/login" element={<Login />} />
@@ -31,7 +45,64 @@ export default function App() {
         <Route path="/seller/register-success" element={<RegisterSuccess />} />
 
         {/* Customer */}
-     
+
+        <Route path="/customer/onboarding" element={<CustomerOnboarding />} />
+        <Route
+          path="/storefront"
+          element={
+            <CustomerGate>
+              <StoreFront />
+            </CustomerGate>
+          }
+        />
+        <Route
+          path="/menu"
+          element={
+            <CustomerGate>
+              <AllMenu />
+            </CustomerGate>
+          }
+        />
+        <Route
+          path="/cart"
+          element={
+            <CustomerGate>
+              <Cart />
+            </CustomerGate>
+          }
+        />
+        <Route
+          path="/product/:id"
+          element={
+            <CustomerGate>
+              <ProductDetail />
+            </CustomerGate>
+          }
+        />
+        <Route
+          path="/checkout"
+          element={
+            <CustomerGate>
+              <Checkout />
+            </CustomerGate>
+          }
+        />
+        <Route
+          path="/order/:id"
+          element={
+            <CustomerGate>
+              <OrderConfirmation />
+            </CustomerGate>
+          }
+        />
+        <Route
+          path="/customer/profile"
+          element={
+            <CustomerGate>
+              <CustomerProfile />
+            </CustomerGate>
+          }
+        />
 
         {/* Seller Dashboard */}
 
@@ -61,8 +132,7 @@ export default function App() {
                     viewBox="0 0 24 24"
                     strokeWidth={2.5}
                     stroke="currentColor"
-                    className="w-7 h-7"
-                  >
+                    className="w-7 h-7">
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -83,8 +153,7 @@ export default function App() {
 
                 <a
                   href="/storefront"
-                  className="w-full bg-[#059669] text-white py-2.5 rounded-xl font-black shadow block text-center transition hover:bg-[#047857]"
-                >
+                  className="w-full bg-[#059669] text-white py-2.5 rounded-xl font-black shadow block text-center transition hover:bg-[#047857]">
                   Go To Storefront Market
                 </a>
               </div>

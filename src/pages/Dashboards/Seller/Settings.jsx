@@ -8,6 +8,7 @@ import PaymentSettingsCard from "../../../components/dashboard/settings/PaymentS
 import TaxComplianceCard from "../../../components/dashboard/settings/TaxComplianceCard";
 import NotificationsCard from "../../../components/dashboard/settings/NotificationsCard";
 import SecurityCard from "../../../components/dashboard/settings/SecurityCard";
+import LoyaltySettingsCard from "../../../components/dashboard/settings/LoyaltySettingsCard";
 
 export default function Settings() {
   return (
@@ -26,6 +27,8 @@ export default function Settings() {
       <BusinessHoursCard />
 
       <DeliverySettingsCard />
+
+      <LoyaltySettingsCard/>
 
       <PaymentSettingsCard />
 
