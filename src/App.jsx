@@ -13,12 +13,10 @@ import Profile from "./pages/Dashboards/Seller/profile";
 import Products from "./pages/Dashboards/Seller/Products";
 import Settings from "./pages/Dashboards/Seller/Settings";
 import RegisterSuccess from "./pages/Auth/RegisterSuccess";
-
+import FestiveMenu from "./pages/Dashboards/Seller/FestiveMenu";
 import Analytics from "./pages/Dashboards/Seller/Analytics";
-// Future Modules
-// import Orders from "./pages/Dashboards/Seller/Orders";
-// import Customers from "./pages/Dashboards/Seller/Customers";
-// import Analytics from "./pages/Dashboards/Seller/Analytics";
+import CreateFestiveMenu from "./pages/Dashboards/Seller/CreateFestiveMenu";
+
 
 export default function App() {
   return (
@@ -46,6 +44,9 @@ export default function App() {
           <Route path="products" element={<Products />} />
           <Route path="analytics" element={<Analytics />} />
           <Route path="profile" element={<Profile />} />
+          <Route path="festivemenu" element={<FestiveMenu/>}/>
+          <Route path="festivemenu/create" element={<CreateFestiveMenu />} />
+
         </Route>
         {/* Registration Success */}
         <Route

@@ -1,54 +1,104 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
-import API from '../api/axios';
+import React, { createContext, useContext, useState, useEffect } from "react";
+import API from "../api/axios";
 
 const AuthContext = createContext(null);
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [token, setToken] = useState(localStorage.getItem('token') || null);
+  const [user, setUser] = useState(() => {
+    const savedUser = localStorage.getItem("user");
+    return savedUser ? JSON.parse(savedUser) : null;
+  });
+
+  const [token, setToken] = useState(
+    localStorage.getItem("token") || null
+  );
+
   const [authLoading, setAuthLoading] = useState(true);
 
   useEffect(() => {
     if (token) {
-      localStorage.setItem('token', token);
-      // Inject token into every axios request automatically
-      API.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+      localStorage.setItem("token", token);
+
+      API.defaults.headers.common[
+        "Authorization"
+      ] = `Bearer ${token}`;
     } else {
-      localStorage.removeItem('token');
-      delete API.defaults.headers.common['Authorization'];
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+
+      delete API.defaults.headers.common.Authorization;
     }
+
     setAuthLoading(false);
   }, [token]);
 
-  const loginSessionEngine = async (phone, password) => {
-    // API match with backend auth controller keys
-    const res = await API.post('/auth/login', { phone, password });
-    if (res.data?.token) {
-      setToken(res.data.token);
-      setUser(res.data.user);
-      return res.data;
-    }
-    throw new Error("Invalid credentials payload match failure.");
+  // =========================
+  // Mock Login (Frontend Only)
+  // =========================
+  const login = (userData, authToken) => {
+    setUser(userData);
+    setToken(authToken);
+
+    localStorage.setItem("token", authToken);
+    localStorage.setItem("user", JSON.stringify(userData));
   };
 
-  const registerSellerSessionEngine = async (payload) => {
-    const res = await API.post('/auth/register/seller', payload);
+  // =========================
+  // Backend Login
+  // =========================
+  const loginSessionEngine = async (phone, password) => {
+    const res = await API.post("/auth/login", {
+      phone,
+      password,
+    });
+
     if (res.data?.token) {
-      setToken(res.data.token);
-      setUser(res.data.user);
+      login(res.data.user, res.data.token);
       return res.data;
     }
+
+    throw new Error("Invalid credentials.");
+  };
+
+  // =========================
+  // Backend Register
+  // =========================
+  const registerSellerSessionEngine = async (payload) => {
+    const res = await API.post("/auth/register/seller", payload);
+
+    if (res.data?.token) {
+      login(res.data.user, res.data.token);
+      return res.data;
+    }
+
     return res.data;
   };
 
+  // =========================
+  // Logout
+  // =========================
   const logout = () => {
-    setToken(null);
     setUser(null);
-    localStorage.removeItem('token');
+    setToken(null);
+
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+
+    delete API.defaults.headers.common.Authorization;
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, loginSessionEngine, registerSellerSessionEngine, logout, authLoading }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        token,
+        login,
+        loginSessionEngine,
+        registerSellerSessionEngine,
+        logout,
+        authLoading,
+      }}
+    >
       {!authLoading && children}
     </AuthContext.Provider>
   );

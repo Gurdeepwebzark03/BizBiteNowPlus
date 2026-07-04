@@ -1,13 +1,5 @@
-import React from "react";
-import {
-  Plus,
-  ShoppingBag,
-  BarChart3,
-  Store,
-  ArrowUpRight,
-  Sparkles,
-} from "lucide-react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Sparkles } from "lucide-react";
 
 const getGreeting = () => {
   const hour = new Date().getHours();
@@ -29,19 +21,63 @@ const DashboardHero = () => {
     year: "numeric",
   });
 
+  // Future API state
+  const [storeActive, setStoreActive] = useState(true);
+  const [loading, setLoading] = useState(false);
+
+  // Load from backend (replace with API)
+  useEffect(() => {
+    const fetchStoreStatus = async () => {
+      try {
+        // Example API
+        // const res = await API.get("/seller/store/status");
+        // setStoreActive(res.data.active);
+
+        // Temporary mock
+        setStoreActive(true);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchStoreStatus();
+  }, []);
+
+  // Update backend
+  const handleToggle = async () => {
+    const newStatus = !storeActive;
+
+    // Optimistic UI
+    setStoreActive(newStatus);
+    setLoading(true);
+
+    try {
+      // Example API
+      // await API.patch("/seller/store/status", {
+      //   active: newStatus,
+      // });
+
+      // Success
+    } catch (err) {
+      // Rollback on failure
+      setStoreActive(!newStatus);
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <section className="relative overflow-hidden rounded-3xl bg-gradient-to-r from-[#1A4D2E] via-[#205C38] to-[#2D6A4F] px-6 py-4 text-white shadow-xl">
       {/* Background */}
       <div className="absolute -top-24 -right-24 h-64 w-64 rounded-full bg-white/10 blur-3xl" />
       <div className="absolute -bottom-16 -left-16 h-56 w-56 rounded-full bg-white/5 blur-3xl" />
-      <div className="absolute right-16 bottom-0 h-24 w-24 rounded-full bg-[#ffc700]/20" />
+      <div className="absolute bottom-0 right-16 h-24 w-24 rounded-full bg-[#ffc700]/20" />
 
       <div className="relative z-10 flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         {/* Left */}
-        <div className="max-w-xl">
+        <div className="max-w-xl text-left ">
           <div className="mb-2 flex flex-wrap items-center gap-2">
-            <Store className="h-5 w-5" />
-
             <h1 className="text-xl font-bold md:text-2xl">
               {greeting}
             </h1>
@@ -61,86 +97,51 @@ const DashboardHero = () => {
         </div>
 
         {/* Right */}
-        <div className="flex flex-col gap-2">
-          {/* Status */}
-          <div className="inline-flex items-center gap-3 rounded-xl border border-white/20 bg-white/15 px-4 py-2 backdrop-blur">
-            <Sparkles
-              size={18}
-              className="text-[#ffc700]"
-            />
-
-            <div>
-              <p className="text-[11px] text-green-100">
-                Store Status
-              </p>
-
-              <h3 className="text-sm font-semibold">
-                Active
-              </h3>
-            </div>
-          </div>
-
-          {/* Quick Actions */}
-          <div className="grid grid-cols-3 gap-2">
-            <Link
-              to="/seller/products"
-              className="rounded-xl bg-white px-4 py-3 text-[#16522d] transition hover:-translate-y-1 hover:shadow-lg"
-            >
-              <Plus
+        <div className="flex flex-col gap-3">
+          <div className="flex min-w-[250px] items-center justify-between rounded-xl border border-white/20 bg-white/15 px-4 py-3 backdrop-blur">
+            <div className="flex items-center gap-3">
+              <Sparkles
                 size={18}
-                className="mb-1"
+                className={
+                  storeActive
+                    ? "text-[#ffc700]"
+                    : "text-gray-300"
+                }
               />
 
-              <h3 className="text-xs font-semibold">
-                Add
-              </h3>
+              <div>
+                <p className="text-[11px] text-green-100">
+                  Store Status
+                </p>
 
-              <p className="text-[10px] text-gray-500">
-                Product
-              </p>
-            </Link>
-
-            <Link
-              to="/seller/orders"
-              className="rounded-xl bg-white px-4 py-3 text-[#16522d] transition hover:-translate-y-1 hover:shadow-lg"
-            >
-              <ShoppingBag
-                size={18}
-                className="mb-1"
-              />
-
-              <h3 className="text-xs font-semibold">
-                Orders
-              </h3>
-
-              <p className="text-[10px] text-gray-500">
-                Manage
-              </p>
-            </Link>
-
-            <Link
-              to="/seller/analytics"
-              className="rounded-xl bg-[#ffc700] px-4 py-3 text-[#16522d] transition hover:-translate-y-1 hover:shadow-lg"
-            >
-              <BarChart3
-                size={18}
-                className="mb-1"
-              />
-
-              <div className="flex items-center justify-between">
-                <div>
-                  <h3 className="text-xs font-semibold">
-                    Analytics
-                  </h3>
-
-                  <p className="text-[10px]">
-                    Reports
-                  </p>
-                </div>
-
-                <ArrowUpRight size={14} />
+                <h3 className="text-sm font-semibold">
+                  {storeActive ? "Active" : "Offline"}
+                </h3>
               </div>
-            </Link>
+            </div>
+
+            <button
+              type="button"
+              disabled={loading}
+              onClick={handleToggle}
+              className={`relative h-7 w-14 rounded-full transition-all duration-300 ${
+                storeActive
+                  ? "bg-[#22C55E]"
+                  : "bg-gray-400"
+              } ${
+                loading
+                  ? "cursor-not-allowed opacity-60"
+                  : ""
+              }`}
+            >
+              <span
+                className={`absolute top-1 h-5 w-5 rounded-full bg-white shadow-md transition-all duration-300 ${
+                  storeActive
+                    ? "left-8"
+                    : "left-1"
+                }`}
+              />
+            </button>
           </div>
         </div>
       </div>

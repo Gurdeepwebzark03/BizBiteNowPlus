@@ -26,14 +26,19 @@ const Button = ({
       disabled={disabled}
       onClick={onClick}
       className={`
+        inline-flex items-center justify-center gap-2
+        h-11
         px-5
-        py-3
         rounded-xl
-        font-semibold
-        transition-all
-        duration-300
-        disabled:opacity-50
+        text-[15px]
+        font-medium
+        transition-all duration-300 ease-in-out
+        active:scale-[0.98]
+        focus-visible:outline-none
+        focus-visible:ring-2
+        focus-visible:ring-[#F4A300]/40
         disabled:cursor-not-allowed
+        disabled:opacity-50
         ${variants[variant]}
         ${className}
       `}

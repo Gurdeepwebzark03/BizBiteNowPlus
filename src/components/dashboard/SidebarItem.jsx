@@ -41,15 +41,24 @@ if (danger) {
     >
       <Icon size={20} />
 
-      {!collapsed && (
-        <span className="font-medium">
-          {title}
-        </span>
-      )}
+      <span
+        className={`
+          overflow-hidden whitespace-nowrap font-medium
+          transition-all duration-300
+          ${
+            collapsed
+              ? "w-0 opacity-0"
+              : "w-auto opacity-100"
+          }
+        `}
+      >
+        {title}
+      </span>
     </NavLink>
   );
 }
 
+// Simple Navigation Button
 // Simple Navigation Button
 if (!children.length) {
   return (
@@ -57,28 +66,35 @@ if (!children.length) {
       type="button"
       onClick={() => navigate(to)}
       className={`
-        flex w-full items-center gap-3
-        rounded-xl
-        px-4 py-3
-        transition-all duration-200
+        flex h-12 w-full items-center rounded-xl px-4
+        text-[15px] font-medium
+        transition-all duration-300 ease-in-out
+        ${
+          collapsed
+            ? "justify-center"
+            : "justify-start gap-3.5"
+        }
         ${
           isActive(to)
-            ? "bg-[#F4A300] text-black font-semibold"
-            : "text-gray-200 hover:bg-white/10"
+            ? "bg-[#F4A300] text-black shadow-sm"
+            : "text-gray-200 hover:bg-white/10 hover:text-white"
         }
       `}
     >
-      <Icon size={20} />
+      <Icon
+        size={20}
+        strokeWidth={2}
+        className="shrink-0 flex-none"
+      />
 
       {!collapsed && (
-        <span className="font-medium">
+        <span className="whitespace-nowrap">
           {title}
         </span>
       )}
     </Button>
   );
 }
-
   // Expandable Menu
   return (
     <div className="space-y-2">
@@ -97,14 +113,17 @@ if (!children.length) {
           }
         `}
       >
-        <div className="flex items-center gap-3">
-          <Icon size={20} />
+        <Icon size={20} className="shrink-0" />
 
-          {!collapsed && (
-            <span className="font-medium">
-              {title}
-            </span>
-          )}
+        <div
+          className={`
+            overflow-hidden transition-all duration-300
+            ${collapsed ? "w-0 opacity-0" : "w-44 opacity-100"}
+          `}
+        >
+          <span className="block whitespace-nowrap font-medium">
+            {title}
+          </span>
         </div>
 
         {!collapsed && (
