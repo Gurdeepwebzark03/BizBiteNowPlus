@@ -2,6 +2,7 @@ import SalesChart from "../../../components/dashboard/analytics/SalesChart";
 import TopProducts from "../../../components/dashboard/widgets/TopProducts/TopProducts";
 import RecentOrders from "../../../components/dashboard/widgets/RecentOrders/RecentOrders";
 import RecentActivity from "../../../components/dashboard/widgets/RecentActivity/RecentActivity";
+import LoyaltyChart from "../../../components/dashboard/analytics/LoyaltyChart";
 
 export default function Analytics() {
   return (
@@ -27,11 +28,11 @@ export default function Analytics() {
         <TopProducts />
 
         <RecentOrders />
-
       </div>
 
       {/* Timeline */}
       <RecentActivity />
+        <LoyaltyChart/>   
 
     </div>
     </div>
