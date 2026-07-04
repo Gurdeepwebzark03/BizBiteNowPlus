@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
-import { 
-  ShoppingCart, Star, MapPin, Phone, User, 
-  CheckCircle2, CreditCard, Wallet, Plus, Minus, 
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import {
+  ShoppingCart, Star, MapPin, Phone, User,
+  CheckCircle2, CreditCard, Wallet, Plus, Minus,
   Award, Search, ChevronRight, X, Sparkles, Leaf,
   Gift, History, Ticket, Percent, Check, Home, Briefcase, ListOrdered,
-  Store, Trash2, LogIn, UserPlus, LogOut, RefreshCw // <-- Added LogOut and RefreshCw icons
+  Store, Trash2, LogOut, RefreshCw // <-- Added LogOut and RefreshCw icons
 } from 'lucide-react';
+import { getMyProfile, logoutCustomer } from '../../api/customer/authApi';
 
 export default function CustomerDashboard() {
+  const navigate = useNavigate();
   // --- ECO-FRIENDLY WHITELABEL BRAND METADATA ---
   const storeMeta = {
     business_name: "Imperial Organic Cafe",
@@ -20,11 +23,6 @@ export default function CustomerDashboard() {
   // --- SUB-ROUTING VERTICAL STATE ---
   const [activeTab, setActiveTab] = useState('home'); 
   const [statusMsg, setStatusMsg] = useState({ type: '', text: '' });
-
-  // --- AUTHENTICATION STATES LAYER ---
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [authMode, setAuthMode] = useState('login'); 
-  const [authForm, setAuthForm] = useState({ name: '', phone: '', mohalla: 'Gomti Nagar', address: '' });
 
   // --- MONGOOSE PRODUCT MOCK ARRAY ---
   const [products] = useState([
@@ -102,15 +100,24 @@ export default function CustomerDashboard() {
     setStatusMsg({ type: 'success', text: 'Purana order direct cart basket mein roll back ho gaya!' });
   };
 
-  // 🚀 NEW: RE-INITIALIZE AUTHENTICATION CONTEXT FLOWS ON LOGOUT
-  const handleLogoutAction = () => {
-    setIsLoggedIn(false);
-    setCart({});
-    setActiveAppliedCoupon(null);
-    setActiveTab('home');
-    setAuthForm({ name: '', phone: '', mohalla: 'Gomti Nagar', address: '' });
-    setStatusMsg({ type: 'error', text: 'Session closed. Logged out securely.' });
+  // 🚀 RE-INITIALIZE AUTHENTICATION CONTEXT FLOWS ON LOGOUT
+  const handleLogoutAction = async () => {
+    await logoutCustomer();
+    navigate('/customer/onboarding', { replace: true });
   };
+
+  // 🚀 LOAD REAL CUSTOMER PROFILE FROM AUTH SESSION ON MOUNT
+  useEffect(() => {
+    getMyProfile()
+      .then((user) => {
+        setCustomerProfile((prev) => ({
+          ...prev,
+          customer_name: user.name || prev.customer_name,
+          customer_phone: user.phone || prev.customer_phone,
+        }));
+      })
+      .catch(() => {});
+  }, []);
 
   const handleApplyCouponAction = (couponObject) => {
     if (getCartSubtotal() === 0) {
@@ -151,22 +158,6 @@ export default function CustomerDashboard() {
     setAddresses(addresses.filter(a => a.id !== id));
   };
 
-  const handleAuthSubmit = (e) => {
-    e.preventDefault();
-    if (authMode === 'signup') {
-      setCustomerProfile(prev => ({
-        ...prev,
-        customer_name: authForm.name,
-        customer_phone: authForm.phone,
-        mohalla: authForm.mohalla,
-        delivery_address: authForm.address
-      }));
-      setAddresses([{ id: 'AD1', type: 'Home', mohalla: authForm.mohalla, full_address: authForm.address }]);
-    }
-    setIsLoggedIn(true);
-    setStatusMsg({ type: 'success', text: 'Secure session validated successfully!' });
-  };
-
   const handleCheckoutSubmit = (e) => {
     e.preventDefault();
     setOrderSuccess({ id: 'BBN-ECO-' + Math.floor(Math.random() * 9000 + 1000), total: getFinalPayableAmount() });
@@ -176,61 +167,6 @@ export default function CustomerDashboard() {
   };
 
   const activeSelectedAddressObj = addresses.find(a => a.id === selectedAddressId) || addresses[0];
-
-  // ---------------- 🔒 AUTHENTICATION ROUTER WALL ----------------
-  if (!isLoggedIn) {
-    return (
-      <div className="min-h-screen w-full bg-[#f4fbf7] flex items-center justify-center p-4 font-sans">
-        <div className="bg-white w-full max-w-md rounded-2xl shadow-xl border border-emerald-100 overflow-hidden flex flex-col text-xs text-slate-800">
-          <div className="p-6 bg-[#e6f9f0] border-b border-emerald-200 text-center space-y-2">
-            <div className="w-12 h-14 bg-emerald-600/10 text-emerald-600 rounded-2xl flex items-center justify-center mx-auto"><Leaf size={24} className="animate-pulse" /></div>
-            <h2 className="text-xl font-black tracking-tight" style={{ color: '#0f172a' }}>{storeMeta.business_name}</h2>
-            <p className="text-emerald-800 font-black uppercase tracking-wider text-[9px]">Grahak Gate Access Terminal</p>
-          </div>
-
-          <form onSubmit={handleAuthSubmit} className="p-6 space-y-4">
-            {authMode === 'signup' && (
-              <div className="space-y-1">
-                <label className="font-bold text-slate-600 block">Full Name *</label>
-                <input type="text" required placeholder="Shresth Saxena" value={authForm.name} onChange={(e)=>setAuthForm({...authForm, name: e.target.value})} className="w-full bg-[#fbfdfb] border border-slate-200 rounded-xl p-3 outline-none font-bold" />
-              </div>
-            )}
-
-            <div className="space-y-1">
-              <label className="font-bold text-slate-600 block">Mobile Phone Number *</label>
-              <input type="tel" required placeholder="e.g. 9876543210" value={authForm.phone} onChange={(e)=>setAuthForm({...authForm, phone: e.target.value})} className="w-full bg-[#fbfdfb] border border-slate-200 rounded-xl p-3 outline-none font-mono font-bold" />
-            </div>
-
-            {authMode === 'signup' && (
-              <>
-                <div className="space-y-1">
-                  <label className="font-bold text-slate-600 block">Select Primary Mohalla Cluster *</label>
-                  <select value={authForm.mohalla} onChange={(e)=>setAuthForm({...authForm, mohalla: e.target.value})} className="w-full bg-[#fbfdfb] border border-slate-200 rounded-xl p-3 font-bold outline-none">
-                    {mohallaClusters.map(moh => <option key={moh} value={moh}>{moh}</option>)}
-                  </select>
-                </div>
-                <div className="space-y-1">
-                  <label className="font-bold text-slate-600 block">Complete Home Drop Address *</label>
-                  <input type="text" required placeholder="Flat, Building, Area Road..." value={authForm.address} onChange={(e)=>setAuthForm({...authForm, address: e.target.value})} className="w-full bg-[#fbfdfb] border border-slate-200 rounded-xl p-3 outline-none" />
-                </div>
-              </>
-            )}
-
-            <button type="submit" style={{ backgroundColor: storeMeta.theme_color }} className="w-full text-white font-black py-3 rounded-xl shadow flex items-center justify-center gap-1.5 cursor-pointer">
-              {authMode === 'login' ? <LogIn size={14} /> : <UserPlus size={14} />}
-              <span>{authMode === 'login' ? 'Secure Login Verification' : 'Deploy Customer Node'}</span>
-            </button>
-
-            <div className="text-center pt-2">
-              <button type="button" onClick={() => setAuthMode(authMode === 'login' ? 'signup' : 'login')} className="text-emerald-700 font-black hover:underline cursor-pointer">
-                {authMode === 'login' ? "New Here? Create Eco-Storefront Account" : "Already Registered? Direct Login"}
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-    );
-  }
 
   // ---------------- CORE MAIN STOREFRONT INTERFACE NAVIGATION SIDEBAR ----------------
   return (
