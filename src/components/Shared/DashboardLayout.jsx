@@ -3,7 +3,8 @@ import { Outlet } from "react-router-dom";
 
 import Sidebar from "../dashboard/Sidebar";
 import Navbar from "../dashboard/widgets/navbar/Navbar";
-
+import { useLocation, Link } from "react-router-dom";
+import { LayoutDashboard, ShoppingBag, Settings } from "lucide-react";
 const DashboardLayout = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [collapsed, setCollapsed] = useState(false);

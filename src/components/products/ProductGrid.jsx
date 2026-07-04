@@ -1,23 +1,15 @@
 import ProductCard from "./ProductCard";
+import ProductTable from "./ProductTable";
 
 export default function ProductGrid({
   products,
-  search,
-  category,
+  view,
+  onView,
+  onEdit,
+  onDelete,
 }) {
-  const filteredProducts = products.filter((product) => {
-    const matchesSearch = product.name
-      .toLowerCase()
-      .includes(search.toLowerCase());
-
-    const matchesCategory =
-      category === "All" ||
-      product.category === category;
-
-    return matchesSearch && matchesCategory;
-  });
-
-  if (filteredProducts.length === 0) {
+  // Empty State
+  if (products.length === 0) {
     return (
       <div className="flex min-h-[350px] flex-col items-center justify-center rounded-2xl border border-dashed border-slate-300 bg-white">
         <h2 className="text-xl font-semibold text-slate-900">
@@ -31,6 +23,19 @@ export default function ProductGrid({
     );
   }
 
+  // List View
+  if (view === "list") {
+    return (
+      <ProductTable
+        products={products}
+        onView={onView}
+        onEdit={onEdit}
+        onDelete={onDelete}
+      />
+    );
+  }
+
+  // Grid View
   return (
     <div
       className="
@@ -42,10 +47,13 @@ export default function ProductGrid({
         2xl:grid-cols-4
       "
     >
-      {filteredProducts.map((product) => (
+      {products.map((product) => (
         <ProductCard
           key={product.id}
           product={product}
+          onView={onView}
+          onEdit={onEdit}
+          onDelete={onDelete}
         />
       ))}
     </div>

@@ -6,7 +6,12 @@ import {
   Package,
 } from "lucide-react";
 
-export default function ProductCard({ product }) {
+export default function ProductCard({
+  product,
+  onView,
+  onEdit,
+  onDelete,
+}) {
   return (
     <div
       className="
@@ -101,6 +106,7 @@ export default function ProductCard({ product }) {
         <div className="mt-6 flex gap-2">
 
           <button
+          onClick={() => onView(product)}
             className="
               flex-1
               rounded-xl
@@ -119,6 +125,7 @@ export default function ProductCard({ product }) {
           </button>
 
           <button
+          onClick={() => onEdit(product)}
             className="
               flex-1
               rounded-xl
@@ -137,6 +144,7 @@ export default function ProductCard({ product }) {
           </button>
 
           <button
+          onClick={() => onDelete(product)}
             className="
               flex-1
               rounded-xl

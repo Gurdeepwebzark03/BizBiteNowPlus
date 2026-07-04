@@ -1,72 +1,108 @@
 import { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { ChevronDown } from "lucide-react";
 import Button from "../UI/Button";
+import { NavLink } from "react-router-dom";
 
-export default function SidebarItem({ item, collapsed = false }) {
+export default function SidebarItem({
+  title,
+  icon: Icon,
+  to,
+  children = [],
+  collapsed = false,
+  danger = false,
+}) {
   const [open, setOpen] = useState(false);
 
-  const Icon = item.icon;
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  // Simple Link
-  if (!item.children) {
-    return (
-      <NavLink
-        to={item.path}
-        className={({ isActive }) =>
-          `
-          flex items-center gap-3
-          rounded-xl
-          bg-red-200
-          px-4 py-3
-          transition-all duration-200
-          ${
-            isActive
-              ? item.danger
-                ? "bg-red-50 text-red-600"
-                : "bg-[#1A4D2E] text-white shadow-md"
-              : item.danger
-              ? "text-red-600 hover:bg-red-50"
-              : "text-slate-700 hover:bg-slate-100"
-          }
-          `
+  const isActive = (path) =>
+    location.pathname === path ||
+    location.pathname.startsWith(`${path}/`);
+
+
+// Logout (NavLink)
+if (danger) {
+  return (
+    <NavLink
+      to={to}
+      className={({ isActive }) => `
+        flex w-full items-center gap-3
+        rounded-xl
+        px-4 py-3
+        transition-all duration-200
+        ${
+          isActive
+            ? "bg-red-100 text-red-600 font-semibold"
+            : "text-red-500 bg-red-100 hover:bg-red-300 hover:text-red-600"
         }
-      >
-        <Icon size={20} />
+      `}
+    >
+      <Icon size={20} />
 
-        {!collapsed && (
-          <span className="font-medium">
-            {item.title}
-          </span>
-        )}
-      </NavLink>
-    );
-  }
+      {!collapsed && (
+        <span className="font-medium">
+          {title}
+        </span>
+      )}
+    </NavLink>
+  );
+}
+
+// Simple Navigation Button
+if (!children.length) {
+  return (
+    <Button
+      type="button"
+      onClick={() => navigate(to)}
+      className={`
+        flex w-full items-center gap-3
+        rounded-xl
+        px-4 py-3
+        transition-all duration-200
+        ${
+          isActive(to)
+            ? "bg-[#F4A300] text-black font-semibold"
+            : "text-gray-200 hover:bg-white/10"
+        }
+      `}
+    >
+      <Icon size={20} />
+
+      {!collapsed && (
+        <span className="font-medium">
+          {title}
+        </span>
+      )}
+    </Button>
+  );
+}
 
   // Expandable Menu
   return (
     <div className="space-y-2">
-        <Button
+      <Button
         type="button"
         onClick={() => setOpen(!open)}
         className={`
-            flex w-full items-center justify-between
-            rounded-xl
-            px-4 py-3
-            transition-all duration-200
-            ${
+          flex w-full items-center justify-between
+          rounded-xl
+          px-4 py-3
+          transition-all duration-200
+          ${
             open
-                ? "bg-[#F4A300] text-black font-semibold"
-                    : "hover:bg-white/40 text-gray-200"
-            }
+              ? "bg-[#F4A300] text-black font-semibold"
+              : "text-gray-200 hover:bg-white/10"
+          }
         `}
-        >
+      >
         <div className="flex items-center gap-3">
           <Icon size={20} />
 
           {!collapsed && (
             <span className="font-medium">
-              {item.title}
+              {title}
             </span>
           )}
         </div>
@@ -82,27 +118,26 @@ export default function SidebarItem({ item, collapsed = false }) {
       </Button>
 
       {!collapsed && open && (
-        <div className="ml-7 space-y-1 pl-4">
-          {item.children.map((child) => (
-            <NavLink
-              key={child.path}
-              to={child.path}
-              className={({ isActive }) =>
-                `
-                block rounded-lg
+        <div className="ml-7 space-y-1 border-l border-white/10 pl-4">
+          {children.map((child) => (
+            <Button
+              key={child.to}
+              type="button"
+              onClick={() => navigate(child.to)}
+              className={`
+                w-full rounded-lg
                 px-3 py-2
-                text-sm
+                text-left text-sm
                 transition
                 ${
-                  isActive
+                  isActive(child.to)
                     ? "bg-[#F4A300] text-black font-semibold"
-                    : "hover:bg-white/40 text-gray-200"
+                    : "text-gray-300 hover:bg-white/10"
                 }
-                `
-              }
+              `}
             >
               {child.title}
-            </NavLink>
+            </Button>
           ))}
         </div>
       )}
