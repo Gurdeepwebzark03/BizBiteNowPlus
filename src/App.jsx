@@ -11,7 +11,12 @@ import Products from "./pages/Dashboards/Seller/Products";
 import Settings from "./pages/Dashboards/Seller/Settings";
 import RegisterSuccess from "./pages/Auth/RegisterSuccess";
 import DeliveryDashboard from "./pages/Dashboards/DeliveryDashboard/DeliveryDashboard"
+
 import FestiveMenu from "./pages/Dashboards/Seller/FestiveMenu";
+
+
+
+// import FestiveMenu from "./pages/Dashboards/Seller/FestiveMenu";
 import Analytics from "./pages/Dashboards/Seller/Analytics";
 import CreateFestiveMenu from "./pages/Dashboards/Seller/CreateFestiveMenu";
 import StoreFront from "./pages/customer/StoreFront";
@@ -108,8 +113,8 @@ export default function App() {
           <Route path="products" element={<Products />} />
           <Route path="analytics" element={<Analytics />} />
           <Route path="profile" element={<Profile />} />
-          <Route path="festivemenu" element={<FestiveMenu/>}/>
-          <Route path="festivemenu/create" element={<CreateFestiveMenu />} />
+          {/* <Route path="festivemenu" element={<FestiveMenu/>}/> */}
+          {/* <Route path="festivemenu/create" element={<CreateFestiveMenu />} /> */}
 
         </Route>
         {/* Registration Success */}
