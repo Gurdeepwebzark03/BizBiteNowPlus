@@ -1,24 +1,17 @@
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
-
 import Login from "./pages/Auth/Login";
 import RegisterSeller from "./pages/Auth/RegisterSeller";
 import DashboardLayout from "./components/Shared/DashboardLayout";
 import Orders from "./pages/Dashboards/Seller/Orders";
 import OrderDetails from "./pages/Dashboards/Seller/OrderDetails";
 import SellerDashboard from "./pages/Dashboards/Seller/SellerDashboard";
-// import CustomerDashboard from "./pages/Dashboards/CustomerDashboard";
-// import Earnings from "./pages/Dashboards/Seller/Earnings";
 import Profile from "./pages/Dashboards/Seller/profile";
 import Products from "./pages/Dashboards/Seller/Products";
 import Settings from "./pages/Dashboards/Seller/Settings";
 import RegisterSuccess from "./pages/Auth/RegisterSuccess";
-
 import DeliveryDashboard from "./pages/Dashboards/DeliveryDashboard/DeliveryDashboard"
-
-=======
 import FestiveMenu from "./pages/Dashboards/Seller/FestiveMenu";
-
 import Analytics from "./pages/Dashboards/Seller/Analytics";
 import CreateFestiveMenu from "./pages/Dashboards/Seller/CreateFestiveMenu";
 import StoreFront from "./pages/customer/StoreFront";
@@ -30,12 +23,6 @@ import OrderConfirmation from "./pages/customer/OrderConfirmation";
 import CustomerProfile from "./pages/customer/Profile";
 import CustomerOnboarding from "./pages/customer/CustomerOnboarding";
 import CustomerGate from "./components/customer/CustomerGate";
-
-// Future Modules
-// import Orders from './pages/Dashboards/Seller/Orders';
-// import Customers from './pages/Dashboards/Seller/Customers';
-// import Analytics from './pages/Dashboards/Seller/Analytics';
-
 export default function App() {
   return (
     <div className="w-full min-h-screen bg-slate-950 m-0 p-0 box-border overflow-x-hidden">
