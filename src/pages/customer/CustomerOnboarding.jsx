@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { Loader2, ArrowRight } from "lucide-react";
 import { sendOtp, verifyOtp, saveProfile } from "../../api/customer/authApi";
 import logoHorizontal from "../../assets/bizbite_logo_horizontal.png";
@@ -27,6 +27,8 @@ const LeftPanel = () => (
 
 const CustomerOnboarding = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const redirectTo = location.state?.from || "/storefront";
   const [step, setStep] = useState(1);
   const [phone, setPhone] = useState("");
   const [otp, setOtp] = useState(["", "", "", ""]);
@@ -83,7 +85,7 @@ const CustomerOnboarding = () => {
       if (res.isNewUser) {
         setStep(3);
       } else {
-        navigate("/storefront", { replace: true });
+        navigate(redirectTo, { replace: true });
       }
     } catch (err) {
       setError(err.message || "Invalid OTP. Try again.");
@@ -100,7 +102,7 @@ const CustomerOnboarding = () => {
     setError("");
     try {
       await saveProfile(name, address, phone);
-      navigate("/storefront", { replace: true });
+      navigate(redirectTo, { replace: true });
     } catch (err) {
       setError(err.message || "Something went wrong. Try again.");
     } finally {
