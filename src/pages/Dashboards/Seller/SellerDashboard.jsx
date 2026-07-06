@@ -11,37 +11,25 @@ import { stats } from "../../../data/dashboardData";
 
 export default function SellerDashboard() {
   return (
-    <div className="space-y-8">
-      {/* Dashboard Hero */}
+    <div className="space-y-6">
+
+      {/* Hero */}
       <DashboardHero />
 
-      {/* Statistics */}
-      <section className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
+      {/* Overview */}
+      <section className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-4">
         {stats.map((item) => (
-          <StatsCard key={item.id} {...item} />
+          <StatsCard
+            key={item.id}
+            {...item}
+          />
         ))}
       </section>
 
-      {/* Analytics */}
-      <section className="grid grid-cols-1 xl:grid-cols-3 gap-6">
-        <div className="xl:col-span-2">
-          <SalesChart />
-        </div>
+      {/* Quick Actions */}
+      <QuickActions />
 
-        <QuickActions />
-      </section>
 
-      {/* Orders & Products */}
-      <section className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-        <RecentOrders />
-        <TopProducts />
-      </section>
-
-      {/* Activity & Stock */}
-      <section className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-        <RecentActivity />
-        <LowStock />
-      </section>
     </div>
   );
 }

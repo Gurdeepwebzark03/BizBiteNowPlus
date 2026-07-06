@@ -1,6 +1,4 @@
 import {
-  ChevronLeft,
-  Menu,
   LayoutDashboard,
   Package,
   ShoppingCart,
@@ -13,65 +11,40 @@ import {
 } from "lucide-react";
 
 import SidebarItem from "./SidebarItem";
-import Button from "../UI/Button";
+
 export default function Sidebar({ collapsed, setCollapsed }) {
   return (
     <aside
+      onMouseEnter={() => setCollapsed(false)}
+      onMouseLeave={() => setCollapsed(true)}
       className={`
-        h-screen
+        flex h-screen flex-col
         bg-[#16522d]
-        border-r
-        border-slate-200
+        border-r border-white/10
         shadow-sm
-        transition-all
-        duration-300
+        transition-all duration-300 ease-in-out
         ${collapsed ? "w-20" : "w-72"}
       `}
     >
       {/* Logo */}
-
-      {/* Seller */}
-
-      <div className="border-b border-slate-200 bg-white p-5">
-        {/* Top Row */}
-        <div
-          className={`mb-5 flex ${
-            collapsed ? "justify-center" : "justify-end "
-          }`}
-        >
-          <Button
-            onClick={() => setCollapsed(!collapsed)}
-            className="rounded-xl p-2"
-          >
-            {collapsed ? <Menu size={20} /> : <ChevronLeft size={20} />}
-          </Button>
-        </div>
-
-        {/* Seller Profile */}
-        <div
-          className={`flex items-center ${
-            collapsed ? "justify-center" : "gap-3"
-          }`}
-        >
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#1A4D2E] text-lg font-bold text-white">
-            GS
-          </div>
-
-          {!collapsed && (
-            <div className="min-w-0">
-              <h3 className="truncate font-semibold text-slate-900">
-                Gurdeep Singh
-              </h3>
-
-              <p className="text-sm text-slate-500">Plus Seller</p>
-            </div>
-          )}
-        </div>
+      <div className="flex h-20 items-center justify-center border-b border-white/10 bg-white px-4">
+        {collapsed ? (
+          <img
+            src="/logo-icon.png"
+            alt="BizBiteNow"
+            className="h-10 w-10 object-contain"
+          />
+        ) : (
+          <img
+            src="/logo-full.png"
+            alt="BizBiteNow"
+            className="h-10 object-contain"
+          />
+        )}
       </div>
 
       {/* Navigation */}
-
-      <nav className="sidebar-scroll h-[calc(100vh-160px)] overflow-y-auto px-3 py-4">
+      <nav className="sidebar-scroll flex-1 overflow-y-auto px-3 py-4">
         <div className="space-y-2">
           <SidebarItem
             title="Dashboard"
@@ -85,6 +58,7 @@ export default function Sidebar({ collapsed, setCollapsed }) {
             icon={Package}
             to="/seller/products"
             collapsed={collapsed}
+            className
           />
 
           <SidebarItem
@@ -110,16 +84,9 @@ export default function Sidebar({ collapsed, setCollapsed }) {
 />
 
           <SidebarItem
-            title="Marketing"
+            title="Festive Menu"
             icon={Gift}
-            to="/seller/marketing"
-            collapsed={collapsed}
-          />
-
-          <SidebarItem
-            title="Storefront"
-            icon={Store}
-            to="/seller/storefront"
+            to="/seller/festivemenu"
             collapsed={collapsed}
           />
 
@@ -136,6 +103,7 @@ export default function Sidebar({ collapsed, setCollapsed }) {
             to="/seller/settings"
             collapsed={collapsed}
           />
+<<<<<<< HEAD
           
           <SidebarItem
             title="Logout"
@@ -145,8 +113,21 @@ export default function Sidebar({ collapsed, setCollapsed }) {
             danger
           />
 
+=======
+>>>>>>> ebd0b3dfa3a10aac5a5af3e2205fbb2409115953
         </div>
       </nav>
+
+      {/* Footer */}
+      <div className="border-t border-white/10 p-3">
+        <SidebarItem
+          title="Logout"
+          icon={LogOut}
+          to="/login"
+          collapsed={collapsed}
+          danger
+        />
+      </div>
     </aside>
   );
 }

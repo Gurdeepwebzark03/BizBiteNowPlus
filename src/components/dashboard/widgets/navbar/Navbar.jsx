@@ -5,7 +5,6 @@ import SearchBar from "../../SearchBar";
 import NotificationButton from "./NotificationButton";
 import ProfileMenu from "../../ProfileMenu";
 
-
 const pageTitles = {
   "/seller/dashboard": "Dashboard",
   "/seller/products": "Products",
@@ -21,54 +20,49 @@ const pageTitles = {
 export default function Navbar({ openSidebar }) {
   const location = useLocation();
 
-  const pageTitle =
-    pageTitles[location.pathname] || "Seller Dashboard";
+
 
   return (
     <header
       className="
-        sticky
-        top-0
-        z-30
-        flex
-        h-[72px]
-        items-center
-        justify-between
-        border-b
-        border-slate-200
-        bg-white
-        px-4
+        sticky top-0 z-30
+        flex h-[72px] items-center justify-between
+        border-b border-slate-200/80
+        bg-white/95
+        px-5
+        backdrop-blur-md
         md:px-6
+        lg:px-8
       "
     >
       {/* Left */}
-      <div className="flex items-center gap-4">
-
+      <div className="flex min-w-0 items-center gap-4">
         <button
           onClick={openSidebar}
           className="
+            flex h-11 w-11 items-center justify-center
             rounded-xl
-            p-2
-            transition
+            transition-all duration-300
             hover:bg-slate-100
+            active:scale-95
             lg:hidden
           "
         >
-          <Menu size={22} />
+          <Menu size={22} strokeWidth={2} />
         </button>
-
 
 
       </div>
 
       {/* Center */}
       <div className="hidden flex-1 justify-center px-8 xl:flex">
-        <SearchBar />
+        <div className="w-full max-w-xl">
+          <SearchBar />
+        </div>
       </div>
 
       {/* Right */}
       <div className="flex items-center gap-3">
-
         <NotificationButton />
 
         <ProfileMenu
@@ -77,7 +71,6 @@ export default function Navbar({ openSidebar }) {
             role: "Plus Seller",
           }}
         />
-
       </div>
     </header>
   );

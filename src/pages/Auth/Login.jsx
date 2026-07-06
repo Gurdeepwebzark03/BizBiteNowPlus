@@ -3,7 +3,6 @@ import { Mail, Lock, ArrowRight } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom";
 import logoHorizontal from "../../assets/bizbite_logo_horizontal.png";
 import { useAuth } from "../../context/AuthContext";
-import API from "../../api/axios";
 import { motion } from "framer-motion";
 
 
@@ -31,8 +30,8 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    setError("");
-    setLoading(true);
+  setError("");
+  setLoading(true);
 
     try {
       const response = await API.post("/seller/login", {
@@ -63,7 +62,6 @@ export default function Login() {
       );
     }
   };
-
 
   return (
     <div className="relative h-screen overflow-hidden bg-gradient-to-br from-[#0b2b18] via-[#16522d] to-[#07140d]">
