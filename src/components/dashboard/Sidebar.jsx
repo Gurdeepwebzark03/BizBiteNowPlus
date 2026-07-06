@@ -10,7 +10,8 @@ import {
   LogOut,
   TicketPercent
 } from "lucide-react";
-
+import icon from "../../assets/BIZ BITE NOW Icon.png";
+import logo from "../../assets/BIZ BITE NOW Horizontal with Icon.png";
 import SidebarItem from "./SidebarItem";
 
 export default function Sidebar({ collapsed, setCollapsed }) {
@@ -31,15 +32,15 @@ export default function Sidebar({ collapsed, setCollapsed }) {
       <div className="flex h-20 items-center justify-center border-b border-white/10 bg-white px-4">
         {collapsed ? (
           <img
-            src="/logo-icon.png"
+            src={icon}
             alt="BizBiteNow"
-            className="h-10 w-10 object-contain"
+            className="h-20 w-20 object-contain"
           />
         ) : (
           <img
-            src="/logo-full.png"
+            src={logo}
             alt="BizBiteNow"
-            className="h-10 object-contain"
+            className="h-20 object-contain"
           />
         )}
       </div>
@@ -69,12 +70,20 @@ export default function Sidebar({ collapsed, setCollapsed }) {
             collapsed={collapsed}
           />
 
-          <SidebarItem
+          {/* <SidebarItem
             title="Delivery"
             icon={Truck}
             to="/seller/delivery"
             collapsed={collapsed}
-          />
+          /> */}
+
+{/* Delivery management */}
+<SidebarItem
+  title="Delivery Management"
+  icon={Truck}
+  to="/seller/delivery-management"
+  collapsed={collapsed}
+/>
 
           <SidebarItem
             title="Special Offers"
@@ -103,6 +112,18 @@ export default function Sidebar({ collapsed, setCollapsed }) {
             to="/seller/settings"
             collapsed={collapsed}
           />
+<<<<<<< HEAD
+          
+          <SidebarItem
+            title="Logout"
+            icon={LogOut}
+            to="/login"
+            collapsed={collapsed}
+            danger
+          />
+
+=======
+>>>>>>> ebd0b3dfa3a10aac5a5af3e2205fbb2409115953
         </div>
       </nav>
 

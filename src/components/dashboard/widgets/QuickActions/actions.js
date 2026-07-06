@@ -5,6 +5,7 @@ import {
   ChartColumn,
   Megaphone,
   Settings,
+  Gift,
 } from "lucide-react";
 
 export const QUICK_ACTIONS = [
@@ -42,10 +43,10 @@ export const QUICK_ACTIONS = [
   },
   {
     id: 5,
-    title: "Marketing",
-    description: "Campaigns",
-    icon: Megaphone,
-    to: "/seller/marketing",
+    title: "Festivemenu",
+    description: "Create Menu",
+    icon: Gift,
+    to: "/seller/festivemenu",
     color: "bg-pink-100 text-pink-700",
   },
   {

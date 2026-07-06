@@ -6,11 +6,17 @@ import TopProducts from "../../../components/dashboard/widgets/TopProducts/TopPr
 import LowStock from "../../../components/dashboard/widgets/LowStock/LowStock";
 import RecentActivity from "../../../components/dashboard/widgets/RecentActivity/RecentActivity";
 import QuickActions from "../../../components/dashboard/widgets/QuickActions/QuickActions";
-
+import { motion } from "framer-motion";
 import { stats } from "../../../data/dashboardData";
 
 export default function SellerDashboard() {
   return (
+        <motion.div
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+      className="space-y-6"
+    >
     <div className="space-y-6">
 
       {/* Hero */}
@@ -31,5 +37,6 @@ export default function SellerDashboard() {
 
 
     </div>
+    </motion.div>
   );
 }

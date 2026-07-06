@@ -7,7 +7,7 @@ import FestiveStats from "../../../components/dashboard/festive/FestiveStats";
 import FestiveFilters from "../../../components/dashboard/festive/FestiveFilters";
 import FestiveMenuTable from "../../../components/dashboard/festive/FestiveMenuTable";
 import FestiveEmptyState from "../../../components/dashboard/festive/FestiveEmptyState";
-
+import { motion } from "framer-motion";
 import CreateFestiveMenuModal from "../../../components/dashboard/festive/modals/CreateFestiveMenuModal";
 import ScheduleMenuModal from "../../../components/dashboard/festive/modals/ScheduleMenuModal";
 import DuplicateMenuModal from "../../../components/dashboard/festive/modals/DuplicateMenuModal";
@@ -135,6 +135,12 @@ export default function FestiveMenu() {
   }, [menus]);
 
   return (
+        <motion.div
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+      className="space-y-6"
+    >
     <div className="space-y-6">
       <FestiveHeader totalMenus={menus.length} onCreate={handleCreate} />
 
@@ -209,5 +215,6 @@ export default function FestiveMenu() {
         }}
       />
     </div>
+    </motion.div>
   );
 }

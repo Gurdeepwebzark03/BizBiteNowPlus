@@ -13,7 +13,7 @@ import {
   Trash2,
   PauseCircle,
 } from "lucide-react";
-
+import { motion } from "framer-motion";
 import { useFestiveMenu } from "../../../context/FestiveMenuContext";
 
 export default function FestiveMenuDetails() {
@@ -60,8 +60,16 @@ export default function FestiveMenuDetails() {
   };
 
   if (!menu) {
+        
+    
     return (
-      <div className="flex min-h-[70vh] items-center justify-center">
+          <motion.div
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+      className="space-y-6"
+    >
+      <div className="flex min-h-[70vh] text-black items-center justify-center">
         <div className="text-center">
           <h2 className="text-3xl font-bold text-slate-800">Menu Not Found</h2>
 
@@ -73,16 +81,23 @@ export default function FestiveMenuDetails() {
           </button>
         </div>
       </div>
+      </motion.div>
     );
   }
 
   return (
-    <div className="space-y-8 p-6">
+        <motion.div
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+      className="space-y-6"
+    >
+    <div  className="space-y-8 text-black p-6">
       {/* Back */}
 
       <button
         onClick={() => navigate(-1)}
-        className="flex items-center gap-2 rounded-xl border px-4 py-2 hover:bg-slate-50"
+        className="flex items-center gap-2 bg-orange-100 gap-2 text-black rounded-xl  p-3 transition-colors duration-300 ease-in-out hover:text-orange-600"
       >
         <ArrowLeft size={18} />
         Back
@@ -242,11 +257,18 @@ export default function FestiveMenuDetails() {
         </div>
       </div>
     </div>
+    </motion.div>
   );
 }
 
 function StatCard({ title, value, icon }) {
   return (
+        <motion.div
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+      className="space-y-6"
+    >
     <div className="rounded-3xl bg-white p-6 shadow">
       <div className="flex items-center justify-between">
         <div>
@@ -259,11 +281,19 @@ function StatCard({ title, value, icon }) {
         </div>
       </div>
     </div>
+    </motion.div>
   );
 }
 
 function DetailItem({ icon, label, value }) {
+
   return (
+        <motion.div
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+      className="space-y-6"
+    >
     <div className="rounded-2xl border p-5">
       <div className="mb-3 text-green-700">{icon}</div>
 
@@ -271,5 +301,6 @@ function DetailItem({ icon, label, value }) {
 
       <h3 className="mt-1 text-lg font-semibold">{value}</h3>
     </div>
+    </motion.div>
   );
 }
