@@ -13,7 +13,7 @@ export const stats = [
   {
     id: 1,
     title: "Today's Revenue",
-    value: "₹18,540",
+    value: "₹8,540",
     trend: 12.5,
     subtitle: "vs yesterday",
     icon: IndianRupee,
@@ -33,7 +33,7 @@ export const stats = [
   {
     id: 3,
     title: "Products",
-    value: "126",
+    value: "20",
     trend: 6,
     subtitle: "this week",
     icon: Package,

@@ -11,7 +11,7 @@ import {
   Copy,
   Trash2,
 } from "lucide-react";
-
+import { motion } from "framer-motion";
 import { useFestiveMenu } from "../../../context/FestiveMenuContext";
 
 export default function FestiveMenuHistory() {
@@ -66,6 +66,12 @@ export default function FestiveMenuHistory() {
       : 0;
 
   return (
+        <motion.div
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+      className="space-y-6"
+    >
     <div className="space-y-6 p-6">
 
       {/* Header */}
@@ -78,7 +84,7 @@ export default function FestiveMenuHistory() {
             onClick={() =>
               navigate("/seller/festivemenu")
             }
-            className="mb-4 flex items-center gap-2 rounded-xl border px-4 py-2 hover:bg-slate-50"
+            className="mb-4 flex items-center bg-orange-100 gap-2 text-black rounded-xl  p-3 transition-colors duration-300 ease-in-out hover:text-orange-600"
           >
             <ArrowLeft size={18} />
 
@@ -95,13 +101,13 @@ export default function FestiveMenuHistory() {
 
             <div>
 
-              <h1 className="text-3xl font-bold">
+              <h1 className="text-3xl text-black font-bold">
 
                 Festive Menu History
 
               </h1>
 
-              <p className="mt-1 text-slate-500">
+              <p className="mt-1 text-black text-slate-500">
 
                 View all previous festive menus,
                 revenue and orders.
@@ -118,7 +124,7 @@ export default function FestiveMenuHistory() {
 
       {/* Stats */}
 
-      <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+      <div className="grid gap-5 text-black md:grid-cols-2 xl:grid-cols-4">
 
         <HistoryCard
           title="Historic Menus"
@@ -168,7 +174,7 @@ export default function FestiveMenuHistory() {
 
       {/* Table */}
 
-      <div className="overflow-hidden rounded-3xl bg-white shadow">
+      <div className="overflow-hidden rounded-3xl text-black bg-white shadow">
 
         <table className="w-full">
 
@@ -377,6 +383,7 @@ export default function FestiveMenuHistory() {
       </div>
 
     </div>
+    </motion.div>
 
   );
 
@@ -391,6 +398,12 @@ function HistoryCard({
 }) {
 
   return (
+    <motion.div
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+      className="space-y-6"
+    >
 
     <div className="rounded-3xl bg-white p-6 shadow">
 
@@ -421,6 +434,7 @@ function HistoryCard({
       </div>
 
     </div>
+    </motion.div>
 
   );
 

@@ -6,7 +6,7 @@ import OrdersTabs from "../../../components/orders/OrderTabs";
 import OrderFilters from "../../../components/orders/OrderFilters";
 import OrdersTable from "../../../components/orders/OrdersTable";
 import OrderPagination from "../../../components/orders/OrderPagination";
-
+import { motion } from "framer-motion";
 import OrderDrawer from "../../../components/orders/OrderDrawer";
 import OrderBoard from "../../../components/orders/OrderBoard";
 import BulkActions from "../../../components/orders/BulkActions";
@@ -361,6 +361,12 @@ const autoCancelOrder = (order) => {
 };
 
 return (
+      <motion.div
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+      className="space-y-6"
+    >
   <div className="space-y-8">
 
     <OrdersHeader
@@ -494,5 +500,7 @@ return (
     />
 
   </div>
+  
+  </motion.div>
 );
 }

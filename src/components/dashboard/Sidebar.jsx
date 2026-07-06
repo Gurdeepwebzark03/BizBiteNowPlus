@@ -9,7 +9,8 @@ import {
   Settings,
   LogOut,
 } from "lucide-react";
-
+import icon from "../../assets/BIZ BITE NOW Icon.png";
+import logo from "../../assets/BIZ BITE NOW Horizontal with Icon.png";
 import SidebarItem from "./SidebarItem";
 
 export default function Sidebar({ collapsed, setCollapsed }) {
@@ -30,15 +31,15 @@ export default function Sidebar({ collapsed, setCollapsed }) {
       <div className="flex h-20 items-center justify-center border-b border-white/10 bg-white px-4">
         {collapsed ? (
           <img
-            src="/logo-icon.png"
+            src={icon}
             alt="BizBiteNow"
-            className="h-10 w-10 object-contain"
+            className="h-20 w-20 object-contain"
           />
         ) : (
           <img
-            src="/logo-full.png"
+            src={logo}
             alt="BizBiteNow"
-            className="h-10 object-contain"
+            className="h-20 object-contain"
           />
         )}
       </div>

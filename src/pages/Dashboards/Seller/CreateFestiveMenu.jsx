@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { ChevronLeft, ChevronRight, Check, Save, X } from "lucide-react";
-
+import { motion } from "framer-motion";
 import BasicInfoStep from "../../../components/dashboard/festive/builder/BasicInfoStep";
 import ProductsStep from "../../../components/dashboard/festive/builder/ProductsStep";
 import ScheduleStep from "../../../components/dashboard/festive/builder/ScheduleStep";
@@ -182,6 +182,12 @@ export default function CreateFestiveMenu() {
     navigate("/seller/festivemenu");
   };
   return (
+        <motion.div
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+      className="space-y-6"
+    >
     <div className="mx-auto max-w-7xl space-y-8 p-6">
       {/* Header */}
 
@@ -350,5 +356,6 @@ export default function CreateFestiveMenu() {
         </div>
       </div>
     </div>
+    </motion.div>
   );
 }

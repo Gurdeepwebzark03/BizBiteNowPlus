@@ -7,7 +7,7 @@ import ProductGrid from "../../../components/products/ProductGrid";
 import ProductDrawer from "../../../components/products/ProductDrawer";
 import ProductModal from "../../../components/products/ProductModal";
 import DeleteProductModal from "../../../components/products/DeleteProductModal";
-
+import { motion } from "framer-motion";
 import { products } from "../../../data/productsData";
 
 export default function Products() {
@@ -202,6 +202,12 @@ export default function Products() {
     XLSX.writeFile(workbook, "products.xlsx");
   };
   return (
+        <motion.div
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+      className="space-y-6"
+    >
     <div className="space-y-8">
       <input
         ref={fileInputRef}
@@ -258,5 +264,6 @@ export default function Products() {
         product={selectedProduct}
       />
     </div>
+    </motion.div>
   );
 }
