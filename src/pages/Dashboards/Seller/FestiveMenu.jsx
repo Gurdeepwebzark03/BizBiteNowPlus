@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-
+import { useNavigate } from "react-router-dom";
 import FestiveHeader from "../../../components/dashboard/festive/FestiveHeader";
 import FestiveBanner from "../../../components/dashboard/festive/FestiveBanner";
 import FestiveStats from "../../../components/dashboard/festive/FestiveStats";
@@ -14,13 +14,13 @@ import DeleteMenuModal from "../../../components/dashboard/festive/modals/Delete
 import { festiveMenuData } from "../../../data/festiveMenuData";
 
 export default function FestiveMenu() {
-  
+  const navigate = useNavigate();
 
   const [menus, setMenus] = useState(festiveMenuData);
 
-  const [search, setSearch] = useState("");
-  const [festivalFilter, setFestivalFilter] = useState("All");
-  const [statusFilter, setStatusFilter] = useState("All");
+const [search, setSearch] = useState("");
+const [festivalFilter, setFestivalFilter] = useState("All");
+const [statusFilter, setStatusFilter] = useState("All");
 
   const [selectedMenu, setSelectedMenu] = useState(null);
 
@@ -47,46 +47,101 @@ export default function FestiveMenu() {
     setSelectedMenu(menu);
     setShowDeleteModal(true);
   };
+  const handleSaveSchedule = (updatedMenu) => {
+  setMenus((prev) =>
+    prev.map((menu) =>
+      menu.id === updatedMenu.id
+        ? updatedMenu
+        : menu
+    )
+  );
 
-  const filteredMenus = useMemo(() => {
-    return menus.filter((menu) => {
-      const matchesSearch =
-        menu.name.toLowerCase().includes(search.toLowerCase()) ||
-        menu.festival.toLowerCase().includes(search.toLowerCase());
+  setSelectedMenu(null);
+  setShowScheduleModal(false);
+};
 
-      const matchesFestival =
-        festivalFilter === "All" ||
-        menu.festival === festivalFilter;
+const handleDuplicateSave = (newMenu) => {
+  setMenus((prev) => [
+    ...prev,
+    newMenu,
+  ]);
 
-      const matchesStatus =
-        statusFilter === "All" ||
-        menu.status === statusFilter;
+  setSelectedMenu(null);
+  setShowDuplicateModal(false);
+};
 
-      return (
-        matchesSearch &&
-        matchesFestival &&
-        matchesStatus
-      );
-    });
-  }, [menus, search, festivalFilter, statusFilter]);
+const handleDeleteConfirm = (menuToDelete) => {
+  setMenus((prev) =>
+    prev.filter(
+      (menu) => menu.id !== menuToDelete.id
+    )
+  );
 
-  const stats = useMemo(() => {
-    return {
-      total: menus.length,
+  setSelectedMenu(null);
+  setShowDeleteModal(false);
+};
 
-      active: menus.filter(
-        (m) => m.status === "Active"
-      ).length,
+const handleViewMenu = (menu) => {
+  navigate(`/seller/festivemenu/${menu.id}`);
+};
+const filteredMenus = useMemo(() => {
+  return menus.filter((menu) => {
+    const menuName = (menu.name || "").toLowerCase();
+    const menuFestival = (menu.festival || "").toLowerCase();
+    const menuStatus = (menu.status || "").toLowerCase();
 
-      scheduled: menus.filter(
-        (m) => m.status === "Scheduled"
-      ).length,
+    const searchText = search.trim().toLowerCase();
+    const selectedFestival = festivalFilter.toLowerCase();
+    const selectedStatus = statusFilter.toLowerCase();
 
-      draft: menus.filter(
-        (m) => m.status === "Draft"
-      ).length,
-    };
-  }, [menus]);
+    const matchesSearch =
+      searchText === "" ||
+      menuName.includes(searchText) ||
+      menuFestival.includes(searchText);
+
+    const matchesFestival =
+      selectedFestival === "all" ||
+      menuFestival === selectedFestival;
+
+    const matchesStatus =
+      selectedStatus === "all" ||
+      menuStatus === selectedStatus;
+
+    return (
+      matchesSearch &&
+      matchesFestival &&
+      matchesStatus
+    );
+  });
+}, [menus, search, festivalFilter, statusFilter]);
+
+const activeMenu = useMemo(() => {
+  return menus.find(
+    (menu) => menu.status.toLowerCase() === "active"
+  );
+}, [menus]);
+const stats = useMemo(() => {
+  return {
+    totalMenus: menus.length,
+
+    active: menus.filter(
+      (m) => m.status.toLowerCase() === "active"
+    ).length,
+
+    scheduled: menus.filter(
+      (m) => m.status.toLowerCase() === "scheduled"
+    ).length,
+
+    draft: menus.filter(
+      (m) => m.status.toLowerCase() === "draft"
+    ).length,
+
+    expired: menus.filter(
+      (m) => m.status.toLowerCase() === "expired"
+    ).length,
+  };
+}, [menus]);
+
     return (
     <div className="space-y-6">
 
@@ -95,17 +150,20 @@ export default function FestiveMenu() {
         onCreate={handleCreate}
       />
 
-      <FestiveBanner />
+      <FestiveBanner
+        menu={activeMenu}
+        onViewMenu={handleViewMenu}
+      />
 
       <FestiveStats stats={stats} />
 
       <FestiveFilters
         search={search}
-        onSearchChange={setSearch}
+        setSearch={setSearch}
         festival={festivalFilter}
-        onFestivalChange={setFestivalFilter}
+        setFestival={setFestivalFilter}
         status={statusFilter}
-        onStatusChange={setStatusFilter}
+        setStatus={setStatusFilter}
       />
 
       {filteredMenus.length === 0 ? (
@@ -131,36 +189,39 @@ export default function FestiveMenu() {
 
       {/* Schedule Modal */}
 
-      <ScheduleMenuModal
-        open={showScheduleModal}
-        menu={selectedMenu}
-        onClose={() => {
-          setSelectedMenu(null);
-          setShowScheduleModal(false);
-        }}
-      />
+<ScheduleMenuModal
+  open={showScheduleModal}
+  menu={selectedMenu}
+  onSave={handleSaveSchedule}
+  onClose={() => {
+    setSelectedMenu(null);
+    setShowScheduleModal(false);
+  }}
+/>
 
       {/* Duplicate Modal */}
 
-      <DuplicateMenuModal
-        open={showDuplicateModal}
-        menu={selectedMenu}
-        onClose={() => {
-          setSelectedMenu(null);
-          setShowDuplicateModal(false);
-        }}
-      />
+<DuplicateMenuModal
+  open={showDuplicateModal}
+  menu={selectedMenu}
+  onDuplicate={handleDuplicateSave}
+  onClose={() => {
+    setSelectedMenu(null);
+    setShowDuplicateModal(false);
+  }}
+/>
 
       {/* Delete Modal */}
 
-      <DeleteMenuModal
-        open={showDeleteModal}
-        menu={selectedMenu}
-        onClose={() => {
-          setSelectedMenu(null);
-          setShowDeleteModal(false);
-        }}
-      />
+<DeleteMenuModal
+  open={showDeleteModal}
+  menu={selectedMenu}
+  onDelete={handleDeleteConfirm}
+  onClose={() => {
+    setSelectedMenu(null);
+    setShowDeleteModal(false);
+  }}
+/>
 
     </div>
   );

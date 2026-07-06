@@ -12,6 +12,7 @@ import Settings from "./pages/Dashboards/Seller/Settings";
 import RegisterSuccess from "./pages/Auth/RegisterSuccess";
 import DeliveryDashboard from "./pages/Dashboards/DeliveryDashboard/DeliveryDashboard"
 import FestiveMenu from "./pages/Dashboards/Seller/FestiveMenu";
+import FestiveMenuDetails from "./pages/Dashboards/Seller/FestiveMenuDetails";
 import Analytics from "./pages/Dashboards/Seller/Analytics";
 import CreateFestiveMenu from "./pages/Dashboards/Seller/CreateFestiveMenu";
 import StoreFront from "./pages/customer/StoreFront";
@@ -23,6 +24,7 @@ import OrderConfirmation from "./pages/customer/OrderConfirmation";
 import CustomerProfile from "./pages/customer/Profile";
 import CustomerOnboarding from "./pages/customer/CustomerOnboarding";
 import CustomerGate from "./components/customer/CustomerGate";
+
 export default function App() {
   return (
     <div className="w-full min-h-screen bg-slate-950 m-0 p-0 box-border overflow-x-hidden">
@@ -110,6 +112,8 @@ export default function App() {
           <Route path="profile" element={<Profile />} />
           <Route path="festivemenu" element={<FestiveMenu/>}/>
           <Route path="festivemenu/create" element={<CreateFestiveMenu />} />
+          <Route path="festivemenu/:id" element={<FestiveMenuDetails />}
+/>
 
         </Route>
         {/* Registration Success */}

@@ -1,5 +1,5 @@
+import { useEffect, useState } from "react";
 import { ImagePlus } from "lucide-react";
-
 const FESTIVALS = [
   "Diwali",
   "Holi",
@@ -26,6 +26,20 @@ export default function BasicInfoStep({
   data = {},
   onChange,
 }) {
+  const [preview, setPreview] = useState("");
+
+useEffect(() => {
+  if (data.banner instanceof File) {
+    const url = URL.createObjectURL(data.banner);
+    setPreview(url);
+
+    return () => URL.revokeObjectURL(url);
+  }
+
+  if (typeof data.banner === "string") {
+    setPreview(data.banner);
+  }
+}, [data.banner]);
   const updateField = (field, value) => {
     onChange?.({
       ...data,
@@ -54,6 +68,7 @@ export default function BasicInfoStep({
           </label>
 
           <input
+            maxLength={60}
             type="text"
             value={data.name || ""}
             onChange={(e) =>
@@ -62,6 +77,9 @@ export default function BasicInfoStep({
             placeholder="Diwali Special Menu"
             className="h-12 w-full rounded-xl border border-slate-200 bg-transparent px-4 outline-none transition focus:border-[#1A4D2E] focus:ring-4 focus:ring-[#1A4D2E]/10 dark:border-slate-700"
           />
+          <p className="mt-1 text-xs text-slate-500 text-right">
+            {(data.name || "").length}/60
+          </p>
         </div>
 
         {/* Festival */}
@@ -132,6 +150,7 @@ export default function BasicInfoStep({
 
         <textarea
           rows={5}
+          maxLength={300}
           value={data.description || ""}
           onChange={(e) =>
             updateField("description", e.target.value)
@@ -139,6 +158,9 @@ export default function BasicInfoStep({
           placeholder="Describe your festive menu..."
           className="w-full rounded-xl border border-slate-200 bg-transparent p-4 outline-none transition focus:border-[#1A4D2E] focus:ring-4 focus:ring-[#1A4D2E]/10 dark:border-slate-700"
         />
+        <p className="mt-2 text-xs text-slate-500 text-right">
+          {(data.description || "").length}/300
+        </p>
       </div>
 
       {/* Banner */}
@@ -194,9 +216,17 @@ export default function BasicInfoStep({
           />
         </label>
 
-        {data.banner && (
-          <div className="mt-4 rounded-xl border border-emerald-200 bg-emerald-50 p-3 text-sm text-emerald-700 dark:border-emerald-800 dark:bg-emerald-900/20 dark:text-emerald-300">
-            Selected: {data.banner.name}
+        {preview && (
+          <div className="mt-5">
+            <img
+              src={preview}
+              alt="Festival Banner Preview"
+              className="h-48 w-full rounded-2xl object-cover border"
+            />
+
+            <p className="mt-2 text-sm text-emerald-600 font-medium">
+              Banner uploaded successfully
+            </p>
           </div>
         )}
       </div>

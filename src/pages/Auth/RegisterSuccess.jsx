@@ -1,111 +1,258 @@
-import React from 'react';
-import { CheckCircle2, ArrowRight, Store, ShieldCheck, HelpCircle } from 'lucide-react';
-import { useNavigate, Link } from 'react-router-dom';
+import React from "react";
+import { motion } from "framer-motion";
+import {
+  CheckCircle2,
+  ArrowRight,
+  Store,
+  ShieldCheck,
+  BarChart3,
+  Sparkles,
+} from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import logoHorizontal from "../../assets/bizbite_logo_horizontal.png";
 
 export default function RegisterSuccess() {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen bg-slate-900 flex items-center justify-center p-0 md:p-6">
-      {/* Main Card Wrapper - Laptop me 12-columns grid, Phone me normal vertical stack */}
-      <div className="bg-white w-full max-w-5xl min-h-[75vh] rounded-none md:rounded-3xl shadow-2xl overflow-hidden grid grid-cols-1 lg:grid-cols-12">
-        
-        {/* LEFT PANEL: Laptop par dikhega, Phone par automatic hide ho jayega (hidden lg:flex) */}
-        <div className="hidden lg:flex lg:col-span-5 bg-gradient-to-br from-slate-950 via-indigo-950 to-slate-900 p-12 flex-col justify-between relative overflow-hidden text-white border-r border-slate-800">
-          <div className="absolute -top-20 -left-20 w-60 h-60 bg-emerald-500/10 rounded-full blur-3xl"></div>
-          
-          <div>
-            <span className="text-2xl font-black tracking-tight">
-              BizbitsNow<span className="text-emerald-400">PLUS</span>
-            </span>
-            <p className="text-xs text-slate-400 mt-1">Infrastructure Verification Layer</p>
-          </div>
+    <div className="relative min-h-screen overflow-hidden bg-gradient-to-br from-[#0b2b18] via-[#16522d] to-[#07140d]">
 
-          <div className="space-y-6 my-auto">
-            <h3 className="text-2xl font-bold tracking-tight text-slate-200">What happens next?</h3>
-            
-            <div className="space-y-4">
-              <div className="flex items-start space-x-3">
-                <div className="p-2 bg-white/5 rounded-lg text-emerald-400"><Store size={16} /></div>
-                <div>
-                  <h4 className="font-semibold text-xs text-slate-200">Storefront Allocation</h4>
-                  <p className="text-[11px] text-slate-400">Your unique Merchant Identity is generated and synced with DB.</p>
+      {/* Background */}
+
+      <div className="absolute -top-32 -left-32 h-72 w-72 rounded-full bg-[#ffc700]/10 blur-3xl"></div>
+
+      <div className="absolute bottom-0 right-0 h-80 w-80 rounded-full bg-white/5 blur-3xl"></div>
+
+      <div className="relative flex min-h-screen items-center justify-center px-6 py-5">
+
+        <motion.div
+          initial={{ opacity: 0, x: 70 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{
+            duration: 0.45,
+            ease: "easeInOut",
+          }}
+          className="w-full max-w-6xl"
+        >
+
+          <div className="grid w-full max-w-6xl max-h-[800px] overflow-hidden rounded-[28px] bg-white shadow-[0_30px_60px_rgba(22,82,45,.18)] lg:min-h-[620px] lg:grid-cols-2">
+
+            {/* LEFT PANEL */}
+
+          <div  className="relative hidden overflow-hidden bg-gradient-to-br from-[#16522d] via-[#124325] to-[#08160e] p-6 text-white lg:flex lg:flex-col">
+
+              <div className="absolute right-0 top-0 h-60 w-60 rounded-full bg-[#ffc700]/10 blur-3xl"></div>
+
+              <div className="relative z-10">
+
+                <img
+                  src={logoHorizontal}
+                  alt="BizBiteNow"
+                  className="h-10 object-contain"
+                />
+
+                <span className="mt-5 inline-flex rounded-full bg-[#ffc700] px-3 py-1 text-xs font-bold text-[#16522d]">
+                  Seller Platform
+                </span>
+
+                <h1 className="mt-6 text-4xl font-black leading-tight">
+                  Welcome to
+                  <br />
+                  BizBiteNow+
+                </h1>
+
+                <p className="mt-4 max-w-sm text-sm leading-7 text-green-100">
+                  Your seller account has been created successfully.
+                  You're now ready to manage products, orders,
+                  festive menus and analytics from one dashboard.
+                </p>
+
+              </div>
+
+              <div className="py-35" >
+
+                <div className="flex items-center gap-4 rounded-2xl border border-white/10 bg-white/5 p-2">
+
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#ffc700] text-[#16522d]">
+                    <Store size={22} />
+                  </div>
+
+                  <div>
+
+                    <h3 className="font-semibold">
+                      Store Created
+                    </h3>
+
+                    <p className="text-xs text-green-100">
+                      Your restaurant profile is ready.
+                    </p>
+
+                  </div>
+
                 </div>
-              </div>
 
-              <div className="flex items-start space-x-3">
-                <div className="p-2 bg-white/5 rounded-lg text-indigo-400"><ShieldCheck size={16} /></div>
-                <div>
-                  <h4 className="font-semibold text-xs text-slate-200">6-Digit Access Token</h4>
-                  <p className="text-[11px] text-slate-400">Your security PIN has been encrypted with hash salts.</p>
+                <div className="flex items-center gap-4 rounded-2xl border border-white/10 bg-white/5 p-2">
+
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#ffc700] text-[#16522d]">
+                    <ShieldCheck size={22} />
+                  </div>
+
+                  <div>
+
+                    <h3 className="font-semibold">
+                      Seller Account Secured
+                    </h3>
+
+                    <p className="text-xs text-green-100">
+                      PIN and profile stored locally.
+                    </p>
+
+                  </div>
+
                 </div>
+
+                <div className="flex items-center gap-4 rounded-2xl border border-white/10 bg-white/5 p-2">
+
+                  <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#ffc700] text-[#16522d]">
+                    <BarChart3 size={22} />
+                  </div>
+
+                  <div>
+
+                    <h3 className="font-semibold">
+                      Dashboard Ready
+                    </h3>
+
+                    <p className="text-xs text-green-100">
+                      Start managing your restaurant instantly.
+                    </p>
+
+                  </div>
+
+                </div>
+
               </div>
+
             </div>
-          </div>
 
-          <div className="text-xs text-slate-500">
-            &copy; 2026 BizbitsNow Security.
-          </div>
-        </div>
+            {/* RIGHT PANEL */}
 
-        {/* RIGHT PANEL: Success Content (Phone and Laptop Dono ke liye tailored) */}
-        <div className="col-span-1 lg:col-span-7 p-6 sm:p-12 md:p-16 flex flex-col justify-center items-center bg-slate-50/30 text-center">
-          <div className="w-full max-w-md mx-auto space-y-8 flex flex-col items-center">
-            
-            {/* Animated Success Check Icon */}
-            <div className="relative flex items-center justify-center">
-              <div className="absolute w-24 h-24 bg-emerald-100 rounded-full animate-ping opacity-25"></div>
-              <div className="relative p-4 bg-emerald-50 rounded-full text-emerald-500 border border-emerald-200">
-                <CheckCircle2 size={56} className="stroke-[1.5]" />
+            <div className="w-full text-center justify-center bg-white px-8 py-1">
+
+              
+
+                <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-emerald-50">
+                  <CheckCircle2
+                    size={48}
+                    className="text-emerald-500"
+                  />
+                </div>
+
+                <div className="mt-6">
+
+                  <span className="inline-flex items-center gap-2 rounded-full bg-green-100 px-4 py-1 text-xs font-bold uppercase tracking-wider text-green-700">
+
+                    <Sparkles size={14} />
+
+                    Registration Successful
+
+                  </span>
+
+                  <h2 className="mt-5 text-4xl font-black text-[#16522d]">
+                    Welcome Seller!
+                  </h2>
+
+                  <p className="mt-4 text-sm leading-7 text-slate-500">
+                    Congratulations! Your BizBiteNow+ seller account
+                    has been created successfully.
+                  </p>
+                                  </div>
+
+                {/* Status Cards */}
+
+                <div className="mt-6 space-y-2.5">
+
+                  <div className="flex items-center justify-between rounded-2xl border border-slate-200 bg-slate-50 px-5 py-3">
+
+                    <span className="text-sm font-medium text-slate-600">
+                      Account Status
+                    </span>
+
+                    <span className="rounded-lg bg-green-100 px-3 py-1 text-xs font-bold text-green-700">
+                      ACTIVE
+                    </span>
+
+                  </div>
+
+                  <div className="flex items-center justify-between rounded-2xl border border-slate-200 bg-slate-50 px-5 py-3">
+
+                    <span className="text-sm font-medium text-slate-600">
+                      Store Status
+                    </span>
+
+                    <span className="rounded-lg bg-[#ffc700]/20 px-3 py-1 text-xs font-bold text-[#16522d]">
+                      READY
+                    </span>
+
+                  </div>
+
+                  <div className="flex items-center justify-between rounded-2xl border border-slate-200 bg-slate-50 px-5 py-3">
+
+                    <span className="text-sm font-medium text-slate-600">
+                      Dashboard Access
+                    </span>
+
+                    <span className="rounded-lg bg-emerald-100 px-3 py-1 text-xs font-bold text-emerald-700">
+                      ENABLED
+                    </span>
+
+                  </div>
+
+                </div>
+
+                {/* CTA */}
+
+                <button
+                  onClick={() => navigate("/seller/dashboard")}
+                  className="group mt-8 flex w-full items-center justify-center gap-3 rounded-2xl bg-[#16522d] py-3 text-base font-bold text-white shadow-lg transition-all duration-300 hover:-translate-y-0.5 hover:bg-[#1b6337]"
+                >
+                  Go To Seller Dashboard
+
+                  <ArrowRight
+                    size={20}
+                    className="transition-transform duration-300 group-hover:translate-x-1"
+                  />
+                </button>
+
+                <button
+                  onClick={() => navigate("/storefront")}
+                  className="mt-4 w-full rounded-2xl border border-[#16522d] py-3 font-semibold text-[#16522d] transition-all duration-300 hover:bg-[#16522d] hover:text-white"
+                >
+                  Visit Storefront
+                </button>
+
+                <div className="mt-10 border-t border-slate-200 pt-5">
+
+                  <p className="text-xs text-slate-500">
+                    You're all set! Start adding products,
+                    managing orders, creating festive menus,
+                    and tracking analytics from your seller dashboard.
+                  </p>
+
+                  <p className="mt-4 text-[11px] text-slate-400">
+                    © 2026 BizBiteNow+ • Seller Platform
+                  </p>
+
+                </div>
+
               </div>
+
             </div>
 
-            {/* Typography Response Texts with Hardcoded slate colors */}
-            <div className="space-y-3">
-              <span className="inline-block bg-emerald-100 text-emerald-800 text-[10px] font-bold px-3 py-1 rounded-full uppercase tracking-wider">
-                System Activated
-              </span>
-              <h1 className="text-3xl font-black tracking-tight" style={{ color: '#0f172a' }}>
-                Account Ready!
-              </h1>
-              <p className="text-sm font-medium text-slate-500 px-2 leading-relaxed">
-                Congratulations, your onboarding response has been securely saved. Your merchant infrastructure is fully active.
-              </p>
-            </div>
-
-            {/* Dynamic Status Badges Info Box */}
-            <div className="w-full bg-white border border-slate-200/60 p-4 rounded-2xl shadow-sm text-left space-y-2.5">
-              <div className="flex justify-between items-center text-xs">
-                <span className="text-slate-400 font-medium">Connection Status</span>
-                <span className="text-emerald-600 font-bold bg-emerald-50 px-2 py-0.5 rounded-md">LIVE / ONLINE</span>
-              </div>
-              <div className="h-px bg-slate-100 w-full"></div>
-              <div className="flex justify-between items-center text-xs">
-                <span className="text-slate-400 font-medium">Database Node</span>
-                <span className="text-slate-700 font-mono font-semibold">Cluster-0_Main</span>
-              </div>
-            </div>
-
-            {/* Call To Action Button */}
-            <button 
-              onClick={() => navigate('/login')}
-              className="w-full bg-slate-900 hover:bg-slate-800 text-white font-semibold py-3.5 rounded-xl transition duration-200 flex items-center justify-center space-x-2 shadow-lg group cursor-pointer text-sm"
-            >
-              <span>Proceed to Login Portal</span>
-              <ArrowRight size={16} className="transform group-hover:translate-x-1 transition-transform" />
-            </button>
-
-            {/* Bottom Support Link */}
-            <div className="flex items-center space-x-1 text-xs text-slate-400 font-medium pt-2">
-              <HelpCircle size={14} />
-              <span>Facing login issues?</span>
-              <Link to="/support" className="text-indigo-600 hover:underline font-semibold ml-1">Contact DevOps</Link>
-            </div>
-
-          </div>
-        </div>
+        </motion.div>
 
       </div>
+
     </div>
   );
 }

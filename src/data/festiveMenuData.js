@@ -138,7 +138,7 @@ export const festiveStats = {
 };
 
 export const festiveStatus = [
-  "all",
+  "All",
   "active",
   "scheduled",
   "draft",

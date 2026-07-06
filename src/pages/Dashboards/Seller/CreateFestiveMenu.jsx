@@ -49,6 +49,38 @@ export default function CreateFestiveMenu() {
 
   const [appearance] = useState({});
 
+const [availableProducts] = useState([
+  {
+    id: 1,
+    name: "Paneer Butter Masala",
+    category: "Main Course",
+    price: 320,
+  },
+  {
+    id: 2,
+    name: "Veg Biryani",
+    category: "Rice",
+    price: 260,
+  },
+  {
+    id: 3,
+    name: "Gulab Jamun",
+    category: "Dessert",
+    price: 140,
+  },
+  {
+    id: 4,
+    name: "Chocolate Cake",
+    category: "Dessert",
+    price: 480,
+  },
+  {
+    id: 5,
+    name: "Cold Coffee",
+    category: "Beverage",
+    price: 180,
+  },
+]);
   const progress =
     (currentStep / STEPS.length) * 100;
 
@@ -236,10 +268,11 @@ export default function CreateFestiveMenu() {
         )}
 
         {currentStep === 2 && (
-          <ProductsStep
-            data={products}
-            onChange={setProducts}
-          />
+        <ProductsStep
+          data={products}
+          products={availableProducts}
+          onChange={setProducts}
+        />
         )}
 
         {currentStep === 3 && (
