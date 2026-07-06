@@ -33,6 +33,7 @@ import OrderConfirmation from "./pages/customer/OrderConfirmation";
 import CustomerProfile from "./pages/customer/Profile";
 import CustomerOnboarding from "./pages/customer/CustomerOnboarding";
 import CustomerGate from "./components/customer/CustomerGate";
+import SpecialOffers from "./components/special offers/SpecialOffers";
 
 export default function App() {
   return (
@@ -123,6 +124,7 @@ export default function App() {
           <Route path="delivery" element={<DeliveryDashboard />} />
           <Route path="settings" element={<Settings />} />
           <Route path="products" element={<Products />} />
+          <Route path="special-offers" element={<SpecialOffers />} />
           <Route path="analytics" element={<Analytics />} />
           <Route path="profile" element={<Profile />} />
 
@@ -137,7 +139,9 @@ export default function App() {
           <Route path="festivemenu/create" element={<CreateFestiveMenu />} />
           <Route path="festivemenu/edit/:id" element={<CreateFestiveMenu />} />
           <Route path="festivemenu/:id" element={<FestiveMenuDetails />} />
+          <Route path="festivemenu/history" element={<FestiveMenuHistory />} />
           <Route path="festivemenu/history" element={<FestiveMenuHistory/>}/>
+
 
         </Route>
         {/* Registration Success */}

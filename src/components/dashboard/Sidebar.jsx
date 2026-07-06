@@ -8,6 +8,7 @@ import {
   BarChart3,
   Settings,
   LogOut,
+  TicketPercent
 } from "lucide-react";
 import icon from "../../assets/BIZ BITE NOW Icon.png";
 import logo from "../../assets/BIZ BITE NOW Horizontal with Icon.png";
@@ -83,6 +84,13 @@ export default function Sidebar({ collapsed, setCollapsed }) {
   to="/seller/delivery-management"
   collapsed={collapsed}
 />
+
+          <SidebarItem
+            title="Special Offers"
+            icon={TicketPercent}
+            to="/seller/special-offers"
+            collapsed={collapsed}
+          />
 
           <SidebarItem
             title="Festive Menu"
