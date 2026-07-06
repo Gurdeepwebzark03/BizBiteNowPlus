@@ -14,6 +14,7 @@ import Products from "./pages/Dashboards/Seller/Products";
 import Settings from "./pages/Dashboards/Seller/Settings";
 import RegisterSuccess from "./pages/Auth/RegisterSuccess";
 import DeliveryDashboard from "./pages/Dashboards/DeliveryDashboard/DeliveryDashboard"
+import DeliveryManagement from "./pages/Dashboards/DeliveryDashboard/DeliveryManagement";
 
 import Analytics from "./pages/Dashboards/Seller/Analytics";
 // Future Modules
@@ -48,6 +49,8 @@ export default function App() {
           <Route path="products" element={<Products />} />
           <Route path="analytics" element={<Analytics />} />
           <Route path="profile" element={<Profile />} />
+          <Route  path="delivery-management" element={<DeliveryManagement />}
+/>
         </Route>
         {/* Registration Success */}
         <Route

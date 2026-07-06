@@ -94,12 +94,20 @@ export default function Sidebar({ collapsed, setCollapsed }) {
             collapsed={collapsed}
           />
 
-          <SidebarItem
+          {/* <SidebarItem
             title="Delivery"
             icon={Truck}
             to="/seller/delivery"
             collapsed={collapsed}
-          />
+          /> */}
+
+{/* Delivery management */}
+<SidebarItem
+  title="Delivery Management"
+  icon={Truck}
+  to="/seller/delivery-management"
+  collapsed={collapsed}
+/>
 
           <SidebarItem
             title="Marketing"
@@ -128,7 +136,7 @@ export default function Sidebar({ collapsed, setCollapsed }) {
             to="/seller/settings"
             collapsed={collapsed}
           />
-
+          
           <SidebarItem
             title="Logout"
             icon={LogOut}

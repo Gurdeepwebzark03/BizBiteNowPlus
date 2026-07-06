@@ -23,7 +23,7 @@ export default function DeliveryDashboard() {
     return matchSearch && matchFilter;
   });
 
-  // Today's Earnings (₹120 per completed delivery)
+  // Dynamic Earnings
   const completedOrders = orders.filter(
     (order) => order.status === "Delivered"
   ).length;
@@ -44,43 +44,67 @@ export default function DeliveryDashboard() {
           </p>
         </div>
 
-        <button
-          onClick={() => setIsOnline(!isOnline)}
-          className={`px-5 py-2 rounded-lg text-white font-semibold transition ${
-            isOnline
-              ? "bg-green-500 hover:bg-green-600"
-              : "bg-red-500 hover:bg-red-600"
-          }`}
-        >
-          {isOnline ? "🟢 Online" : "🔴 Offline"}
-        </button>
+        {/* Animated Toggle Switch */}
+        <div className="flex items-center gap-3">
+
+          <span
+            className={`text-sm font-semibold ${
+              isOnline
+                ? "text-green-600"
+                : "text-red-600"
+            }`}
+          >
+            {isOnline ? "Online" : "Offline"}
+          </span>
+
+          <button
+            type="button"
+            onClick={() => setIsOnline(!isOnline)}
+            className={`relative w-16 h-8 rounded-full transition-all duration-300 ${
+              isOnline
+                ? "bg-green-500"
+                : "bg-gray-400"
+            }`}
+          >
+
+            <div
+              className={`absolute top-1 left-1 w-6 h-6 rounded-full bg-white shadow-md transition-all duration-300 ${
+                isOnline
+                  ? "translate-x-8"
+                  : "translate-x-0"
+              }`}
+            />
+
+          </button>
+
+        </div>
 
       </div>
 
-      {/* Delivery Partner Profile */}
+      {/* Delivery Partner */}
       <DeliveryProfileCard isOnline={isOnline} />
 
-      {/* Today's Earnings */}
-      {/* <TodayEarnings completedOrders={completedOrders} /> */}
+      {/* Earnings */}
+      <TodayEarnings completedOrders={completedOrders} />
 
-      {/* Dashboard Stats */}
+      {/* Stats */}
       <DeliveryStats orders={orders} />
 
       {/* Search & Filter */}
-      <div className="bg-white rounded-xl shadow-md p-4 mb-6 flex flex-col md:flex-row justify-between gap-4">
+      <div className="bg-white rounded-xl shadow-md p-4 mb-6 flex flex-col md:flex-row gap-4 justify-between">
 
         <input
           type="text"
-          placeholder="Search by Order ID or Customer..."
+          placeholder="Search Order ID or Customer..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="border rounded-lg px-4 py-2 w-full md:w-80 outline-none focus:ring-2 focus:ring-amber-500"
+          className="border rounded-lg px-4 py-2 w-full md:w-80 focus:outline-none focus:ring-2 focus:ring-amber-500"
         />
 
         <select
           value={filter}
           onChange={(e) => setFilter(e.target.value)}
-          className="border rounded-lg px-4 py-2 w-full md:w-60 outline-none focus:ring-2 focus:ring-amber-500"
+          className="border rounded-lg px-4 py-2 w-full md:w-60 focus:outline-none focus:ring-2 focus:ring-amber-500"
         >
           <option>All</option>
           <option>Pending</option>
