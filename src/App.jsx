@@ -12,6 +12,10 @@ import Settings from "./pages/Dashboards/Seller/Settings";
 import RegisterSuccess from "./pages/Auth/RegisterSuccess";
 import DeliveryDashboard from "./pages/Dashboards/DeliveryDashboard/DeliveryDashboard";
 
+import DeliveryDashboard from "./pages/Dashboards/DeliveryDashboard/DeliveryDashboard"
+import DeliveryManagement from "./pages/Dashboards/DeliveryDashboard/DeliveryManagement";
+
+
 import FestiveMenu from "./pages/Dashboards/Seller/FestiveMenu";
 import FestiveMenuDetails from "./pages/Dashboards/Seller/FestiveMenuDetails";
 import { FestiveMenuProvider } from "./context/FestiveMenuContext";
@@ -121,11 +125,20 @@ export default function App() {
           <Route path="products" element={<Products />} />
           <Route path="analytics" element={<Analytics />} />
           <Route path="profile" element={<Profile />} />
+
+          <Route  path="delivery-management" element={<DeliveryManagement />}
+/>
+
+          <Route path="festivemenu" element={<FestiveMenu/>}/>
+          <Route path="festivemenu/create" element={<CreateFestiveMenu />} />
+
+
           <Route path="festivemenu" element={<FestiveMenu />} />
           <Route path="festivemenu/create" element={<CreateFestiveMenu />} />
           <Route path="festivemenu/edit/:id" element={<CreateFestiveMenu />} />
           <Route path="festivemenu/:id" element={<FestiveMenuDetails />} />
           <Route path="festivemenu/history" element={<FestiveMenuHistory/>}/>
+
         </Route>
         {/* Registration Success */}
         <Route

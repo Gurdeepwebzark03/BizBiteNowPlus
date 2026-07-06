@@ -69,12 +69,20 @@ export default function Sidebar({ collapsed, setCollapsed }) {
             collapsed={collapsed}
           />
 
-          <SidebarItem
+          {/* <SidebarItem
             title="Delivery"
             icon={Truck}
             to="/seller/delivery"
             collapsed={collapsed}
-          />
+          /> */}
+
+{/* Delivery management */}
+<SidebarItem
+  title="Delivery Management"
+  icon={Truck}
+  to="/seller/delivery-management"
+  collapsed={collapsed}
+/>
 
           <SidebarItem
             title="Festive Menu"
@@ -96,6 +104,18 @@ export default function Sidebar({ collapsed, setCollapsed }) {
             to="/seller/settings"
             collapsed={collapsed}
           />
+<<<<<<< HEAD
+          
+          <SidebarItem
+            title="Logout"
+            icon={LogOut}
+            to="/login"
+            collapsed={collapsed}
+            danger
+          />
+
+=======
+>>>>>>> ebd0b3dfa3a10aac5a5af3e2205fbb2409115953
         </div>
       </nav>
 
