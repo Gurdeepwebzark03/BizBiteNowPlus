@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom";
 import logoHorizontal from "../../assets/bizbite_logo_horizontal.png";
-import { API } from "../../services/api";
+
 import { motion } from "framer-motion";
 
 
@@ -42,27 +42,39 @@ export default function RegisterSeller() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    setError("");
-    setLoading(true);
+  setError("");
 
-    try {
-      const response = await API.post("/auth/register", formData);
+  if (
+    !formData.name.trim() ||
+    !formData.email.trim() ||
+    !formData.phoneNumber.trim() ||
+    !formData.business_name.trim() ||
+    !formData.pin.trim() ||
+    !formData.address.trim() ||
+    !formData.city.trim() ||
+    !formData.state.trim()
+  ) {
+    setError("Please fill in all required fields.");
+    return;
+  }
 
-      if (response.status === 201 || response.status === 200) {
-        alert("Registration successful! Please login.");
-        navigate("/login");
-      }
-    } catch (err) {
-      setError(
-        err.response?.data?.message ||
-          "Something went wrong. Please check your details.",
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
+  setLoading(true);
+
+  // Fake API delay
+  await new Promise((resolve) => setTimeout(resolve, 1000));
+
+  // Save demo seller locally
+  localStorage.setItem(
+    "pendingSeller",
+    JSON.stringify(formData)
+  );
+
+  setLoading(false);
+
+  navigate("/seller/register-success");
+};
 
   return (
     <div className="relative h-screen overflow-hidden bg-gradient-to-br from-[#0b2b18] via-[#16522d] to-[#07140d]">

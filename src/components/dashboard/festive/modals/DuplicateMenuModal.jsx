@@ -56,15 +56,15 @@ export default function DuplicateMenuModal({
     >
       <div
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-lg rounded-2xl overflow-hidden bg-white dark:bg-slate-900 shadow-2xl"
+        className="w-full max-w-lg rounded-2xl overflow-hidden bg-white 900 shadow-2xl"
       >
         {/* Header */}
 
-        <div className="flex items-center justify-between border-b dark:border-slate-700 px-6 py-5">
+        <div className="flex items-center justify-between border-b border-slate-700 px-6 py-5">
 
           <div className="flex items-center gap-3">
 
-            <div className="rounded-xl bg-violet-100 dark:bg-violet-500/10 p-3">
+            <div className="rounded-xl bg-violet-100 -violet-500/10 p-3">
 
               <Copy
                 size={22}
@@ -89,7 +89,7 @@ export default function DuplicateMenuModal({
 
           <button
             onClick={onClose}
-            className="rounded-lg p-2 hover:bg-slate-100 dark:hover:bg-slate-800"
+            className="rounded-lg p-2 hover:bg-slate-100 hover:bg-slate-800"
           >
             <X size={18} />
           </button>
@@ -100,7 +100,7 @@ export default function DuplicateMenuModal({
 
         <div className="p-6 space-y-6">
 
-          <div className="rounded-xl border bg-violet-50 dark:bg-violet-500/10 border-violet-200 dark:border-violet-800 p-5">
+          <div className="rounded-xl border bg-violet-50 -violet-500/10 border-violet-200 border-violet-800 p-5">
 
             <div className="flex items-center gap-3">
 
@@ -204,11 +204,11 @@ export default function DuplicateMenuModal({
 
         {/* Footer */}
 
-        <div className="flex justify-end gap-3 border-t dark:border-slate-700 px-6 py-5">
+        <div className="flex justify-end gap-3 border-t border-slate-700 px-6 py-5">
 
           <button
             onClick={onClose}
-            className="rounded-xl border px-5 py-2.5 hover:bg-slate-100 dark:hover:bg-slate-800"
+            className="rounded-xl border px-5 py-2.5 hover:bg-slate-100 hover:bg-slate-800"
           >
             Cancel
           </button>

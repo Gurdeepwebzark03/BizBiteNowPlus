@@ -28,7 +28,7 @@ export default function ReviewStep({
 
       {/* Basic Information */}
 
-      <div className="rounded-xl border bg-white dark:bg-slate-900 dark:border-slate-700">
+      <div className="rounded-xl border bg-white 900 border-slate-700">
 
         <div className="border-b px-6 py-4 flex items-center gap-2">
           <Package className="text-orange-500" size={18} />
@@ -85,7 +85,7 @@ export default function ReviewStep({
               Description
             </p>
 
-            <p className="mt-2 text-sm text-slate-600 dark:text-slate-400">
+            <p className="mt-2 text-sm text-slate-600 text-slate-400">
               {basicInfo.description ||
                 "No description added."}
             </p>
@@ -98,7 +98,7 @@ export default function ReviewStep({
 
       {/* Products */}
 
-      <div className="rounded-xl border bg-white dark:bg-slate-900 dark:border-slate-700">
+      <div className="rounded-xl border bg-white 900 border-slate-700">
 
         <div className="border-b px-6 py-4 flex items-center gap-2">
 
@@ -121,7 +121,7 @@ export default function ReviewStep({
               Total Products
             </p>
 
-            <span className="rounded-full bg-slate-100 dark:bg-slate-800 px-3 py-1 text-sm">
+            <span className="rounded-full bg-slate-100 800 px-3 py-1 text-sm">
               {products.length}
             </span>
 
@@ -176,7 +176,7 @@ export default function ReviewStep({
       </div>
             {/* Appearance */}
 
-      <div className="rounded-xl border bg-white dark:bg-slate-900 dark:border-slate-700">
+      <div className="rounded-xl border bg-white 900 border-slate-700">
 
         <div className="border-b px-6 py-4 flex items-center gap-2">
           <Palette className="text-pink-500" size={18} />
@@ -247,7 +247,7 @@ export default function ReviewStep({
 
       {/* Schedule */}
 
-      <div className="rounded-xl border bg-white dark:bg-slate-900 dark:border-slate-700">
+      <div className="rounded-xl border bg-white 900 border-slate-700">
 
         <div className="border-b px-6 py-4 flex items-center gap-2">
 
@@ -322,7 +322,7 @@ export default function ReviewStep({
 
       {/* Validation */}
 
-      <div className="rounded-xl border bg-emerald-50 dark:bg-emerald-900/10 border-emerald-200 dark:border-emerald-800 p-6">
+      <div className="rounded-xl border bg-emerald-50 -emerald-900/10 border-emerald-200 border-emerald-800 p-6">
 
         <div className="flex items-center gap-2 mb-5">
 

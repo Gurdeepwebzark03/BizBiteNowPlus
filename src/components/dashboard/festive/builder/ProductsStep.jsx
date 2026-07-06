@@ -1,55 +1,18 @@
 import { Plus, Search, Package, Trash2 } from "lucide-react";
 import { useMemo, useState } from "react";
 
-const mockProducts = [
-  {
-    id: 1,
-    name: "Paneer Butter Masala",
-    category: "Main Course",
-    price: 320,
-  },
-  {
-    id: 2,
-    name: "Veg Biryani",
-    category: "Rice",
-    price: 260,
-  },
-  {
-    id: 3,
-    name: "Gulab Jamun",
-    category: "Dessert",
-    price: 140,
-  },
-  {
-    id: 4,
-    name: "Chocolate Cake",
-    category: "Dessert",
-    price: 480,
-  },
-  {
-    id: 5,
-    name: "Cold Coffee",
-    category: "Beverage",
-    price: 180,
-  },
-  {
-    id: 6,
-    name: "Family Combo",
-    category: "Combo",
-    price: 999,
-  },
-];
 
 export default function ProductsStep({
   data = [],
+  products = [],
   onChange,
 }) {
   const [search, setSearch] = useState("");
 
   const selectedProducts = data;
 
-  const filteredProducts = useMemo(() => {
-    return mockProducts.filter((product) =>
+const filteredProducts = useMemo(() => {
+  return products.filter((product) =>
       product.name
         .toLowerCase()
         .includes(search.toLowerCase())
@@ -98,7 +61,7 @@ export default function ProductsStep({
   return (
     <div className="space-y-8">
       <div>
-        <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
+        <h2 className="text-2xl font-bold text-slate-900 text-white">
           Add Products
         </h2>
 
@@ -119,7 +82,7 @@ export default function ProductsStep({
             setSearch(e.target.value)
           }
           placeholder="Search product..."
-          className="h-12 w-full rounded-xl border border-slate-200 bg-transparent pl-11 pr-4 outline-none focus:border-[#1A4D2E] dark:border-slate-700"
+          className="h-12 w-full rounded-xl border border-slate-200 bg-transparent pl-11 pr-4 outline-none focus:border-[#1A4D2E] border-slate-700"
         />
       </div>
 
@@ -127,12 +90,17 @@ export default function ProductsStep({
         <h3 className="mb-4 text-lg font-semibold">
           Available Products
         </h3>
-
+{filteredProducts.length === 0 && (
+  <div className="rounded-xl border border-dashed py-10 text-center text-slate-500">
+    No products available.
+  </div>
+)}
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {filteredProducts.map((product) => (
+          {filteredProducts.length > 0 &&
+  filteredProducts.map((product) => (
             <div
               key={product.id}
-              className="rounded-xl border border-slate-200 p-4 dark:border-slate-700"
+              className="rounded-xl border border-slate-200 p-4 border-slate-700"
             >
               <div className="flex justify-between">
                 <div>
@@ -156,11 +124,19 @@ export default function ProductsStep({
                   ₹{product.price}
                 </span>
 
-                <button
-                  onClick={() =>
-                    addProduct(product)
-                  }
-                  className="flex items-center gap-2 rounded-lg bg-[#1A4D2E] px-3 py-2 text-sm text-white"
+<button
+    disabled={selectedProducts.some(
+        (item) => item.id === product.id
+    )}
+    onClick={() => addProduct(product)}
+                  className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm text-white transition
+${
+  selectedProducts.some(
+    (item) => item.id === product.id
+  )
+    ? "bg-slate-400 cursor-not-allowed"
+    : "bg-[#1A4D2E] hover:bg-[#245a37]"
+}`}
                 >
                   <Plus size={16} />
                   Add
