@@ -20,8 +20,6 @@ const pageTitles = {
 export default function Navbar({ openSidebar }) {
   const location = useLocation();
 
-
-
   return (
     <header
       className="
@@ -50,17 +48,7 @@ export default function Navbar({ openSidebar }) {
         >
           <Menu size={22} strokeWidth={2} />
         </button>
-
-
       </div>
-
-      {/* Center */}
-      <div className="hidden flex-1 justify-center px-8 xl:flex">
-        <div className="w-full max-w-xl">
-          <SearchBar />
-        </div>
-      </div>
-
       {/* Right */}
       <div className="flex items-center gap-3">
         <NotificationButton />

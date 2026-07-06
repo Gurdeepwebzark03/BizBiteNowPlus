@@ -14,23 +14,56 @@ import {
   PauseCircle,
 } from "lucide-react";
 
-import { festiveMenuData } from "../../../data/festiveMenuData";
+import { useFestiveMenu } from "../../../context/FestiveMenuContext";
 
 export default function FestiveMenuDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const menu = festiveMenuData.find(
-    (item) => item.id === Number(id)
-  );
+  const { menus, deleteMenu, duplicateMenu, endMenu } = useFestiveMenu();
+
+  const menu = menus.find((item) => item.id === Number(id));
+  const handleEdit = () => {
+    navigate(`/seller/festivemenu/edit/${menu.id}`);
+  };
+
+  const handleDuplicate = () => {
+    duplicateMenu(menu.id);
+
+    alert("Menu duplicated");
+
+    navigate("/seller/festivemenu");
+  };
+
+  const handleDelete = () => {
+    const confirmDelete = window.confirm("Delete this festive menu?");
+
+    if (!confirmDelete) return;
+
+    deleteMenu(menu.id);
+
+    navigate("/seller/festivemenu");
+  };
+
+  const handleEndMenu = () => {
+    const confirmEnd = window.confirm("End this festive menu?");
+
+    if (!confirmEnd) return;
+
+    endMenu(menu.id);
+
+    navigate("/seller/festivemenu");
+  };
+
+  const handlePreview = () => {
+    alert("Customer Preview will be connected later.");
+  };
 
   if (!menu) {
     return (
       <div className="flex min-h-[70vh] items-center justify-center">
         <div className="text-center">
-          <h2 className="text-3xl font-bold text-slate-800">
-            Menu Not Found
-          </h2>
+          <h2 className="text-3xl font-bold text-slate-800">Menu Not Found</h2>
 
           <button
             onClick={() => navigate(-1)}
@@ -45,7 +78,6 @@ export default function FestiveMenuDetails() {
 
   return (
     <div className="space-y-8 p-6">
-
       {/* Back */}
 
       <button
@@ -59,7 +91,6 @@ export default function FestiveMenuDetails() {
       {/* Hero */}
 
       <div className="overflow-hidden rounded-3xl bg-white shadow">
-
         <img
           src={menu.banner}
           alt={menu.name}
@@ -67,11 +98,8 @@ export default function FestiveMenuDetails() {
         />
 
         <div className="space-y-5 p-8">
-
           <div className="flex flex-wrap items-center justify-between gap-5">
-
             <div>
-
               <span className="rounded-full bg-green-100 px-4 py-1 text-sm font-semibold text-green-700">
                 {menu.status.toUpperCase()}
               </span>
@@ -83,50 +111,51 @@ export default function FestiveMenuDetails() {
               <p className="mt-3 max-w-3xl text-slate-600">
                 {menu.description}
               </p>
-
             </div>
 
             <div className="flex gap-3">
-
-              <button className="rounded-xl border px-5 py-3 hover:bg-slate-50">
+              <button
+                onClick={handlePreview}
+                className="rounded-xl border px-5 py-3 hover:bg-slate-50"
+              >
                 <Eye size={18} />
               </button>
 
-              <button className="rounded-xl border px-5 py-3 hover:bg-slate-50">
+              <button
+                onClick={handleEdit}
+                className="rounded-xl border px-5 py-3 hover:bg-slate-50"
+              >
                 <Pencil size={18} />
               </button>
 
-              <button className="rounded-xl border px-5 py-3 hover:bg-slate-50">
+              <button
+                onClick={handleDuplicate}
+                className="rounded-xl border px-5 py-3 hover:bg-slate-50"
+              >
                 <Copy size={18} />
               </button>
 
-              <button className="rounded-xl border border-red-200 px-5 py-3 text-red-600 hover:bg-red-50">
+              <button
+                onClick={handleDelete}
+                className="rounded-xl border border-red-200 px-5 py-3 text-red-600 hover:bg-red-50"
+              >
                 <Trash2 size={18} />
               </button>
-
             </div>
-
           </div>
-
         </div>
-
       </div>
 
       {/* Stats */}
 
       <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
-
         <StatCard
           title="Revenue"
           value={`₹${menu.revenue.toLocaleString()}`}
           icon={<IndianRupee />}
         />
 
-        <StatCard
-          title="Orders"
-          value={menu.orders}
-          icon={<ShoppingBag />}
-        />
+        <StatCard title="Orders" value={menu.orders} icon={<ShoppingBag />} />
 
         <StatCard
           title="Products"
@@ -134,37 +163,23 @@ export default function FestiveMenuDetails() {
           icon={<Package />}
         />
 
-        <StatCard
-          title="Combos"
-          value={menu.totalCombos}
-          icon={<Layers3 />}
-        />
-
+        <StatCard title="Combos" value={menu.totalCombos} icon={<Layers3 />} />
       </div>
 
       {/* Details */}
 
       <div className="grid gap-6 lg:grid-cols-3">
-
         <div className="rounded-3xl bg-white p-7 shadow lg:col-span-2">
-
-          <h2 className="mb-6 text-2xl font-bold">
-            Menu Details
-          </h2>
+          <h2 className="mb-6 text-2xl font-bold">Menu Details</h2>
 
           <div className="grid gap-5 md:grid-cols-2">
-
             <DetailItem
               icon={<CalendarDays />}
               label="Festival"
               value={menu.festival}
             />
 
-            <DetailItem
-              icon={<Clock3 />}
-              label="Status"
-              value={menu.status}
-            />
+            <DetailItem icon={<Clock3 />} label="Status" value={menu.status} />
 
             <DetailItem
               icon={<CalendarDays />}
@@ -177,50 +192,55 @@ export default function FestiveMenuDetails() {
               label="Ends"
               value={menu.endsOn}
             />
-
           </div>
-
         </div>
 
         <div className="rounded-3xl bg-white p-7 shadow">
-
-          <h2 className="mb-6 text-2xl font-bold">
-            Quick Actions
-          </h2>
+          <h2 className="mb-6 text-2xl font-bold">Quick Actions</h2>
 
           <div className="space-y-4">
-
-            <button className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#1A4D2E] py-3 text-white">
+            <button
+              onClick={handleEdit}
+              className="flex w-full items-center justify-center gap-2 rounded-xl bg-[#1A4D2E] py-3 text-white"
+            >
               <Pencil size={18} />
               Edit Menu
             </button>
 
-            <button className="flex w-full items-center justify-center gap-2 rounded-xl border py-3">
+            <button
+              onClick={handleDuplicate}
+              className="flex w-full items-center justify-center gap-2 rounded-xl border py-3"
+            >
               <Copy size={18} />
               Duplicate
             </button>
 
-            <button className="flex w-full items-center justify-center gap-2 rounded-xl border py-3">
+            <button
+              onClick={handlePreview}
+              className="flex w-full items-center justify-center gap-2 rounded-xl border py-3"
+            >
               <Eye size={18} />
               Preview
             </button>
 
-            <button className="flex w-full items-center justify-center gap-2 rounded-xl border py-3">
+            <button
+              onClick={handleEndMenu}
+              className="flex w-full items-center justify-center gap-2 rounded-xl border py-3"
+            >
               <PauseCircle size={18} />
               End Menu
             </button>
 
-            <button className="flex w-full items-center justify-center gap-2 rounded-xl border border-red-200 py-3 text-red-600">
+            <button
+              onClick={handleDelete}
+              className="flex w-full items-center justify-center gap-2 rounded-xl border border-red-200 py-3 text-red-600"
+            >
               <Trash2 size={18} />
               Delete
             </button>
-
           </div>
-
         </div>
-
       </div>
-
     </div>
   );
 }
@@ -245,17 +265,11 @@ function StatCard({ title, value, icon }) {
 function DetailItem({ icon, label, value }) {
   return (
     <div className="rounded-2xl border p-5">
-      <div className="mb-3 text-green-700">
-        {icon}
-      </div>
+      <div className="mb-3 text-green-700">{icon}</div>
 
-      <p className="text-sm text-slate-500">
-        {label}
-      </p>
+      <p className="text-sm text-slate-500">{label}</p>
 
-      <h3 className="mt-1 text-lg font-semibold">
-        {value}
-      </h3>
+      <h3 className="mt-1 text-lg font-semibold">{value}</h3>
     </div>
   );
 }

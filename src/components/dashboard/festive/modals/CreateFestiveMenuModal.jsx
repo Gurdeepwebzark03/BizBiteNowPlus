@@ -90,12 +90,12 @@ export default function CreateFestiveMenuModal({
         {/* Body */}
 
         <div className="p-6 space-y-6">
-          <div className="rounded-xl bg-orange-50 dark:bg-orange-500/10 border border-orange-200 dark:border-orange-800 p-5">
+          <div className="rounded-xl bg-orange-50 -orange-500/10 border border-orange-200 border-orange-800 p-5">
             <h3 className="font-bangers tracking-widest text-black mb-3">
               What happens next?
             </h3>
 
-            <ul className="space-y-3 text-black text-slate-600 dark:text-slate-300">
+            <ul className="space-y-3 text-black text-slate-600 text-slate-300">
 
               <li className=" font-bangers tracking-widest text-black">
                 • Add festive menu details.
@@ -144,11 +144,11 @@ export default function CreateFestiveMenuModal({
 
         {/* Footer */}
 
-        <div className="flex justify-end gap-3 border-t dark:border-slate-700 px-6 py-5">
+        <div className="flex justify-end gap-3 border-t border-slate-700 px-6 py-5">
 
           <button
             onClick={onClose}
-            className="rounded-xl border px-5 py-2.5 font-medium hover:bg-slate-100 dark:hover:bg-slate-800 transition"
+            className="rounded-xl border px-5 py-2.5 font-medium hover:bg-slate-100 hover:bg-slate-800 transition"
           >
             Cancel
           </button>

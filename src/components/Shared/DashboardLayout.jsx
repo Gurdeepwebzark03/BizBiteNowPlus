@@ -30,9 +30,7 @@ const DashboardLayout = ({ children }) => {
           duration-300
           lg:translate-x-0
           ${
-            sidebarOpen
-              ? "translate-x-0"
-              : "-translate-x-full lg:translate-x-0"
+            sidebarOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
           }
         `}
       >
@@ -63,9 +61,7 @@ const DashboardLayout = ({ children }) => {
 
         {/* Content */}
         <main className="p-4 sm:p-6 lg:p-8">
-          <div className="mx-auto max-w-[1700px]">
-            {children || <Outlet />}
-          </div>
+          <div className="mx-auto max-w-[1700px]">{children || <Outlet />}</div>
         </main>
       </div>
     </div>

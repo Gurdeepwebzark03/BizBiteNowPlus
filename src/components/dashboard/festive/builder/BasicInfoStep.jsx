@@ -50,7 +50,7 @@ useEffect(() => {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
+        <h2 className="text-2xl font-bold text-slate-900 text-white">
           Basic Information
         </h2>
 
@@ -75,7 +75,7 @@ useEffect(() => {
               updateField("name", e.target.value)
             }
             placeholder="Diwali Special Menu"
-            className="h-12 w-full rounded-xl border border-slate-200 bg-transparent px-4 outline-none transition focus:border-[#1A4D2E] focus:ring-4 focus:ring-[#1A4D2E]/10 dark:border-slate-700"
+            className="h-12 w-full rounded-xl border border-slate-200 bg-transparent px-4 outline-none transition focus:border-[#1A4D2E] focus:ring-4 focus:ring-[#1A4D2E]/10 border-slate-700"
           />
           <p className="mt-1 text-xs text-slate-500 text-right">
             {(data.name || "").length}/60
@@ -94,7 +94,7 @@ useEffect(() => {
             onChange={(e) =>
               updateField("festival", e.target.value)
             }
-            className="h-12 w-full rounded-xl border border-slate-200 bg-transparent px-4 outline-none transition focus:border-[#1A4D2E] focus:ring-4 focus:ring-[#1A4D2E]/10 dark:border-slate-700"
+            className="h-12 w-full rounded-xl border border-slate-200 bg-transparent px-4 outline-none transition focus:border-[#1A4D2E] focus:ring-4 focus:ring-[#1A4D2E]/10 border-slate-700"
           >
             <option value="">
               Select Festival
@@ -124,7 +124,7 @@ useEffect(() => {
           onChange={(e) =>
             updateField("theme", e.target.value)
           }
-          className="h-12 w-full rounded-xl border border-slate-200 bg-transparent px-4 outline-none transition focus:border-[#1A4D2E] focus:ring-4 focus:ring-[#1A4D2E]/10 dark:border-slate-700"
+          className="h-12 w-full rounded-xl border border-slate-200 bg-transparent px-4 outline-none transition focus:border-[#1A4D2E] focus:ring-4 focus:ring-[#1A4D2E]/10 border-slate-700"
         >
           <option value="">
             Select Theme
@@ -156,7 +156,7 @@ useEffect(() => {
             updateField("description", e.target.value)
           }
           placeholder="Describe your festive menu..."
-          className="w-full rounded-xl border border-slate-200 bg-transparent p-4 outline-none transition focus:border-[#1A4D2E] focus:ring-4 focus:ring-[#1A4D2E]/10 dark:border-slate-700"
+          className="w-full rounded-xl border border-slate-200 bg-transparent p-4 outline-none transition focus:border-[#1A4D2E] focus:ring-4 focus:ring-[#1A4D2E]/10 border-slate-700"
         />
         <p className="mt-2 text-xs text-slate-500 text-right">
           {(data.description || "").length}/300
@@ -185,7 +185,7 @@ useEffect(() => {
             transition-all
             hover:border-[#1A4D2E]
             hover:bg-[#1A4D2E]/5
-            dark:border-slate-700
+            border-slate-700
           "
         >
           <ImagePlus

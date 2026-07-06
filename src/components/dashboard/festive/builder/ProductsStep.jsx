@@ -61,7 +61,7 @@ const filteredProducts = useMemo(() => {
   return (
     <div className="space-y-8">
       <div>
-        <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
+        <h2 className="text-2xl font-bold text-slate-900 text-white">
           Add Products
         </h2>
 
@@ -82,7 +82,7 @@ const filteredProducts = useMemo(() => {
             setSearch(e.target.value)
           }
           placeholder="Search product..."
-          className="h-12 w-full rounded-xl border border-slate-200 bg-transparent pl-11 pr-4 outline-none focus:border-[#1A4D2E] dark:border-slate-700"
+          className="h-12 w-full rounded-xl border border-slate-200 bg-transparent pl-11 pr-4 outline-none focus:border-[#1A4D2E] border-slate-700"
         />
       </div>
 
@@ -100,7 +100,7 @@ const filteredProducts = useMemo(() => {
   filteredProducts.map((product) => (
             <div
               key={product.id}
-              className="rounded-xl border border-slate-200 p-4 dark:border-slate-700"
+              className="rounded-xl border border-slate-200 p-4 border-slate-700"
             >
               <div className="flex justify-between">
                 <div>
