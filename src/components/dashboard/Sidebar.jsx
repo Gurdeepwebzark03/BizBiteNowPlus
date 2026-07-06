@@ -8,6 +8,7 @@ import {
   BarChart3,
   Settings,
   LogOut,
+  TicketPercent
 } from "lucide-react";
 
 import SidebarItem from "./SidebarItem";
@@ -72,6 +73,13 @@ export default function Sidebar({ collapsed, setCollapsed }) {
             title="Delivery"
             icon={Truck}
             to="/seller/delivery"
+            collapsed={collapsed}
+          />
+
+          <SidebarItem
+            title="Special Offers"
+            icon={TicketPercent}
+            to="/seller/special-offers"
             collapsed={collapsed}
           />
 
