@@ -47,26 +47,41 @@ const StoreProfileCard = () => {
           </div>
 
           {/* Banner */}
-          <div>
-            <label className="mb-3 block text-sm font-medium text-[#16522d]">
-              Store Banner
-            </label>
+<div>
+  <label className="mb-3 block text-sm font-medium text-[#16522d]">
+    Store Banner
+  </label>
 
-            <div className="flex h-40 cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-slate-300 bg-[#f8faf8] transition hover:border-[#16522d]">
-              <Upload
-                size={34}
-                className="mb-3 text-[#16522d]"
-              />
+  <label
+    htmlFor="banner-upload"
+    className="flex h-40 cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-slate-300 bg-[#f8faf8] transition hover:border-[#16522d]"
+  >
+    <Upload
+      size={34}
+      className="mb-3 text-[#16522d]"
+    />
 
-              <p className="text-sm text-slate-600">
-                Upload Banner
-              </p>
+    <p className="text-sm text-slate-600">
+      Upload Banner
+    </p>
 
-              <span className="mt-2 text-xs text-slate-500">
-                1200 × 400 Recommended
-              </span>
-            </div>
-          </div>
+    <span className="mt-2 text-xs text-slate-500">
+      1200 × 400 Recommended
+    </span>
+  </label>
+
+  <input
+    id="banner-upload"
+    type="file"
+    accept="image/*"
+    className="hidden"
+    onChange={(e) => {
+      const file = e.target.files?.[0];
+      console.log(file);
+    }}
+  />
+</div>
+          
         </div>
 
         {/* Store Name */}

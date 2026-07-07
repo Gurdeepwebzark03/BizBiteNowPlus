@@ -56,7 +56,7 @@ export default function ScheduleStep({
 
       {/* Publish */}
 
-      <div className="rounded-xl border bg-white dark:bg-slate-900 dark:border-slate-700 p-6">
+      <div className="rounded-xl border bg-white 900 border-slate-700 p-6">
 
         <div className="flex items-center gap-2 mb-5">
 
@@ -141,7 +141,7 @@ export default function ScheduleStep({
 
       {/* End Schedule */}
 
-      <div className="rounded-xl border bg-white dark:bg-slate-900 dark:border-slate-700 p-6">
+      <div className="rounded-xl border bg-white 900 border-slate-700 p-6">
 
         <div className="flex items-center gap-2 mb-5">
 
@@ -227,7 +227,7 @@ export default function ScheduleStep({
       </div>
             {/* Timezone */}
 
-      <div className="rounded-xl border bg-white dark:bg-slate-900 dark:border-slate-700 p-6">
+      <div className="rounded-xl border bg-white 900 border-slate-700 p-6">
 
         <div className="flex items-center gap-2 mb-5">
           <Clock3 className="text-blue-500" size={20} />
@@ -318,7 +318,7 @@ export default function ScheduleStep({
 
       {/* Warning */}
 
-      <div className="rounded-xl border border-amber-300 bg-amber-50 dark:bg-amber-900/10 dark:border-amber-700 p-5">
+      <div className="rounded-xl border border-amber-300 bg-amber-50 -amber-900/10 border-amber-700 p-5">
 
         <div className="flex items-start gap-3">
 
@@ -333,7 +333,7 @@ export default function ScheduleStep({
               Schedule Reminder
             </h4>
 
-            <p className="text-sm text-slate-600 dark:text-slate-400 mt-1">
+            <p className="text-sm text-slate-600 text-slate-400 mt-1">
               Ensure your festive menu contains all
               required products before the publish
               time. Once published, customers will
@@ -348,7 +348,7 @@ export default function ScheduleStep({
 
       {/* Summary */}
 
-      <div className="rounded-xl border bg-slate-50 dark:bg-slate-900 dark:border-slate-700 p-6">
+      <div className="rounded-xl border bg-slate-50 900 border-slate-700 p-6">
 
         <h3 className="font-semibold mb-5">
           Schedule Summary
@@ -400,7 +400,7 @@ export default function ScheduleStep({
 
         </div>
 
-        <div className="mt-6 rounded-lg bg-orange-50 dark:bg-orange-900/10 p-4 border border-orange-200 dark:border-orange-800">
+        <div className="mt-6 rounded-lg bg-orange-50 -orange-900/10 p-4 border border-orange-200 border-orange-800">
 
           <p className="text-sm">
             <strong>Timezone:</strong>{" "}

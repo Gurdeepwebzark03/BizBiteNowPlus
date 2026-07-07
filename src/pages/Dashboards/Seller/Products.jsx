@@ -1,7 +1,5 @@
-import { useState } from "react";
-
-import DashboardLayout from "../../../components/Shared/DashboardLayout";
-
+import { useMemo, useRef, useState } from "react";
+import * as XLSX from "xlsx";
 import ProductsHeader from "../../../components/products/ProductsHeader";
 import ProductStats from "../../../components/products/ProductStats";
 import ProductFilters from "../../../components/products/ProductFilters";
@@ -9,17 +7,13 @@ import ProductGrid from "../../../components/products/ProductGrid";
 import ProductDrawer from "../../../components/products/ProductDrawer";
 import ProductModal from "../../../components/products/ProductModal";
 import DeleteProductModal from "../../../components/products/DeleteProductModal";
-
-import {
-  products,
-  productStats,
-} from "../../../data/productsData";
+import { motion } from "framer-motion";
+import { products } from "../../../data/productsData";
 
 export default function Products() {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
-
-  // Shared Grid/List view state
+  const [status, setStatus] = useState("All");
   const [view, setView] = useState("grid");
 
   const [selectedProduct, setSelectedProduct] = useState(null);
@@ -30,11 +24,24 @@ export default function Products() {
 
   const [modalMode, setModalMode] = useState("add");
 
-  // Later this will come from API
   const [productList, setProductList] = useState(products);
 
   // =========================
-  // View Product
+  // Dynamic Stats
+  // =========================
+
+  const productStats = useMemo(
+    () => ({
+      totalProducts: productList.length,
+      activeProducts: productList.filter((p) => p.available).length,
+      outOfStock: productList.filter((p) => !p.available).length,
+      categories: new Set(productList.map((p) => p.category)).size,
+    }),
+    [productList],
+  );
+
+  // =========================
+  // View
   // =========================
 
   const handleView = (product) => {
@@ -43,7 +50,7 @@ export default function Products() {
   };
 
   // =========================
-  // Add Product
+  // Add
   // =========================
 
   const handleAdd = () => {
@@ -53,7 +60,7 @@ export default function Products() {
   };
 
   // =========================
-  // Edit Product
+  // Edit
   // =========================
 
   const handleEdit = (product) => {
@@ -63,7 +70,7 @@ export default function Products() {
   };
 
   // =========================
-  // Delete Product
+  // Delete
   // =========================
 
   const handleDelete = (product) => {
@@ -73,78 +80,190 @@ export default function Products() {
 
   const confirmDelete = () => {
     setProductList((prev) =>
-      prev.filter((item) => item.id !== selectedProduct.id)
+      prev.filter((item) => item.id !== selectedProduct.id),
     );
 
     setDeleteOpen(false);
     setSelectedProduct(null);
   };
 
-  // Filtered Products
-  const filteredProducts = productList.filter((product) => {
-    const matchesSearch = product.name
-      .toLowerCase()
-      .includes(search.toLowerCase());
+  // =========================
+  // Filters
+  // =========================
 
-    const matchesCategory =
-      category === "All" ||
-      product.category === category;
+  const filteredProducts = useMemo(() => {
+    return productList.filter((product) => {
+      const matchesSearch = product.name
+        .toLowerCase()
+        .includes(search.toLowerCase());
 
-    return matchesSearch && matchesCategory;
-  });
-console.log(filteredProducts);
-console.log(productList);
+      const matchesCategory =
+        category === "All" || product.category === category;
+
+      const matchesStatus =
+        status === "All" ||
+        (status === "Available" && product.available) ||
+        (status === "Out of Stock" && !product.available);
+
+      return matchesSearch && matchesCategory && matchesStatus;
+    });
+  }, [productList, search, category, status]);
+
+  const fileInputRef = useRef(null);
+
+  const handleImportClick = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleImport = (event) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+
+    reader.onload = (e) => {
+      try {
+        const data = new Uint8Array(e.target.result);
+
+        const workbook = XLSX.read(data, {
+          type: "array",
+        });
+
+        const sheetName = workbook.SheetNames[0];
+
+        const worksheet = workbook.Sheets[sheetName];
+
+        const importedProducts = XLSX.utils.sheet_to_json(worksheet);
+
+        if (!importedProducts.length) {
+          alert("No products found in Excel file.");
+          return;
+        }
+
+        const formattedProducts = importedProducts.map((item) => ({
+          id: Number(item.ID),
+          sku: item.SKU || "",
+          name: item.Name || "",
+          description: item.Description || "",
+          category: item.Category || "",
+          price: Number(item.Price) || 0,
+          stock: Number(item.Stock) || 0,
+          available: String(item.Available).toLowerCase() === "true",
+          featured: String(item.Featured).toLowerCase() === "true",
+          combo: String(item.Combo).toLowerCase() === "true",
+          delivery: String(item.Delivery).toLowerCase() === "true",
+          image: item.Image || "",
+        }));
+
+        setProductList((prevProducts) => {
+          const existingIds = new Set(prevProducts.map((p) => p.id));
+
+          const newProducts = formattedProducts.filter(
+            (p) => !existingIds.has(p.id),
+          );
+
+          return [...prevProducts, ...newProducts];
+        });
+
+        alert(`${formattedProducts.length} products imported successfully.`);
+      } catch (error) {
+        console.error(error);
+        alert("Invalid Excel file.");
+      }
+
+      event.target.value = "";
+    };
+
+    reader.readAsArrayBuffer(file);
+  };
+
+  const handleExport = () => {
+    const exportData = productList.map((product) => ({
+      ID: product.id,
+      SKU: product.sku,
+      Name: product.name,
+      Description: product.description,
+      Category: product.category,
+      Price: product.price,
+      Stock: product.stock,
+      Available: product.available,
+      Featured: product.featured,
+      Combo: product.combo,
+      Delivery: product.delivery,
+      Image: product.image,
+    }));
+
+    const worksheet = XLSX.utils.json_to_sheet(exportData);
+
+    const workbook = XLSX.utils.book_new();
+
+    XLSX.utils.book_append_sheet(workbook, worksheet, "Products");
+
+    XLSX.writeFile(workbook, "products.xlsx");
+  };
   return (
-    
-      <div className="space-y-8">
-        <ProductsHeader
-          onAdd={handleAdd}
-        />
+        <motion.div
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+      className="space-y-6"
+    >
+    <div className="space-y-8">
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept=".xlsx,.xls"
+        hidden
+        onChange={handleImport}
+      />
 
-        <ProductStats
-          stats={productStats}
-        />
+      <ProductsHeader
+        onAdd={handleAdd}
+        onImport={handleImportClick}
+        onExport={handleExport}
+      />
 
-        <ProductFilters
-          search={search}
-          setSearch={setSearch}
-          category={category}
-          setCategory={setCategory}
-          view={view}
-          setView={setView}
-        />
+      <ProductStats stats={productStats} />
 
-        <ProductGrid
-          products={filteredProducts}
-          view={view}
-          onView={handleView}
-          onEdit={handleEdit}
-          onDelete={handleDelete}
-        />
+      <ProductFilters
+        search={search}
+        setSearch={setSearch}
+        category={category}
+        setCategory={setCategory}
+        status={status}
+        setStatus={setStatus}
+        view={view}
+        setView={setView}
+      />
 
-        {/* Product Details */}
-        <ProductDrawer
-          open={drawerOpen}
-          onClose={() => setDrawerOpen(false)}
-          product={selectedProduct}
-        />
+      <ProductGrid
+        products={filteredProducts}
+        view={view}
+        onView={handleView}
+        onEdit={handleEdit}
+        onDelete={handleDelete}
+      />
 
-        {/* Add / Edit Product */}
-        <ProductModal
-          open={modalOpen}
-          onClose={() => setModalOpen(false)}
-          mode={modalMode}
-          product={selectedProduct}
-        />
+      <ProductDrawer
+        open={drawerOpen}
+        onClose={() => setDrawerOpen(false)}
+        product={selectedProduct}
+      />
 
-        {/* Delete Product */}
-        <DeleteProductModal
-          open={deleteOpen}
-          onClose={() => setDeleteOpen(false)}
-          onDelete={confirmDelete}
-          product={selectedProduct}
-        />
-      </div>
-    
+      <ProductModal
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        mode={modalMode}
+        product={selectedProduct}
+      />
+
+      <DeleteProductModal
+        open={deleteOpen}
+        onClose={() => setDeleteOpen(false)}
+        onDelete={confirmDelete}
+        product={selectedProduct}
+      />
+    </div>
+    </motion.div>
   );
 }

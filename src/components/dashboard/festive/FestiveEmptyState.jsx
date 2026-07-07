@@ -7,24 +7,24 @@ export default function FestiveEmptyState({
   const isSearching = search.trim().length > 0;
 
   return (
-    <div className="rounded-2xl border border-dashed border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900">
+    <div className="rounded-2xl border border-dashed border-slate-300 border-slate-700 bg-white 900">
 
       <div className="flex flex-col items-center justify-center px-8 py-20 text-center">
 
-        <div className="flex h-24 w-24 items-center justify-center rounded-full bg-orange-100 dark:bg-orange-500/10">
+        <div className="flex h-24 w-24 items-center justify-center rounded-full bg-orange-100 -orange-500/10">
           <Gift
             size={44}
             className="text-orange-500"
           />
         </div>
 
-        <h2 className="mt-8 text-2xl font-bold text-slate-900 dark:text-white">
+        <h2 className="mt-8 text-2xl font-bold text-slate-900 text-white">
           {isSearching
             ? "No Matching Festive Menus"
             : "No Festive Menus Yet"}
         </h2>
 
-        <p className="mt-4 max-w-xl text-sm leading-7 text-slate-500 dark:text-slate-400">
+        <p className="mt-4 max-w-xl text-sm leading-7 text-slate-500 text-slate-400">
 
           {isSearching
             ? "We couldn't find any festive menu matching your search or filters. Try changing the keywords or filters."
@@ -46,7 +46,7 @@ export default function FestiveEmptyState({
                 Beautiful Themes
               </h4>
 
-              <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
+              <p className="mt-2 text-sm text-slate-500 text-slate-400">
                 Customize festive branding, banners,
                 colors and product highlights.
               </p>
@@ -62,7 +62,7 @@ export default function FestiveEmptyState({
                 Festival Specials
               </h4>
 
-              <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
+              <p className="mt-2 text-sm text-slate-500 text-slate-400">
                 Offer limited-time festive combos,
                 discounts and exclusive products.
               </p>
@@ -78,7 +78,7 @@ export default function FestiveEmptyState({
                 Auto Schedule
               </h4>
 
-              <p className="mt-2 text-sm text-slate-500 dark:text-slate-400">
+              <p className="mt-2 text-sm text-slate-500 text-slate-400">
                 Publish and revert menus
                 automatically without manual work.
               </p>

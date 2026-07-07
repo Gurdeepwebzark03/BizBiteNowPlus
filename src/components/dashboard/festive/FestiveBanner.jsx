@@ -5,7 +5,10 @@ import {
   ArrowRight,
 } from "lucide-react";
 
-const FestiveBanner = ({ menu }) => {
+const FestiveBanner = ({
+  menu,
+  onViewMenu,
+}) => {
   if (!menu) return null;
 
   const endDate = new Date(menu.endsOn);
@@ -126,6 +129,7 @@ const FestiveBanner = ({ menu }) => {
           </div>
 
           <button
+            onClick={() => onViewMenu?.(menu)}
             className="
               mt-2
               flex

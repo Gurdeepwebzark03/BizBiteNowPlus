@@ -1,27 +1,29 @@
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
-
 import Login from "./pages/Auth/Login";
 import RegisterSeller from "./pages/Auth/RegisterSeller";
 import DashboardLayout from "./components/Shared/DashboardLayout";
 import Orders from "./pages/Dashboards/Seller/Orders";
 import OrderDetails from "./pages/Dashboards/Seller/OrderDetails";
 import SellerDashboard from "./pages/Dashboards/Seller/SellerDashboard";
-// import CustomerDashboard from "./pages/Dashboards/CustomerDashboard";
-// import Earnings from "./pages/Dashboards/Seller/Earnings";
 import Profile from "./pages/Dashboards/Seller/profile";
 import Products from "./pages/Dashboards/Seller/Products";
 import Settings from "./pages/Dashboards/Seller/Settings";
 import RegisterSuccess from "./pages/Auth/RegisterSuccess";
+import DeliveryDashboard from "./pages/Dashboards/DeliveryDashboard/DeliveryDashboard";
 
 import DeliveryDashboard from "./pages/Dashboards/DeliveryDashboard/DeliveryDashboard"
 import DeliveryManagement from "./pages/Dashboards/DeliveryDashboard/DeliveryManagement";
 
 
 import FestiveMenu from "./pages/Dashboards/Seller/FestiveMenu";
+import FestiveMenuDetails from "./pages/Dashboards/Seller/FestiveMenuDetails";
+import { FestiveMenuProvider } from "./context/FestiveMenuContext";
+import FestiveMenuHistory from "./pages/Dashboards/Seller/FestiveMenuHistory";
 
+// import FestiveMenu from "./pages/Dashboards/Seller/FestiveMenu";
 import Analytics from "./pages/Dashboards/Seller/Analytics";
-
+import CreateFestiveMenu from "./pages/Dashboards/Seller/CreateFestiveMenu";
 import StoreFront from "./pages/customer/StoreFront";
 import AllMenu from "./pages/customer/AllMenu";
 import Cart from "./pages/customer/Cart";
@@ -32,19 +34,21 @@ import CustomerProfile from "./pages/customer/Profile";
 import CustomerOnboarding from "./pages/customer/CustomerOnboarding";
 import CustomerGate from "./components/customer/CustomerGate";
 
+<<<<<<< HEAD
 
 // Future Modules
 // import Orders from './pages/Dashboards/Seller/Orders';
 // import Customers from './pages/Dashboards/Seller/Customers';
 // import Analytics from './pages/Dashboards/Seller/Analytics';
 
+=======
+>>>>>>> 535dd27f82b042b5462e869db512d3e68e1b347f
 export default function App() {
   return (
     <div className="w-full min-h-screen bg-slate-950 m-0 p-0 box-border overflow-x-hidden">
       <Routes>
         {/* Default */}
         <Route path="/" element={<Navigate to="/storefront" replace />} />
-
 
         {/* Authentication */}
         <Route path="/seller/login" element={<Login />} />
@@ -113,7 +117,14 @@ export default function App() {
 
         {/* Seller Dashboard */}
 
-        <Route path="/seller" element={<DashboardLayout />}>
+        <Route
+          path="/seller"
+          element={
+            <FestiveMenuProvider>
+              <DashboardLayout />
+            </FestiveMenuProvider>
+          }
+        >
           <Route index element={<Navigate to="dashboard" replace />} />
           <Route path="dashboard" element={<SellerDashboard />} />
           <Route path="orders" element={<Orders />} />
@@ -126,10 +137,23 @@ export default function App() {
 
           <Route  path="delivery-management" element={<DeliveryManagement />}
 />
+<<<<<<< HEAD
 
           <Route path="festivemenu" element={<FestiveMenu/>}/>
           {/* <Route path="festivemenu/create" element={<CreateFestiveMenu />} /> */}
 
+=======
+
+          <Route path="festivemenu" element={<FestiveMenu/>}/>
+          <Route path="festivemenu/create" element={<CreateFestiveMenu />} />
+
+
+          <Route path="festivemenu" element={<FestiveMenu />} />
+          <Route path="festivemenu/create" element={<CreateFestiveMenu />} />
+          <Route path="festivemenu/edit/:id" element={<CreateFestiveMenu />} />
+          <Route path="festivemenu/:id" element={<FestiveMenuDetails />} />
+          <Route path="festivemenu/history" element={<FestiveMenuHistory/>}/>
+>>>>>>> 535dd27f82b042b5462e869db512d3e68e1b347f
 
         </Route>
         {/* Registration Success */}
@@ -145,7 +169,8 @@ export default function App() {
                     viewBox="0 0 24 24"
                     strokeWidth={2.5}
                     stroke="currentColor"
-                    className="w-7 h-7">
+                    className="w-7 h-7"
+                  >
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -166,7 +191,8 @@ export default function App() {
 
                 <a
                   href="/storefront"
-                  className="w-full bg-[#059669] text-white py-2.5 rounded-xl font-black shadow block text-center transition hover:bg-[#047857]">
+                  className="w-full bg-[#059669] text-white py-2.5 rounded-xl font-black shadow block text-center transition hover:bg-[#047857]"
+                >
                   Go To Storefront Market
                 </a>
               </div>

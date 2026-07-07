@@ -12,7 +12,13 @@ import {
 
 import FestiveStatusBadge from "./FestiveStatusBadge";
 
-const FestiveMenuTable = ({ menus }) => {
+const FestiveMenuTable = ({
+  menus,
+  onSchedule,
+  onDuplicate,
+  onDelete,
+  onEdit,
+}) => {
   if (!menus.length) {
     return (
       <div className="rounded-2xl border border-dashed border-slate-300 bg-white p-16 text-center">
@@ -215,28 +221,40 @@ const FestiveMenuTable = ({ menus }) => {
 
                   <div className="flex justify-center gap-2">
 
-                    <button className="rounded-lg p-2 transition hover:bg-blue-100">
+<button
+  onClick={() => onEdit?.(menu)}
+  className="rounded-lg p-2 transition hover:bg-blue-100"
+>
                       <Pencil
                         size={18}
                         className="text-blue-600"
                       />
                     </button>
 
-                    <button className="rounded-lg p-2 transition hover:bg-amber-100">
+                    <button
+                      onClick={() => onSchedule?.(menu)}
+                      className="rounded-lg p-2 transition hover:bg-amber-100"
+                    >
                       <CalendarClock
                         size={18}
                         className="text-amber-600"
                       />
                     </button>
 
-                    <button className="rounded-lg p-2 transition hover:bg-green-100">
+                    <button
+                      onClick={() => onDuplicate?.(menu)}
+                      className="rounded-lg p-2 transition hover:bg-green-100"
+                    >
                       <Copy
                         size={18}
                         className="text-green-600"
                       />
                     </button>
 
-                    <button className="rounded-lg p-2 transition hover:bg-red-100">
+<button
+  onClick={() => onDelete?.(menu)}
+  className="rounded-lg p-2 transition hover:bg-red-100"
+>
                       <Trash2
                         size={18}
                         className="text-red-600"
