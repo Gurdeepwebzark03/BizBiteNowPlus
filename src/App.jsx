@@ -17,7 +17,7 @@ import RegisterSuccess from "./pages/Auth/RegisterSuccess";
 import DeliveryDashboard from "./pages/Dashboards/DeliveryDashboard/DeliveryDashboard"
 import DeliveryManagement from "./pages/Dashboards/DeliveryDashboard/DeliveryManagement";
 
-=======
+
 import FestiveMenu from "./pages/Dashboards/Seller/FestiveMenu";
 
 import Analytics from "./pages/Dashboards/Seller/Analytics";
@@ -31,6 +31,7 @@ import OrderConfirmation from "./pages/customer/OrderConfirmation";
 import CustomerProfile from "./pages/customer/Profile";
 import CustomerOnboarding from "./pages/customer/CustomerOnboarding";
 import CustomerGate from "./components/customer/CustomerGate";
+
 
 // Future Modules
 // import Orders from './pages/Dashboards/Seller/Orders';
@@ -122,14 +123,14 @@ export default function App() {
           <Route path="products" element={<Products />} />
           <Route path="analytics" element={<Analytics />} />
           <Route path="profile" element={<Profile />} />
-<<<<<<< HEAD
+
           <Route  path="delivery-management" element={<DeliveryManagement />}
 />
-=======
-          <Route path="festivemenu" element={<FestiveMenu/>}/>
-          <Route path="festivemenu/create" element={<CreateFestiveMenu />} />
 
->>>>>>> ebd0b3dfa3a10aac5a5af3e2205fbb2409115953
+          <Route path="festivemenu" element={<FestiveMenu/>}/>
+          {/* <Route path="festivemenu/create" element={<CreateFestiveMenu />} /> */}
+
+
         </Route>
         {/* Registration Success */}
         <Route

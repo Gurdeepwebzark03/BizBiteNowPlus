@@ -12,7 +12,7 @@ export default function DeliveryBoyTable({
     <div className="bg-white rounded-xl shadow-md overflow-hidden">
       <div className="overflow-x-auto">
         <table className="min-w-full">
-          <thead className="bg-amber-100">
+          <thead className="bg-gray-100 text-black">
             <tr>
               <th className="px-6 py-4 text-left font-semibold">Name</th>
               <th className="px-6 py-4 text-left font-semibold">Phone</th>
@@ -31,7 +31,7 @@ export default function DeliveryBoyTable({
               deliveryBoys.map((boy) => (
                 <tr
                   key={boy.id}
-                  className="border-b hover:bg-amber-50 transition"
+                  className="border-b hover:bg-gray-100 transition"
                 >
                   <td className="px-6 py-4 font-semibold">{boy.name}</td>
 
@@ -66,7 +66,7 @@ export default function DeliveryBoyTable({
     <span
       className={`text-sm font-semibold ${
         boy.status === "Online"
-          ? "text-green-600"
+          ? "text-green-900"
           : "text-red-600"
       }`}
     >
@@ -84,25 +84,7 @@ export default function DeliveryBoyTable({
                   <td className="px-6 py-4">
                     <div className="flex justify-center gap-3">
 
-  {/* View Dashboard */}
-
-  <button
-    className="text-blue-600 hover:text-blue-800"
-    title="View Dashboard"
-  >
-    <FaEye size={18} />
-  </button>
-
-  {/* Assign Order */}
-
-  <button
-    onClick={() => onAssign(boy)}
-    className="bg-green-500 hover:bg-green-600 text-white text-xs px-3 py-1 rounded-lg"
-    title="Assign Order"
-  >
-    Assign
-  </button>
-
+  
   {/* Edit */}
 
   <button
