@@ -1,5 +1,5 @@
 import { ArrowRight } from "lucide-react";
-import Badge from "../../../ui/Badge";
+import Badge from "../../../UI/Badge";
 import { STATUS_VARIANTS } from "./constants";
 
 const OrderItem = ({ order }) => {
