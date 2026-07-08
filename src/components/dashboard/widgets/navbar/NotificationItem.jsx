@@ -1,4 +1,4 @@
-import { NOTIFICATION_CONFIG } from "./notificationConfig";
+import { NOTIFICATION_CONFIG } from "./notificationConfig.js";
 
 const NotificationItem = ({ notification }) => {
   const config =

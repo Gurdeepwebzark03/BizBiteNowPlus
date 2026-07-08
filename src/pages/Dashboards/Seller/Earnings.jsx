@@ -15,7 +15,7 @@ import {
   todaysOrders,
   earningsHistory,
   regularCustomers,
-} from "../../../components/dashboard/earnings/earningsData";
+} from "../../../components/dashboard/earnings/earningsData.js";
 
 export default function Earnings() {
   const [search, setSearch] = useState("");

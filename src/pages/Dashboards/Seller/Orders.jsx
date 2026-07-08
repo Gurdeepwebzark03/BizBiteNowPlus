@@ -12,7 +12,7 @@ import OrderBoard from "../../../components/orders/OrderBoard";
 import BulkActions from "../../../components/orders/BulkActions";
 import ExportModal from "../../../components/orders/ExportModal";
 
-import { orders as initialOrders } from "../../../data/ordersData";
+import { orders as initialOrders } from "../../../data/ordersData.js";
 
 export default function Orders() {
   const [orders, setOrders] = useState(initialOrders);

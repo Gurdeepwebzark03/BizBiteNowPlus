@@ -8,7 +8,7 @@ import ProductDrawer from "../../../components/products/ProductDrawer";
 import ProductModal from "../../../components/products/ProductModal";
 import DeleteProductModal from "../../../components/products/DeleteProductModal";
 import { motion } from "framer-motion";
-import { products } from "../../../data/productsData";
+import { products } from "../../../data/productsData.js";
 
 export default function Products() {
   const [search, setSearch] = useState("");
