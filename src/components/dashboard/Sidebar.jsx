@@ -112,7 +112,6 @@ export default function Sidebar({ collapsed, setCollapsed }) {
             to="/seller/settings"
             collapsed={collapsed}
           />
-<<<<<<< HEAD
           
           <SidebarItem
             title="Logout"
@@ -122,8 +121,6 @@ export default function Sidebar({ collapsed, setCollapsed }) {
             danger
           />
 
-=======
->>>>>>> ebd0b3dfa3a10aac5a5af3e2205fbb2409115953
         </div>
       </nav>
 

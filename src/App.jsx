@@ -12,7 +12,6 @@ import Settings from "./pages/Dashboards/Seller/Settings";
 import RegisterSuccess from "./pages/Auth/RegisterSuccess";
 import DeliveryDashboard from "./pages/Dashboards/DeliveryDashboard/DeliveryDashboard";
 
-import DeliveryDashboard from "./pages/Dashboards/DeliveryDashboard/DeliveryDashboard"
 import DeliveryManagement from "./pages/Dashboards/DeliveryDashboard/DeliveryManagement";
 
 

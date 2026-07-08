@@ -7,6 +7,8 @@ import {
   IndianRupee,
   Percent,
   TrendingUp,
+  Trophy,
+  Target,
 } from "lucide-react";
 
 import {
@@ -17,6 +19,7 @@ import {
   Tooltip,
   XAxis,
   YAxis,
+  Cell,
 } from "recharts";
 
 import { getCampaigns } from "../../../api/offers";
@@ -33,6 +36,14 @@ const dateFormatter = (date) =>
     month: "short",
   });
 
+const COLORS = [
+  "#16522D",
+  "#1E3A5F",
+  "#D4A017",
+  "#8FA6C1",
+  "#B7C4D3",
+];
+
 const RedemptionTracking = () => {
   const [campaigns, setCampaigns] = useState([]);
 
@@ -43,7 +54,7 @@ const RedemptionTracking = () => {
         setCampaigns([
           {
             id: "1",
-            name: "Diwali Dhamaka",
+            name: "Eid Special",
             sentAt: "2026-06-20",
             sentCount: 142,
             redeemedCount: 37,
@@ -51,7 +62,7 @@ const RedemptionTracking = () => {
           },
           {
             id: "2",
-            name: "Eid Special",
+            name: "Diwali Dhamaka",
             sentAt: "2026-06-12",
             sentCount: 210,
             redeemedCount: 98,
@@ -87,7 +98,7 @@ const RedemptionTracking = () => {
     );
 
     const redemptionRate = totalSent
-      ? Math.round((totalRedeemed / totalSent) * 100)
+      ? ((totalRedeemed / totalSent) * 100).toFixed(1)
       : 0;
 
     return {
@@ -98,159 +109,135 @@ const RedemptionTracking = () => {
     };
   }, [campaigns]);
 
-  const chartData = campaigns.map((campaign) => ({
-    name: campaign.name,
-    redeemed: campaign.redeemedCount,
-  }));
+  const chartData = campaigns
+    .map((campaign) => ({
+      name: campaign.name,
+      redeemed: campaign.redeemedCount,
+      revenue: campaign.revenue / 100,
+      sent: campaign.sentCount,
+      conversion:
+        ((campaign.redeemedCount / campaign.sentCount) * 100).toFixed(1),
+    }))
+    .sort((a, b) => b.redeemed - a.redeemed);
 
-  const CustomTooltip = ({
-    active,
-    payload,
-    label,
-  }) => {
+  const bestRevenue = [...campaigns].sort(
+    (a, b) => b.revenue - a.revenue
+  )[0];
+
+  const highestConversion = [...campaigns].sort(
+    (a, b) =>
+      b.redeemedCount / b.sentCount -
+      a.redeemedCount / a.sentCount
+  )[0];
+
+  const highestReach = [...campaigns].sort(
+    (a, b) => b.sentCount - a.sentCount
+  )[0];
+
+  const CustomTooltip = ({ active, payload }) => {
     if (!active || !payload?.length) return null;
 
-    return (
-      <div className="rounded-xl border border-slate-200 bg-white p-4 shadow-lg">
-        <p className="font-semibold">
-          {label}
-        </p>
+    const item = payload[0].payload;
 
-        <p className="mt-2 text-[#16522d]">
-          Redeemed : {payload[0].value}
-        </p>
+    return (
+      <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-xl">
+        <h3 className="font-semibold text-slate-900">{item.name}</h3>
+
+        <div className="mt-3 space-y-2 text-sm">
+          <div className="flex justify-between gap-8">
+            <span className="text-slate-500">Redeemed</span>
+            <span className="font-semibold">
+              {item.redeemed}
+            </span>
+          </div>
+
+          <div className="flex justify-between">
+            <span className="text-slate-500">Conversion</span>
+            <span className="font-semibold text-[#16522D]">
+              {item.conversion}%
+            </span>
+          </div>
+
+          <div className="flex justify-between">
+            <span className="text-slate-500">Revenue</span>
+            <span className="font-semibold">
+              {currency.format(item.revenue)}
+            </span>
+          </div>
+        </div>
       </div>
     );
   };
 
   return (
     <motion.section
-      initial={{ opacity: 0, y: 15 }}
+      initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.35 }}
+      transition={{ duration: 0.4 }}
       className="rounded-3xl border border-slate-200 bg-white shadow-sm"
     >
-      {/* Header */}
+      <div className="border-b border-slate-200 px-6 py-5">
+        <div className="flex items-center gap-4">
+          <div className="rounded-xl bg-[#16522D]/10 p-3">
+            <TrendingUp
+              className="text-[#16522D]"
+              size={24}
+            />
+          </div>
 
-      <div className="flex items-center gap-3 border-b border-slate-200 px-6 py-5">
+          <div>
+            <h2 className="text-xl font-bold text-[#16522D]">
+              Offer Performance
+            </h2>
 
-        <div className="rounded-xl bg-[#16522d]/10 p-3">
-          <TrendingUp
-            size={22}
-            className="text-[#16522d]"
-          />
+            <p className="text-sm text-slate-500">
+              Track campaign performance, revenue and
+              customer engagement.
+            </p>
+          </div>
         </div>
-
-        <div>
-          <h2 className="text-xl font-semibold text-[#16522d]">
-            Offer Performance
-          </h2>
-
-          <p className="text-sm text-slate-500">
-            Track campaign performance and
-            customer engagement.
-          </p>
-        </div>
-
       </div>
 
       <div className="space-y-8 p-6">
 
-        {/* Summary Cards */}
+        {/* KPI Cards */}
 
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
 
-          <div className="rounded-2xl bg-[#16522d] p-6 text-white">
+          <StatCard
+            title="Campaigns"
+            value={campaigns.length}
+            icon={<Megaphone size={22} />}
+            dark
+          />
 
-            <div className="flex items-center justify-between">
+          <StatCard
+            title="Customers Reached"
+            value={stats.totalSent}
+            icon={<Users size={22} />}
+          />
 
-              <p className="text-sm text-white/80">
-                Campaigns Sent
-              </p>
+          <StatCard
+            title="Redeemed"
+            value={stats.totalRedeemed}
+            icon={<Gift size={22} />}
+          />
 
-              <Megaphone size={22} />
-
-            </div>
-
-            <h2 className="mt-4 text-3xl font-bold">
-              {campaigns.length}
-            </h2>
-
-          </div>
-
-          <div className="rounded-2xl border border-slate-200 bg-white p-6">
-
-            <div className="flex items-center justify-between">
-
-              <p className="text-sm text-slate-500">
-                Customers Reached
-              </p>
-
-              <Users
-                size={22}
-                className="text-[#16522d]"
-              />
-
-            </div>
-
-            <h2 className="mt-4 text-3xl font-bold text-slate-900">
-              {stats.totalSent}
-            </h2>
-
-          </div>
-
-          <div className="rounded-2xl border border-slate-200 bg-white p-6">
-
-            <div className="flex items-center justify-between">
-
-              <p className="text-sm text-slate-500">
-                Offers Redeemed
-              </p>
-
-              <Gift
-                size={22}
-                className="text-[#16522d]"
-              />
-
-            </div>
-
-            <h2 className="mt-4 text-3xl font-bold text-slate-900">
-              {stats.totalRedeemed}
-            </h2>
-
-          </div>
-
-          <div className="rounded-2xl border border-slate-200 bg-white p-6">
-
-            <div className="flex items-center justify-between">
-
-              <p className="text-sm text-slate-500">
-                Redemption Rate
-              </p>
-
-              <Percent
-                size={22}
-                className="text-[#16522d]"
-              />
-
-            </div>
-
-            <h2 className="mt-4 text-3xl font-bold text-slate-900">
-              {stats.redemptionRate}%
-            </h2>
-
-          </div>
+          <StatCard
+            title="Conversion"
+            value={`${stats.redemptionRate}%`}
+            icon={<Percent size={22} />}
+          />
 
         </div>
-                {/* Revenue + Chart */}
 
-        <div className="grid gap-6 xl:grid-cols-3">
+        {/* Revenue + Best Campaign */}
 
-          {/* Revenue Card */}
+        <div className="grid gap-6 lg:grid-cols-3">
 
-          <div className="rounded-2xl border border-slate-200 bg-white p-6">
+          <div className="rounded-2xl border border-slate-200 p-6">
 
-            <div className="flex items-center justify-between">
+            <div className="flex justify-between">
 
               <div>
 
@@ -258,102 +245,262 @@ const RedemptionTracking = () => {
                   Revenue Generated
                 </p>
 
-                <h2 className="mt-3 text-3xl font-bold text-[#16522d]">
+                <h2 className="mt-3 text-3xl font-bold text-[#16522D]">
                   {currency.format(stats.totalRevenue / 100)}
                 </h2>
 
                 <p className="mt-2 text-sm text-slate-500">
-                  Total revenue from redeemed offers
+                  Total campaign revenue
                 </p>
 
               </div>
 
-              <div className="rounded-xl bg-[#16522d]/10 p-3">
-
+              <div className="rounded-xl bg-[#16522D]/10 p-3">
                 <IndianRupee
+                  className="text-[#16522D]"
                   size={24}
-                  className="text-[#16522d]"
                 />
-
               </div>
 
             </div>
 
           </div>
 
-          {/* Redemption Chart */}
+          <div className="rounded-2xl border border-slate-200 p-6 lg:col-span-2">
 
-          <div className="rounded-2xl border border-slate-200 bg-white p-6 xl:col-span-2">
+            <div className="flex items-center justify-between">
 
-            <div className="mb-6">
+              <div>
 
-              <h3 className="text-lg font-semibold text-[#16522d]">
-                Campaign Redemption
-              </h3>
+                <p className="text-sm text-slate-500">
+                  🏆 Best Campaign
+                </p>
 
-              <p className="text-sm text-slate-500">
-                Number of customers who redeemed each campaign.
-              </p>
+                <h2 className="mt-2 text-2xl font-bold text-[#16522D]">
+                  {bestRevenue?.name}
+                </h2>
+
+                <p className="mt-2 text-slate-500">
+                  Highest revenue generated
+                </p>
+
+              </div>
+
+              <div className="rounded-full bg-yellow-100 p-4">
+                <Trophy className="text-yellow-600" />
+              </div>
 
             </div>
+          </div>
 
-            <div className="h-80">
+        </div>
 
-              <ResponsiveContainer
-                width="100%"
-                height="100%"
+        {/* Horizontal Performance Chart */}
+
+        <div className="rounded-2xl border border-slate-200 p-6">
+
+          <div className="mb-6">
+
+            <h3 className="text-lg font-semibold text-[#16522D]">
+              Top Performing Campaigns
+            </h3>
+
+            <p className="text-sm text-slate-500">
+              Ranked by redeemed offers.
+            </p>
+
+          </div>
+
+          <div className="h-[340px]">
+
+            <ResponsiveContainer>
+
+              <BarChart
+                layout="vertical"
+                data={chartData}
+                margin={{
+                  top: 10,
+                  right: 30,
+                  left: 50,
+                  bottom: 10,
+                }}
               >
 
-                <BarChart data={chartData}>
+                <defs>
+                  <linearGradient
+                    id="offerGradient"
+                    x1="0"
+                    y1="0"
+                    x2="1"
+                    y2="0"
+                  >
+                    <stop offset="0%" stopColor="#16522D" />
+                    <stop offset="100%" stopColor="#34D399" />
+                  </linearGradient>
+                </defs>
 
-                  <CartesianGrid
-                    strokeDasharray="3 3"
-                    stroke="#E5E7EB"
-                  />
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  horizontal={false}
+                  stroke="#E5E7EB"
+                />
 
-                  <XAxis
-                    dataKey="name"
-                    tickLine={false}
-                    axisLine={false}
-                  />
+                <XAxis type="number" />
 
-                  <YAxis
-                    tickLine={false}
-                    axisLine={false}
-                  />
+                <YAxis
+                  dataKey="name"
+                  type="category"
+                  width={130}
+                />
 
-                  <Tooltip
-                    content={<CustomTooltip />}
-                  />
+                <Tooltip content={<CustomTooltip />} />
 
-                  <Bar
-                    dataKey="redeemed"
-                    radius={[8, 8, 0, 0]}
-                    fill="#16522d"
-                  />
+                <Bar
+                  dataKey="redeemed"
+                  radius={[0, 10, 10, 0]}
+                >
+                  {chartData.map((_, index) => (
+                    <Cell
+                      key={index}
+                      fill={COLORS[index % COLORS.length]}
+                    />
+                  ))}
+                </Bar>
 
-                </BarChart>
+              </BarChart>
 
-              </ResponsiveContainer>
+            </ResponsiveContainer>
 
+          </div>
+
+        </div>
+                {/* Performance Insights */}
+
+        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+
+          <div className="rounded-2xl border border-slate-200 bg-white p-6 transition hover:-translate-y-1 hover:shadow-lg">
+            <div className="flex items-center justify-between">
+              <p className="text-sm font-medium text-slate-500">
+                Highest Revenue
+              </p>
+
+              <div className="rounded-xl bg-green-100 p-3">
+                <IndianRupee
+                  size={20}
+                  className="text-green-700"
+                />
+              </div>
             </div>
 
+            <h3 className="mt-5 text-xl font-bold text-slate-900">
+              {bestRevenue?.name}
+            </h3>
+
+            <p className="mt-2 text-2xl font-bold text-[#16522D]">
+              {currency.format(bestRevenue?.revenue / 100 || 0)}
+            </p>
+
+            <p className="mt-3 text-sm text-slate-500">
+              Best performing campaign
+            </p>
+          </div>
+
+          <div className="rounded-2xl border border-slate-200 bg-white p-6 transition hover:-translate-y-1 hover:shadow-lg">
+            <div className="flex items-center justify-between">
+              <p className="text-sm font-medium text-slate-500">
+                Best Conversion
+              </p>
+
+              <div className="rounded-xl bg-blue-100 p-3">
+                <Target
+                  size={20}
+                  className="text-blue-700"
+                />
+              </div>
+            </div>
+
+            <h3 className="mt-5 text-xl font-bold text-slate-900">
+              {highestConversion?.name}
+            </h3>
+
+            <p className="mt-2 text-2xl font-bold text-blue-700">
+              {(
+                (highestConversion?.redeemedCount /
+                  highestConversion?.sentCount) *
+                100
+              ).toFixed(1)}
+              %
+            </p>
+
+            <p className="mt-3 text-sm text-slate-500">
+              Highest redemption rate
+            </p>
+          </div>
+
+          <div className="rounded-2xl border border-slate-200 bg-white p-6 transition hover:-translate-y-1 hover:shadow-lg">
+            <div className="flex items-center justify-between">
+              <p className="text-sm font-medium text-slate-500">
+                Largest Reach
+              </p>
+
+              <div className="rounded-xl bg-purple-100 p-3">
+                <Users
+                  size={20}
+                  className="text-purple-700"
+                />
+              </div>
+            </div>
+
+            <h3 className="mt-5 text-xl font-bold text-slate-900">
+              {highestReach?.name}
+            </h3>
+
+            <p className="mt-2 text-2xl font-bold text-purple-700">
+              {highestReach?.sentCount}
+            </p>
+
+            <p className="mt-3 text-sm text-slate-500">
+              Customers reached
+            </p>
+          </div>
+
+          <div className="rounded-2xl border border-slate-200 bg-white p-6 transition hover:-translate-y-1 hover:shadow-lg">
+            <div className="flex items-center justify-between">
+              <p className="text-sm font-medium text-slate-500">
+                Total Revenue
+              </p>
+
+              <div className="rounded-xl bg-yellow-100 p-3">
+                <TrendingUp
+                  size={20}
+                  className="text-yellow-700"
+                />
+              </div>
+            </div>
+
+            <h3 className="mt-5 text-3xl font-bold text-[#16522D]">
+              {currency.format(stats.totalRevenue / 100)}
+            </h3>
+
+            <p className="mt-3 text-sm text-slate-500">
+              Across all campaigns
+            </p>
           </div>
 
         </div>
 
         {/* Campaign History */}
 
-        <div className="rounded-2xl border border-slate-200 bg-white">
+        <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white">
 
           <div className="border-b border-slate-200 px-6 py-5">
 
-            <h3 className="text-lg font-semibold text-[#16522d]">
+            <h3 className="text-lg font-semibold text-[#16522D]">
               Campaign History
             </h3>
 
             <p className="text-sm text-slate-500">
-              Review all manual and automatic campaigns.
+              Performance summary for every campaign.
             </p>
 
           </div>
@@ -366,23 +513,23 @@ const RedemptionTracking = () => {
 
                 <tr>
 
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-slate-600">
+                  <th className="px-6 py-4 text-left text-sm font-semibold">
                     Campaign
                   </th>
 
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-slate-600">
+                  <th className="px-6 py-4 text-left text-sm font-semibold">
                     Sent
                   </th>
 
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-slate-600">
-                    Redeemed
+                  <th className="px-6 py-4 text-left text-sm font-semibold">
+                    Progress
                   </th>
 
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-slate-600">
+                  <th className="px-6 py-4 text-left text-sm font-semibold">
                     Revenue
                   </th>
 
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-slate-600">
+                  <th className="px-6 py-4 text-left text-sm font-semibold">
                     Date
                   </th>
 
@@ -392,54 +539,89 @@ const RedemptionTracking = () => {
 
               <tbody>
 
-                {campaigns.map((campaign) => (
+                {campaigns.map((campaign) => {
 
-                  <tr
-                    key={campaign.id}
-                    className="border-t border-slate-100 hover:bg-slate-50"
-                  >
+                  const conversion =
+                    (campaign.redeemedCount /
+                      campaign.sentCount) *
+                    100;
 
-                    <td className="px-6 py-5">
+                  return (
 
-                      <div className="flex items-center gap-3">
+                    <tr
+                      key={campaign.id}
+                      className="border-t border-slate-100 transition hover:bg-slate-50"
+                    >
+
+                      <td className="px-6 py-5">
 
                         <div>
 
-                          <p className="font-medium text-slate-800">
+                          <p className="font-semibold text-slate-800">
                             {campaign.name}
                           </p>
 
                           {campaign.auto && (
-                            <span className="mt-1 inline-flex rounded-full bg-[#16522d]/10 px-2 py-1 text-xs font-medium text-[#16522d]">
-                              Auto
+                            <span className="mt-2 inline-flex rounded-full bg-[#16522D]/10 px-3 py-1 text-xs font-medium text-[#16522D]">
+                              🤖 Auto Campaign
                             </span>
                           )}
 
                         </div>
 
-                      </div>
+                      </td>
 
-                    </td>
+                      <td className="px-6 py-5">
+                        {campaign.sentCount}
+                      </td>
 
-                    <td className="px-6 py-5">
-                      {campaign.sentCount}
-                    </td>
+                      <td className="px-6 py-5">
 
-                    <td className="px-6 py-5">
-                      {campaign.redeemedCount}
-                    </td>
+                        <div className="w-44">
 
-                    <td className="px-6 py-5 font-medium text-[#16522d]">
-                      {currency.format(campaign.revenue / 100)}
-                    </td>
+                          <div className="mb-2 flex justify-between text-xs text-slate-500">
 
-                    <td className="px-6 py-5 text-slate-500">
-                      {dateFormatter(campaign.sentAt)}
-                    </td>
+                            <span>
+                              {campaign.redeemedCount}/
+                              {campaign.sentCount}
+                            </span>
 
-                  </tr>
+                            <span>
+                              {conversion.toFixed(1)}%
+                            </span>
 
-                ))}
+                          </div>
+
+                          <div className="h-2 rounded-full bg-slate-200">
+
+                            <div
+                              className="h-2 rounded-full bg-gradient-to-r from-[#16522D] to-green-400 transition-all duration-700"
+                              style={{
+                                width: `${conversion}%`,
+                              }}
+                            />
+
+                          </div>
+
+                        </div>
+
+                      </td>
+
+                      <td className="px-6 py-5 font-semibold text-[#16522D]">
+                        {currency.format(
+                          campaign.revenue / 100
+                        )}
+                      </td>
+
+                      <td className="px-6 py-5 text-slate-500">
+                        {dateFormatter(campaign.sentAt)}
+                      </td>
+
+                    </tr>
+
+                  );
+
+                })}
 
               </tbody>
 
@@ -452,7 +634,56 @@ const RedemptionTracking = () => {
       </div>
 
     </motion.section>
+
   );
 };
+
+/* ---------- Reusable KPI Card ---------- */
+
+const StatCard = ({
+  title,
+  value,
+  icon,
+  dark = false,
+}) => (
+  <div
+    className={`rounded-2xl p-6 transition hover:-translate-y-1 hover:shadow-lg ${
+      dark
+        ? "bg-[#16522D] text-white"
+        : "border border-slate-200 bg-white"
+    }`}
+  >
+    <div className="flex items-center justify-between">
+
+      <p
+        className={`text-sm ${
+          dark ? "text-white/80" : "text-slate-500"
+        }`}
+      >
+        {title}
+      </p>
+
+      <div
+        className={
+          dark
+            ? ""
+            : "rounded-xl bg-[#16522D]/10 p-2 text-[#16522D]"
+        }
+      >
+        {icon}
+      </div>
+
+    </div>
+
+    <h2
+      className={`mt-5 text-3xl font-bold ${
+        dark ? "text-white" : "text-slate-900"
+      }`}
+    >
+      {value}
+    </h2>
+
+  </div>
+);
 
 export default RedemptionTracking;
