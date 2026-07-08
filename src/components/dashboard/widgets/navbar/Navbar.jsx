@@ -46,26 +46,38 @@ export default function Navbar({ openSidebar }) {
   });
 
   return (
- <header
+<header
   className="
     fixed
-    top-4
-    left-1/2
-    -translate-x-1/2
-    z-[1000]
+    top-0
+    left-0
+
+    z-30
+
     flex
-    h-[72px]
-    w-[55%]
+    h-16
+    w-full
     items-center
     justify-between
-    rounded-3xl
-    border
+
+    border-b
     border-slate-200
-    
-    px-5
-    shadow-lg
     bg-slate-100
-    md:px-6
+
+    px-4
+    shadow-md
+
+    sm:top-4
+    sm:left-1/2
+    sm:w-[95%]
+    sm:h-[72px]
+    sm:-translate-x-1/2
+    sm:rounded-3xl
+    sm:border
+    sm:px-6
+    sm:z-20
+
+    lg:w-[55%]
     lg:px-8
   "
 >

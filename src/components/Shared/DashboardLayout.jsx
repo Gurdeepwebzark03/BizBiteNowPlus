@@ -20,11 +20,12 @@ const DashboardLayout = ({ children }) => {
       )}
 
       {/* Sidebar */}
-        <Sidebar
-          collapsed={collapsed}
-          setCollapsed={setCollapsed}
-          closeSidebar={() => setSidebarOpen(false)}
-        />
+      <Sidebar
+        collapsed={collapsed}
+        setCollapsed={setCollapsed}
+        sidebarOpen={sidebarOpen}
+        closeSidebar={() => setSidebarOpen(false)}
+      />
 
 
       {/* Main Layout */}

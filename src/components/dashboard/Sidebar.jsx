@@ -14,20 +14,38 @@ import icon from "../../assets/BIZ BITE NOW Vertical with Icon.png";
 import logo from "../../assets/BIZ BITE NOW Horizontal with Icon.png";
 import SidebarItem from "./SidebarItem";
 
-export default function Sidebar({ collapsed, setCollapsed }) {
+export default function Sidebar({
+  collapsed,
+  setCollapsed,
+  sidebarOpen,
+  closeSidebar,
+}) {
   return (
     <aside
       onMouseEnter={() => setCollapsed(false)}
       onMouseLeave={() => setCollapsed(true)}
-     className={`
-  fixed left-4 top-4 bottom-4
-  flex flex-col
-  rounded-3xl
-  bg-slate-100
-  backdrop-blur-md
-  shadow-xl
-  transition-all duration-300 ease-in-out
-  ${collapsed ? "w-20" : "w-55"}
+className={`
+fixed z-50
+top-4 bottom-4
+
+bg-slate-100
+rounded-3xl
+shadow-xl
+transition-all duration-300 ease-in-out
+
+flex flex-col
+
+${
+  sidebarOpen
+    ? "left-4"
+    : "-left-full"
+}
+
+lg:left-4
+
+${collapsed ? "lg:w-20" : "lg:w-55"}
+
+w-72
 `}
     >
       {/* Logo */}
@@ -57,6 +75,7 @@ export default function Sidebar({ collapsed, setCollapsed }) {
             icon={LayoutDashboard}
             to="/seller/dashboard"
             collapsed={collapsed}
+            onClick={closeSidebar}
           />
 
           <SidebarItem
@@ -65,6 +84,7 @@ export default function Sidebar({ collapsed, setCollapsed }) {
             to="/seller/products"
             collapsed={collapsed}
             className
+            onClick={closeSidebar}
           />
 
           <SidebarItem
@@ -72,6 +92,7 @@ export default function Sidebar({ collapsed, setCollapsed }) {
             icon={ShoppingCart}
             to="/seller/orders"
             collapsed={collapsed}
+            onClick={closeSidebar}
           />
 
           <SidebarItem
@@ -79,6 +100,7 @@ export default function Sidebar({ collapsed, setCollapsed }) {
             icon={Truck}
             to="/seller/delivery"
             collapsed={collapsed}
+            onClick={closeSidebar}
           />
 
           <SidebarItem
@@ -86,12 +108,14 @@ export default function Sidebar({ collapsed, setCollapsed }) {
             icon={Gift}
             to="/seller/festivemenu"
             collapsed={collapsed}
+            onClick={closeSidebar}
           />
           <SidebarItem
             title="Earnings"
             icon={IndianRupee}
             to="/seller/earnings"
             collapsed={collapsed}
+            onClick={closeSidebar}
           />
 
           <SidebarItem
@@ -99,6 +123,7 @@ export default function Sidebar({ collapsed, setCollapsed }) {
             icon={BarChart3}
             to="/seller/analytics"
             collapsed={collapsed}
+            onClick={closeSidebar}
           />
 
           <SidebarItem
@@ -106,6 +131,7 @@ export default function Sidebar({ collapsed, setCollapsed }) {
             icon={Settings}
             to="/seller/settings"
             collapsed={collapsed}
+            onClick={closeSidebar}
           />
         </div>
       </nav>
@@ -118,6 +144,7 @@ export default function Sidebar({ collapsed, setCollapsed }) {
           to="/login"
           collapsed={collapsed}
           danger
+          onClick={closeSidebar}
         />
       </div>
     </aside>

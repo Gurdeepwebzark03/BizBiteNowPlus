@@ -37,7 +37,7 @@ export default function NotificationPanel() {
     <div
       className="
         absolute
-        -right-30
+        -right-26.5
         mt-3
         w-[380px]
         overflow-hidden

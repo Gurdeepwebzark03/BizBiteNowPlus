@@ -8,10 +8,11 @@ export default function SidebarItem({
   title,
   icon: Icon,
   to,
+  collapsed,
+  danger,
+  onClick,
   children = [],
-  collapsed = false,
-  danger = false,
-}) {
+}){
   const [open, setOpen] = useState(false);
 
   const navigate = useNavigate();
@@ -26,7 +27,8 @@ export default function SidebarItem({
 if (danger) {
   return (
     <NavLink
-      to={to}
+        to={to}
+  onClick={onClick}
       className={({ isActive }) => `
         group
         flex w-full items-center gap-3
