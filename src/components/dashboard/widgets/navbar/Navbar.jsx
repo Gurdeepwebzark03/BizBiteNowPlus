@@ -97,7 +97,7 @@ export default function Navbar({ openSidebar }) {
     }`}
   >
     <h2 className="text-2xl font-bold text-slate-900">
-      Seller <span className="text-green-700 font-inter">Dashboard</span> 
+      BizBitesNow<span className="text-green-700 font-inter">Plus</span> 
     </h2>
   </div>
 
