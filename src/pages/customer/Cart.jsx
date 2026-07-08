@@ -127,11 +127,11 @@ const Cart = () => {
               <div className="p-4 flex items-center gap-3">
 
                 {/* Image */}
-                <div className="w-16 h-16 rounded-xl bg-gray-100 flex items-center justify-center shrink-0 overflow-hidden">
+                <div className="w-16 h-16 rounded-xl bg-gray-100 shrink-0 overflow-hidden">
                   <img
                     src={item.image}
                     alt={item.name}
-                    className="w-12 h-12 object-contain"
+                    className="w-full h-full object-cover"
                   />
                 </div>
 

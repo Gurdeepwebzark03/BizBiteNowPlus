@@ -118,15 +118,26 @@ code {
   padding: 4px 8px;
   background: var(--code-bg);
 }
-/* Storefront banner carousel — white pagination dots */
+/* Storefront banner carousel — white pagination dots, bottom-left */
+.storefront-banner .swiper-pagination {
+  left: 24px;
+  right: auto;
+  width: auto;
+  text-align: left;
+  bottom: 16px !important;
+}
+
 .storefront-banner .swiper-pagination-bullet {
   background: white;
   opacity: 0.5;
+  transition: width 0.2s ease, opacity 0.2s ease;
 }
 
 .storefront-banner .swiper-pagination-bullet-active {
   background: white;
   opacity: 1;
+  width: 20px;
+  border-radius: 4px;
 }
 
 /* Hide Scrollbar */

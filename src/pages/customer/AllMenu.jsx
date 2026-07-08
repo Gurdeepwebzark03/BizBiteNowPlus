@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { ChevronLeft } from "lucide-react";
 import { categories } from "../../data/products";
 import { useCart } from "../../context/CartContext";
+import FoodTypeIndicator from "../../components/customer/FoodTypeIndicator";
 
 const AllMenu = () => {
   const navigate = useNavigate();
@@ -13,15 +14,15 @@ const AllMenu = () => {
       style={{ fontFamily: "Arial, sans-serif" }}>
       {/* Header */}
       <div
-        className="sticky top-0 z-30 bg-white border-b border-gray-100 px-4 flex items-center gap-2"
-        style={{ minHeight: "56px" }}>
+        className="sticky top-0 z-30 bg-white border-b border-gray-100 px-4 flex items-center gap-3"
+        style={{ minHeight: "64px" }}>
         <button
           onClick={() => navigate(-1)}
-          className="flex items-center justify-center text-[#1C1C1C]"
-          style={{ minHeight: "44px", minWidth: "44px" }}>
-          <ChevronLeft size={22} />
+          className="flex items-center justify-center text-[#1C1C1C] bg-gray-100 rounded-xl"
+          style={{ minHeight: "40px", minWidth: "40px" }}>
+          <ChevronLeft size={20} />
         </button>
-        <h1 className="font-bold text-[#1C1C1C]" style={{ fontSize: "20px" }}>
+        <h1 className="font-bold text-[#1C1C1C]" style={{ fontSize: "24px" }}>
           Full Menu
         </h1>
       </div>
@@ -49,23 +50,17 @@ const AllMenu = () => {
                   key={product.id}
                   onClick={() => navigate(`/product/${product.id}`)}
                   className="bg-white rounded-2xl p-4 flex items-center gap-3 shadow-sm cursor-pointer active:opacity-80">
-                  <div className="shrink-0 flex flex-col items-center gap-0.5">
-                    <div className="w-16 h-16 rounded-xl bg-gray-100 flex items-center justify-center overflow-hidden">
-                      <img
-                        src={product.image}
-                        alt={product.name}
-                        className="w-12 h-12 object-contain"
-                      />
-                    </div>
-                    <span
-                      className="text-gray-400 font-semibold"
-                      style={{ fontSize: "10px" }}>
-                      NO IMAGE
-                    </span>
+                  <div className="shrink-0 w-16 h-16 rounded-xl bg-gray-100 overflow-hidden">
+                    <img
+                      src={product.image}
+                      alt={product.name}
+                      className="w-full h-full object-cover"
+                    />
                   </div>
 
                   <div className="flex-1 min-w-0">
-                    <p className="font-bold text-[#1C1C1C] text-[16px]">
+                    <p className="font-bold text-[#1C1C1C] text-[16px] flex items-center gap-1.5">
+                      <FoodTypeIndicator isVeg={product.isVeg} />
                       {product.name}
                     </p>
                     <p
@@ -85,9 +80,9 @@ const AllMenu = () => {
                       e.stopPropagation();
                       addToCart(product);
                     }}
-                    className="shrink-0 border-2 border-[#1A4D2E] text-[#1A4D2E] font-bold rounded-xl px-4 hover:bg-[#1A4D2E] hover:text-white transition-colors"
+                    className="shrink-0 border-2 border-[#1A4D2E] text-[#1A4D2E] font-bold rounded-full px-4 hover:bg-[#1A4D2E] hover:text-white transition-colors"
                     style={{ minHeight: "38px", fontSize: "15px" }}>
-                    ADD
+                    Add
                   </button>
                 </div>
               ))}
