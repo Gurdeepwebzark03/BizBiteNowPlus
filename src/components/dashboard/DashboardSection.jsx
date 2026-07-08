@@ -1,4 +1,4 @@
-import Card from "../ui/Card";
+import Card from "../UI/Card";
 
 const DashboardSection = ({
   title,

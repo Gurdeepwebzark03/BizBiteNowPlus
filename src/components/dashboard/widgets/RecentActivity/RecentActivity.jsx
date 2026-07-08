@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import DashboardWidget from "../../DashboardWidget";
-import EmptyState from "../../../ui/EmptyState";
+import EmptyState from "../../../UI/EmptyState";
 import ActivityItem from "./ActivityItem";
 import { activities } from "../../../../data/dashboardData";
 
