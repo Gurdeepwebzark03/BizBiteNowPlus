@@ -34,7 +34,7 @@ export default function SellerDashboard() {
 
       {/* Quick Actions */}
       <QuickActions />
-
+      <SalesChart/>
 
     </div>
     </motion.div>

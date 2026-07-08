@@ -1,6 +1,7 @@
 import {
   LayoutDashboard,
   Package,
+  IndianRupee,
   ShoppingCart,
   Truck,
   Gift,
@@ -9,37 +10,59 @@ import {
   Settings,
   LogOut,
 } from "lucide-react";
-import icon from "../../assets/BIZ BITE NOW Icon.png";
+import icon from "../../assets/BIZ BITE NOW Vertical with Icon.png";
 import logo from "../../assets/BIZ BITE NOW Horizontal with Icon.png";
 import SidebarItem from "./SidebarItem";
 
-export default function Sidebar({ collapsed, setCollapsed }) {
+export default function Sidebar({
+  collapsed,
+  setCollapsed,
+  sidebarOpen,
+  closeSidebar,
+}) {
   return (
     <aside
       onMouseEnter={() => setCollapsed(false)}
       onMouseLeave={() => setCollapsed(true)}
-      className={`
-        flex h-screen flex-col
-        bg-[#16522d]
-        border-r border-white/10
-        shadow-sm
-        transition-all duration-300 ease-in-out
-        ${collapsed ? "w-20" : "w-72"}
-      `}
+className={`
+fixed z-50
+top-4 bottom-4
+
+bg-slate-100
+rounded-3xl
+shadow-xl
+transition-all duration-300 ease-in-out
+
+flex flex-col
+
+${
+  sidebarOpen
+    ? "left-4"
+    : "-left-full"
+}
+
+lg:left-4
+
+${collapsed ? "lg:w-20" : "lg:w-55"}
+
+w-72
+`}
     >
       {/* Logo */}
-      <div className="flex h-20 items-center justify-center border-b border-white/10 bg-white px-4">
+      <div className="flex h-20 items-center justify-center rounded-t-3xl  py-10 backdrop-blur-md px-4">
         {collapsed ? (
+        <div className="h-16 w-16 overflow-hidden rounded-[14px]">
           <img
             src={icon}
             alt="BizBiteNow"
-            className="h-20 w-20 object-contain"
+            className="h-full w-full object-cover"
           />
+        </div>
         ) : (
           <img
             src={logo}
             alt="BizBiteNow"
-            className="h-20 object-contain"
+            className="h-20 rounded-3xl object-contain"
           />
         )}
       </div>
@@ -52,6 +75,7 @@ export default function Sidebar({ collapsed, setCollapsed }) {
             icon={LayoutDashboard}
             to="/seller/dashboard"
             collapsed={collapsed}
+            onClick={closeSidebar}
           />
 
           <SidebarItem
@@ -60,6 +84,7 @@ export default function Sidebar({ collapsed, setCollapsed }) {
             to="/seller/products"
             collapsed={collapsed}
             className
+            onClick={closeSidebar}
           />
 
           <SidebarItem
@@ -67,28 +92,30 @@ export default function Sidebar({ collapsed, setCollapsed }) {
             icon={ShoppingCart}
             to="/seller/orders"
             collapsed={collapsed}
+            onClick={closeSidebar}
           />
 
-          {/* <SidebarItem
+          <SidebarItem
             title="Delivery"
             icon={Truck}
             to="/seller/delivery"
             collapsed={collapsed}
-          /> */}
-
-{/* Delivery management */}
-<SidebarItem
-  title="Delivery Management"
-  icon={Truck}
-  to="/seller/delivery-management"
-  collapsed={collapsed}
-/>
+            onClick={closeSidebar}
+          />
 
           <SidebarItem
             title="Festive Menu"
             icon={Gift}
             to="/seller/festivemenu"
             collapsed={collapsed}
+            onClick={closeSidebar}
+          />
+          <SidebarItem
+            title="Earnings"
+            icon={IndianRupee}
+            to="/seller/earnings"
+            collapsed={collapsed}
+            onClick={closeSidebar}
           />
 
           <SidebarItem
@@ -96,6 +123,7 @@ export default function Sidebar({ collapsed, setCollapsed }) {
             icon={BarChart3}
             to="/seller/analytics"
             collapsed={collapsed}
+            onClick={closeSidebar}
           />
 
           <SidebarItem
@@ -103,6 +131,7 @@ export default function Sidebar({ collapsed, setCollapsed }) {
             icon={Settings}
             to="/seller/settings"
             collapsed={collapsed}
+            onClick={closeSidebar}
           />
 
           
@@ -121,12 +150,14 @@ export default function Sidebar({ collapsed, setCollapsed }) {
 
       {/* Footer */}
       {/* <div className="border-t border-white/10 p-3">
+      <div className="border-t border-[#C5BAFF]/40 p-3">
         <SidebarItem
           title="Logout"
           icon={LogOut}
           to="/login"
           collapsed={collapsed}
           danger
+          onClick={closeSidebar}
         />
       </div> */}
     </aside>

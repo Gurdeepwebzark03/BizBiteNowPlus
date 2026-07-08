@@ -1,5 +1,5 @@
-import Badge from "../../../ui/Badge";
-import Button from "../../../ui/Button";
+import Badge from "../../../UI/Badge";
+import Button from "../../../UI/Button";
 import { STOCK_STATUS } from "./constants";
 
 const LowStockItem = ({ product }) => {

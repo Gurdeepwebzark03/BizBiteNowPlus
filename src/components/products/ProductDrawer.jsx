@@ -29,18 +29,19 @@ export default function ProductDrawer({
           fixed
           right-0
           top-0
-          z-50
+          z-[9999]
           h-screen
           w-full
           max-w-xl
           overflow-y-auto
           bg-white
+          
           shadow-2xl
         "
       >
         {/* Header */}
 
-        <div className="sticky top-0 z-20 flex items-center justify-between border-b bg-white p-6">
+        <div className="sticky top-0 z-20 flex items-center  z-[10000] justify-between border-b bg-white p-6">
 
           <h2 className="text-2xl font-bold text-slate-900">
             Product Details

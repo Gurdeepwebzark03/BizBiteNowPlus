@@ -1,5 +1,5 @@
 import { Search, LayoutGrid, List } from "lucide-react";
-import { categories } from "../../data/productsData";
+import { categories } from "../../data/productsData.js";
 
 export default function ProductFilters({
   search,

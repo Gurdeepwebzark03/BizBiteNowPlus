@@ -8,7 +8,7 @@ import ProductDrawer from "../../../components/products/ProductDrawer";
 import ProductModal from "../../../components/products/ProductModal";
 import DeleteProductModal from "../../../components/products/DeleteProductModal";
 import { motion } from "framer-motion";
-import { products } from "../../../data/productsData";
+import { products } from "../../../data/productsData.js";
 
 export default function Products() {
   const [search, setSearch] = useState("");
@@ -33,8 +33,12 @@ export default function Products() {
   const productStats = useMemo(
     () => ({
       totalProducts: productList.length,
-      activeProducts: productList.filter((p) => p.available).length,
-      outOfStock: productList.filter((p) => !p.available).length,
+      activeProducts: productList.filter(
+  (p) => p.available === true
+).length,
+outOfStock: productList.filter(
+  (p) => p.available === false
+).length,
       categories: new Set(productList.map((p) => p.category)).size,
     }),
     [productList],
@@ -53,22 +57,79 @@ export default function Products() {
   // Add
   // =========================
 
-  const handleAdd = () => {
-    setSelectedProduct(null);
-    setModalMode("add");
-    setModalOpen(true);
-  };
+const handleAdd = () => {
+  setSelectedProduct(null);
+  setModalMode("add");
+  setModalOpen(true);
+};
 
   // =========================
   // Edit
   // =========================
 
-  const handleEdit = (product) => {
-    setSelectedProduct(product);
-    setModalMode("edit");
-    setModalOpen(true);
+const handleEdit = (product) => {
+  setSelectedProduct({ ...product });
+  setModalMode("edit");
+  setModalOpen(true);
+};
+
+// =========================
+// Save Product
+// =========================
+
+const handleSaveProduct = (productData) => {
+  const formattedProduct = {
+    id:
+      modalMode === "add"
+        ? Date.now()
+        : productData.id,
+
+    sku:
+      productData.sku ||
+      `SKU-${Date.now().toString().slice(-5)}`,
+
+    name: productData.name,
+
+    description:
+      productData.description || "",
+
+    category: productData.category,
+
+    price: Number(productData.price),
+
+    stock: Number(productData.stock),
+
+    available: productData.available,
+
+    featured: productData.featured,
+
+    combo: productData.combo,
+
+    delivery: productData.delivery,
+
+    image:
+      productData.image ||
+      "https://placehold.co/600x600?text=Food",
   };
 
+  if (modalMode === "add") {
+    setProductList((prev) => [
+      formattedProduct,
+      ...prev,
+    ]);
+  } else {
+    setProductList((prev) =>
+      prev.map((item) =>
+        item.id === formattedProduct.id
+          ? formattedProduct
+          : item
+      )
+    );
+  }
+
+  setModalOpen(false);
+  setSelectedProduct(null);
+};
   // =========================
   // Delete
   // =========================
@@ -102,8 +163,10 @@ export default function Products() {
 
       const matchesStatus =
         status === "All" ||
-        (status === "Available" && product.available) ||
-        (status === "Out of Stock" && !product.available);
+        (status === "Available" &&
+          product.available === true) ||
+        (status === "Out of Stock" &&
+          product.available === false);
 
       return matchesSearch && matchesCategory && matchesStatus;
     });
@@ -255,6 +318,7 @@ export default function Products() {
         onClose={() => setModalOpen(false)}
         mode={modalMode}
         product={selectedProduct}
+        onSave={handleSaveProduct}
       />
 
       <DeleteProductModal

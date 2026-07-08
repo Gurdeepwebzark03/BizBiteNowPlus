@@ -16,31 +16,34 @@ export default function RevenueSummary({
     {
       key: "revenue",
       title: "Revenue",
-      value: `₹${summary.revenue.toLocaleString()}`,
+      value: `₹${summary.revenue.toLocaleString("en-IN")}`,
       growth: summary.revenueGrowth,
       icon: IndianRupee,
-      primary: true,
+      color: "#16522D",
     },
     {
       key: "orders",
       title: "Orders",
-      value: summary.orders.toLocaleString(),
+      value: summary.orders.toLocaleString("en-IN"),
       growth: summary.ordersGrowth,
       icon: ShoppingBag,
+      color: "#1E3A5F",
     },
     {
       key: "averageOrder",
-      title: "Avg Order",
-      value: `₹${summary.averageOrder.toLocaleString()}`,
+      title: "Average Order",
+      value: `₹${summary.averageOrder.toLocaleString("en-IN")}`,
       growth: summary.averageOrderGrowth,
       icon: Receipt,
+      color: "#D4A017",
     },
     {
       key: "conversion",
-      title: "Conversion",
+      title: "Conversion Rate",
       value: `${summary.conversion}%`,
       growth: summary.conversionGrowth,
       icon: Percent,
+      color: "#16522D",
     },
   ];
 
@@ -49,104 +52,63 @@ export default function RevenueSummary({
       {cards.map((card) => {
         const Icon = card.icon;
         const positive = card.growth >= 0;
+        const active = activeMetric === card.key;
 
         return (
           <button
             key={card.key}
             type="button"
             onClick={() => onMetricChange(card.key)}
-            className={`
-              group
-              w-full
-              rounded-xl
-              border
-              p-4
-              text-left
-              transition-all
-              duration-300
-              ${
-                activeMetric === card.key
-                  ? "scale-[1.02] shadow-lg ring-2 ring-[#1A4D2E]"
-                  : "hover:-translate-y-1 hover:shadow-md"
-              }
-              ${
-                card.primary
-                  ? "border-[#1A4D2E] bg-[#1A4D2E] text-white"
-                  : "border-slate-200 bg-white hover:border-[#1A4D2E]/30"
-              }
-            `}
+            className={`w-full rounded-2xl border bg-white p-5 text-left transition-all duration-300 ${
+              active
+                ? "border-[#16522D] ring-2 ring-[#16522D]/10 shadow-lg"
+                : "border-slate-200 hover:-translate-y-1 hover:border-[#16522D]/20 hover:shadow-md"
+            }`}
           >
             <div className="flex items-start justify-between">
               <div>
-                <p
-                  className={`text-[13px] font-medium ${
-                    card.primary
-                      ? "text-white/75"
-                      : "text-slate-500"
-                  }`}
-                >
+                <p className="text-sm font-medium text-slate-500">
                   {card.title}
                 </p>
 
-                <h2
-                  className={`mt-2 text-[28px] font-bold leading-none ${
-                    card.primary
-                      ? "text-white"
-                      : "text-slate-900"
-                  }`}
-                >
+                <h2 className="mt-2 text-3xl font-bold text-slate-900">
                   {card.value}
                 </h2>
               </div>
 
               <div
-                className={`
-                  flex h-9 w-9 items-center justify-center rounded-lg
-                  transition-all
-                  ${
-                    card.primary
-                      ? "bg-white/10"
-                      : "bg-[#1A4D2E]/5 group-hover:bg-[#1A4D2E]/10"
-                  }
-                `}
+                className="flex h-11 w-11 items-center justify-center rounded-xl"
+                style={{
+                  backgroundColor: `${card.color}15`,
+                }}
               >
                 <Icon
-                  size={18}
-                  className={
-                    card.primary
-                      ? "text-white"
-                      : "text-[#1A4D2E]"
-                  }
+                  size={20}
+                  style={{
+                    color: card.color,
+                  }}
                 />
               </div>
             </div>
 
             <div
-              className={`mt-4 flex items-center gap-1 text-[12px] ${
-                card.primary
-                  ? "text-white"
-                  : positive
+              className={`mt-5 flex items-center gap-2 text-sm ${
+                positive
                   ? "text-emerald-600"
                   : "text-red-500"
               }`}
             >
               {positive ? (
-                <ArrowUpRight size={14} />
+                <ArrowUpRight size={16} />
               ) : (
-                <ArrowDownRight size={14} />
+                <ArrowDownRight size={16} />
               )}
 
               <span className="font-semibold">
                 {Math.abs(card.growth)}%
               </span>
 
-              <span
-                className={
-                  card.primary
-                    ? "text-white/70"
-                    : "text-slate-500"
-                }
-              >
+              <span className="text-slate-500">
                 vs previous period
               </span>
             </div>

@@ -12,10 +12,6 @@ import Settings from "./pages/Dashboards/Seller/Settings";
 import RegisterSuccess from "./pages/Auth/RegisterSuccess";
 import DeliveryDashboard from "./pages/Dashboards/DeliveryDashboard/DeliveryDashboard";
 
-import DeliveryDashboard from "./pages/Dashboards/DeliveryDashboard/DeliveryDashboard"
-import DeliveryManagement from "./pages/Dashboards/DeliveryDashboard/DeliveryManagement";
-
-
 import FestiveMenu from "./pages/Dashboards/Seller/FestiveMenu";
 import FestiveMenuDetails from "./pages/Dashboards/Seller/FestiveMenuDetails";
 import { FestiveMenuProvider } from "./context/FestiveMenuContext";
@@ -33,19 +29,17 @@ import OrderConfirmation from "./pages/customer/OrderConfirmation";
 import CustomerProfile from "./pages/customer/Profile";
 import CustomerOnboarding from "./pages/customer/CustomerOnboarding";
 import CustomerGate from "./components/customer/CustomerGate";
+import Earnings from "./pages/Dashboards/Seller/Earnings";
 
-<<<<<<< HEAD
 
 // Future Modules
 // import Orders from './pages/Dashboards/Seller/Orders';
 // import Customers from './pages/Dashboards/Seller/Customers';
 // import Analytics from './pages/Dashboards/Seller/Analytics';
 
-=======
->>>>>>> 535dd27f82b042b5462e869db512d3e68e1b347f
 export default function App() {
   return (
-    <div className="w-full min-h-screen bg-slate-950 m-0 p-0 box-border overflow-x-hidden">
+    <div className="w-full min-h-screen bg-slate-100 m-0 p-0 box-border overflow-x-hidden">
       <Routes>
         {/* Default */}
         <Route path="/" element={<Navigate to="/storefront" replace />} />
@@ -137,23 +131,15 @@ export default function App() {
 
           <Route  path="delivery-management" element={<DeliveryManagement />}
 />
-<<<<<<< HEAD
 
           <Route path="festivemenu" element={<FestiveMenu/>}/>
           {/* <Route path="festivemenu/create" element={<CreateFestiveMenu />} /> */}
-
-=======
-
-          <Route path="festivemenu" element={<FestiveMenu/>}/>
-          <Route path="festivemenu/create" element={<CreateFestiveMenu />} />
-
 
           <Route path="festivemenu" element={<FestiveMenu />} />
           <Route path="festivemenu/create" element={<CreateFestiveMenu />} />
           <Route path="festivemenu/edit/:id" element={<CreateFestiveMenu />} />
           <Route path="festivemenu/:id" element={<FestiveMenuDetails />} />
           <Route path="festivemenu/history" element={<FestiveMenuHistory/>}/>
->>>>>>> 535dd27f82b042b5462e869db512d3e68e1b347f
 
         </Route>
         {/* Registration Success */}

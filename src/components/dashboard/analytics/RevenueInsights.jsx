@@ -29,35 +29,39 @@ export default function RevenueInsights({
   const cards = [
     {
       title: "Highest Revenue",
-      value: `₹${highestRevenue.toLocaleString()}`,
+      value: `₹${highestRevenue.toLocaleString("en-IN")}`,
       icon: TrendingUp,
+      color: "#16522D",
     },
     {
       title: "Lowest Revenue",
-      value: `₹${lowestRevenue.toLocaleString()}`,
+      value: `₹${lowestRevenue.toLocaleString("en-IN")}`,
       icon: BadgePercent,
+      color: "#D4A017",
     },
     {
       title: "Average Revenue",
-      value: `₹${avgRevenue.toLocaleString()}`,
+      value: `₹${avgRevenue.toLocaleString("en-IN")}`,
       icon: Wallet,
+      color: "#1E3A5F",
     },
     {
-      title: "Gross Revenue",
-      value: `₹${summary.revenue.toLocaleString()}`,
+      title: "Total Revenue",
+      value: `₹${summary.revenue.toLocaleString("en-IN")}`,
       icon: IndianRupee,
+      color: "#16522D",
     },
   ];
 
   return (
-    <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-6">
+    <div className="mt-6 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-300 hover:shadow-lg">
       <div className="mb-6">
         <h3 className="text-lg font-semibold text-slate-900">
           Revenue Insights
         </h3>
 
         <p className="mt-1 text-sm text-slate-500">
-          Revenue performance based on the selected period.
+          Key revenue metrics for the selected reporting period.
         </p>
       </div>
 
@@ -68,17 +72,24 @@ export default function RevenueInsights({
           return (
             <div
               key={card.title}
-              className="rounded-xl border border-slate-200 p-5 transition-all duration-300 hover:-translate-y-1 hover:border-[#1A4D2E]/30 hover:shadow-md"
+              className="rounded-xl border border-slate-200 bg-white p-5 transition-all duration-300 hover:-translate-y-1 hover:border-[#16522D]/20 hover:shadow-md"
             >
               <div className="flex items-center justify-between">
                 <p className="text-sm font-medium text-slate-500">
                   {card.title}
                 </p>
 
-                <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#1A4D2E]/5">
+                <div
+                  className="flex h-10 w-10 items-center justify-center rounded-lg"
+                  style={{
+                    backgroundColor: `${card.color}15`,
+                  }}
+                >
                   <Icon
                     size={18}
-                    className="text-[#1A4D2E]"
+                    style={{
+                      color: card.color,
+                    }}
                   />
                 </div>
               </div>

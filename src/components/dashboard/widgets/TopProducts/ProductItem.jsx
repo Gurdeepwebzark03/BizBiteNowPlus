@@ -1,4 +1,4 @@
-import Badge from "../../../ui/Badge";
+import Badge from "../../../UI/Badge";
 import ProductProgress from "./ProductProgress";
 
 const ProductItem = ({ product, rank }) => {

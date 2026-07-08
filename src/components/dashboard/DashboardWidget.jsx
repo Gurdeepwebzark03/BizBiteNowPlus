@@ -34,12 +34,6 @@ const DashboardWidget = ({
             </p>
           )}
         </div>
-
-        {action || (
-          <button className="rounded-xl p-2 transition hover:bg-gray-100">
-            <MoreHorizontal size={18} />
-          </button>
-        )}
       </div>
 
       {/* Content */}
