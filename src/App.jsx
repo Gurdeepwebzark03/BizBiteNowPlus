@@ -12,10 +12,6 @@ import Settings from "./pages/Dashboards/Seller/Settings";
 import RegisterSuccess from "./pages/Auth/RegisterSuccess";
 import DeliveryDashboard from "./pages/Dashboards/DeliveryDashboard/DeliveryDashboard";
 
-import DeliveryDashboard from "./pages/Dashboards/DeliveryDashboard/DeliveryDashboard"
-import DeliveryManagement from "./pages/Dashboards/DeliveryDashboard/DeliveryManagement";
-
-
 import FestiveMenu from "./pages/Dashboards/Seller/FestiveMenu";
 import FestiveMenuDetails from "./pages/Dashboards/Seller/FestiveMenuDetails";
 import { FestiveMenuProvider } from "./context/FestiveMenuContext";
@@ -33,11 +29,11 @@ import OrderConfirmation from "./pages/customer/OrderConfirmation";
 import CustomerProfile from "./pages/customer/Profile";
 import CustomerOnboarding from "./pages/customer/CustomerOnboarding";
 import CustomerGate from "./components/customer/CustomerGate";
-import SpecialOffers from "./components/special offers/SpecialOffers";
+import Earnings from "./pages/Dashboards/Seller/Earnings";
 
 export default function App() {
   return (
-    <div className="w-full min-h-screen bg-slate-950 m-0 p-0 box-border overflow-x-hidden">
+    <div className="w-full min-h-screen bg-slate-100 m-0 p-0 box-border overflow-x-hidden">
       <Routes>
         {/* Default */}
         <Route path="/" element={<Navigate to="/storefront" replace />} />
@@ -124,25 +120,14 @@ export default function App() {
           <Route path="delivery" element={<DeliveryDashboard />} />
           <Route path="settings" element={<Settings />} />
           <Route path="products" element={<Products />} />
-          <Route path="special-offers" element={<SpecialOffers />} />
           <Route path="analytics" element={<Analytics />} />
-          <Route path="profile" element={<Profile />} />
-
-          <Route  path="delivery-management" element={<DeliveryManagement />}
-/>
-
-          <Route path="festivemenu" element={<FestiveMenu/>}/>
-          <Route path="festivemenu/create" element={<CreateFestiveMenu />} />
-
-
+          <Route path="earnings"  element={<Earnings/>} />
+           <Route path="profile" element={<Profile />} />
           <Route path="festivemenu" element={<FestiveMenu />} />
           <Route path="festivemenu/create" element={<CreateFestiveMenu />} />
           <Route path="festivemenu/edit/:id" element={<CreateFestiveMenu />} />
           <Route path="festivemenu/:id" element={<FestiveMenuDetails />} />
-          <Route path="festivemenu/history" element={<FestiveMenuHistory />} />
           <Route path="festivemenu/history" element={<FestiveMenuHistory/>}/>
-
-
         </Route>
         {/* Registration Success */}
         <Route

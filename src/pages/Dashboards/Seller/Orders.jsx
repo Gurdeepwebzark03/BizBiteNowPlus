@@ -401,7 +401,7 @@ return (
     <BulkActions
       selectedCount={selectedOrders.length}
       onClear={() => setSelectedOrders([])}
-      onAccept={() => bulkUpdate("Pending")}
+      onAccept={() => bulkUpdate("Preparing")}
       onPreparing={() =>
         bulkUpdate("Preparing")
       }
@@ -433,9 +433,9 @@ return (
 
           onView={openDrawer}
 
-          onAccept={(o) =>
-            updateStatus(o.id, "Pending")
-          }
+            onAccept={(o) =>
+              updateStatus(o.id, "Preparing")
+            }
 
           onPreparing={(o) =>
             updateStatus(

@@ -209,20 +209,6 @@ export default function OrdersTable({
 
                   <div className="flex justify-end gap-2">
 
-                    <button
-                      onClick={() => onView(order)}
-                      className="rounded-lg p-2 transition hover:bg-slate-100"
-                    >
-                      <Eye size={18} />
-                    </button>
-
-                    <button
-                      onClick={() => onPrint(order)}
-                      className="rounded-lg p-2 transition hover:bg-slate-100"
-                    >
-                      <Printer size={18} />
-                    </button>
-
                     <OrderActions
                       order={order}
                       onAccept={onAccept}
@@ -233,9 +219,7 @@ export default function OrdersTable({
                       onCancel={onCancel}
                     />
 
-                    <button className="rounded-lg p-2 transition hover:bg-slate-100">
-                      <MoreVertical size={18} />
-                    </button>
+
 
                   </div>
 

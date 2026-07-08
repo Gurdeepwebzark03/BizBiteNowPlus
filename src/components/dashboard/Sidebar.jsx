@@ -1,6 +1,7 @@
 import {
   LayoutDashboard,
   Package,
+  IndianRupee,
   ShoppingCart,
   Truck,
   Gift,
@@ -8,9 +9,8 @@ import {
   BarChart3,
   Settings,
   LogOut,
-  TicketPercent
 } from "lucide-react";
-import icon from "../../assets/BIZ BITE NOW Icon.png";
+import icon from "../../assets/BIZ BITE NOW Vertical with Icon.png";
 import logo from "../../assets/BIZ BITE NOW Horizontal with Icon.png";
 import SidebarItem from "./SidebarItem";
 
@@ -19,28 +19,32 @@ export default function Sidebar({ collapsed, setCollapsed }) {
     <aside
       onMouseEnter={() => setCollapsed(false)}
       onMouseLeave={() => setCollapsed(true)}
-      className={`
-        flex h-screen flex-col
-        bg-[#16522d]
-        border-r border-white/10
-        shadow-sm
-        transition-all duration-300 ease-in-out
-        ${collapsed ? "w-20" : "w-72"}
-      `}
+     className={`
+  fixed left-4 top-4 bottom-4
+  flex flex-col
+  rounded-3xl
+  bg-slate-100
+  backdrop-blur-md
+  shadow-xl
+  transition-all duration-300 ease-in-out
+  ${collapsed ? "w-20" : "w-55"}
+`}
     >
       {/* Logo */}
-      <div className="flex h-20 items-center justify-center border-b border-white/10 bg-white px-4">
+      <div className="flex h-20 items-center justify-center rounded-t-3xl  py-10 backdrop-blur-md px-4">
         {collapsed ? (
+        <div className="h-16 w-16 overflow-hidden rounded-[14px]">
           <img
             src={icon}
             alt="BizBiteNow"
-            className="h-20 w-20 object-contain"
+            className="h-full w-full object-cover"
           />
+        </div>
         ) : (
           <img
             src={logo}
             alt="BizBiteNow"
-            className="h-20 object-contain"
+            className="h-20 rounded-3xl object-contain"
           />
         )}
       </div>
@@ -70,25 +74,10 @@ export default function Sidebar({ collapsed, setCollapsed }) {
             collapsed={collapsed}
           />
 
-          {/* <SidebarItem
+          <SidebarItem
             title="Delivery"
             icon={Truck}
             to="/seller/delivery"
-            collapsed={collapsed}
-          /> */}
-
-{/* Delivery management */}
-<SidebarItem
-  title="Delivery Management"
-  icon={Truck}
-  to="/seller/delivery-management"
-  collapsed={collapsed}
-/>
-
-          <SidebarItem
-            title="Special Offers"
-            icon={TicketPercent}
-            to="/seller/special-offers"
             collapsed={collapsed}
           />
 
@@ -96,6 +85,12 @@ export default function Sidebar({ collapsed, setCollapsed }) {
             title="Festive Menu"
             icon={Gift}
             to="/seller/festivemenu"
+            collapsed={collapsed}
+          />
+          <SidebarItem
+            title="Earnings"
+            icon={IndianRupee}
+            to="/seller/earnings"
             collapsed={collapsed}
           />
 
@@ -112,23 +107,11 @@ export default function Sidebar({ collapsed, setCollapsed }) {
             to="/seller/settings"
             collapsed={collapsed}
           />
-<<<<<<< HEAD
-          
-          <SidebarItem
-            title="Logout"
-            icon={LogOut}
-            to="/login"
-            collapsed={collapsed}
-            danger
-          />
-
-=======
->>>>>>> ebd0b3dfa3a10aac5a5af3e2205fbb2409115953
         </div>
       </nav>
 
       {/* Footer */}
-      <div className="border-t border-white/10 p-3">
+      <div className="border-t border-[#C5BAFF]/40 p-3">
         <SidebarItem
           title="Logout"
           icon={LogOut}

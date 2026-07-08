@@ -46,18 +46,29 @@ export default function Navbar({ openSidebar }) {
   });
 
   return (
-    <header
-      className="
-        sticky top-0 z-30
-        flex h-[72px] items-center justify-between
-        border-b border-slate-200/80
-        bg-white/95
-        px-5
-        backdrop-blur-md
-        md:px-6
-        lg:px-8
-      "
-    >
+ <header
+  className="
+    fixed
+    top-4
+    left-1/2
+    -translate-x-1/2
+    z-[1000]
+    flex
+    h-[72px]
+    w-[55%]
+    items-center
+    justify-between
+    rounded-3xl
+    border
+    border-slate-200
+    
+    px-5
+    shadow-lg
+    bg-slate-100
+    md:px-6
+    lg:px-8
+  "
+>
       {/* Left */}
       <div className="flex min-w-0 items-center gap-4">
         <button
@@ -66,7 +77,7 @@ export default function Navbar({ openSidebar }) {
       flex h-11 w-11 items-center justify-center
       rounded-xl
       transition-all duration-300
-      hover:bg-slate-100
+      hover:bg-[#FDFDF5]
       active:scale-95
       lg:hidden
     "
@@ -93,7 +104,7 @@ export default function Navbar({ openSidebar }) {
   {/* Clock */}
 
   <div
-    className={`absolute inset-0 flex items-center gap-3 rounded-2xl border border-slate-200 bg-slate-50 px-4 py-2 transition-all duration-500 ease-in-out ${
+    className={`absolute inset-0 flex items-center gap-3 rounded-2xl background-blur-md px-4 py-2 transition-all duration-500 ease-in-out ${
       !isDashboard
         ? "translate-y-0 opacity-100"
         : "translate-y-6 opacity-0"
@@ -107,7 +118,7 @@ export default function Navbar({ openSidebar }) {
     </div>
 
     <div>
-      <p className="text-xs text-slate-500">
+      <p className="text-xs text-slate-600 ">
         {formattedDate}
       </p>
 
@@ -125,7 +136,7 @@ export default function Navbar({ openSidebar }) {
 
         <ProfileMenu
           seller={{
-            name: "Gurdeep Singh",
+            name: "Seller",
             role: "Plus Seller",
           }}
         />
