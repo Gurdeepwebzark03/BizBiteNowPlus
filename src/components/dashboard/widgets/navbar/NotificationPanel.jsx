@@ -5,7 +5,7 @@ import {
   Bell,
   CheckCheck,
 } from "lucide-react";
-import { notifications } from "./notificationData";
+import { notifications } from "./notificationData.js";
 
 const iconMap = {
   order: {
