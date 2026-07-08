@@ -50,7 +50,7 @@ export default function DeliveryBoyForm({
 
       <div className="bg-white rounded-xl shadow-xl w-full max-w-md p-6">
 
-        <h2 className="text-2xl font-bold text-amber-700 mb-5">
+        <h2 className="text-2xl font-bold text-black mb-5">
           {editData ? "Edit Delivery Boy" : "Add Delivery Boy"}
         </h2>
 
@@ -111,14 +111,14 @@ export default function DeliveryBoyForm({
             <button
               type="button"
               onClick={onClose}
-              className="px-5 py-2 rounded-lg bg-gray-200"
+              className="px-5 py-2 rounded-lg bg-gray-200 hover:bg-gray-100 cursor-pointer"
             >
               Cancel
             </button>
 
             <button
               type="submit"
-              className="px-5 py-2 rounded-lg bg-amber-500 text-white"
+              className="px-5 py-2 rounded-lg bg-green-900 hover:bg-green-800 text-white cursor-pointer"
             >
               Save
             </button>

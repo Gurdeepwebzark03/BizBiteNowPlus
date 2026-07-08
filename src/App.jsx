@@ -31,6 +31,12 @@ import CustomerOnboarding from "./pages/customer/CustomerOnboarding";
 import CustomerGate from "./components/customer/CustomerGate";
 import Earnings from "./pages/Dashboards/Seller/Earnings";
 
+
+// Future Modules
+// import Orders from './pages/Dashboards/Seller/Orders';
+// import Customers from './pages/Dashboards/Seller/Customers';
+// import Analytics from './pages/Dashboards/Seller/Analytics';
+
 export default function App() {
   return (
     <div className="w-full min-h-screen bg-slate-100 m-0 p-0 box-border overflow-x-hidden">
@@ -121,13 +127,20 @@ export default function App() {
           <Route path="settings" element={<Settings />} />
           <Route path="products" element={<Products />} />
           <Route path="analytics" element={<Analytics />} />
-          <Route path="earnings"  element={<Earnings/>} />
-           <Route path="profile" element={<Profile />} />
+          <Route path="profile" element={<Profile />} />
+
+          <Route  path="delivery-management" element={<DeliveryManagement />}
+/>
+
+          <Route path="festivemenu" element={<FestiveMenu/>}/>
+          {/* <Route path="festivemenu/create" element={<CreateFestiveMenu />} /> */}
+
           <Route path="festivemenu" element={<FestiveMenu />} />
           <Route path="festivemenu/create" element={<CreateFestiveMenu />} />
           <Route path="festivemenu/edit/:id" element={<CreateFestiveMenu />} />
           <Route path="festivemenu/:id" element={<FestiveMenuDetails />} />
           <Route path="festivemenu/history" element={<FestiveMenuHistory/>}/>
+
         </Route>
         {/* Registration Success */}
         <Route

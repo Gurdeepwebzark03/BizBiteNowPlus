@@ -133,10 +133,23 @@ w-72
             collapsed={collapsed}
             onClick={closeSidebar}
           />
+
+          
+          <SidebarItem
+            title="Logout"
+            icon={LogOut}
+            to="/login"
+            collapsed={collapsed}
+            danger
+          />
+
+
+
         </div>
       </nav>
 
       {/* Footer */}
+      {/* <div className="border-t border-white/10 p-3">
       <div className="border-t border-[#C5BAFF]/40 p-3">
         <SidebarItem
           title="Logout"
@@ -146,7 +159,7 @@ w-72
           danger
           onClick={closeSidebar}
         />
-      </div>
+      </div> */}
     </aside>
   );
 }

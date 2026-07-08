@@ -25,7 +25,7 @@ export default function AssignOrderModal({
 
       <div className="bg-white rounded-xl w-full max-w-md p-6 shadow-lg">
 
-        <h2 className="text-2xl font-bold text-amber-700 mb-5">
+        <h2 className="text-2xl font-bold text-black mb-5">
           Assign Order
         </h2>
 
@@ -55,14 +55,14 @@ export default function AssignOrderModal({
 
             <button
               onClick={onClose}
-              className="px-5 py-2 rounded-lg bg-gray-300"
+              className="px-5 py-2 rounded-lg bg-gray-200 hover:bg-gray-100 cursor-pointer"
             >
               Cancel
             </button>
 
             <button
               onClick={handleAssign}
-              className="px-5 py-2 rounded-lg bg-amber-500 text-white"
+              className="px-5 py-2 rounded-lg bg-green-900 hover:bg-green-800 cursor-pointer text-white"
             >
               Assign
             </button>

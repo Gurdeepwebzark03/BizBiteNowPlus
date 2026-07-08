@@ -3,7 +3,7 @@ import deliveryBoyData from "../../../data/deliveryBoyData";
 import DeliveryBoyTable from "../../../components/delivery/DeliveryBoyTable";
 import DeliveryBoyForm from "../../../components/delivery/DeliveryBoyForm";
 import DeleteDeliveryModal from "../../../components/delivery/DeleteDeliveryModal";
-import AssignOrderModal from "../../../components/delivery/AssignOrderModal";
+// import AssignOrderModal from "../../../components/delivery/AssignOrderModal";
 
 export default function DeliveryManagement() {
   const [deliveryBoys, setDeliveryBoys] = useState(deliveryBoyData);
@@ -82,24 +82,24 @@ const handleToggleStatus = (id) => {
 };
 
 // Open Assign Order Modal
-const handleAssignClick = (boy) => {
-  setSelectedOrder(boy);
-  setAssignModal(true);
-};
+// const handleAssignClick = (boy) => {
+//   setSelectedOrder(boy);
+//   setAssignModal(true);
+// };
 
 // Assign Order
-const handleAssignOrder = (id) => {
-  const updated = deliveryBoys.map((boy) =>
-    boy.id === id
-      ? {
-          ...boy,
-          assignedOrders: boy.assignedOrders + 1,
-        }
-      : boy
-  );
+// const handleAssignOrder = (id) => {
+//   const updated = deliveryBoys.map((boy) =>
+//     boy.id === id
+//       ? {
+//           ...boy,
+//           assignedOrders: boy.assignedOrders + 1,
+//         }
+//       : boy
+//   );
 
-  setDeliveryBoys(updated);
-};
+//   setDeliveryBoys(updated);
+// };
 
   // Delete Click
   const handleDeleteClick = (boy) => {
@@ -120,7 +120,7 @@ const handleAssignOrder = (id) => {
   };
 
   return (
-    <div className="min-h-screen bg-amber-50 p-6">
+    <div className="min-h-screen bg-gray-100 p-6">
 
       {/* Header */}
 
@@ -128,7 +128,7 @@ const handleAssignOrder = (id) => {
 
         <div>
 
-          <h1 className="text-3xl font-bold text-amber-700">
+          <h1 className="text-3xl font-bold text-black">
             Delivery Management
           </h1>
 
@@ -143,7 +143,7 @@ const handleAssignOrder = (id) => {
             setEditData(null);
             setIsModalOpen(true);
           }}
-          className="bg-amber-500 hover:bg-amber-600 text-white px-5 py-2 rounded-lg"
+          className="bg-green-900 hover:bg-green-800 text-white px-5 py-2 rounded-lg"
         >
           + Add Delivery Boy
         </button>
@@ -154,13 +154,14 @@ const handleAssignOrder = (id) => {
 
       <div className="bg-white rounded-xl shadow-md p-4 mb-6 flex flex-col md:flex-row justify-between gap-4">
 
-        <input
-          type="text"
-          placeholder="Search Name or Phone..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          className="border rounded-lg px-4 py-2 w-full md:w-80"
-        />
+<input
+  type="text"
+  placeholder="Search Name or Phone..."
+  value={search}
+  onChange={(e) => setSearch(e.target.value)}
+  className="w-full md:w-80 rounded-lg border border-gray-300 px-4 py-2 focus:border-gray-500 focus:outline-none"
+/>
+       
 
         <select
           value={filter}
@@ -181,7 +182,7 @@ const handleAssignOrder = (id) => {
   onEdit={handleEdit}
   onDelete={handleDeleteClick}
   onToggleStatus={handleToggleStatus}
-  onAssign={handleAssignClick}
+  // onAssign={handleAssignClick}
 />
 
       {/* Add / Edit Modal */}
@@ -205,13 +206,7 @@ const handleAssignOrder = (id) => {
         deliveryBoy={selectedBoy}
       />
 
-      {/* AssignOrderModal */}
-      <AssignOrderModal
-  isOpen={assignModal}
-  onClose={() => setAssignModal(false)}
-  deliveryBoys={deliveryBoys}
-  onAssign={handleAssignOrder}
-/>
+   
 
     </div>
   );
