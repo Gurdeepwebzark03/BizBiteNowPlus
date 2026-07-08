@@ -1,4 +1,4 @@
-const VEG_COLOR = "#1A4D2E";
+const VEG_COLOR = "#E8622D";
 const NON_VEG_COLOR = "#8B2E2E";
 
 const FoodTypeIndicator = ({ isVeg }) => {

@@ -4,8 +4,8 @@ import { ChevronLeft, MapPin, Loader2, Lock } from "lucide-react";
 import { useCart } from "../../context/CartContext";
 import { getMyProfile } from "../../api/customer/authApi";
 
-const GREEN = "#1A4D2E";
-const LIGHT_GREEN = "#E6F4EA";
+const GREEN = "#E8622D";
+const LIGHT_GREEN = "#FFEDD5";
 const CHARCOAL = "#1C1C1C";
 const CREAM = "#FAFAF5";
 

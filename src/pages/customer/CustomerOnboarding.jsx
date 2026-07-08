@@ -7,7 +7,7 @@ import logoHorizontal from "../../assets/bizbite_logo_horizontal.png";
 const LeftPanel = () => (
   <div
     className="hidden md:flex flex-col items-center justify-center shrink-0 px-12"
-    style={{ backgroundColor: "#1A4D2E", width: "420px" }}
+    style={{ backgroundColor: "#E8622D", width: "420px" }}
   >
     <img
       src={logoHorizontal}
@@ -169,7 +169,7 @@ const CustomerOnboarding = () => {
               disabled={loading}
               className="w-full text-white font-bold rounded-xl flex items-center justify-center gap-2 transition-opacity"
               style={{
-                backgroundColor: "#1A4D2E",
+                backgroundColor: "#E8622D",
                 minHeight: "52px",
                 fontSize: "17px",
                 opacity: loading ? 0.8 : 1,
@@ -214,7 +214,7 @@ const CustomerOnboarding = () => {
                   value={digit}
                   onChange={(e) => handleOtpChange(e.target.value, i)}
                   onKeyDown={(e) => handleOtpKeyDown(e, i)}
-                  className="border border-gray-200 rounded-xl text-center font-bold text-[#1C1C1C] outline-none focus:border-[#1A4D2E] transition-colors"
+                  className="border border-gray-200 rounded-xl text-center font-bold text-[#1C1C1C] outline-none focus:border-[#E8622D] transition-colors"
                   style={{
                     width: "60px",
                     height: "60px",
@@ -259,7 +259,7 @@ const CustomerOnboarding = () => {
           <div className="bg-white rounded-3xl shadow-sm p-8 w-full max-w-sm">
             <span
               className="inline-block text-[14px] font-bold px-3 py-1 rounded-full mb-4"
-              style={{ backgroundColor: "#e6f4ea", color: "#1A4D2E" }}
+              style={{ backgroundColor: "#ffedd5", color: "#E8622D" }}
             >
               NUMBER VERIFIED ✓
             </span>
@@ -283,7 +283,7 @@ const CustomerOnboarding = () => {
               value={name}
               onChange={(e) => { setName(e.target.value); setError(""); }}
               placeholder="Your Name"
-              className="w-full border border-gray-200 rounded-xl px-4 text-[16px] text-[#1C1C1C] outline-none focus:border-[#1A4D2E] transition-colors mb-3"
+              className="w-full border border-gray-200 rounded-xl px-4 text-[16px] text-[#1C1C1C] outline-none focus:border-[#E8622D] transition-colors mb-3"
               style={{
                 minHeight: "52px",
                 fontFamily: "Arial, sans-serif",
@@ -295,7 +295,7 @@ const CustomerOnboarding = () => {
               onChange={(e) => { setAddress(e.target.value); setError(""); }}
               placeholder="Complete Delivery Address (Flat, Wing, Area)"
               rows={3}
-              className="w-full border border-gray-200 rounded-xl px-4 py-3 text-[16px] text-[#1C1C1C] outline-none resize-none focus:border-[#1A4D2E] transition-colors mb-4"
+              className="w-full border border-gray-200 rounded-xl px-4 py-3 text-[16px] text-[#1C1C1C] outline-none resize-none focus:border-[#E8622D] transition-colors mb-4"
               style={{ fontFamily: "Arial, sans-serif" }}
             />
 
@@ -304,7 +304,7 @@ const CustomerOnboarding = () => {
               disabled={loading}
               className="w-full text-white font-bold rounded-xl flex items-center justify-center gap-2 transition-opacity"
               style={{
-                backgroundColor: "#1A4D2E",
+                backgroundColor: "#E8622D",
                 minHeight: "52px",
                 fontSize: "17px",
                 opacity: loading ? 0.8 : 1,

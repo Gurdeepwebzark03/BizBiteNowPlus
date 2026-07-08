@@ -173,7 +173,7 @@ const StoreFront = () => {
             />
           </div>
 
-          {/* Bell + Customer */}
+          {/* Bell + Cart + Customer */}
           <div className="flex items-center gap-3 shrink-0">
             <button
               className="relative flex items-center justify-center text-gray-500 shrink-0"
@@ -184,6 +184,22 @@ const StoreFront = () => {
                 className="absolute rounded-full"
                 style={{ top: "8px", right: "9px", width: "7px", height: "7px", backgroundColor: "#C2703D" }}
               />
+            </button>
+
+            <button
+              onClick={() => navigate("/cart")}
+              className="relative flex items-center justify-center text-gray-500 shrink-0 lg:hidden"
+              style={{ minHeight: "40px", minWidth: "40px" }}
+            >
+              <ShoppingCart size={20} />
+              {totalItems > 0 && (
+                <span
+                  className="absolute bg-[#F4A300] text-[#1C1C1C] font-bold rounded-full flex items-center justify-center"
+                  style={{ top: "2px", right: "0px", fontSize: "10px", width: "16px", height: "16px" }}
+                >
+                  {totalItems > 9 ? "9+" : totalItems}
+                </span>
+              )}
             </button>
 
             <button

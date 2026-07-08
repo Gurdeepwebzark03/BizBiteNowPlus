@@ -80,7 +80,7 @@ const AllMenu = () => {
                       e.stopPropagation();
                       addToCart(product);
                     }}
-                    className="shrink-0 border-2 border-[#1A4D2E] text-[#1A4D2E] font-bold rounded-full px-4 hover:bg-[#1A4D2E] hover:text-white transition-colors"
+                    className="shrink-0 border-2 border-[#E8622D] text-[#E8622D] font-bold rounded-full px-4 hover:bg-[#E8622D] hover:text-white transition-colors"
                     style={{ minHeight: "38px", fontSize: "15px" }}>
                     Add
                   </button>

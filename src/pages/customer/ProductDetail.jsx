@@ -22,7 +22,7 @@ const ProductDetail = () => {
         <p className="text-gray-400 text-[16px]">Product not found</p>
         <button
           onClick={() => navigate("/")}
-          className="mt-4 text-[#1A4D2E] font-bold underline"
+          className="mt-4 text-[#E8622D] font-bold underline"
           style={{ minHeight: "44px" }}
         >
           Back to Store
@@ -46,7 +46,7 @@ const ProductDetail = () => {
         className="relative overflow-hidden"
         style={{
           height: "260px",
-          background: "linear-gradient(135deg, #1A4D2E 0%, #143D24 100%)",
+          background: "linear-gradient(135deg, #E8622D 0%, #E8622D 100%)",
         }}
       >
         <div
@@ -78,7 +78,7 @@ const ProductDetail = () => {
             {product.name}
           </h1>
           <span
-            className="font-bold text-[#1A4D2E] shrink-0"
+            className="font-bold text-[#E8622D] shrink-0"
             style={{ fontSize: "22px" }}
           >
             ₹{product.price}
@@ -120,7 +120,7 @@ const ProductDetail = () => {
           <button
             onClick={() => setQty((q) => q + 1)}
             className="rounded-lg flex items-center justify-center"
-            style={{ minHeight: "40px", minWidth: "40px", backgroundColor: "#1A4D2E" }}
+            style={{ minHeight: "40px", minWidth: "40px", backgroundColor: "#E8622D" }}
           >
             <Plus size={16} color="#fff" />
           </button>
@@ -136,7 +136,7 @@ const ProductDetail = () => {
         <button
           onClick={handleAddToCart}
           className="w-full text-white rounded-xl font-bold flex items-center justify-center gap-2"
-          style={{ minHeight: "52px", fontSize: "17px", fontFamily: "Arial, sans-serif", backgroundColor: "#1A4D2E" }}
+          style={{ minHeight: "52px", fontSize: "17px", fontFamily: "Arial, sans-serif", backgroundColor: "#E8622D" }}
         >
           <ShoppingCart size={18} />
           Add to Cart — ₹{product.price * qty}

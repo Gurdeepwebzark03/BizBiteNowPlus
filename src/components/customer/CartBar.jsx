@@ -14,7 +14,7 @@ const CartBar = () => {
         onClick={() => navigate("/cart")}
         className="w-full text-white px-4 flex items-center justify-between shadow-lg"
         style={{
-          backgroundColor: "#1A4D2E",
+          backgroundColor: "#E8622D",
           minHeight: "56px",
           fontFamily: "Arial, sans-serif",
         }}
