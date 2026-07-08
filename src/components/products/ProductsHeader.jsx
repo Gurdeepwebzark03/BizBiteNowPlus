@@ -20,7 +20,7 @@ export default function ProductsHeader({
 
       {/* Right */}
       <div className="flex flex-wrap items-center gap-3">
-        <button
+        {/* <button
           onClick={onImport}
           className="inline-flex items-center gap-2 rounded-xl border border-slate-300 bg-white px-4 py-2.5 text-sm font-medium text-slate-700 transition hover:bg-slate-50"
         >
@@ -34,7 +34,7 @@ export default function ProductsHeader({
         >
           <Download size={18} />
           Export
-        </button>
+        </button> */}
 
         <button
           onClick={onAdd}
