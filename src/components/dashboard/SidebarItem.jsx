@@ -8,10 +8,11 @@ export default function SidebarItem({
   title,
   icon: Icon,
   to,
+  collapsed,
+  danger,
+  onClick,
   children = [],
-  collapsed = false,
-  danger = false,
-}) {
+}){
   const [open, setOpen] = useState(false);
 
   const navigate = useNavigate();
@@ -26,59 +27,105 @@ export default function SidebarItem({
 if (danger) {
   return (
     <NavLink
-      to={to}
+        to={to}
+  onClick={onClick}
       className={({ isActive }) => `
+        group
         flex w-full items-center gap-3
         rounded-xl
         px-4 py-3
-        transition-all duration-200
+        transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]
         ${
           isActive
-            ? "bg-red-100 text-red-600 font-semibold"
-            : "text-red-500 bg-red-100 hover:bg-red-300 hover:text-red-600"
+            ? "bg-red-500 text-white font-semibold"
+            : "bg-red-100 text-red-500 hover:bg-red-100 hover:text-red-600"
         }
       `}
     >
-      <Icon size={20} />
+      <Icon
+        size={20}
+        className={`
+          shrink-0 flex-none
+          transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]
+          group-hover:-translate-y-0.5
+        `}
+      />
 
-      {!collapsed && (
-        <span className="font-medium">
-          {title}
-        </span>
-      )}
+      <span
+        className={`
+          overflow-hidden whitespace-nowrap font-medium
+          transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]
+          ${
+            collapsed
+              ? "w-0 opacity-0"
+              : "w-auto opacity-100"
+          }
+          group-hover:-translate-y-0.5
+        `}
+      >
+        {title}
+      </span>
     </NavLink>
   );
 }
+
 
 // Simple Navigation Button
 if (!children.length) {
   return (
     <Button
+      variant="ghost"
       type="button"
       onClick={() => navigate(to)}
       className={`
-        flex w-full items-center gap-3
-        rounded-xl
-        px-4 py-3
-        transition-all duration-200
+        group
+        flex h-12 w-full items-center rounded-xl px-4
+        text-[15px] font-medium
+        transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]
+        ${
+          collapsed
+            ? "justify-center"
+            : "justify-start gap-3.5"
+        }
         ${
           isActive(to)
-            ? "bg-[#F4A300] text-black font-semibold"
-            : "text-gray-200 hover:bg-white/10"
+            ? "bg-[#ffc700] text-slate-800 shadow-md"
+            : "bg-transparent text-green-700 hover:bg-[#E8F9FF] hover:text-[#6B5FD6]"
         }
       `}
     >
-      <Icon size={20} />
+      <Icon
+        size={20}
+        strokeWidth={2}
+        className={`
+          shrink-0 flex-none
+          transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]
+          ${
+            isActive(to)
+              ? "text-white"
+              : "text-green-700 group-hover:text-[#F4A300] group-hover:-translate-y-0.5"
+          }
+        `}
+      />
 
       {!collapsed && (
-        <span className="font-medium">
+        <span
+          className={`
+            whitespace-nowrap
+            transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]
+            ${
+              isActive(to)
+                ? "text-white"
+                : "group-hover:text-[#F4A300] group-hover:-translate-y-0.5"
+            }
+          `}
+        >
           {title}
         </span>
       )}
     </Button>
   );
 }
-
   // Expandable Menu
   return (
     <div className="space-y-2">
@@ -97,14 +144,17 @@ if (!children.length) {
           }
         `}
       >
-        <div className="flex items-center gap-3">
-          <Icon size={20} />
+        <Icon size={20} className="shrink-0" />
 
-          {!collapsed && (
-            <span className="font-medium">
-              {title}
-            </span>
-          )}
+        <div
+          className={`
+            overflow-hidden transition-all duration-300
+            ${collapsed ? "w-0 opacity-0" : "w-44 opacity-100"}
+          `}
+        >
+          <span className="block whitespace-nowrap font-medium">
+            {title}
+          </span>
         </div>
 
         {!collapsed && (

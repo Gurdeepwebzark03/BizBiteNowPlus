@@ -3,7 +3,6 @@ import { Mail, Lock, ArrowRight } from "lucide-react";
 import { useNavigate, Link } from "react-router-dom";
 import logoHorizontal from "../../assets/bizbite_logo_horizontal.png";
 import { useAuth } from "../../context/AuthContext";
-import API from "../../api/axios";
 import { motion } from "framer-motion";
 
 
@@ -29,41 +28,39 @@ export default function Login() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
+  e.preventDefault();
 
-    setError("");
-    setLoading(true);
+  setError("");
 
-    try {
-      const response = await API.post("/seller/login", {
-        email: formData.email,
-        pin: formData.pin,
-        fcm_token: formData.fcm_token,
-      });
+  if (!formData.email.trim() || !formData.pin.trim()) {
+    setError("Please enter your email and PIN.");
+    return;
+  }
 
-      if (response.data.token && response.data.seller) {
-        localStorage.setItem("token", response.data.token);
-        localStorage.setItem(
-          "user",
-          JSON.stringify(response.data.seller)
-        );
+  setLoading(true);
 
-        login(response.data.seller, response.data.token);
+  // Fake loading
+  await new Promise((resolve) => setTimeout(resolve, 1000));
 
-        setLoading(false);
-
-        navigate("/seller-dashboard");
-      }
-    } catch (err) {
-      setLoading(false);
-
-      setError(
-        err.response?.data?.message ||
-          "Invalid Credentials! Access Gateway pipeline declined."
-      );
-    }
+  const seller = {
+    id: 1,
+    name: "Demo Seller",
+    email: formData.email,
+    storeName: "BizBite Demo Restaurant",
+    role: "seller",
   };
 
+  const fakeToken = "demo-seller-token";
+
+  localStorage.setItem("token", fakeToken);
+  localStorage.setItem("user", JSON.stringify(seller));
+
+  login(seller, fakeToken);
+
+  setLoading(false);
+
+  navigate("/seller/dashboard");
+};
 
   return (
     <div className="relative h-screen overflow-hidden bg-gradient-to-br from-[#0b2b18] via-[#16522d] to-[#07140d]">
@@ -244,7 +241,10 @@ export default function Login() {
 
                 <div >
 
-                  <label className="mb-2 block w-full text-left text-sm font-semibold text-[#16522d]">
+                  <label
+                    htmlFor="email"
+                    className="mb-2 block w-full text-left text-sm font-semibold text-[#16522d]"
+                  >
                     Email Address
                   </label>
 
@@ -255,15 +255,17 @@ export default function Login() {
                       className="text-gray-400 transition group-focus-within:text-[#16522d]"
                     />
 
-                    <input
-                      type="email"
-                      name="email"
-                      required
-                      value={formData.email}
-                      onChange={handleChange}
-                      placeholder="seller@bizbitenow.com"
-                      className="w-full bg-transparent px-4 py-2 text-[#16522d] outline-none placeholder:text-gray-400"
-                    />
+                          <input
+                            id="email"
+                            name="email"
+                            type="email"
+                            required
+                            autoComplete="email"
+                            value={formData.email}
+                            onChange={handleChange}
+                            placeholder="seller@bizbitenow.com"
+                            className="w-full bg-transparent px-4 py-2 text-[#16522d] outline-none placeholder:text-gray-400"
+                          />
 
                   </div>
 
@@ -275,9 +277,12 @@ export default function Login() {
 
                   <div className="mb-2 flex items-center justify-between">
 
-                    <label className="text-sm font-semibold text-[#16522d]">
-                      Security PIN
-                    </label>
+                      <label
+                        htmlFor="pin"
+                        className="text-sm font-semibold text-[#16522d]"
+                      >
+                        Security PIN
+                      </label>
 
                     <button
                       type="button"
@@ -295,16 +300,19 @@ export default function Login() {
                       className="text-gray-400 transition group-focus-within:text-[#16522d]"
                     />
 
-                    <input
-                      type={showPin ? "text" : "password"}
-                      name="pin"
-                      required
-                      maxLength={4}
-                      value={formData.pin}
-                      onChange={handleChange}
-                      placeholder="••••"
-                      className="w-full bg-transparent px-4 py-2 font-mono tracking-[0.35em] text-[#16522d] outline-none placeholder:text-gray-400"
-                    />
+                        <input
+                          id="pin"
+                          name="pin"
+                          type={showPin ? "text" : "password"}
+                          required
+                          maxLength={4}
+                          inputMode="numeric"
+                          autoComplete="current-password"
+                          value={formData.pin}
+                          onChange={handleChange}
+                          placeholder="••••"
+                          className="w-full bg-transparent px-4 py-2 font-mono tracking-[0.35em] text-[#16522d] outline-none placeholder:text-gray-400"
+                        />
 
                     <button
                       type="button"
@@ -322,16 +330,20 @@ export default function Login() {
 
                 <div className="flex items-center justify-between">
 
-                  <label className="flex cursor-pointer items-center gap-2 text-sm text-gray-600">
+                <label
+                  htmlFor="rememberMe"
+                  className="flex cursor-pointer items-center gap-2 text-sm text-gray-600"
+                >
+                  <input
+                    id="rememberMe"
+                    name="rememberMe"
+                    type="checkbox"
+                    autoComplete="off"
+                    className="h-4 w-4 accent-[#16522d]"
+                  />
 
-                    <input
-                      type="checkbox"
-                      className="h-4 w-4 accent-[#16522d]"
-                    />
-
-                    Remember Me
-
-                  </label>
+                  Remember Me
+                </label>
 
                   <button
                     type="button"

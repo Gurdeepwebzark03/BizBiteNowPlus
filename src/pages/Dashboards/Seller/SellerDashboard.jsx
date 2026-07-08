@@ -6,42 +6,37 @@ import TopProducts from "../../../components/dashboard/widgets/TopProducts/TopPr
 import LowStock from "../../../components/dashboard/widgets/LowStock/LowStock";
 import RecentActivity from "../../../components/dashboard/widgets/RecentActivity/RecentActivity";
 import QuickActions from "../../../components/dashboard/widgets/QuickActions/QuickActions";
-
+import { motion } from "framer-motion";
 import { stats } from "../../../data/dashboardData";
 
 export default function SellerDashboard() {
   return (
-    <div className="space-y-8">
-      {/* Dashboard Hero */}
+        <motion.div
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+      className="space-y-6"
+    >
+    <div className="space-y-6">
+
+      {/* Hero */}
       <DashboardHero />
 
-      {/* Statistics */}
-      <section className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6">
+      {/* Overview */}
+      <section className="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-4">
         {stats.map((item) => (
-          <StatsCard key={item.id} {...item} />
+          <StatsCard
+            key={item.id}
+            {...item}
+          />
         ))}
       </section>
 
-      {/* Analytics */}
-      <section className="grid grid-cols-1 xl:grid-cols-3 gap-6">
-        <div className="xl:col-span-2">
-          <SalesChart />
-        </div>
+      {/* Quick Actions */}
+      <QuickActions />
+      <SalesChart/>
 
-        <QuickActions />
-      </section>
-
-      {/* Orders & Products */}
-      <section className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-        <RecentOrders />
-        <TopProducts />
-      </section>
-
-      {/* Activity & Stock */}
-      <section className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-        <RecentActivity />
-        <LowStock />
-      </section>
     </div>
+    </motion.div>
   );
 }

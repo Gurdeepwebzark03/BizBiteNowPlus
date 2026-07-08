@@ -1,102 +1,70 @@
+import { useState } from "react";
+
+import AnalyticsSummaryCards from "./AnalyticsSummaryCards";
+import ActualVsBudgetChart from "./ActualVsBudgetChart";
+import CurrentVsPastChart from "./CurrentVsPastChart";
+import ProductSalesChart from "./ProductSalesChart";
+import BudgetDonutChart from "./BudgetDonutChart";
+
+
 import {
-  AreaChart,
-  Area,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-} from "recharts";
+  analyticsSummary,
+  actualVsBudgetData,
+  currentVsPastData,
+  productSalesData,
+  budgetDonutData,
+  availableYears,
+  selectedYear,
+} from "./analyticsData";
 
-import ChartHeader from "./ChartHeader";
-import RevenueSummary from "./RevenueSummary";
-import { salesChartData } from "../../../data/salesChartData";
-
-const CustomTooltip = ({ active, payload, label }) => {
-  if (!active || !payload?.length) return null;
+export default function SalesChart() {
+  const [year, setYear] = useState(selectedYear);
 
   return (
-    <div className="rounded-xl border border-gray-200 bg-white p-4 shadow-lg">
-      <p className="font-semibold">{label}</p>
+    <div className="space-y-8">
 
-      <p className="mt-2 text-[#1A4D2E]">
-        Revenue: ₹{payload[0].value.toLocaleString()}
-      </p>
-    </div>
-  );
-};
-
-const SalesChart = () => {
-  return (
-    <div className="rounded-3xl h-full border border-gray-200 bg-white p-6 shadow-sm">
-
-      <ChartHeader
-        title="Sales Analytics"
-        subtitle="Track your weekly sales performance"
+      {/* KPI Cards */}
+      <AnalyticsSummaryCards
+        summary={analyticsSummary}
       />
 
-      <RevenueSummary />
+      {/* Revenue Section */}
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-12">
 
-      <div className="mt-8 h-[350px]">
+        <div className="xl:col-span-8">
+          <ActualVsBudgetChart
+            data={actualVsBudgetData}
+          />
+        </div>
 
-        <ResponsiveContainer width="100%" height="100%">
-          <AreaChart data={salesChartData}>
+        <div className="space-y-6 xl:col-span-4">
 
-            <defs>
-              <linearGradient
-                id="salesGradient"
-                x1="0"
-                y1="0"
-                x2="0"
-                y2="1"
-              >
-                <stop
-                  offset="5%"
-                  stopColor="#1A4D2E"
-                  stopOpacity={0.35}
-                />
 
-                <stop
-                  offset="95%"
-                  stopColor="#1A4D2E"
-                  stopOpacity={0}
-                />
-              </linearGradient>
-            </defs>
+          <CurrentVsPastChart
+            data={currentVsPastData}
+          />
 
-            <CartesianGrid
-              strokeDasharray="3 3"
-              stroke="#E5E7EB"
-            />
+        </div>
 
-            <XAxis
-              dataKey="day"
-              tickLine={false}
-              axisLine={false}
-            />
+      </div>
 
-            <YAxis
-              tickLine={false}
-              axisLine={false}
-            />
+      {/* Product & Orders */}
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-12">
 
-            <Tooltip content={<CustomTooltip />} />
+        <div className="xl:col-span-8">
+          <ProductSalesChart
+            data={productSalesData}
+          />
+        </div>
 
-            <Area
-              type="monotone"
-              dataKey="revenue"
-              stroke="#1A4D2E"
-              strokeWidth={3}
-              fill="url(#salesGradient)"
-            />
-
-          </AreaChart>
-        </ResponsiveContainer>
+        <div className="xl:col-span-4">
+          <BudgetDonutChart
+            data={budgetDonutData}
+          />
+        </div>
 
       </div>
 
     </div>
   );
-};
-
-export default SalesChart;
+}

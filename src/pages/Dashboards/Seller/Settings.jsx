@@ -8,10 +8,18 @@ import PaymentSettingsCard from "../../../components/dashboard/settings/PaymentS
 import TaxComplianceCard from "../../../components/dashboard/settings/TaxComplianceCard";
 import NotificationsCard from "../../../components/dashboard/settings/NotificationsCard";
 import SecurityCard from "../../../components/dashboard/settings/SecurityCard";
+import LoyaltySettingsCard from "../../../components/dashboard/settings/LoyaltySettingsCard";
+import { motion } from "framer-motion";
 
 export default function Settings() {
   return (
-    <div className="space-y-8">
+        <motion.div
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+      className="space-y-6"
+    >
+          <div className="space-y-8">
       <PageHeader
         title="Store Settings"
         subtitle="Manage every aspect of your restaurant from one place."
@@ -27,6 +35,8 @@ export default function Settings() {
 
       <DeliverySettingsCard />
 
+      <LoyaltySettingsCard/>
+
       <PaymentSettingsCard />
 
       <TaxComplianceCard />
@@ -35,5 +45,6 @@ export default function Settings() {
 
       <SecurityCard />
     </div>
+    </motion.div>
   );
 }

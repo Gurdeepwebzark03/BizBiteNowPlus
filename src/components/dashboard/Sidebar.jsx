@@ -1,8 +1,7 @@
 import {
-  ChevronLeft,
-  Menu,
   LayoutDashboard,
   Package,
+  IndianRupee,
   ShoppingCart,
   Truck,
   Gift,
@@ -11,73 +10,72 @@ import {
   Settings,
   LogOut,
 } from "lucide-react";
-
+import icon from "../../assets/BIZ BITE NOW Vertical with Icon.png";
+import logo from "../../assets/BIZ BITE NOW Horizontal with Icon.png";
 import SidebarItem from "./SidebarItem";
-import Button from "../UI/Button";
-export default function Sidebar({ collapsed, setCollapsed }) {
+
+export default function Sidebar({
+  collapsed,
+  setCollapsed,
+  sidebarOpen,
+  closeSidebar,
+}) {
   return (
     <aside
-      className={`
-        h-screen
-        bg-[#16522d]
-        border-r
-        border-slate-200
-        shadow-sm
-        transition-all
-        duration-300
-        ${collapsed ? "w-20" : "w-72"}
-      `}
+      onMouseEnter={() => setCollapsed(false)}
+      onMouseLeave={() => setCollapsed(true)}
+className={`
+fixed z-50
+top-4 bottom-4
+
+bg-slate-100
+rounded-3xl
+shadow-xl
+transition-all duration-300 ease-in-out
+
+flex flex-col
+
+${
+  sidebarOpen
+    ? "left-4"
+    : "-left-full"
+}
+
+lg:left-4
+
+${collapsed ? "lg:w-20" : "lg:w-55"}
+
+w-72
+`}
     >
       {/* Logo */}
-
-      {/* Seller */}
-
-      <div className="border-b border-slate-200 bg-white p-5">
-        {/* Top Row */}
-        <div
-          className={`mb-5 flex ${
-            collapsed ? "justify-center" : "justify-end "
-          }`}
-        >
-          <Button
-            onClick={() => setCollapsed(!collapsed)}
-            className="rounded-xl p-2"
-          >
-            {collapsed ? <Menu size={20} /> : <ChevronLeft size={20} />}
-          </Button>
+      <div className="flex h-20 items-center justify-center rounded-t-3xl  py-10 backdrop-blur-md px-4">
+        {collapsed ? (
+        <div className="h-16 w-16 overflow-hidden rounded-[14px]">
+          <img
+            src={icon}
+            alt="BizBiteNow"
+            className="h-full w-full object-cover"
+          />
         </div>
-
-        {/* Seller Profile */}
-        <div
-          className={`flex items-center ${
-            collapsed ? "justify-center" : "gap-3"
-          }`}
-        >
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-[#1A4D2E] text-lg font-bold text-white">
-            GS
-          </div>
-
-          {!collapsed && (
-            <div className="min-w-0">
-              <h3 className="truncate font-semibold text-slate-900">
-                Gurdeep Singh
-              </h3>
-
-              <p className="text-sm text-slate-500">Plus Seller</p>
-            </div>
-          )}
-        </div>
+        ) : (
+          <img
+            src={logo}
+            alt="BizBiteNow"
+            className="h-20 rounded-3xl object-contain"
+          />
+        )}
       </div>
 
       {/* Navigation */}
-
-      <nav className="sidebar-scroll h-[calc(100vh-160px)] overflow-y-auto px-3 py-4">
+      <nav className="sidebar-scroll flex-1 overflow-y-auto px-3 py-4">
         <div className="space-y-2">
           <SidebarItem
             title="Dashboard"
             icon={LayoutDashboard}
             to="/seller/dashboard"
             collapsed={collapsed}
+            onClick={closeSidebar}
           />
 
           <SidebarItem
@@ -85,6 +83,8 @@ export default function Sidebar({ collapsed, setCollapsed }) {
             icon={Package}
             to="/seller/products"
             collapsed={collapsed}
+            className
+            onClick={closeSidebar}
           />
 
           <SidebarItem
@@ -92,6 +92,7 @@ export default function Sidebar({ collapsed, setCollapsed }) {
             icon={ShoppingCart}
             to="/seller/orders"
             collapsed={collapsed}
+            onClick={closeSidebar}
           />
 
           <SidebarItem
@@ -99,20 +100,22 @@ export default function Sidebar({ collapsed, setCollapsed }) {
             icon={Truck}
             to="/seller/delivery"
             collapsed={collapsed}
+            onClick={closeSidebar}
           />
 
           <SidebarItem
-            title="Marketing"
+            title="Festive Menu"
             icon={Gift}
-            to="/seller/marketing"
+            to="/seller/festivemenu"
             collapsed={collapsed}
+            onClick={closeSidebar}
           />
-
           <SidebarItem
-            title="Storefront"
-            icon={Store}
-            to="/seller/storefront"
+            title="Earnings"
+            icon={IndianRupee}
+            to="/seller/earnings"
             collapsed={collapsed}
+            onClick={closeSidebar}
           />
 
           <SidebarItem
@@ -120,6 +123,7 @@ export default function Sidebar({ collapsed, setCollapsed }) {
             icon={BarChart3}
             to="/seller/analytics"
             collapsed={collapsed}
+            onClick={closeSidebar}
           />
 
           <SidebarItem
@@ -127,8 +131,10 @@ export default function Sidebar({ collapsed, setCollapsed }) {
             icon={Settings}
             to="/seller/settings"
             collapsed={collapsed}
+            onClick={closeSidebar}
           />
 
+          
           <SidebarItem
             title="Logout"
             icon={LogOut}
@@ -137,8 +143,23 @@ export default function Sidebar({ collapsed, setCollapsed }) {
             danger
           />
 
+
+
         </div>
       </nav>
+
+      {/* Footer */}
+      {/* <div className="border-t border-white/10 p-3">
+      <div className="border-t border-[#C5BAFF]/40 p-3">
+        <SidebarItem
+          title="Logout"
+          icon={LogOut}
+          to="/login"
+          collapsed={collapsed}
+          danger
+          onClick={closeSidebar}
+        />
+      </div> */}
     </aside>
   );
 }

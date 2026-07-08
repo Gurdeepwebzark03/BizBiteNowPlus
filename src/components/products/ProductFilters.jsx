@@ -1,11 +1,13 @@
 import { Search, LayoutGrid, List } from "lucide-react";
-import { categories } from "../../data/productsData";
+import { categories } from "../../data/productsData.js";
 
 export default function ProductFilters({
   search,
   setSearch,
   category,
   setCategory,
+  status,
+  setStatus,
   view,
   setView,
 }) {
@@ -14,9 +16,11 @@ export default function ProductFilters({
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
 
         {/* Left */}
+
         <div className="flex flex-1 flex-col gap-4 md:flex-row">
 
           {/* Search */}
+
           <div className="relative flex-1">
             <Search
               size={18}
@@ -28,46 +32,16 @@ export default function ProductFilters({
               placeholder="Search products..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="
-                w-full
-                rounded-xl
-                border
-                border-slate-300
-                bg-white
-                py-3
-                pl-11
-                pr-4
-                text-sm
-                text-slate-900
-                placeholder:text-slate-400
-                outline-none
-                transition
-                focus:border-[#1A4D2E]
-                focus:ring-2
-                focus:ring-[#1A4D2E]/20
-              "
+              className="w-full rounded-xl border border-slate-300 bg-white py-3 pl-11 pr-4 text-sm outline-none transition focus:border-[#1A4D2E] focus:ring-2 focus:ring-[#1A4D2E]/20"
             />
           </div>
 
           {/* Category */}
+
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className="
-              rounded-xl
-              border
-              border-slate-300
-              bg-white
-              px-4
-              py-3
-              text-sm
-              text-slate-900
-              outline-none
-              transition
-              focus:border-[#1A4D2E]
-              focus:ring-2
-              focus:ring-[#1A4D2E]/20
-            "
+            className="rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-[#1A4D2E] focus:ring-2 focus:ring-[#1A4D2E]/20"
           >
             {categories.map((item) => (
               <option key={item} value={item}>
@@ -77,31 +51,21 @@ export default function ProductFilters({
           </select>
 
           {/* Status */}
+
           <select
-            className="
-              rounded-xl
-              border
-              border-slate-300
-              bg-white
-              px-4
-              py-3
-              text-sm
-              text-slate-900
-              outline-none
-              transition
-              focus:border-[#1A4D2E]
-              focus:ring-2
-              focus:ring-[#1A4D2E]/20
-            "
+            value={status}
+            onChange={(e) => setStatus(e.target.value)}
+            className="rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm outline-none transition focus:border-[#1A4D2E] focus:ring-2 focus:ring-[#1A4D2E]/20"
           >
-            <option>All Status</option>
-            <option>Available</option>
-            <option>Out of Stock</option>
+            <option value="All">All Status</option>
+            <option value="Available">Available</option>
+            <option value="Out of Stock">Out of Stock</option>
           </select>
 
         </div>
 
         {/* Right */}
+
         <div className="flex items-center gap-2 rounded-xl border border-slate-200 p-1">
 
           <button
