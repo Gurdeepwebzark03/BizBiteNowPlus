@@ -186,14 +186,6 @@ export default function ProfileMenu({
 
               <div className="my-2 border-t border-slate-200" />
 
-              <MenuItem
-                icon={LogOut}
-                title="Logout"
-                danger
-                onClick={() =>
-                  handleNavigate("/login")
-                }
-              />
             </div>
           </motion.div>
         )}
