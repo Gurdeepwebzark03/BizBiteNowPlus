@@ -12,24 +12,22 @@ export default function SidebarItem({
   danger,
   onClick,
   children = [],
-}){
+}) {
   const [open, setOpen] = useState(false);
 
   const navigate = useNavigate();
   const location = useLocation();
 
   const isActive = (path) =>
-    location.pathname === path ||
-    location.pathname.startsWith(`${path}/`);
+    location.pathname === path || location.pathname.startsWith(`${path}/`);
 
-
-// Logout (NavLink)
-if (danger) {
-  return (
-    <NavLink
+  // Logout (NavLink)
+  if (danger) {
+    return (
+      <NavLink
         to={to}
-  onClick={onClick}
-      className={({ isActive }) => `
+        onClick={onClick}
+        className={({ isActive }) => `
         group
         flex w-full items-center gap-3
         rounded-xl
@@ -41,63 +39,54 @@ if (danger) {
             : "bg-red-100 text-red-500 hover:bg-red-100 hover:text-red-600"
         }
       `}
-    >
-      <Icon
-        size={20}
-        className={`
+      >
+        <Icon
+          size={20}
+          className={`
           shrink-0 flex-none
           transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]
           group-hover:-translate-y-0.5
         `}
-      />
+        />
 
-      <span
-        className={`
+        <span
+          className={`
           overflow-hidden whitespace-nowrap font-medium
           transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]
-          ${
-            collapsed
-              ? "w-0 opacity-0"
-              : "w-auto opacity-100"
-          }
+          ${collapsed ? "w-0 opacity-0" : "w-auto opacity-100"}
           group-hover:-translate-y-0.5
         `}
-      >
-        {title}
-      </span>
-    </NavLink>
-  );
-}
+        >
+          {title}
+        </span>
+      </NavLink>
+    );
+  }
 
-
-// Simple Navigation Button
-if (!children.length) {
-  return (
-    <Button
-      variant="ghost"
-      type="button"
-      onClick={() => navigate(to)}
-      className={`
+  // Simple Navigation Button
+  if (!children.length) {
+    return (
+      <Button
+        variant="ghost"
+        type="button"
+        onClick={() => navigate(to)}
+        className={`
         group
         flex h-12 w-full items-center rounded-xl px-4
         text-[15px] font-medium
         transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]
-        ${
-          collapsed
-            ? "justify-center"
-            : "justify-start gap-3.5"
-        }
+        ${collapsed ? "justify-center" : "justify-start gap-3.5"}
         ${
           isActive(to)
             ? "bg-[#ffc700] text-slate-800 shadow-md"
             : "bg-transparent text-green-700 hover:bg-[#E8F9FF] hover:text-[#6B5FD6]"
         }
       `}
-    >
-      <Icon
-        size={20}
-        strokeWidth={2}
-        className={`
+      >
+        <Icon
+          size={20}
+          strokeWidth={2}
+          className={`
           shrink-0 flex-none
           transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]
           ${
@@ -106,11 +95,11 @@ if (!children.length) {
               : "text-green-700 group-hover:text-[#F4A300] group-hover:-translate-y-0.5"
           }
         `}
-      />
+        />
 
-      {!collapsed && (
-        <span
-          className={`
+        {!collapsed && (
+          <span
+            className={`
             whitespace-nowrap
             transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]
             ${
@@ -119,13 +108,13 @@ if (!children.length) {
                 : "group-hover:text-[#F4A300] group-hover:-translate-y-0.5"
             }
           `}
-        >
-          {title}
-        </span>
-      )}
-    </Button>
-  );
-}
+          >
+            {title}
+          </span>
+        )}
+      </Button>
+    );
+  }
   // Expandable Menu
   return (
     <div className="space-y-2">
@@ -152,9 +141,7 @@ if (!children.length) {
             ${collapsed ? "w-0 opacity-0" : "w-44 opacity-100"}
           `}
         >
-          <span className="block whitespace-nowrap font-medium">
-            {title}
-          </span>
+          <span className="block whitespace-nowrap font-medium">{title}</span>
         </div>
 
         {!collapsed && (

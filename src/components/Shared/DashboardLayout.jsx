@@ -6,7 +6,7 @@ import Navbar from "../dashboard/widgets/navbar/Navbar";
 
 export default function DashboardLayout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-const [sidebarExpanded, setSidebarExpanded] = useState(false);
+  const [sidebarExpanded, setSidebarExpanded] = useState(false);
   const toggleSidebar = () => {
     if (window.innerWidth < 1024) {
       setSidebarOpen((prev) => !prev);
@@ -30,32 +30,28 @@ const [sidebarExpanded, setSidebarExpanded] = useState(false);
       )}
 
       {/* Sidebar */}
-<Sidebar
-  sidebarOpen={sidebarOpen}
-  closeSidebar={closeSidebar}
-  onExpandedChange={setSidebarExpanded}
-/>
+      <Sidebar
+        sidebarOpen={sidebarOpen}
+        closeSidebar={closeSidebar}
+        onExpandedChange={setSidebarExpanded}
+      />
 
       {/* Main Content */}
-<div
-  className="h-full bg-slate-100 transition-[margin-left,width] duration-300 ease-[cubic-bezier(.22,1,.36,1)]"
-  style={{
-    marginLeft: 0,
-    width: "100%",
-    ...(window.matchMedia("(min-width: 1024px)").matches && {
-      marginLeft: sidebarExpanded ? 240 : 96,
-      width: sidebarExpanded
-        ? "calc(100% - 240px)"
-        : "calc(100% - 96px)",
-    }),
-  }}
->
+      <div
+        className="h-full bg-slate-100 transition-[margin-left,width] duration-300 ease-[cubic-bezier(.22,1,.36,1)]"
+        style={{
+          marginLeft: 0,
+          width: "100%",
+          ...(window.matchMedia("(min-width: 1024px)").matches && {
+            marginLeft: sidebarExpanded ? 240 : 96,
+            width: sidebarExpanded ? "calc(100% - 240px)" : "calc(100% - 96px)",
+          }),
+        }}
+      >
         <Navbar openSidebar={toggleSidebar} />
 
         <main className="pt-24 p-4 sm:p-6 lg:p-8">
-          <div className="mx-auto max-w-[1700px]">
-            {children || <Outlet />}
-          </div>
+          <div className="mx-auto max-w-[1700px]">{children || <Outlet />}</div>
         </main>
       </div>
     </div>
