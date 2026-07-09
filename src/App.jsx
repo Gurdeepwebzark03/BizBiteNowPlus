@@ -101,6 +101,7 @@ export default function App() {
           <Route path="settings" element={<Settings />} />
           <Route path="products" element={<Products />} />
           <Route path="analytics" element={<Analytics />} />
+          <Route path="earnings" element={<Earnings />} />
           <Route path="profile" element={<Profile />} />
           <Route  path="delivery-management" element={<DeliveryDashboard />}
 />
