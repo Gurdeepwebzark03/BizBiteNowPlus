@@ -80,7 +80,7 @@ export default function RegisterSeller() {
   };
 
   return (
-<div className="relative flex h-screen items-center justify-center px-4 py-0 bg-gradient-to-br from-[#0b2b18] via-[#16522d] to-[#07140d]">
+<div className="relative flex h-full items-center justify-center px-4 py-0 bg-gradient-to-br from-[#0b2b18] via-[#16522d] to-[#07140d]">
   {/* Background */}
   <div className="absolute -top-32 -left-32 h-72 w-72 rounded-full bg-[#ffc700]/10 blur-3xl"></div>
   <div className="absolute bottom-0 right-0 h-80 w-80 rounded-full bg-white/5 blur-3xl"></div>
@@ -140,13 +140,13 @@ export default function RegisterSeller() {
         duration: 0.45,
         ease: "easeInOut",
       }}
-      className="relative z-20 w-full max-w-sm sm:max-w-2xl lg:max-w-6xl origin-center scale-100 lg:scale-80"
+      className="w-full h-4xl max-w-6xl"
     >
-      <div className="grid w-6x overflow-hidden rounded-3xl bg-white shadow-[0_40px_80px_rgba(22,82,45,0.15)] lg:grid-cols-2 lg:rounded-[32px]">
+      <div className="relative z-10 w-full max-w-6xl grid lg:grid-cols-2 rounded-[32px] overflow-hidden shadow-[0_40px_80px_rgba(22,82,45,0.15)]">
 
         {/* LEFT PANEL */}
 
-        <div className="relative hidden lg:flex flex-col justify-between overflow-hidden bg-gradient-to-br from-[#16522d] via-[#124325] to-[#08160e] p-4 xl:p-5 text-white">
+        <div className="relative hidden lg:flex flex-col justify-between overflow-hidden bg-gradient-to-br from-[#16522d] via-[#124325] to-[#08160e] p-8 text-white">
           <div className="absolute right-0 top-0 h-56 w-56 rounded-full bg-[#ffc700]/10 blur-3xl"></div>
 
           <div className="relative z-10">
@@ -193,7 +193,7 @@ export default function RegisterSeller() {
             ].map((item) => (
               <div
                 key={item.title}
-                className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 p-3"
+                className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 p-2.5"
               >
                 <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#ffc700] font-black text-[#16522d]">
                   ✓
@@ -214,8 +214,8 @@ export default function RegisterSeller() {
         </div>
 
         {/* RIGHT PANEL */}
-<div className="flex items-center justify-center bg-white px-5 py-6 sm:px-8 lg:px-10 lg:py-8">
-  <div className="w-full max-w-md sm:max-w-lg lg:max-w-xl">
+<div className= "flex items-center justify-center bg-white px-10 py-6">
+  <div className="w-full max-w-lg">
 
     {/* Mobile Logo */}
 
@@ -229,23 +229,17 @@ export default function RegisterSeller() {
 
     {/* Brand */}
 
-    <h1 className="text-center text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl lg:text-left">
+    <h1 className="text-center text-2xl font-extrabold tracking-tight text-slate-900 sm:text-3xl lg:text-center">
       BizbitsNow
       <span className="text-emerald-500">PLUS</span>
     </h1>
 
     {/* Title */}
 
-    <h2 className="mt-3 text-center text-2xl font-black text-[#16522d] sm:text-3xl lg:text-left">
+    <h2 className="mt-3 text-center text-2xl font-black text-[#16522d] sm:text-m lg:text-center">
       Create Seller Account
     </h2>
 
-    {/* Subtitle */}
-
-    <p className="mt-2 text-center text-sm leading-6 text-gray-500 lg:text-left">
-      Register your restaurant and start accepting online orders in just a
-      few minutes.
-    </p>
 
     {/* Error */}
 
@@ -259,9 +253,9 @@ export default function RegisterSeller() {
 
     <form
       onSubmit={handleSubmit}
-      className="mt-6 space-y-5"
+      className="space-y-4"
     >
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+      <div className="grid grid-cols-1 gap-3 lg:grid-cols-2">
         {/* Owner Name */}
 
 <div>
@@ -487,7 +481,7 @@ export default function RegisterSeller() {
 
     {/* Divider */}
 
-    <div className="my-6 flex items-center gap-3">
+    <div className="my-5 flex items-center gap-3">
       <div className="h-px flex-1 bg-gray-200"></div>
 
       <span className="text-xs font-medium uppercase tracking-wider text-gray-400">
@@ -513,7 +507,7 @@ export default function RegisterSeller() {
 
     {/* Footer */}
 
-    <div className="mt-8 border-t border-gray-200 pt-5 text-center">
+    <div className="mt-6 border-t border-gray-200 pt-4 text-center">
       <p className="text-xs text-gray-500">
         Trusted by restaurants across India.
       </p>

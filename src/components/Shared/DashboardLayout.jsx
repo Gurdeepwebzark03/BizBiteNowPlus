@@ -38,7 +38,7 @@ const [sidebarExpanded, setSidebarExpanded] = useState(false);
 
       {/* Main Content */}
 <div
-  className="min-h-screen bg-slate-100 transition-[margin-left,width] duration-300 ease-[cubic-bezier(.22,1,.36,1)]"
+  className="h-full bg-slate-100 transition-[margin-left,width] duration-300 ease-[cubic-bezier(.22,1,.36,1)]"
   style={{
     marginLeft: 0,
     width: "100%",
