@@ -3,8 +3,8 @@ import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { CheckCircle, Package, Share2, Home, MapPin } from "lucide-react";
 
 const STATUS_STYLES = {
-  "Order Placed": "bg-[#F4A300]/20 text-[#1A4D2E]",
-  "Delivered": "bg-green-100 text-green-700",
+  "Order Placed": "bg-[#F4A300]/20 text-[#E8622D]",
+  "Delivered": "bg-orange-100 text-orange-700",
 };
 
 const OrderConfirmation = () => {
@@ -40,7 +40,7 @@ const OrderConfirmation = () => {
         <p className="text-gray-400 text-[16px]">Order details not available.</p>
         <button
           onClick={() => navigate("/")}
-          className="mt-4 text-[#1A4D2E] font-bold underline"
+          className="mt-4 text-[#E8622D] font-bold underline"
           style={{ minHeight: "44px" }}
         >
           Back to Store
@@ -55,7 +55,7 @@ const OrderConfirmation = () => {
       style={{ fontFamily: "Arial, sans-serif" }}
     >
       {/* Success Banner */}
-      <div className="bg-[#1A4D2E] text-white px-4 py-10 flex flex-col items-center text-center">
+      <div className="bg-[#E8622D] text-white px-4 py-10 flex flex-col items-center text-center">
         <CheckCircle size={60} className="text-[#F4A300] mb-3" />
         <h1 className="font-bold" style={{ fontSize: "24px" }}>
           Order Placed!
@@ -73,7 +73,7 @@ const OrderConfirmation = () => {
         {/* Status */}
         <div className="bg-white rounded-xl p-4 shadow-sm flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <Package size={18} className="text-[#1A4D2E]" />
+            <Package size={18} className="text-[#E8622D]" />
             <span className="font-semibold text-[#1C1C1C] text-[16px]">
               Order Status
             </span>
@@ -112,14 +112,14 @@ const OrderConfirmation = () => {
 
           <div className="border-t border-gray-100 mt-3 pt-3 flex justify-between font-bold text-[#1C1C1C]">
             <span>Total</span>
-            <span className="text-[#1A4D2E]">₹{order.total.toFixed(0)}</span>
+            <span className="text-[#E8622D]">₹{order.total.toFixed(0)}</span>
           </div>
         </div>
 
         {/* Delivery Address */}
         <div className="bg-white rounded-xl p-4 shadow-sm">
           <div className="flex items-center gap-2 mb-2">
-            <MapPin size={16} className="text-[#1A4D2E] shrink-0" />
+            <MapPin size={16} className="text-[#E8622D] shrink-0" />
             <h2
               className="font-bold text-[#1C1C1C]"
               style={{ fontSize: "17px" }}
@@ -141,7 +141,7 @@ const OrderConfirmation = () => {
         {/* Share Order Link */}
         <button
           onClick={handleShare}
-          className="w-full border-2 border-[#1A4D2E] text-[#1A4D2E] rounded-xl font-bold flex items-center justify-center gap-2 transition-colors"
+          className="w-full border-2 border-[#E8622D] text-[#E8622D] rounded-xl font-bold flex items-center justify-center gap-2 transition-colors"
           style={{ minHeight: "48px", fontFamily: "Arial, sans-serif" }}
         >
           <Share2 size={16} />

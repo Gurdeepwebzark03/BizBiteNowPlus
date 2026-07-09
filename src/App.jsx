@@ -11,6 +11,7 @@ import Products from "./pages/Dashboards/Seller/Products";
 import Settings from "./pages/Dashboards/Seller/Settings";
 import RegisterSuccess from "./pages/Auth/RegisterSuccess";
 import DeliveryDashboard from "./pages/Dashboards/DeliveryDashboard/DeliveryDashboard";
+import DeliveryManagement from "./pages/Dashboards/DeliveryDashboard/DeliveryManagement";
 
 import FestiveMenu from "./pages/Dashboards/Seller/FestiveMenu";
 import FestiveMenuDetails from "./pages/Dashboards/Seller/FestiveMenuDetails";
@@ -52,38 +53,10 @@ export default function App() {
         {/* Customer */}
 
         <Route path="/customer/onboarding" element={<CustomerOnboarding />} />
-        <Route
-          path="/storefront"
-          element={
-            <CustomerGate>
-              <StoreFront />
-            </CustomerGate>
-          }
-        />
-        <Route
-          path="/menu"
-          element={
-            <CustomerGate>
-              <AllMenu />
-            </CustomerGate>
-          }
-        />
-        <Route
-          path="/cart"
-          element={
-            <CustomerGate>
-              <Cart />
-            </CustomerGate>
-          }
-        />
-        <Route
-          path="/product/:id"
-          element={
-            <CustomerGate>
-              <ProductDetail />
-            </CustomerGate>
-          }
-        />
+        <Route path="/storefront" element={<StoreFront />} />
+        <Route path="/menu" element={<AllMenu />} />
+        <Route path="/cart" element={<Cart />} />
+        <Route path="/product/:id" element={<ProductDetail />} />
         <Route
           path="/checkout"
           element={
