@@ -154,9 +154,9 @@ const handleSaveProduct = (productData) => {
 
   const filteredProducts = useMemo(() => {
     return productList.filter((product) => {
-      const matchesSearch = product.name
-        .toLowerCase()
-        .includes(search.toLowerCase());
+      const matchesSearch = product.name.toLowerCase().includes(search.toLowerCase()) || 
+      product.sku.toLowerCase().includes(search.toLowerCase());
+        
 
       const matchesCategory =
         category === "All" || product.category === category;

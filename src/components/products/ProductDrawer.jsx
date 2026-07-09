@@ -20,7 +20,7 @@ export default function ProductDrawer({
       {/* Overlay */}
       <div
         onClick={onClose}
-        className="fixed inset-0 z-40 bg-black/40"
+        className="fixed inset-0 z-40 h-full bg-black/40"
       />
 
       {/* Drawer */}
@@ -95,12 +95,6 @@ export default function ProductDrawer({
               icon={<IndianRupee size={18} />}
               title="Selling Price"
               value={`₹${product.price}`}
-            />
-
-            <Info
-              icon={<Boxes size={18} />}
-              title="Stock"
-              value={`${product.stock} Units`}
             />
 
             <Info

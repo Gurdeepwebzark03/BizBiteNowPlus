@@ -126,7 +126,7 @@ export default function ProductModal({
 
       <div
         onClick={onClose}
-        className="fixed inset-0 z-40 bg-black/40 h-full backdrop-blur-sm"
+        className="fixed inset-0 z-40 bg-black/40 h-fullbackdrop-blur-sm"
       />
 
       {/* Modal */}
@@ -199,7 +199,7 @@ export default function ProductModal({
 
     {/* SKU */}
 
-    <div className="mb-5">
+    {/* <div className="mb-5">
 
       <label className="mb-2 block text-sm font-medium text-slate-700">
         SKU
@@ -214,7 +214,7 @@ export default function ProductModal({
         className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-[#16522D] focus:ring-4 focus:ring-[#16522D]/10"
       />
 
-    </div>
+    </div> */}
 
     {/* Category */}
 
@@ -339,7 +339,7 @@ export default function ProductModal({
 
       </div>
 
-      <div>
+      {/* <div>
 
         <label className="mb-2 block text-sm font-medium text-slate-700">
           Stock
@@ -354,7 +354,7 @@ export default function ProductModal({
           className="w-full rounded-xl border border-slate-300 px-4 py-3 outline-none transition focus:border-[#16522D] focus:ring-4 focus:ring-[#16522D]/10"
         />
 
-      </div>
+      </div> */}
 
     </div>
 

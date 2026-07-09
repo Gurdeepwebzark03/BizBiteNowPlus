@@ -96,7 +96,7 @@ top-4
 bottom-4
 left-4
 
-z-50
+z-40
 flex
 flex-col
 overflow-hidden

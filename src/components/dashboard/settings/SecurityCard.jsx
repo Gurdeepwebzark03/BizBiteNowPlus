@@ -9,18 +9,7 @@ import {
   Save,
 } from "lucide-react";
 
-const sessions = [
-  {
-    device: "Windows 11 • Chrome",
-    location: "Ambala, Haryana",
-    active: true,
-  },
-  {
-    device: "Android • Chrome",
-    location: "Ambala, Haryana",
-    active: false,
-  },
-];
+
 
 const SecurityCard = () => {
   return (
@@ -56,26 +45,20 @@ const SecurityCard = () => {
         <div className="grid gap-5 md:grid-cols-3">
           <input
             type="password"
-            placeholder="Current Password"
+            placeholder="Current Pin"
             className="rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-800 outline-none transition focus:border-[#16522d] focus:ring-2 focus:ring-[#16522d]/20"
           />
 
           <input
-            type="password"
-            placeholder="New Password"
-            className="rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-800 outline-none transition focus:border-[#16522d] focus:ring-2 focus:ring-[#16522d]/20"
-          />
-
-          <input
-            type="password"
-            placeholder="Confirm Password"
+            type="pin"
+            placeholder="New Pin"
             className="rounded-xl border border-slate-300 bg-white px-4 py-3 text-slate-800 outline-none transition focus:border-[#16522d] focus:ring-2 focus:ring-[#16522d]/20"
           />
         </div>
       </div>
 
       {/* Security Options */}
-      <div className="border-b border-slate-200 p-6">
+      {/* <div className="border-b border-slate-200 p-6">
         <h3 className="mb-5 text-lg font-semibold text-[#16522d]">
           Security Options
         </h3>
@@ -131,10 +114,10 @@ const SecurityCard = () => {
             />
           </label>
         </div>
-      </div>
+      </div>*/}
 
       {/* Active Sessions */}
-      <div className="border-b border-slate-200 p-6">
+     {/* <div className="border-b border-slate-200 p-6">
         <h3 className="mb-5 text-lg font-semibold text-[#16522d]">
           Active Sessions
         </h3>
@@ -170,7 +153,7 @@ const SecurityCard = () => {
             </div>
           ))}
         </div>
-      </div>
+      </div> */}
 
       {/* Actions */}
       <div className="flex flex-wrap justify-between gap-4 p-6">
@@ -180,11 +163,6 @@ const SecurityCard = () => {
         </button>
 
         <div className="flex gap-3">
-          <button className="flex items-center gap-2 rounded-xl border border-[#16522d] px-5 py-3 font-medium text-[#16522d] transition hover:bg-[#16522d] hover:text-white">
-            <LogOut size={18} />
-            Logout All Devices
-          </button>
-
           <button className="flex items-center gap-2 rounded-xl bg-[#ffc700] px-6 py-3 font-semibold text-[#16522d] transition hover:bg-[#e6b800]">
             <Save size={18} />
             Save Security Settings
