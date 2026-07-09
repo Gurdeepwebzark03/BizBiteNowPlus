@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 export default function AssignOrderModal({
   isOpen,
@@ -9,9 +9,20 @@ export default function AssignOrderModal({
   const [formData, setFormData] = useState({
     orderId: "",
     customer: "",
-    items: "",
     address: "",
+    items: "",
   });
+
+  useEffect(() => {
+    if (isOpen) {
+      setFormData({
+        orderId: "",
+        customer: "",
+        address: "",
+        items: "",
+      });
+    }
+  }, [isOpen]);
 
   if (!isOpen) return null;
 
@@ -26,8 +37,8 @@ export default function AssignOrderModal({
     if (
       !formData.orderId ||
       !formData.customer ||
-      !formData.items ||
-      !formData.address
+      !formData.address ||
+      !formData.items
     ) {
       alert("Please fill all fields");
       return;
@@ -35,34 +46,24 @@ export default function AssignOrderModal({
 
     onAssign(formData);
 
-    setFormData({
-      orderId: "",
-      customer: "",
-      items: "",
-      address: "",
-    });
-
     onClose();
   };
 
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
 
-      <div className="bg-white rounded-xl p-6 w-full max-w-lg">
+      <div className="bg-white w-full max-w-md rounded-xl p-6">
 
-        <h2 className="text-2xl text-black font-bold mb-5">
+        <h2 className="text-2xl font-bold text-amber-700 mb-5">
           Assign Order
         </h2>
 
-        <div className="mb-4">
-          <label className="font-semibold">
-            Delivery Boy
-          </label>
-
-          <div className="mt-2 bg-gray-100 rounded-lg px-4 py-3">
+        <p className="mb-4 text-gray-600">
+          Delivery Boy :
+          <span className="font-semibold ml-2">
             {deliveryBoy?.name}
-          </div>
-        </div>
+          </span>
+        </p>
 
         <div className="space-y-4">
 
@@ -107,14 +108,14 @@ export default function AssignOrderModal({
 
           <button
             onClick={onClose}
-            className="px-5 py-2 rounded-lg bg-gray-200 hover:bg-gray-100 cursor-pointer"
+            className="px-5 py-2 rounded-lg bg-gray-300"
           >
             Cancel
           </button>
 
           <button
             onClick={handleSubmit}
-            className="px-5 py-2 rounded-lg bg-green-900 hover:bg-green-800 text-white cursor-pointer"
+            className="px-5 py-2 rounded-lg bg-amber-500 text-white hover:bg-amber-600"
           >
             Assign Order
           </button>
