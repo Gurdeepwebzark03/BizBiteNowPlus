@@ -10,7 +10,7 @@ import Profile from "./pages/Dashboards/Seller/profile";
 import Products from "./pages/Dashboards/Seller/Products";
 import Settings from "./pages/Dashboards/Seller/Settings";
 import RegisterSuccess from "./pages/Auth/RegisterSuccess";
-import DeliveryDashboard from "./pages/Dashboards/DeliveryDashboard/DeliveryDashboard";
+// import DeliveryDashboard from "./pages/Dashboards/DeliveryDashboard/DeliveryDashboard";
 
 import FestiveMenu from "./pages/Dashboards/Seller/FestiveMenu";
 import FestiveMenuDetails from "./pages/Dashboards/Seller/FestiveMenuDetails";
@@ -37,6 +37,10 @@ import Earnings from "./pages/Dashboards/Seller/Earnings";
 // import Customers from './pages/Dashboards/Seller/Customers';
 // import Analytics from './pages/Dashboards/Seller/Analytics';
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 353e19c (Change Ui of Delivery management & Assign Delivery boy)
 export default function App() {
   return (
     <div className="w-full min-h-screen bg-slate-100 m-0 p-0 box-border overflow-x-hidden">
@@ -131,15 +135,32 @@ export default function App() {
 
           <Route  path="delivery-management" element={<DeliveryManagement />}
 />
+<<<<<<< HEAD
+=======
+
+>>>>>>> 353e19c (Change Ui of Delivery management & Assign Delivery boy)
 
           <Route path="festivemenu" element={<FestiveMenu/>}/>
           {/* <Route path="festivemenu/create" element={<CreateFestiveMenu />} /> */}
 
+<<<<<<< HEAD
+=======
+
+
+          <Route path="festivemenu" element={<FestiveMenu/>}/>
+          <Route path="festivemenu/create" element={<CreateFestiveMenu />} />
+
+
+>>>>>>> 353e19c (Change Ui of Delivery management & Assign Delivery boy)
           <Route path="festivemenu" element={<FestiveMenu />} />
           <Route path="festivemenu/create" element={<CreateFestiveMenu />} />
           <Route path="festivemenu/edit/:id" element={<CreateFestiveMenu />} />
           <Route path="festivemenu/:id" element={<FestiveMenuDetails />} />
           <Route path="festivemenu/history" element={<FestiveMenuHistory/>}/>
+<<<<<<< HEAD
+=======
+
+>>>>>>> 353e19c (Change Ui of Delivery management & Assign Delivery boy)
 
         </Route>
         {/* Registration Success */}
