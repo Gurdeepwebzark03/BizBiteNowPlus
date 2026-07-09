@@ -20,7 +20,7 @@ export default function DashboardLayout({ children }) {
   };
 
   return (
-    <div className="relative min-h-screen mt-0 lg:mt-16 bg-slate-100">
+    <div className="relative min-h-full mt-0 lg:mt-16 bg-slate-100">
       {/* Mobile Overlay */}
       {sidebarOpen && (
         <div
@@ -50,7 +50,7 @@ export default function DashboardLayout({ children }) {
       >
         <Navbar openSidebar={toggleSidebar} />
 
-        <main className="pt-24 p-4 sm:p-6 lg:p-8">
+        <main className=" p-4 sm:p-6 lg:p-8">
           <div className="mx-auto max-w-[1700px]">{children || <Outlet />}</div>
         </main>
       </div>

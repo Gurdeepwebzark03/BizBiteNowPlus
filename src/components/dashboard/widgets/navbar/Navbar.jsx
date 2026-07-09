@@ -51,77 +51,99 @@ export default function Navbar({ openSidebar }) {
     fixed
     top-0
     left-0
-
     z-30
 
     flex
+    items-center
+
     h-16
     w-full
-    items-center
-    justify-between
 
     border-b
     border-slate-200
     bg-slate-100
 
-    px-4
+    px-3
     shadow-md
 
-    sm:top-4
-    sm:left-1/2
-    sm:w-[95%]
-    sm:h-[72px]
-    sm:-translate-x-1/2
-    sm:rounded-3xl
-    sm:border
-    sm:px-6
-    sm:z-20
+    max-[1024px]:relative
+    max-[1024px]:shadow-none
 
-    lg:w-[55%]
-    lg:px-8
+    min-[1025px]:fixed
+    min-[1025px]:top-4
+    min-[1025px]:left-1/2
+    min-[1025px]:h-[72px]
+    min-[1025px]:w-[55%]
+    min-[1025px]:-translate-x-1/2
+    min-[1025px]:rounded-3xl
+    min-[1025px]:border
+    min-[1025px]:px-6
   "
 >
-      {/* Left */}
-      <div className="flex min-w-0 items-center gap-4">
-        <button
-          onClick={openSidebar}
-          className="
-      flex h-11 w-11 items-center justify-center
-      rounded-xl
-      transition-all duration-300
-      hover:bg-[#FDFDF5]
-      active:scale-95
-      lg:hidden
-    "
-        >
-          <Menu size={22} strokeWidth={2} />
-        </button>
+  {/* Left */}
 
-<div className="relative hidden h-[52px] w-[260px] overflow-hidden md:block">
-
-  {/* Dashboard Title */}
-
-  <div
-    className={`absolute inset-0 flex items-center transition-all duration-500 ease-in-out ${
-      isDashboard
-        ? "translate-y-0 opacity-100"
-        : "-translate-y-6 opacity-0"
-    }`}
-  >
-    <h2 className="text-2xl font-bold text-slate-900">
-      BizBitesNow<span className="text-green-700 font-inter">Plus</span> 
-    </h2>
+  <div className="flex w-10 shrink-0 items-center justify-start">
+    <button
+      onClick={openSidebar}
+      className="
+        flex
+        h-10
+        w-10
+        items-center
+        justify-center
+        rounded-xl
+        transition-all
+        duration-300
+        hover:bg-[#FDFDF5]
+        active:scale-95
+        lg:hidden
+      "
+    >
+      <Menu size={22} strokeWidth={2} />
+    </button>
   </div>
 
-  {/* Clock */}
+  {/* Center */}
 
-  <div
-    className={`absolute inset-0 flex items-center gap-3 rounded-2xl background-blur-md px-4 py-2 transition-all duration-500 ease-in-out ${
-      !isDashboard
-        ? "translate-y-0 opacity-100"
-        : "translate-y-6 opacity-0"
-    }`}
+ <div className="relative flex-1 h-[52px] overflow-hidden lg:flex lg:justify-start">
+
+<div
+  className={`absolute inset-0 flex items-center  lg:justify-start lg:px-0 px-2 transition-all duration-500 ease-in-out ${
+    isDashboard
+      ? "translate-y-0 opacity-100"
+      : "-translate-y-6 opacity-0 pointer-events-none"
+  }`}
+>
+  <h2
+    className="
+      truncate
+      text-center
+      font-bold
+      leading-none
+      text-slate-900
+
+      text-[15px]
+      sm:text-[17px]
+      md:text-[20px]
+      lg:text-[18px]
+      xl:text-[24px]
+    "
   >
+    BizBitesNow
+    <span className="text-green-700 font-inter">Plus</span>
+  </h2>
+</div>
+
+{/* Time & Date */}
+
+<div
+  className={`absolute inset-0 flex items-center  lg:justify-start transition-all duration-500 ease-in-out ${
+    !isDashboard
+      ? "translate-y-0 opacity-100"
+      : "translate-y-6 opacity-0 pointer-events-none"
+  }`}
+>
+  <div className="flex items-center gap-3 rounded-2xl bg-white/60 px-3 py-2 backdrop-blur-sm">
     <div className="rounded-xl bg-[#16522d]/10 p-2">
       <Clock
         size={18}
@@ -129,8 +151,8 @@ export default function Navbar({ openSidebar }) {
       />
     </div>
 
-    <div>
-      <p className="text-xs text-slate-600 ">
+    <div className="leading-tight">
+      <p className="text-[11px] text-slate-500">
         {formattedDate}
       </p>
 
@@ -139,20 +161,27 @@ export default function Navbar({ openSidebar }) {
       </p>
     </div>
   </div>
+</div>
 
 </div>
-      </div>
-      {/* Right */}
-      <div className="flex items-center gap-3">
-        <NotificationButton />
+{/* Right */}
 
-        <ProfileMenu
-          seller={{
-            name: "Seller",
-            role: "Plus Seller",
-          }}
-        />
-      </div>
+<div className="flex shrink-0 items-center gap-2 sm:gap-3">
+
+  <div className="flex h-10 w-10 items-center justify-center sm:h-11 sm:w-11">
+    <NotificationButton />
+  </div>
+
+  <div className="flex items-center">
+    <ProfileMenu
+      seller={{
+        name: "Seller",
+        role: "Plus Seller",
+      }}
+    />
+  </div>
+
+</div>
     </header>
   );
 }
