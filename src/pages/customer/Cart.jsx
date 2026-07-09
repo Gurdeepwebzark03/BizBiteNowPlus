@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ChevronLeft, Trash2, ShoppingBag, Plus, Minus } from "lucide-react";
+import { ChevronLeft, Trash2, ShoppingBag, Plus, Minus, AlertTriangle } from "lucide-react";
 import { useCart } from "../../context/CartContext";
 
-const PLUS_PURPLE = "#4B0082";
-const PLUS_LAVENDER = "#EDE7F6";
-const PRIMARY_GREEN = "#1A4D2E";
+const PLUS_PURPLE = "#E8622D";
+const PLUS_LAVENDER = "#FFEDD5";
+const PRIMARY_GREEN = "#E8622D";
 const CHARCOAL = "#1C1C1C";
 const CREAM = "#FAFAF5";
 
@@ -38,36 +38,9 @@ const PlusSection = ({ label, children }) => (
   </div>
 );
 
-const Toggle = ({ options, value, onChange }) => (
-  <div className="flex items-center gap-2.5">
-    {options.map((opt) => {
-      const active = value === opt.key;
-      return (
-        <button
-          key={opt.key}
-          onClick={() => onChange(opt.key)}
-          className="flex-1 rounded-xl font-bold text-[18px] transition-colors"
-          style={{
-            minHeight: "44px",
-            backgroundColor: active ? PLUS_PURPLE : "#FFFFFF",
-            color: active ? "#FFFFFF" : PLUS_PURPLE,
-          }}
-        >
-          {opt.label}
-        </button>
-      );
-    })}
-  </div>
-);
-
 const Cart = () => {
   const { cart, updateQty, removeFromCart, totalItems, totalPrice } = useCart();
   const navigate = useNavigate();
-
-  const [deliveryMethod, setDeliveryMethod] = useState("delivery");
-  const [schedule, setSchedule] = useState("now");
-  const [orderNotes, setOrderNotes] = useState("");
-  const [paymentMethod, setPaymentMethod] = useState("upi");
 
   // Empty state
   if (cart.length === 0) {
@@ -128,11 +101,11 @@ const Cart = () => {
               <div className="p-4 flex items-center gap-3">
 
                 {/* Image */}
-                <div className="w-16 h-16 rounded-xl bg-gray-100 flex items-center justify-center shrink-0 overflow-hidden">
+                <div className="w-16 h-16 rounded-xl bg-gray-100 shrink-0 overflow-hidden">
                   <img
                     src={item.image}
                     alt={item.name}
-                    className="w-12 h-12 object-contain"
+                    className="w-full h-full object-cover"
                   />
                 </div>
 
@@ -196,46 +169,11 @@ const Cart = () => {
           ))}
         </div>
 
-        {/* Pickup vs Delivery */}
-        <PlusSection label="Pickup vs delivery">
-          <Toggle
-            options={[
-              { key: "delivery", label: "Delivery" },
-              { key: "pickup", label: "Pickup" },
-            ]}
-            value={deliveryMethod}
-            onChange={setDeliveryMethod}
-          />
-        </PlusSection>
-
-        {/* Schedule order */}
-        <PlusSection label="Schedule order">
-          <Toggle
-            options={[
-              { key: "now", label: "Now" },
-              { key: "later", label: "Later" },
-            ]}
-            value={schedule}
-            onChange={setSchedule}
-          />
-        </PlusSection>
-
-        {/* Order notes */}
-        <PlusSection label="Order notes">
-          <input
-            type="text"
-            value={orderNotes}
-            onChange={(e) => setOrderNotes(e.target.value)}
-            placeholder="Any special instructions"
-            className="w-full rounded-xl px-4 text-[18px] placeholder-gray-400"
-            style={{ minHeight: "44px", backgroundColor: "#FFFFFF", color: CHARCOAL }}
-          />
-        </PlusSection>
-
         {/* Minimum order nudge */}
         {amountToMinOrder > 0 && (
           <PlusSection>
-            <p className="font-semibold text-[18px]" style={{ color: PLUS_PURPLE }}>
+            <p className="font-semibold text-[18px] flex items-center gap-2" style={{ color: PLUS_PURPLE }}>
+              <AlertTriangle size={16} />
               Add ₹{amountToMinOrder} more to reach ₹{MIN_ORDER.toLocaleString("en-IN")} minimum order
             </p>
           </PlusSection>
@@ -256,25 +194,13 @@ const Cart = () => {
 
           <div className="border-t border-gray-100 mt-3 pt-3 flex justify-between items-center">
             <span className="font-bold" style={{ fontSize: "19px", color: CHARCOAL }}>
-              Grand total
+              Running total
             </span>
             <span className="font-bold" style={{ fontSize: "21px", color: PRIMARY_GREEN }}>
               ₹{grandTotal}
             </span>
           </div>
         </div>
-
-        {/* Payment method */}
-        <PlusSection label="Payment method">
-          <Toggle
-            options={[
-              { key: "cash", label: "Cash" },
-              { key: "upi", label: "UPI" },
-            ]}
-            value={paymentMethod}
-            onChange={setPaymentMethod}
-          />
-        </PlusSection>
 
       </div>
 

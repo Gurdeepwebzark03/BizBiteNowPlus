@@ -10,7 +10,8 @@ import Profile from "./pages/Dashboards/Seller/profile";
 import Products from "./pages/Dashboards/Seller/Products";
 import Settings from "./pages/Dashboards/Seller/Settings";
 import RegisterSuccess from "./pages/Auth/RegisterSuccess";
-// import DeliveryDashboard from "./pages/Dashboards/DeliveryDashboard/DeliveryDashboard";
+import DeliveryDashboard from "./pages/Dashboards/DeliveryDashboard/DeliveryDashboard";
+import DeliveryManagement from "./pages/Dashboards/DeliveryDashboard/DeliveryManagement";
 
 import FestiveMenu from "./pages/Dashboards/Seller/FestiveMenu";
 import FestiveMenuDetails from "./pages/Dashboards/Seller/FestiveMenuDetails";
@@ -37,10 +38,7 @@ import Earnings from "./pages/Dashboards/Seller/Earnings";
 // import Customers from './pages/Dashboards/Seller/Customers';
 // import Analytics from './pages/Dashboards/Seller/Analytics';
 
-<<<<<<< HEAD
-=======
 
->>>>>>> 353e19c (Change Ui of Delivery management & Assign Delivery boy)
 export default function App() {
   return (
     <div className="w-full min-h-screen bg-slate-100 m-0 p-0 box-border overflow-x-hidden">
@@ -56,38 +54,10 @@ export default function App() {
         {/* Customer */}
 
         <Route path="/customer/onboarding" element={<CustomerOnboarding />} />
-        <Route
-          path="/storefront"
-          element={
-            <CustomerGate>
-              <StoreFront />
-            </CustomerGate>
-          }
-        />
-        <Route
-          path="/menu"
-          element={
-            <CustomerGate>
-              <AllMenu />
-            </CustomerGate>
-          }
-        />
-        <Route
-          path="/cart"
-          element={
-            <CustomerGate>
-              <Cart />
-            </CustomerGate>
-          }
-        />
-        <Route
-          path="/product/:id"
-          element={
-            <CustomerGate>
-              <ProductDetail />
-            </CustomerGate>
-          }
-        />
+        <Route path="/storefront" element={<StoreFront />} />
+        <Route path="/menu" element={<AllMenu />} />
+        <Route path="/cart" element={<Cart />} />
+        <Route path="/product/:id" element={<ProductDetail />} />
         <Route
           path="/checkout"
           element={
@@ -135,32 +105,23 @@ export default function App() {
 
           <Route  path="delivery-management" element={<DeliveryManagement />}
 />
-<<<<<<< HEAD
-=======
 
->>>>>>> 353e19c (Change Ui of Delivery management & Assign Delivery boy)
 
           <Route path="festivemenu" element={<FestiveMenu/>}/>
           {/* <Route path="festivemenu/create" element={<CreateFestiveMenu />} /> */}
 
-<<<<<<< HEAD
-=======
 
 
           <Route path="festivemenu" element={<FestiveMenu/>}/>
           <Route path="festivemenu/create" element={<CreateFestiveMenu />} />
 
 
->>>>>>> 353e19c (Change Ui of Delivery management & Assign Delivery boy)
           <Route path="festivemenu" element={<FestiveMenu />} />
           <Route path="festivemenu/create" element={<CreateFestiveMenu />} />
           <Route path="festivemenu/edit/:id" element={<CreateFestiveMenu />} />
           <Route path="festivemenu/:id" element={<FestiveMenuDetails />} />
           <Route path="festivemenu/history" element={<FestiveMenuHistory/>}/>
-<<<<<<< HEAD
-=======
 
->>>>>>> 353e19c (Change Ui of Delivery management & Assign Delivery boy)
 
         </Route>
         {/* Registration Success */}

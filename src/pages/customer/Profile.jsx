@@ -26,7 +26,7 @@ const Profile = () => {
       className="min-h-screen bg-[#FAFAF5] flex flex-col items-center justify-center px-5"
       style={{ fontFamily: "Arial, sans-serif" }}
     >
-      <div className="w-16 h-16 rounded-2xl bg-[#1A4D2E] flex items-center justify-center shadow-md mb-6">
+      <div className="w-16 h-16 rounded-2xl bg-[#E8622D] flex items-center justify-center shadow-md mb-6">
         <img src={logo} alt="BizBiteNow" className="w-10 h-10 object-contain" />
       </div>
 

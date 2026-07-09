@@ -1,16 +1,85 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { ChevronLeft, MapPin, Loader2 } from "lucide-react";
+import { ChevronLeft, MapPin, Loader2, Lock } from "lucide-react";
 import { useCart } from "../../context/CartContext";
+import { getMyProfile } from "../../api/customer/authApi";
+
+const GREEN = "#E8622D";
+const LIGHT_GREEN = "#FFEDD5";
+const CHARCOAL = "#1C1C1C";
+const CREAM = "#FAFAF5";
+
+const loyalty = { earned: 6, total: 10 };
+
+const PlusBadge = () => (
+  <span
+    className="absolute -top-2.5 left-3 z-10 text-white text-[14px] font-bold px-2.5 py-0.5 rounded-full shadow-sm"
+    style={{ backgroundColor: GREEN }}
+  >
+    Plus
+  </span>
+);
+
+const PlusSection = ({ label, children }) => (
+  <div className="relative rounded-2xl pt-6 px-4 pb-4" style={{ backgroundColor: LIGHT_GREEN }}>
+    <PlusBadge />
+    {label && (
+      <h3 className="font-bold text-[18px] mb-2.5" style={{ color: GREEN }}>
+        {label}
+      </h3>
+    )}
+    {children}
+  </div>
+);
+
+const Toggle = ({ options, value, onChange }) => (
+  <div className="flex items-center gap-2.5">
+    {options.map((opt) => {
+      const active = value === opt.key;
+      return (
+        <button
+          key={opt.key}
+          onClick={() => onChange(opt.key)}
+          className="flex-1 rounded-xl font-bold text-[18px] transition-colors"
+          style={{
+            minHeight: "44px",
+            backgroundColor: active ? GREEN : "#FFFFFF",
+            color: active ? "#FFFFFF" : GREEN,
+          }}
+        >
+          {opt.label}
+        </button>
+      );
+    })}
+  </div>
+);
 
 const Checkout = () => {
   const navigate = useNavigate();
-  const { cart, totalItems, totalPrice, clearCart } = useCart();
+  const { cart, totalPrice, clearCart } = useCart();
 
   const [form, setForm] = useState({ name: "", phone: "", address: "" });
   const [errors, setErrors] = useState({});
   const [locLoading, setLocLoading] = useState(false);
   const [placing, setPlacing] = useState(false);
+  const [editingAddress, setEditingAddress] = useState(false);
+  const [autoFilled, setAutoFilled] = useState(false);
+  const [paymentMethod, setPaymentMethod] = useState("upi");
+
+  // Prefill delivery details from the customer's saved auth profile
+  useEffect(() => {
+    getMyProfile()
+      .then((user) => {
+        setForm((prev) => ({
+          ...prev,
+          name: user.name || prev.name,
+          phone: user.phone || prev.phone,
+          address: user.address || prev.address,
+        }));
+        setAutoFilled(!!(user.name && user.address));
+      })
+      .catch(() => {});
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -42,6 +111,7 @@ const Checkout = () => {
             address: `${latitude.toFixed(5)}, ${longitude.toFixed(5)}`,
           }));
         }
+        setAutoFilled(true);
         setLocLoading(false);
       },
       () => {
@@ -61,10 +131,24 @@ const Checkout = () => {
     return errs;
   };
 
+  const handleDoneEditing = () => {
+    const errs = validate();
+    if (Object.keys(errs).length > 0) {
+      setErrors(errs);
+      return;
+    }
+    setAutoFilled(false);
+    setEditingAddress(false);
+  };
+
+  const deliveryFee = 0;
+  const grandTotal = totalPrice + deliveryFee;
+
   const handlePlaceOrder = () => {
     const errs = validate();
     if (Object.keys(errs).length > 0) {
       setErrors(errs);
+      setEditingAddress(true);
       return;
     }
     setPlacing(true);
@@ -73,12 +157,12 @@ const Checkout = () => {
       const order = {
         id: orderId,
         items: cart,
-        total: totalPrice,
+        total: grandTotal,
         name: form.name,
         phone: form.phone,
         address: form.address,
         status: "Order Placed",
-        paymentMethod: "Cash on Delivery",
+        paymentMethod: paymentMethod === "upi" ? "UPI" : "Cash on Delivery",
       };
       clearCart();
       navigate(`/order/${orderId}`, { state: { order } });
@@ -86,176 +170,204 @@ const Checkout = () => {
   };
 
   return (
-    <div
-      className="bg-[#FAFAF5] min-h-screen"
-      style={{ fontFamily: "Arial, sans-serif" }}>
+    <div className="min-h-screen" style={{ fontFamily: "Arial, sans-serif", backgroundColor: CREAM }}>
       {/* Header */}
-      <div
-        className="sticky top-0 z-30 bg-white border-b border-gray-100 px-4 flex items-center gap-2"
-        style={{ minHeight: "56px" }}>
+      <div className="px-4 pt-5 pb-3 flex items-center gap-2">
         <button
           onClick={() => navigate(-1)}
-          className="flex items-center justify-center text-[#1C1C1C]"
-          style={{ minHeight: "44px", minWidth: "44px" }}>
-          <ChevronLeft size={22} />
+          className="flex items-center justify-center -ml-1"
+          style={{ minHeight: "36px", minWidth: "36px", color: CHARCOAL }}
+        >
+          <ChevronLeft size={20} />
         </button>
-        <h1 className="font-bold text-[#1C1C1C]" style={{ fontSize: "20px" }}>
+        <h1 className="font-bold" style={{ fontSize: "22px", color: CHARCOAL }}>
           Checkout
         </h1>
       </div>
 
-      <div className="px-4 py-4 space-y-4 pb-10">
-        Delivery Details
-        <div className="bg-white rounded-xl p-4 shadow-sm">
-          <h2
-            className="font-bold text-[#1C1C1C] mb-4"
-            style={{ fontSize: "17px" }}>
-            Delivery Details
-          </h2>
-
-          <div className="mb-3">
-            <label className="block text-[14px] font-semibold text-gray-500 mb-1">
-              Full Name *
-            </label>
-            <input
-              type="text"
-              name="name"
-              value={form.name}
-              onChange={handleChange}
-              placeholder="Enter your full name"
-              className={`w-full border rounded-xl px-3 text-[16px] text-[#1C1C1C] outline-none focus:border-[#1A4D2E] transition-colors ${
-                errors.name ? "border-red-400" : "border-gray-200"
-              }`}
-              style={{ minHeight: "44px", fontFamily: "Arial, sans-serif" }}
-            />
-            {errors.name && (
-              <p className="text-red-500 text-[14px] mt-1">{errors.name}</p>
-            )}
-          </div>
-
-          <div className="mb-3">
-            <label className="block text-[14px] font-semibold text-gray-500 mb-1">
-              Phone Number *
-            </label>
-            <input
-              type="tel"
-              name="phone"
-              value={form.phone}
-              onChange={handleChange}
-              placeholder="10-digit mobile number"
-              maxLength={10}
-              className={`w-full border rounded-xl px-3 text-[16px] text-[#1C1C1C] outline-none focus:border-[#1A4D2E] transition-colors ${
-                errors.phone ? "border-red-400" : "border-gray-200"
-              }`}
-              style={{ minHeight: "44px", fontFamily: "Arial, sans-serif" }}
-            />
-            {errors.phone && (
-              <p className="text-red-500 text-[14px] mt-1">{errors.phone}</p>
-            )}
-          </div>
-
-          <div>
-            <label className="block text-[14px] font-semibold text-gray-500 mb-1">
-              Delivery Address *
-            </label>
-            <textarea
-              name="address"
-              value={form.address}
-              onChange={handleChange}
-              placeholder="Enter your full delivery address"
-              rows={3}
-              className={`w-full border rounded-xl px-3 py-3 text-[16px] text-[#1C1C1C] outline-none resize-none focus:border-[#1A4D2E] transition-colors ${
-                errors.address ? "border-red-400" : "border-gray-200"
-              }`}
-              style={{ fontFamily: "Arial, sans-serif" }}
-            />
-            {errors.address && (
-              <p className="text-red-500 text-[14px] mt-1">{errors.address}</p>
-            )}
+      <div className="px-4 pb-40 space-y-3">
+        {/* Delivery Address */}
+        <div className="bg-white rounded-2xl shadow-sm p-4">
+          <div className="flex items-center justify-between mb-3">
+            <h2 className="font-bold" style={{ fontSize: "19px", color: CHARCOAL }}>
+              Delivery address
+            </h2>
             <button
-              onClick={getLocation}
-              disabled={locLoading}
-              className="mt-1 flex items-center gap-2 text-[#1A4D2E] text-[14px] font-semibold"
-              style={{ minHeight: "44px" }}>
-              {locLoading ? (
-                <Loader2 size={14} className="animate-spin" />
-              ) : (
-                <MapPin size={14} />
-              )}
-              {locLoading ? "Getting location..." : "Use my current location"}
+              onClick={() =>
+                editingAddress ? handleDoneEditing() : setEditingAddress(true)
+              }
+              className="font-bold text-[16px]"
+              style={{ color: GREEN }}
+            >
+              {editingAddress ? "Done" : "Change"}
             </button>
           </div>
-        </div>
-        {/* Payment Method — COD only */}
-        <div className="bg-white rounded-xl p-4 shadow-sm">
-          <h2
-            className="font-bold text-[#1C1C1C] mb-3"
-            style={{ fontSize: "17px" }}>
-            Payment Method
-          </h2>
-          <div className="flex items-center gap-3 border-2 border-[#1A4D2E] rounded-xl px-4 py-3 bg-[#1A4D2E]/5">
-            <div className="w-4 h-4 rounded-full border-2 border-[#1A4D2E] flex items-center justify-center shrink-0">
-              <div className="w-2 h-2 rounded-full bg-[#1A4D2E]" />
-            </div>
+
+          {!editingAddress ? (
+            <>
+              <div className="flex items-start gap-2.5">
+                <MapPin size={18} style={{ color: GREEN }} className="mt-0.5 shrink-0" />
+                <div>
+                  <p className="font-semibold text-[18px]" style={{ color: CHARCOAL }}>
+                    {form.name || "Add your name"}
+                  </p>
+                  <p className="text-[16px] text-gray-400 mt-0.5">
+                    {form.address || "Add your delivery address"}
+                  </p>
+                  <p className="text-[16px] text-gray-400">
+                    {form.phone ? `+91 ${form.phone}` : "Add your phone number"}
+                  </p>
+                </div>
+              </div>
+              {autoFilled && (
+                <div className="flex items-center gap-1.5 mt-3">
+                  <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: GREEN }} />
+                  <span className="text-[14px] font-semibold" style={{ color: GREEN }}>
+                    Auto-filled from your location
+                  </span>
+                </div>
+              )}
+            </>
+          ) : (
             <div>
-              <p className="font-semibold text-[#1C1C1C] text-[16px]">
-                Cash on Delivery
-              </p>
-              <p className="text-[14px] text-gray-400 mt-0.5">
-                Pay when your order arrives
-              </p>
+              <div className="mb-3">
+                <label className="block text-[14px] font-semibold text-gray-500 mb-1">
+                  Full Name *
+                </label>
+                <input
+                  type="text"
+                  name="name"
+                  value={form.name}
+                  onChange={handleChange}
+                  placeholder="Enter your full name"
+                  className={`w-full border rounded-xl px-3 text-[16px] outline-none transition-colors ${
+                    errors.name ? "border-red-400" : "border-gray-200"
+                  }`}
+                  style={{ minHeight: "44px", color: CHARCOAL, fontFamily: "Arial, sans-serif" }}
+                />
+                {errors.name && <p className="text-red-500 text-[14px] mt-1">{errors.name}</p>}
+              </div>
+
+              <div className="mb-3">
+                <label className="block text-[14px] font-semibold text-gray-500 mb-1">
+                  Phone Number *
+                </label>
+                <input
+                  type="tel"
+                  name="phone"
+                  value={form.phone}
+                  onChange={handleChange}
+                  placeholder="10-digit mobile number"
+                  maxLength={10}
+                  className={`w-full border rounded-xl px-3 text-[16px] outline-none transition-colors ${
+                    errors.phone ? "border-red-400" : "border-gray-200"
+                  }`}
+                  style={{ minHeight: "44px", color: CHARCOAL, fontFamily: "Arial, sans-serif" }}
+                />
+                {errors.phone && <p className="text-red-500 text-[14px] mt-1">{errors.phone}</p>}
+              </div>
+
+              <div>
+                <label className="block text-[14px] font-semibold text-gray-500 mb-1">
+                  Delivery Address *
+                </label>
+                <textarea
+                  name="address"
+                  value={form.address}
+                  onChange={handleChange}
+                  placeholder="Enter your full delivery address"
+                  rows={3}
+                  className={`w-full border rounded-xl px-3 py-3 text-[16px] outline-none resize-none transition-colors ${
+                    errors.address ? "border-red-400" : "border-gray-200"
+                  }`}
+                  style={{ color: CHARCOAL, fontFamily: "Arial, sans-serif" }}
+                />
+                {errors.address && <p className="text-red-500 text-[14px] mt-1">{errors.address}</p>}
+                <button
+                  onClick={getLocation}
+                  disabled={locLoading}
+                  className="mt-1 flex items-center gap-2 font-semibold text-[14px]"
+                  style={{ minHeight: "44px", color: GREEN }}
+                >
+                  {locLoading ? <Loader2 size={14} className="animate-spin" /> : <MapPin size={14} />}
+                  {locLoading ? "Getting location..." : "Use my current location"}
+                </button>
+              </div>
             </div>
-          </div>
+          )}
         </div>
-        {/* Order Summary */}
-        <div className="bg-white rounded-xl p-4 shadow-sm">
-          <h2
-            className="font-bold text-[#1C1C1C] mb-3"
-            style={{ fontSize: "17px" }}>
-            Order Summary
+
+        {/* Loyalty stamp progress */}
+        <PlusSection label="Loyalty stamp progress">
+          <p className="text-[16px] font-semibold" style={{ color: CHARCOAL }}>
+            {loyalty.earned} of {loyalty.total} stamps - {loyalty.total - loyalty.earned} more for a free item
+          </p>
+        </PlusSection>
+
+        {/* Payment method */}
+        <PlusSection label="Payment method">
+          <Toggle
+            options={[
+              { key: "cash", label: "Cash" },
+              { key: "upi", label: "UPI" },
+            ]}
+            value={paymentMethod}
+            onChange={setPaymentMethod}
+          />
+        </PlusSection>
+
+        {/* Bill Summary */}
+        <div className="bg-white rounded-2xl shadow-sm p-4">
+          <h2 className="font-bold mb-3" style={{ fontSize: "19px", color: CHARCOAL }}>
+            Bill summary
           </h2>
 
-          {cart.map((item) => (
-            <div
-              key={item.id}
-              className="flex justify-between text-[16px] text-gray-500 mb-2">
-              <span>
-                {item.name} × {item.qty}
-              </span>
-              <span className="font-semibold text-[#1C1C1C]">
-                ₹{item.price * item.qty}
-              </span>
+          <div className="space-y-2">
+            <div className="flex justify-between text-[18px] text-gray-500">
+              <span>Item total</span>
+              <span className="font-semibold" style={{ color: CHARCOAL }}>₹{totalPrice}</span>
             </div>
-          ))}
-
-          <div className="flex justify-between text-[16px] text-gray-500 mt-2 pt-2 border-t border-gray-100">
-            <span>Delivery</span>
-            <span className="text-green-600 font-semibold">Free</span>
+            <div className="flex justify-between text-[18px] text-gray-500">
+              <span>Delivery fee</span>
+              <span className="font-semibold" style={{ color: CHARCOAL }}>₹{deliveryFee}</span>
+            </div>
           </div>
 
-          <div className="flex justify-between font-bold text-[#1C1C1C] mt-3 pt-3 border-t border-gray-100">
-            <span>Total ({totalItems} items)</span>
-            <span className="text-[#1A4D2E]">₹{totalPrice.toFixed(0)}</span>
+          <div className="border-t border-gray-100 mt-3 pt-3 flex justify-between items-center">
+            <span className="font-bold" style={{ fontSize: "19px", color: CHARCOAL }}>
+              Grand total
+            </span>
+            <span className="font-bold" style={{ fontSize: "21px", color: GREEN }}>
+              ₹{grandTotal}
+            </span>
           </div>
         </div>
-        {/* Place Order Button */}
+      </div>
+
+      {/* Place Order Button — fixed bottom */}
+      <div className="fixed bottom-0 left-0 right-0">
         <button
           onClick={handlePlaceOrder}
           disabled={placing}
-          className="w-full bg-[#1A4D2E] text-white rounded-xl font-bold flex items-center justify-center gap-2 transition-opacity"
+          className="w-full text-white font-bold flex items-center justify-center gap-2 transition-opacity"
           style={{
-            minHeight: "52px",
-            fontSize: "17px",
+            minHeight: "56px",
+            fontSize: "19px",
             fontFamily: "Arial, sans-serif",
+            backgroundColor: GREEN,
             opacity: placing ? 0.8 : 1,
-          }}>
+          }}
+        >
           {placing ? (
             <>
               <Loader2 size={18} className="animate-spin" />
               Placing Order...
             </>
           ) : (
-            <>Place Order — ₹{totalPrice.toFixed(0)}</>
+            <>
+              <Lock size={16} />
+              Place order · ₹{grandTotal}
+            </>
           )}
         </button>
       </div>
