@@ -97,13 +97,12 @@ export default function App() {
           <Route path="dashboard" element={<SellerDashboard />} />
           <Route path="orders" element={<Orders />} />
           <Route path="orders/:orderId" element={<OrderDetails />} />
-          <Route path="delivery" element={<DeliveryDashboard />} />
+          <Route path="delivery" element={<DeliveryManagement />} />
           <Route path="settings" element={<Settings />} />
           <Route path="products" element={<Products />} />
           <Route path="analytics" element={<Analytics />} />
           <Route path="profile" element={<Profile />} />
-
-          <Route  path="delivery-management" element={<DeliveryManagement />}
+          <Route  path="delivery-management" element={<DeliveryDashboard />}
 />
 
 
