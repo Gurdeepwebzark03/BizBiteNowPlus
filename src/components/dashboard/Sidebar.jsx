@@ -5,148 +5,308 @@ import {
   ShoppingCart,
   Truck,
   Gift,
-  Store,
   BarChart3,
   Settings,
   LogOut,
 } from "lucide-react";
+
+import {
+  useState,
+  useEffect,
+  useRef,
+  useCallback,
+} from "react";
+
 import icon from "../../assets/BIZ BITE NOW Vertical with Icon.png";
 import logo from "../../assets/BIZ BITE NOW Horizontal with Icon.png";
 import SidebarItem from "./SidebarItem";
 
 export default function Sidebar({
-  collapsed,
-  setCollapsed,
   sidebarOpen,
   closeSidebar,
+  onExpandedChange,
 }) {
+  const [collapsed, setCollapsed] = useState(
+  window.innerWidth >= 1024
+);
+
+  const hoverTimer = useRef(null);
+
+
+
+  const isDesktop = useCallback(
+    () => window.innerWidth >= 1024,
+    []
+  );
+ useEffect(() => {
+  const handleResize = () => {
+    if (window.innerWidth < 1024) {
+      setCollapsed(false);
+    } else {
+      setCollapsed(true);
+    }
+  };
+
+  handleResize();
+
+  window.addEventListener("resize", handleResize);
+
+  return () => {
+    window.removeEventListener("resize", handleResize);
+  };
+}, []);
+const expandSidebar = () => {
+  if (!isDesktop()) return;
+
+  setCollapsed(false);
+  onExpandedChange?.(true);
+};
+
+const collapseSidebar = () => {
+  if (!isDesktop()) return;
+
+  setCollapsed(true);
+  onExpandedChange?.(false);
+};
+
+
+
+  useEffect(() => {
+    return () => {
+      clearTimeout(hoverTimer.current);
+    };
+  }, []);
+
+  
   return (
-    <aside
-      onMouseEnter={() => setCollapsed(false)}
-      onMouseLeave={() => setCollapsed(true)}
+<aside
+  onMouseEnter={() => {
+    if (window.innerWidth >= 1024) {
+      expandSidebar();
+    }
+  }}
+  onMouseLeave={() => {
+    if (window.innerWidth >= 1024) {
+      collapseSidebar();
+    }
+  }}
 className={`
-fixed z-50
-top-4 bottom-4
+fixed
+top-4
+bottom-4
+left-4
 
-bg-slate-100
+z-50
+flex
+flex-col
+overflow-hidden
+
 rounded-3xl
+bg-slate-100
 shadow-xl
-transition-all duration-300 ease-in-out
 
-flex flex-col
+transform-gpu
+will-change-transform
+will-change-[width]
 
+transition-all
+duration-300
+ease-[cubic-bezier(.22,1,.36,1)]
+
+/* Mobile */
+w-72
 ${
   sidebarOpen
-    ? "left-4"
-    : "-left-full"
+    ? "translate-x-0"
+    : "-translate-x-[120%]"
 }
 
-lg:left-4
-
-${collapsed ? "lg:w-20" : "lg:w-55"}
-
-w-72
+/* Desktop */
+lg:translate-x-0
+${
+  collapsed
+    ? "lg:w-20"
+    : "lg:w-56"
+}
 `}
+>
+    {/* Logo */}
+
+    <div
+      className="
+        flex
+        h-20
+        items-center
+        justify-center
+
+        px-4
+        py-8
+      "
     >
-      {/* Logo */}
-      <div className="flex h-20 items-center justify-center rounded-t-3xl  py-10 backdrop-blur-md px-4">
+      <div
+        className={`
+          flex
+          items-center
+          justify-center
+
+          transition-all
+          duration-300
+
+          ${
+            collapsed
+              ? "w-14"
+              : "w-full"
+          }
+        `}
+      >
         {collapsed ? (
-        <div className="h-16 w-16 overflow-hidden rounded-[14px]">
           <img
             src={icon}
             alt="BizBiteNow"
-            className="h-full w-full object-cover"
+            className="
+              h-14
+              w-14
+              rounded-xl
+              object-contain
+              transition-all
+              duration-300
+            "
           />
-        </div>
         ) : (
           <img
             src={logo}
             alt="BizBiteNow"
-            className="h-20 rounded-3xl object-contain"
+            className="
+              h-16
+              w-auto
+              object-contain
+              transition-all
+              duration-300
+            "
           />
         )}
       </div>
+    </div>
 
-      {/* Navigation */}
-      <nav className="sidebar-scroll flex-1 overflow-y-auto px-3 py-4">
-        <div className="space-y-2">
-          <SidebarItem
-            title="Dashboard"
-            icon={LayoutDashboard}
-            to="/seller/dashboard"
-            collapsed={collapsed}
-            onClick={closeSidebar}
-          />
+    {/* Navigation */}
 
-          <SidebarItem
-            title="Product Management"
-            icon={Package}
-            to="/seller/products"
-            collapsed={collapsed}
-            className
-            onClick={closeSidebar}
-          />
+{/* Navigation */}
+<nav className="sidebar-scroll flex-1 overflow-y-auto px-3 py-4">
+  <div className="space-y-2">
+    <SidebarItem
+      title="Dashboard"
+      icon={LayoutDashboard}
+      to="/seller/dashboard"
+      collapsed={
+  window.innerWidth >= 1024
+    ? collapsed
+    : false
+}
+      onClick={closeSidebar}
+    />
 
-          <SidebarItem
-            title="Orders"
-            icon={ShoppingCart}
-            to="/seller/orders"
-            collapsed={collapsed}
-            onClick={closeSidebar}
-          />
+    <SidebarItem
+      title="Product Management"
+      icon={Package}
+      to="/seller/products"
+      collapsed={
+  window.innerWidth >= 1024
+    ? collapsed
+    : false
+}
+      onClick={closeSidebar}
+    />
 
-          <SidebarItem
-            title="Delivery"
-            icon={Truck}
-            to="/seller/delivery"
-            collapsed={collapsed}
-            onClick={closeSidebar}
-          />
+    <SidebarItem
+      title="Orders"
+      icon={ShoppingCart}
+      to="/seller/orders"
+      collapsed={
+  window.innerWidth >= 1024
+    ? collapsed
+    : false
+}
+      onClick={closeSidebar}
+    />
 
-          <SidebarItem
-            title="Festive Menu"
-            icon={Gift}
-            to="/seller/festivemenu"
-            collapsed={collapsed}
-            onClick={closeSidebar}
-          />
-          <SidebarItem
-            title="Earnings"
-            icon={IndianRupee}
-            to="/seller/earnings"
-            collapsed={collapsed}
-            onClick={closeSidebar}
-          />
+    <SidebarItem
+      title="Delivery"
+      icon={Truck}
+      to="/seller/delivery"
+      collapsed={
+  window.innerWidth >= 1024
+    ? collapsed
+    : false
+}
+      onClick={closeSidebar}
+    />
 
-          <SidebarItem
-            title="Analytics"
-            icon={BarChart3}
-            to="/seller/analytics"
-            collapsed={collapsed}
-            onClick={closeSidebar}
-          />
+    <SidebarItem
+      title="Festive Menu"
+      icon={Gift}
+      to="/seller/festivemenu"
+      collapsed={
+  window.innerWidth >= 1024
+    ? collapsed
+    : false
+}
+      onClick={closeSidebar}
+    />
 
-          <SidebarItem
-            title="Store Settings"
-            icon={Settings}
-            to="/seller/settings"
-            collapsed={collapsed}
-            onClick={closeSidebar}
-          />
-        </div>
-      </nav>
+    <SidebarItem
+      title="Earnings"
+      icon={IndianRupee}
+      to="/seller/earnings"
+      collapsed={
+  window.innerWidth >= 1024
+    ? collapsed
+    : false
+}
+      onClick={closeSidebar}
+    />
 
-      {/* Footer */}
-      <div className="border-t border-[#C5BAFF]/40 p-3">
-        <SidebarItem
-          title="Logout"
-          icon={LogOut}
-          to="/login"
-          collapsed={collapsed}
-          danger
-          onClick={closeSidebar}
-        />
-      </div>
-    </aside>
-  );
+    <SidebarItem
+      title="Analytics"
+      icon={BarChart3}
+      to="/seller/analytics"
+      collapsed={
+  window.innerWidth >= 1024
+    ? collapsed
+    : false
+}
+      onClick={closeSidebar}
+    />
+
+    <SidebarItem
+      title="Store Settings"
+      icon={Settings}
+      to="/seller/settings"
+      collapsed={
+  window.innerWidth >= 1024
+    ? collapsed
+    : false
+}
+      onClick={closeSidebar}
+    />
+  </div>
+</nav>
+
+{/* Footer */}
+<div className="mt-auto border-t border-slate-200 p-3">
+  <SidebarItem
+    title="Logout"
+    icon={LogOut}
+    to="/login"
+    collapsed={
+  window.innerWidth >= 1024
+    ? collapsed
+    : false
+}
+    danger
+    onClick={closeSidebar}
+  />
+</div>
+
+</aside>
+);
 }
