@@ -43,7 +43,7 @@ const DeliveryProfileCard = ({ isOnline }) => {
           <span
             className={`inline-block mt-2 px-4 py-1 rounded-full text-white text-sm ${
               isOnline
-                ? "bg-green-500"
+                ? "bg-green-900"
                 : "bg-red-500"
             }`}
           >
