@@ -40,19 +40,14 @@ const [sidebarExpanded, setSidebarExpanded] = useState(false);
 <div
   className="min-h-screen bg-slate-100 transition-[margin-left,width] duration-300 ease-[cubic-bezier(.22,1,.36,1)]"
   style={{
-    marginLeft:
-      window.innerWidth >= 1024
-        ? sidebarExpanded
-          ? 240
-          : 96
-        : 0,
-
-    width:
-      window.innerWidth >= 1024
-        ? sidebarExpanded
-          ? "calc(100% - 240px)"
-          : "calc(100% - 96px)"
-        : "100%",
+    marginLeft: 0,
+    width: "100%",
+    ...(window.matchMedia("(min-width: 1024px)").matches && {
+      marginLeft: sidebarExpanded ? 240 : 96,
+      width: sidebarExpanded
+        ? "calc(100% - 240px)"
+        : "calc(100% - 96px)",
+    }),
   }}
 >
         <Navbar openSidebar={toggleSidebar} />

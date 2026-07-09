@@ -112,11 +112,14 @@ const handleImageUpload = (e, field) => {
           className="mb-3 text-[#16522d]"
         />
         <p className="text-sm text-slate-600">
-          Upload Banner
+          Upload Banner max 4MB
         </p>
         <span className="mt-2 text-xs text-slate-500">
-          1200 × 400 Recommended
+          1200 × 400 Recommended  
+          
         </span>
+        <span className="text-red-700">
+              ! Didnt have a Banner contact us</span>
       </>
     )}
   </label>
@@ -124,6 +127,7 @@ const handleImageUpload = (e, field) => {
   <input
     id="banner-upload"
     type="file"
+    multiple
     accept="image/*"
     className="hidden"
     onChange={(e) => handleImageUpload(e, "banner")}
