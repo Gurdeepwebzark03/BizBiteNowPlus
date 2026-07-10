@@ -240,6 +240,8 @@ export default function Sidebar({
             collapsed={window.innerWidth >= 1024 ? collapsed : false}
             onClick={closeSidebar}
           />
+
+
         </div>
       </nav>
 
