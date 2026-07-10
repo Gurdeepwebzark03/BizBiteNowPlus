@@ -1,5 +1,5 @@
-import { useCallback, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useCallback, useMemo, useState } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { ChevronLeft, CheckCircle } from "lucide-react";
 import { categories, allProducts } from "../../data/products";
 import { useCart } from "../../context/CartContext";
@@ -14,6 +14,20 @@ const AllMenu = () => {
   const navigate = useNavigate();
   const { addToCart } = useCart();
   const [toast, setToast] = useState("");
+  const [searchParams] = useSearchParams();
+  const searchQuery = (searchParams.get("search") || "").toLowerCase();
+
+  const filteredCategories = useMemo(() => {
+    if (!searchQuery) return categories;
+    return categories
+      .map((category) => ({
+        ...category,
+        products: category.products.filter((p) =>
+          p.name.toLowerCase().includes(searchQuery)
+        ),
+      }))
+      .filter((category) => category.products.length > 0);
+  }, [searchQuery]);
 
   const showToast = useCallback((name) => {
     setToast(name);
@@ -44,14 +58,20 @@ const AllMenu = () => {
         <p
           className="mt-4 max-w-md mx-auto text-white/70"
           style={{ fontSize: "14px" }}>
-          {allProducts.length} dishes, one obsession — quality. Every plate is prepared fresh and dressed
-          with ingredients that actually taste like something.
+          {searchQuery
+            ? `Showing results for "${searchParams.get("search")}"`
+            : `${allProducts.length} dishes, one obsession — quality. Every plate is prepared fresh and dressed with ingredients that actually taste like something.`}
         </p>
       </div>
 
       {/* Categories */}
       <div className="px-4 pb-16 space-y-10 max-w-5xl mx-auto">
-        {categories.map((category) => (
+        {filteredCategories.length === 0 && (
+          <div className="text-center py-16 text-white/60" style={{ fontSize: "16px" }}>
+            No dishes found
+          </div>
+        )}
+        {filteredCategories.map((category) => (
           <div key={category.id}>
             {/* Category heading */}
             <h2
@@ -66,7 +86,7 @@ const AllMenu = () => {
             </h2>
 
             {/* Products */}
-            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {category.products.map((product) => (
                 <div
                   key={product.id}

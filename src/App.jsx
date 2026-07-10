@@ -28,10 +28,11 @@ import ProductDetail from "./pages/customer/ProductDetail";
 import Checkout from "./pages/customer/Checkout";
 import OrderConfirmation from "./pages/customer/OrderConfirmation";
 import CustomerProfile from "./pages/customer/Profile";
+import MyOrders from "./pages/customer/MyOrders";
 import CustomerOnboarding from "./pages/customer/CustomerOnboarding";
 import CustomerGate from "./components/customer/CustomerGate";
-import Earnings from "./pages/Dashboards/Seller/Earnings";
-
+import CustomerLayout from "./components/customer/CustomerLayout";
+// import Earnings from "./pages/Dashboards/Seller/Earnings";
 
 // Future Modules
 // import Orders from './pages/Dashboards/Seller/Orders';
@@ -53,34 +54,45 @@ export default function App() {
         {/* Customer */}
 
         <Route path="/customer/onboarding" element={<CustomerOnboarding />} />
-        <Route path="/storefront" element={<StoreFront />} />
-        <Route path="/menu" element={<AllMenu />} />
-        <Route path="/cart" element={<Cart />} />
-        <Route path="/product/:id" element={<ProductDetail />} />
-        <Route
-          path="/checkout"
-          element={
-            <CustomerGate>
-              <Checkout />
-            </CustomerGate>
-          }
-        />
-        <Route
-          path="/order/:id"
-          element={
-            <CustomerGate>
-              <OrderConfirmation />
-            </CustomerGate>
-          }
-        />
-        <Route
-          path="/customer/profile"
-          element={
-            <CustomerGate>
-              <CustomerProfile />
-            </CustomerGate>
-          }
-        />
+
+        <Route element={<CustomerLayout />}>
+          <Route path="/storefront" element={<StoreFront />} />
+          <Route path="/menu" element={<AllMenu />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/product/:id" element={<ProductDetail />} />
+          <Route
+            path="/checkout"
+            element={
+              <CustomerGate>
+                <Checkout />
+              </CustomerGate>
+            }
+          />
+          <Route
+            path="/order/:id"
+            element={
+              <CustomerGate>
+                <OrderConfirmation />
+              </CustomerGate>
+            }
+          />
+          <Route
+            path="/customer/profile"
+            element={
+              <CustomerGate>
+                <CustomerProfile />
+              </CustomerGate>
+            }
+          />
+          <Route
+            path="/customer/orders"
+            element={
+              <CustomerGate>
+                <MyOrders />
+              </CustomerGate>
+            }
+          />
+        </Route>
 
         {/* Seller Dashboard */}
 
@@ -90,8 +102,7 @@ export default function App() {
             <FestiveMenuProvider>
               <DashboardLayout />
             </FestiveMenuProvider>
-          }
-        >
+          }>
           <Route index element={<Navigate to="dashboard" replace />} />
           <Route path="dashboard" element={<SellerDashboard />} />
           <Route path="orders" element={<Orders />} />
@@ -102,18 +113,16 @@ export default function App() {
           <Route path="analytics" element={<Analytics />} />
           <Route path="profile" element={<Profile />} />
 
-          <Route  path="delivery-management" element={<DeliveryManagement />}
-/>
+          <Route path="delivery-management" element={<DeliveryManagement />} />
 
-          <Route path="festivemenu" element={<FestiveMenu/>}/>
+          <Route path="festivemenu" element={<FestiveMenu />} />
           {/* <Route path="festivemenu/create" element={<CreateFestiveMenu />} /> */}
 
           <Route path="festivemenu" element={<FestiveMenu />} />
           <Route path="festivemenu/create" element={<CreateFestiveMenu />} />
           <Route path="festivemenu/edit/:id" element={<CreateFestiveMenu />} />
           <Route path="festivemenu/:id" element={<FestiveMenuDetails />} />
-          <Route path="festivemenu/history" element={<FestiveMenuHistory/>}/>
-
+          <Route path="festivemenu/history" element={<FestiveMenuHistory />} />
         </Route>
         {/* Registration Success */}
         <Route
@@ -128,8 +137,7 @@ export default function App() {
                     viewBox="0 0 24 24"
                     strokeWidth={2.5}
                     stroke="currentColor"
-                    className="w-7 h-7"
-                  >
+                    className="w-7 h-7">
                     <path
                       strokeLinecap="round"
                       strokeLinejoin="round"
@@ -150,8 +158,7 @@ export default function App() {
 
                 <a
                   href="/storefront"
-                  className="w-full bg-[#059669] text-white py-2.5 rounded-xl font-black shadow block text-center transition hover:bg-[#047857]"
-                >
+                  className="w-full bg-[#059669] text-white py-2.5 rounded-xl font-black shadow block text-center transition hover:bg-[#047857]">
                   Go To Storefront Market
                 </a>
               </div>
