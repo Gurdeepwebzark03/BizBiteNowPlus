@@ -5,7 +5,11 @@ import { useLocation } from "react-router-dom";
 import SearchBar from "../../SearchBar";
 import NotificationButton from "./NotificationButton";
 import ProfileMenu from "../../ProfileMenu";
+const user = {
+  subscription: "free", // "free" | "plus"
+};
 
+const isPlus = user.subscription === "plus";
 const pageTitles = {
   "/seller/dashboard": "Dashboard",
   "/seller/products": "Products",
@@ -130,7 +134,7 @@ export default function Navbar({ openSidebar }) {
     "
   >
     BizBitesNow
-    <span className="text-green-700 font-inter">Plus</span>
+    <span className="text-green-700 font-inter">{isPlus ? "Plus" : ""}</span>
   </h2>
 </div>
 
