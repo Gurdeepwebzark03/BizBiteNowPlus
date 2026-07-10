@@ -149,7 +149,7 @@ export default function EarningsHistory({
 
       <div className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
 
-        <div className="rounded-2xl bg-violet-50 p-5">
+        <div className="rounded-2xl bg-white shadow-lg p-5">
 
           <div className="flex items-center justify-between">
 
@@ -170,7 +170,7 @@ export default function EarningsHistory({
 
         </div>
 
-        <div className="rounded-2xl bg-emerald-50 p-5">
+        <div className="rounded-2xl bg-white shadow-lg p-5">
 
           <div className="flex items-center justify-between">
 
@@ -188,7 +188,7 @@ export default function EarningsHistory({
 
         </div>
 
-        <div className="rounded-2xl bg-blue-50 p-5">
+        <div className="rounded-2xl bg-white shadow-lg p-5">
 
           <div className="flex items-center justify-between">
 
@@ -209,7 +209,7 @@ export default function EarningsHistory({
 
         </div>
 
-        <div className="rounded-2xl bg-orange-50 p-5">
+        <div className="rounded-2xl bg-white shadow-lg p-5">
 
           <div className="flex items-center justify-between">
 
@@ -239,7 +239,7 @@ export default function EarningsHistory({
 
       <div className="mt-8 hidden xl:block">
 
-        <div className="max-h-[500px] overflow-y-auto rounded-2xl border border-slate-200">
+        <div className="max-h-[500px] overflow-y-auto scrollbar-hide rounded-2xl border border-slate-200">
 
           <table className="min-w-full">
 

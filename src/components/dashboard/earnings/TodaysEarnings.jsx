@@ -56,14 +56,14 @@ export default function TodaysEarnings({ summary }) {
         <div className="relative flex flex-col gap-8 xl:flex-row xl:items-center xl:justify-between">
           <div>
             <div className="flex items-center gap-3">
-              <div className="rounded-2xl bg-white/15 p-4 backdrop-blur">
+              <div className="rounded-2xl mt-7 bg-green-100 p-4 text-green-700 ">
                 <Banknote size={32} />
               </div>
 
               <div>
                 <p className="text-white/80">Today's Earnings</p>
 
-                <h2 className="mt-1 text-5xl font-black">
+                <h2 className="mt-0 text-5xl  font-black">
                   ₹{summary.todayEarnings.toLocaleString("en-IN")}
                 </h2>
               </div>
@@ -87,9 +87,9 @@ export default function TodaysEarnings({ summary }) {
                 <TrendingUp size={20} />
               </div>
 
-              <div className="mt-6 h-4 overflow-hidden rounded-full bg-blue-200">
+              <div className="mt-6 h-4 overflow-hidden rounded-full bg-green-200">
                 <div
-                  className="h-full rounded-full bg-blue-300 transition-all duration-700"
+                  className="h-full rounded-full bg-green-700 transition-all duration-700"
                   style={{
                     width: `${Math.min(summary.revenueGrowth * 4, 100)}%`,
                   }}
@@ -149,7 +149,7 @@ export default function TodaysEarnings({ summary }) {
               </p>
             </div>
 
-            <TrendingUp className="text-violet-600" size={24} />
+            <TrendingUp className="text-green-600" size={24} />
           </div>
 
           {/* COD */}
@@ -160,14 +160,14 @@ export default function TodaysEarnings({ summary }) {
                 Cash on Delivery
               </span>
 
-              <span className="font-bold text-orange-600">
+              <span className="font-bold text-green-600">
                 {codPercentage}%
               </span>
             </div>
 
-            <div className="h-4 overflow-hidden rounded-full bg-orange-100">
+            <div className="h-2 overflow-hidden rounded-full bg-green-100">
               <div
-                className="h-full rounded-full bg-gradient-to-r from-orange-500 to-red-500 transition-all duration-700"
+                className="h-full rounded-full bg-gradient-to-r from-green-500 to-green-900 transition-all duration-700"
                 style={{
                   width: `${codPercentage}%`,
                 }}
@@ -187,14 +187,14 @@ export default function TodaysEarnings({ summary }) {
                 Online Payments
               </span>
 
-              <span className="font-bold text-emerald-600">
+              <span className="font-bold text-green-600">
                 {onlinePercentage}%
               </span>
             </div>
 
-            <div className="h-4 overflow-hidden rounded-full bg-emerald-100">
+            <div className="h-2 overflow-hidden rounded-full bg-green-100">
               <div
-                className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-green-600 transition-all duration-700"
+                className="h-full rounded-full bg-gradient-to-r from-green-500 to-green-900 transition-all duration-700"
                 style={{
                   width: `${onlinePercentage}%`,
                 }}
@@ -219,8 +219,8 @@ export default function TodaysEarnings({ summary }) {
           </p>
 
           <div className="mt-8 space-y-5">
-            <div className="flex items-start gap-4 rounded-2xl bg-green-50 p-4">
-              <div className="rounded-xl bg-green-500 p-2 text-white">
+            <div className="flex items-start gap-4 rounded-2xl bg-white shadow-lg p-4">
+              <div className="rounded-xl bg-green-300 p-2 text-green-700">
                 <TrendingUp size={18} />
               </div>
 
@@ -234,8 +234,8 @@ export default function TodaysEarnings({ summary }) {
               </div>
             </div>
 
-            <div className="flex items-start gap-4 rounded-2xl bg-blue-50 p-4">
-              <div className="rounded-xl bg-blue-500 p-2 text-white">
+            <div className="flex items-start gap-4 rounded-2xl bg-white shadow-lg p-4">
+              <div className="rounded-xl bg-blue-300 p-2 text-blue-700">
                 <Wallet size={18} />
               </div>
 
@@ -251,8 +251,8 @@ export default function TodaysEarnings({ summary }) {
               </div>
             </div>
 
-            <div className="flex items-start gap-4 rounded-2xl bg-violet-50 p-4">
-              <div className="rounded-xl bg-violet-500 p-2 text-white">
+            <div className="flex items-start gap-4 rounded-2xl bg-white shadow-lg p-4">
+              <div className="rounded-xl bg-violet-300 p-2 text-violet-700">
                 <BadgeCheck size={18} />
               </div>
 
@@ -268,8 +268,8 @@ export default function TodaysEarnings({ summary }) {
               </div>
             </div>
 
-            <div className="flex items-start gap-4 rounded-2xl bg-orange-50 p-4">
-              <div className="rounded-xl bg-orange-500 p-2 text-white">
+            <div className="flex items-start gap-4 rounded-2xl bg-white shadow-lg p-4">
+              <div className="rounded-xl bg-orange-300 p-2 text-orange-700">
                 <CreditCard size={18} />
               </div>
 

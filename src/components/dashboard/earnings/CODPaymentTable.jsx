@@ -199,7 +199,7 @@ export default function CODPaymentTable({
 
       <div className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-5">
 
-        <div className="rounded-2xl bg-violet-50 p-5">
+        <div className="rounded-2xl bg-white shadow-lg p-5">
 
           <div className="flex items-center justify-between">
 
@@ -217,7 +217,7 @@ export default function CODPaymentTable({
 
         </div>
 
-        <div className="rounded-2xl bg-green-50 p-5">
+        <div className="rounded-2xl bg-white shadow-lg p-5">
 
           <div className="flex items-center justify-between">
 
@@ -235,7 +235,7 @@ export default function CODPaymentTable({
 
         </div>
 
-        <div className="rounded-2xl bg-red-50 p-5">
+        <div className="rounded-2xl bg-white shadow-lg p-5">
 
           <div className="flex items-center justify-between">
 
@@ -253,7 +253,7 @@ export default function CODPaymentTable({
 
         </div>
 
-        <div className="rounded-2xl bg-blue-50 p-5">
+        <div className="rounded-2xl bg-white shadow-lg p-5">
 
           <div className="flex items-center justify-between">
 
@@ -274,7 +274,7 @@ export default function CODPaymentTable({
 
         </div>
 
-        <div className="rounded-2xl bg-amber-50 p-5">
+        <div className="rounded-2xl bg-white shadow-lg p-5">
 
           <div className="flex items-center justify-between">
 
@@ -298,7 +298,7 @@ export default function CODPaymentTable({
       </div>
             {/* Desktop Table */}
 
-      <div className="mt-8 hidden overflow-x-auto xl:block">
+      <div className="mt-8 hidden overflow-x-auto scrollbar-hide xl:block">
 
         <table className="min-w-full">
 
@@ -407,12 +407,12 @@ export default function CODPaymentTable({
                     }
                     className={`rounded-xl px-4 py-2 text-sm font-semibold transition-all duration-300 ${
                       order.status === "Paid"
-                        ? "bg-red-500 text-white hover:bg-red-600"
-                        : "bg-emerald-500 text-white hover:bg-emerald-600"
+                        ? "bg-green-700 text-white hover:bg-green-600"
+                        : "bg-yellow-500 text-white hover:bg-yellow-600"
                     }`}
                   >
                     {order.status === "Paid"
-                      ? "Mark Unpaid"
+                      ? "paid"
                       : "Mark Paid"}
                   </button>
 

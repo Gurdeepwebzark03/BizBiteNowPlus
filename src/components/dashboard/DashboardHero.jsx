@@ -7,7 +7,9 @@ import {
   CloudSun,
   MoonStar,
 } from "lucide-react";
-
+// Temporary
+// Replace with backend value later
+const isPremium = false;
 const DashboardHero = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
   const [storeActive, setStoreActive] = useState(true);
@@ -55,7 +57,6 @@ const DashboardHero = () => {
   const liveTime = currentTime.toLocaleTimeString("en-IN", {
     hour: "2-digit",
     minute: "2-digit",
-    second: "2-digit",
     hour12: true,
   });
 
@@ -98,12 +99,12 @@ const DashboardHero = () => {
               </div>
 
               <div>
-                <h2
-                  className="text-3xl font-bold text-[#183A2A]"
-                  style={{ fontFamily: "Playfair Display" }}
-                >
-                  BizBiteNow+
-                </h2>
+<h2
+  className="text-3xl font-bold text-[#183A2A]"
+  style={{ fontFamily: "Playfair Display" }}
+>
+  {isPremium ? "BizBiteNow+" : "BizBiteNow"}
+</h2>
 
                 <p className="mt-1 text-xs uppercase tracking-[0.35em] text-[#8C8375]">
                   Restaurant Seller
@@ -141,7 +142,7 @@ const DashboardHero = () => {
                   Today
                 </p>
 
-                <h3 className="mt-3 text-base lg:text-lg font-semibold leading-7 text-[#2C2C2C]">
+                <h3 className="mt-3 text-base lg:text-lg font-bold leading-7 text-[#2C2C2C]">
                   {today}
                 </h3>
               </div>
@@ -157,7 +158,7 @@ const DashboardHero = () => {
                   Live Time
                 </p>
 
-                <h3 className="mt-3 text-xl lg:text-2xl font-bold text-[#183A2A]">
+                <h3 className="mt-3 text-base lg:text-lg font-bold leading-7 text-[#2C2C2C]">
                   {liveTime}
                 </h3>
               </div>
@@ -166,7 +167,7 @@ const DashboardHero = () => {
 
           {/* ================= RIGHT ================= */}
 
-          <div className="w-full lg:col-span-2 2xl:col-span-1  flex justify-center 2xl:justify-end">
+          <div className="w-full lg:col-span-2 2xl:col-span-1 mb-10 flex justify-center 2xl:justify-end">
             <div className="w-full max-w-md overflow-hidden rounded-[28px] border border-[#E9E4DB] bg-[#183A2A] shadow-[0_20px_45px_rgba(24,58,42,.18)]">
               <div className="h-1 bg-[#C89B3C]" />
 
@@ -251,7 +252,7 @@ const DashboardHero = () => {
 
                   <div className="w-fit rounded-full border border-white/10 bg-white/5 px-4 py-2">
                     <span className="text-xs tracking-[0.2em] text-[#D7C49A]">
-                      BIZBITENOW+
+                      {isPremium ? "BizBiteNow+" : "BizBiteNow"}
                     </span>
                   </div>
                 </div>

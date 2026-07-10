@@ -16,6 +16,13 @@ import icon from "../../assets/BIZ BITE NOW Vertical with Icon.png";
 import logo from "../../assets/BIZ BITE NOW Horizontal with Icon.png";
 import SidebarItem from "./SidebarItem";
 
+// Temporary - replace with backend value later
+const user = {
+  subscription: "free", // "free" | "plus"
+};
+
+const isPlus = user.subscription === "plus";
+
 export default function Sidebar({
   sidebarOpen,
   closeSidebar,
@@ -190,37 +197,41 @@ export default function Sidebar({
             onClick={closeSidebar}
           />
 
-          <SidebarItem
-            title="Delivery"
-            icon={Truck}
-            to="/seller/delivery"
-            collapsed={window.innerWidth >= 1024 ? collapsed : false}
-            onClick={closeSidebar}
-          />
+<SidebarItem
+  title="Delivery"
+  icon={Truck}
+  to="/seller/delivery"
+  premium={!isPlus}
+  collapsed={window.innerWidth >= 1024 ? collapsed : false}
+  onClick={closeSidebar}
+/>
 
-          <SidebarItem
-            title="Festive Menu"
-            icon={Gift}
-            to="/seller/festivemenu"
-            collapsed={window.innerWidth >= 1024 ? collapsed : false}
-            onClick={closeSidebar}
-          />
+<SidebarItem
+  title="Festive Menu"
+  icon={Gift}
+  to="/seller/festivemenu"
+  premium={!isPlus}
+  collapsed={window.innerWidth >= 1024 ? collapsed : false}
+  onClick={closeSidebar}
+/>
 
           <SidebarItem
             title="Earnings"
             icon={IndianRupee}
             to="/seller/earnings"
+            premium={!isPlus}
             collapsed={window.innerWidth >= 1024 ? collapsed : false}
             onClick={closeSidebar}
           />
 
-          <SidebarItem
-            title="Analytics"
-            icon={BarChart3}
-            to="/seller/analytics"
-            collapsed={window.innerWidth >= 1024 ? collapsed : false}
-            onClick={closeSidebar}
-          />
+<SidebarItem
+  title="Analytics"
+  icon={BarChart3}
+  to="/seller/analytics"
+  premium={!isPlus}
+  collapsed={window.innerWidth >= 1024 ? collapsed : false}
+  onClick={closeSidebar}
+/>
 
           <SidebarItem
             title="Store Settings"

@@ -24,7 +24,7 @@ const TopProducts = () => {
           description="Products will appear here."
         />
       ) : (
-      <div className="space-y-1.5">
+      <div className="max-h-[700px] space-y-3 overflow-y-auto scrollbar-hide pr-1">
         {topProducts.map((product, index) => (
           <ProductItem
             key={product.id}

@@ -21,7 +21,7 @@ function DashboardWidget({
         ${className}
       `}
     >
-      <div className="flex items-start justify-between border-b border-gray-100 px-6 py-5">
+      <div className="flex items-start overflow-y-auto justify-between border-b border-gray-100 px-6 py-5">
         <div>
           <h2 className="text-lg font-semibold text-[#1A4D2E]">
             {title}

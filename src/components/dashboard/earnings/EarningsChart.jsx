@@ -46,7 +46,7 @@ const ChartTooltip = ({
         {label}
       </p>
 
-      <p className="mt-3 text-lg font-bold text-violet-600">
+      <p className="mt-3 text-lg font-bold text-green-900">
         ₹
         {payload[0].value.toLocaleString(
           "en-IN"
@@ -111,8 +111,8 @@ export default function EarningsChart({
               }
               className={`rounded-xl px-4 py-2 text-sm font-semibold transition ${
                 filter === item.value
-                  ? "bg-violet-600 text-white shadow-lg"
-                  : "border border-slate-200 bg-white hover:border-violet-500 hover:text-violet-600"
+                  ? "bg-yellow-500 text-white shadow-lg"
+                  : "border border-slate-200 bg-white hover:border-green-500 hover:text-green-600"
               }`}
             >
               {item.label}
@@ -134,13 +134,13 @@ export default function EarningsChart({
 
       <div className="mt-8 grid gap-5 md:grid-cols-3">
 
-        <div className="rounded-2xl bg-violet-50 p-5">
+        <div className="rounded-2xl bg-white shadow-lg p-5">
           <div className="flex items-center justify-between">
             <p className="text-sm text-slate-500">
               Total Revenue
             </p>
 
-            <TrendingUp className="text-violet-600" />
+            <TrendingUp className="text-green-600" />
           </div>
 
           <h2 className="mt-3 text-3xl font-bold">
@@ -151,7 +151,7 @@ export default function EarningsChart({
           </h2>
         </div>
 
-        <div className="rounded-2xl bg-emerald-50 p-5">
+        <div className="rounded-2xl bg-white shadow-lg p-5">
           <div className="flex items-center justify-between">
             <p className="text-sm text-slate-500">
               Highest
@@ -168,7 +168,7 @@ export default function EarningsChart({
           </h2>
         </div>
 
-        <div className="rounded-2xl bg-orange-50 p-5">
+        <div className="rounded-2xl bg-white shadow-lg p-5">
           <div className="flex items-center justify-between">
             <p className="text-sm text-slate-500">
               Average
@@ -210,13 +210,13 @@ export default function EarningsChart({
 
                 <stop
                   offset="5%"
-                  stopColor="#7C3AED"
+                  stopColor="#16522d "
                   stopOpacity={0.35}
                 />
 
                 <stop
                   offset="95%"
-                  stopColor="#7C3AED"
+                  stopColor="#16522d "
                   stopOpacity={0}
                 />
 
@@ -252,12 +252,12 @@ export default function EarningsChart({
             <Area
               type="monotone"
               dataKey="revenue"
-              stroke="#7C3AED"
+              stroke="#16522d "
               strokeWidth={4}
               fill="url(#earningGradient)"
               activeDot={{
                 r: 7,
-                fill: "#7C3AED",
+                fill: "#16522d ",
               }}
             />
 

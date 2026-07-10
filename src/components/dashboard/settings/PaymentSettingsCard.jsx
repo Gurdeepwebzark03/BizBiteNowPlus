@@ -7,7 +7,9 @@ import {
   Save,
   Banknote,
 } from "lucide-react";
-
+// Temporary
+// Replace with backend value
+const isPlusUser = false;
 const PaymentSettingsCard = () => {
   return (
     <motion.section
@@ -42,9 +44,12 @@ const PaymentSettingsCard = () => {
 
           <div className="grid gap-4 md:grid-cols-2">
             {[
-              { icon: Smartphone, label: "UPI" },
-              { icon: Banknote, label: "Cash On Delivery" },
-            ].map((item) => (
+  ...(isPlusUser
+    ? [{ icon: Smartphone, label: "UPI" }]
+    : []),
+
+  { icon: Banknote, label: "Cash On Delivery" },
+].map((item) => (
               <label
                 key={item.label}
                 className="flex items-center justify-between rounded-xl border border-slate-200 bg-[#f8faf8] p-4"
