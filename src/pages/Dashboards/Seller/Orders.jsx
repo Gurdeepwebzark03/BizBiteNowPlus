@@ -91,7 +91,7 @@ useEffect(() => {
   // Subscription
   // ==========================
 
-  const isPlusUser = true;
+  const isPlusUser = false;
 
   // =====================================
   // Filter Orders
