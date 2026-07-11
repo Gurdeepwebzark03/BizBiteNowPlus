@@ -113,13 +113,7 @@ export default function Sidebar({ collapsed, setCollapsed }) {
             collapsed={collapsed}
           />
           
-          <SidebarItem
-            title="Logout"
-            icon={LogOut}
-            to="/login"
-            collapsed={collapsed}
-            danger
-          />
+          
 
         </div>
       </nav>
