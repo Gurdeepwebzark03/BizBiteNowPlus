@@ -197,7 +197,7 @@ export default function RegularCustomers({
 
       <div className="mt-8 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
 
-        <div className="rounded-2xl bg-violet-50 p-5">
+        <div className="rounded-2xl bg-white shadow-lg p-5">
 
           <div className="flex items-center justify-between">
 
@@ -215,7 +215,7 @@ export default function RegularCustomers({
 
         </div>
 
-        <div className="rounded-2xl bg-emerald-50 p-5">
+        <div className="rounded-2xl bg-white shadow-lg p-5">
 
           <div className="flex items-center justify-between">
 
@@ -233,7 +233,7 @@ export default function RegularCustomers({
 
         </div>
 
-        <div className="rounded-2xl bg-blue-50 p-5">
+        <div className="rounded-2xl bg-white shadow-lg p-5">
 
           <div className="flex items-center justify-between">
 
@@ -254,7 +254,7 @@ export default function RegularCustomers({
 
         </div>
 
-        <div className="rounded-2xl bg-orange-50 p-5">
+        <div className="rounded-2xl bg-white shadow-lg p-5">
 
           <div className="flex items-center justify-between">
 
@@ -280,7 +280,7 @@ export default function RegularCustomers({
 
       <div className="mt-8 hidden xl:block">
 
-        <div className="overflow-x-auto rounded-2xl border border-slate-200">
+        <div className="overflow-x-auto scrollbar-hide rounded-2xl border border-slate-200">
 
           <table className="min-w-full">
 
@@ -334,7 +334,7 @@ export default function RegularCustomers({
 
                       <div className="flex items-center gap-4">
 
-                        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-blue-500 text-lg font-bold text-white">
+                        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-green-500 to-green-700 text-lg font-bold text-white">
                           {customer.name.charAt(0)}
                         </div>
 

@@ -32,7 +32,7 @@ import CustomerProfile from "./pages/customer/Profile";
 import CustomerOnboarding from "./pages/customer/CustomerOnboarding";
 import CustomerGate from "./components/customer/CustomerGate";
 import Earnings from "./pages/Dashboards/Seller/Earnings";
-
+import SpecialOffers from "./components/special offers/SpecialOffers";
 
 // Future Modules
 // import Orders from './pages/Dashboards/Seller/Orders';
@@ -99,11 +99,14 @@ export default function App() {
           <Route path="orders" element={<Orders />} />
           <Route path="orders/:orderId" element={<OrderDetails />} />
           <Route path="delivery" element={<DeliveryManagement />} />
+          <Route path="special-offers" element={<SpecialOffers />} />
           <Route path="settings" element={<Settings />} />
           <Route path="products" element={<Products />} />
           <Route path="analytics" element={<Analytics />} />
+          <Route path="earnings" element={<Earnings />} />
           <Route path="profile" element={<Profile />} />
-          <Route  path="delivery-management" element={<DeliveryManagement />}
+          <Route  path="delivery-management" element={<DeliveryDashboard />}
+          
 />
 
 

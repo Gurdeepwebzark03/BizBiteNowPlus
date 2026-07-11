@@ -24,7 +24,7 @@ const RecentOrders = () => {
           description="Orders will appear here."
         />
       ) : (
-        <div className="space-y-3">
+        <div className="max-h-[700px] space-y-3 overflow-y-auto scrollbar-hide pr-1">
           {recentOrders.map((order) => (
             <OrderItem
               key={order.id}

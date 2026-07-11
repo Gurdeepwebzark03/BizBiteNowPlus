@@ -13,7 +13,9 @@ import {
   updateLoyaltySettings,
   getStampLevelBreakdown,
 } from "../../../api/loyalty";
-
+// Temporary
+// Replace with backend subscription later
+const isPlusUser = false;
 const REWARD_PRESETS = {
   item: "Free dessert",
   discount: "20% off next order",
@@ -25,7 +27,7 @@ const LoyaltySettingsCard = () => {
   const [breakdown, setBreakdown] = useState(null);
   const [saving, setSaving] = useState(false);
   const [loadError, setLoadError] = useState(null);
-
+  const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   useEffect(() => {
     let cancelled = false;
 
@@ -116,7 +118,46 @@ const LoyaltySettingsCard = () => {
         </span>
       </div>
 
-      <div className="space-y-6 p-6">
+      <div className="relative">
+
+  {!isPlusUser && (
+    <div className="absolute inset-0 z-20 flex items-center justify-center rounded-b-2xl bg-white/75 backdrop-blur-sm">
+
+      <div className="mx-6 max-w-md rounded-2xl border border-amber-200 bg-white p-8 text-center shadow-xl">
+
+        <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-amber-100">
+          <Gift
+            size={30}
+            className="text-amber-500"
+          />
+        </div>
+
+        <h3 className="text-2xl font-bold text-slate-800">
+          Loyalty Program
+        </h3>
+
+        <p className="mt-3 text-sm text-slate-500">
+          Reward repeat customers with digital stamp cards, discounts and free rewards.
+        </p>
+
+        <button
+          className="mt-6 rounded-xl bg-[#16522d] px-6 py-3 font-semibold text-white hover:bg-[#124324]"
+        >
+          Upgrade to BizBite Plus
+        </button>
+
+      </div>
+
+    </div>
+  )}
+
+  <div
+    className={`space-y-6 p-6 ${
+      !isPlusUser
+        ? "pointer-events-none select-none opacity-40 blur-[2px]"
+        : ""
+    }`}
+  >
         {/* Loyalty Programme */}
         <div className="rounded-xl border border-slate-200 bg-[#f8faf8] p-5">
           <div className="flex items-center justify-between">
@@ -255,6 +296,9 @@ const LoyaltySettingsCard = () => {
         )}
 
       </div>
+            </div>
+
+
 
       {/* Footer */}
       <div className="flex justify-end border-t border-slate-200 px-6 py-5">

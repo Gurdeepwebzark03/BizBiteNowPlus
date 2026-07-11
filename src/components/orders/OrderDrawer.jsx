@@ -16,40 +16,51 @@ export default function OrderDrawer({
   if (!open || !order) return null;
 
   return (
-    <>
+<>
       <div
         onClick={onClose}
         className="fixed inset-0 z-40 bg-black/40"
       />
 
-      <aside className="fixed right-0 top-0 z-50 h-screen w-full max-w-lg overflow-y-auto bg-white shadow-2xl">
+      <aside
+  className="
+    fixed right-0 top-0 z-50
+    h-screen w-full
+    max-w-full sm:max-w-lg
+    overflow-y-auto
+    scrollbar-hide
+    bg-white
+    shadow-2xl
+    animate-in slide-in-from-right duration-300
+  "
+>
 
-        <div className="flex items-center justify-between border-b p-6">
+<div className="sticky top-0 z-10 flex items-center justify-between border-b bg-white px-4 py-4 sm:px-6">
 
-          <div>
+  <div className="min-w-0">
 
-            <h2 className="text-xl font-bold">
-              {order.orderId}
-            </h2>
+    <h2 className="truncate text-lg font-bold sm:text-xl">
+      {order.orderId}
+    </h2>
 
-            <p className="text-sm text-slate-500">
-              {order.createdAt}
-            </p>
+    <p className="text-xs text-slate-500 sm:text-sm">
+      {order.createdAt}
+    </p>
 
-          </div>
+  </div>
 
-          <button
-            onClick={onClose}
-            className="rounded-lg p-2 hover:bg-slate-100"
-          >
-            <X size={20} />
-          </button>
+  <button
+    onClick={onClose}
+    className="rounded-lg p-2 transition hover:bg-slate-100"
+  >
+    <X size={20} />
+  </button>
 
-        </div>
 
-        <div className="space-y-6 p-6">
+        <section>
+        <div className="space-y-4 p-4 sm:space-y-6 sm:p-6">
 
-          <section className="rounded-xl border p-5">
+          className="rounded-xl border border-slate-200 p-4 sm:p-5"
 
             <h3 className="mb-4 flex items-center gap-2 font-semibold">
               <User size={18} />
@@ -69,7 +80,7 @@ export default function OrderDrawer({
               <MapPin size={16} />
               {order.address}
             </div>
-
+          </div>
           </section>
 
           <section className="rounded-xl border p-5">

@@ -12,6 +12,7 @@ import {
 import { categories, allProducts } from "../../data/products";
 import { useCart } from "../../context/CartContext";
 import FoodTypeIndicator from "../../components/customer/FoodTypeIndicator";
+import NotificationPanel from "../../components/customer/NotificationPanel";
 import {
   isCustomerLoggedIn,
   logoutCustomer,
@@ -57,6 +58,16 @@ const heroSlides = [
 
 const allTabs = [{ id: 0, name: "All items" }, ...categories];
 
+const notificationTags = ["New", "Offer", "Trending", "Back in stock", "Chef's pick"];
+const notifications = allProducts.slice(0, 5).map((p, i) => ({
+  id: p.id,
+  image: p.image,
+  tag: notificationTags[i % notificationTags.length],
+  title: p.name,
+  meta: p.category,
+  price: p.price,
+}));
+
 const StoreFront = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -65,6 +76,7 @@ const StoreFront = () => {
   const [search, setSearch] = useState("");
   const [toast, setToast] = useState("");
   const [customerName, setCustomerName] = useState(null);
+  const [showNotifications, setShowNotifications] = useState(false);
   const searchRef = useRef(null);
   const menuRef = useRef(null);
 
@@ -173,28 +185,49 @@ const StoreFront = () => {
             />
           </div>
 
-          {/* Bell + Cart + Customer */}
+          {/* Menu + Bell + Cart + Customer */}
           <div className="flex items-center gap-3 shrink-0">
             <button
-              className="relative flex items-center justify-center text-gray-500 shrink-0"
+              onClick={() => navigate("/menu")}
+              className="relative flex items-center justify-center text-gray-500 shrink-0 rounded-xl hover:bg-[#FBE7DD] hover:text-[#E8622D] transition-colors lg:hidden cursor-pointer"
               style={{ minHeight: "40px", minWidth: "40px" }}
             >
-              <Bell size={20} />
-              <span
-                className="absolute rounded-full"
-                style={{ top: "8px", right: "9px", width: "7px", height: "7px", backgroundColor: "#C2703D" }}
-              />
+              <LayoutGrid size={20} />
             </button>
+
+            <div className="relative">
+              <button
+                onClick={() => setShowNotifications((v) => !v)}
+                className="relative flex items-center justify-center text-gray-500 shrink-0 rounded-xl hover:bg-[#FBE7DD] hover:text-[#E8622D] transition-colors cursor-pointer"
+                style={{ minHeight: "40px", minWidth: "40px" }}
+              >
+                <Bell size={20} />
+                <span
+                  className="absolute rounded-full"
+                  style={{ top: "8px", right: "9px", width: "7px", height: "7px", backgroundColor: "#E8622D" }}
+                />
+              </button>
+              {showNotifications && (
+                <NotificationPanel
+                  notifications={notifications}
+                  onClose={() => setShowNotifications(false)}
+                  onBrowseMenu={() => {
+                    setShowNotifications(false);
+                    navigate("/menu");
+                  }}
+                />
+              )}
+            </div>
 
             <button
               onClick={() => navigate("/cart")}
-              className="relative flex items-center justify-center text-gray-500 shrink-0 lg:hidden"
+              className="relative flex items-center justify-center text-gray-500 shrink-0 rounded-xl hover:bg-[#FBE7DD] hover:text-[#E8622D] transition-colors lg:hidden cursor-pointer"
               style={{ minHeight: "40px", minWidth: "40px" }}
             >
               <ShoppingCart size={20} />
               {totalItems > 0 && (
                 <span
-                  className="absolute bg-[#F4A300] text-[#1C1C1C] font-bold rounded-full flex items-center justify-center"
+                  className="absolute bg-[#E8622D] text-white font-bold rounded-full flex items-center justify-center"
                   style={{ top: "2px", right: "0px", fontSize: "10px", width: "16px", height: "16px" }}
                 >
                   {totalItems > 9 ? "9+" : totalItems}
@@ -208,7 +241,7 @@ const StoreFront = () => {
                   isCustomerLoggedIn() ? "/customer/profile" : "/customer/onboarding"
                 )
               }
-              className="flex items-center gap-2 pl-2 sm:border-l border-gray-100"
+              className="flex items-center gap-2 pl-2 sm:border-l border-gray-100 cursor-pointer"
             >
               <span
                 className="w-9 h-9 rounded-full flex items-center justify-center shrink-0"
@@ -244,7 +277,7 @@ const StoreFront = () => {
                 key={label}
                 onClick={action}
                 title={label}
-                className="relative flex items-center justify-center rounded-xl transition-colors shrink-0"
+                className="relative flex items-center justify-center rounded-xl transition-colors shrink-0 cursor-pointer"
                 style={{
                   width: "44px",
                   height: "44px",
@@ -255,7 +288,7 @@ const StoreFront = () => {
                 <Icon size={20} />
                 {badge > 0 && (
                   <span
-                    className="absolute -top-1 -right-1 bg-[#F4A300] text-[#1C1C1C] font-bold rounded-full flex items-center justify-center"
+                    className="absolute -top-1 -right-1 bg-[#E8622D] text-white font-bold rounded-full flex items-center justify-center"
                     style={{ fontSize: "10px", width: "16px", height: "16px" }}
                   >
                     {badge > 9 ? "9+" : badge}
@@ -270,7 +303,7 @@ const StoreFront = () => {
           <button
             onClick={handleLogout}
             title="Log out"
-            className="flex items-center justify-center rounded-xl text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors shrink-0"
+            className="flex items-center justify-center rounded-xl text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors shrink-0 cursor-pointer"
             style={{ width: "44px", height: "44px" }}
           >
             <LogOut size={20} />
@@ -318,7 +351,7 @@ const StoreFront = () => {
                       </p>
                       <button
                         onClick={() => navigate("/menu")}
-                        className="mt-5 font-bold rounded-full px-6 text-white transition-colors"
+                        className="mt-5 font-bold rounded-full px-6 text-white transition-colors cursor-pointer"
                         style={{ minHeight: "44px", backgroundColor: "#E8622D", fontSize: "15px" }}
                       >
                         {slide.cta}
@@ -337,7 +370,7 @@ const StoreFront = () => {
             </h2>
             <button
               onClick={() => navigate("/menu")}
-              className="flex items-center gap-0.5 font-semibold text-gray-500"
+              className="flex items-center gap-0.5 font-semibold text-gray-500 cursor-pointer"
               style={{ fontSize: "13px" }}
             >
               View all <ChevronRight size={14} />
@@ -348,7 +381,7 @@ const StoreFront = () => {
               <button
                 key={category.id}
                 onClick={() => jumpToCategory(category.id)}
-                className="relative rounded-2xl overflow-hidden text-left"
+                className="relative rounded-2xl overflow-hidden text-left cursor-pointer"
                 style={{ height: "190px" }}
               >
                 <img
@@ -370,7 +403,7 @@ const StoreFront = () => {
             ))}
             <button
               onClick={() => navigate("/menu")}
-              className="relative rounded-2xl overflow-hidden flex flex-col items-center justify-center gap-1.5 text-center"
+              className="relative rounded-2xl overflow-hidden flex flex-col items-center justify-center gap-1.5 text-center cursor-pointer"
               style={{ height: "190px", backgroundColor: "#FBE7DD" }}
             >
               <ChevronRight size={22} style={{ color: "#E8622D" }} />
@@ -387,7 +420,7 @@ const StoreFront = () => {
             </h2>
             <button
               onClick={() => navigate("/menu")}
-              className="flex items-center gap-0.5 font-semibold text-gray-500"
+              className="flex items-center gap-0.5 font-semibold text-gray-500 cursor-pointer"
               style={{ fontSize: "13px" }}
             >
               View all <ChevronRight size={14} />
@@ -470,14 +503,13 @@ const StoreFront = () => {
           {/* CATEGORY TABS */}
           <div
             ref={menuRef}
-            className="flex gap-2 overflow-x-auto pb-2 mb-4 scroll-mt-20"
-            style={{ scrollbarWidth: "none" }}
+            className="flex gap-2 overflow-x-auto pb-2 mb-4 scroll-mt-20 scrollbar-hide"
           >
             {allTabs.map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => { setActiveCategory(tab.id); setSearch(""); }}
-                className="shrink-0 px-4 rounded-full text-[16px] font-semibold transition-all shadow-sm"
+                className="shrink-0 px-4 rounded-full text-[16px] font-semibold transition-all shadow-sm cursor-pointer"
                 style={{
                   minHeight: "38px",
                   backgroundColor: activeCategory === tab.id ? "#E8622D" : "#fff",
@@ -538,7 +570,7 @@ const StoreFront = () => {
                   {/* Add button */}
                   <button
                     onClick={(e) => { e.stopPropagation(); addToCart(product); showToast(product.name); }}
-                    className="shrink-0 border-2 border-[#E8622D] text-[#E8622D] font-bold rounded-full px-4 hover:bg-[#E8622D] hover:text-white transition-colors"
+                    className="shrink-0 border-2 border-[#E8622D] text-[#E8622D] font-bold rounded-full px-4 hover:bg-[#E8622D] hover:text-white transition-colors cursor-pointer"
                     style={{ minHeight: "38px", fontSize: "15px" }}
                   >
                     Add

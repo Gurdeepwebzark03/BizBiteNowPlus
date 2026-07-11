@@ -1,7 +1,33 @@
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 import { Camera, Upload, Save } from "lucide-react";
 
 const StoreProfileCard = () => {
+const emptyForm = {
+  storeName: "",
+  tagline: "",
+  description: "",
+  logo: "",
+  banner: "",
+};
+
+const [formData, setFormData] = useState(emptyForm);
+const handleImageUpload = (e, field) => {
+  const file = e.target.files?.[0];
+
+  if (!file) return;
+
+  const reader = new FileReader();
+
+  reader.onloadend = () => {
+    setFormData((prev) => ({
+      ...prev,
+      [field]: reader.result,
+    }));
+  };
+
+  reader.readAsDataURL(file);
+};
   return (
     <motion.div
       initial={{ opacity: 0, y: 15 }}
@@ -26,27 +52,44 @@ const StoreProfileCard = () => {
         <div className="grid gap-6 lg:grid-cols-2">
           {/* Logo */}
           <div>
-            <label className="mb-3 block text-sm font-medium text-[#16522d]">
-              Store Logo
-            </label>
+  <label className="mb-3 block text-sm font-medium text-[#16522d]">
+    Store Logo
+  </label>
 
-            <div className="flex h-40 cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-slate-300 bg-[#f8faf8] transition hover:border-[#16522d]">
-              <Camera
-                size={34}
-                className="mb-3 text-[#16522d]"
-              />
+  <label
+    htmlFor="logo-upload"
+    className="flex h-40 cursor-pointer flex-col items-center justify-center overflow-hidden rounded-xl border-2 border-dashed border-slate-300 bg-[#f8faf8] transition hover:border-[#16522d]"
+  >
+    {formData.logo ? (
+      <img
+        src={formData.logo}
+        alt="Logo"
+        className="h-full w-full object-contain"
+      />
+    ) : (
+      <>
+        <Camera
+          size={34}
+          className="mb-3 text-[#16522d]"
+        />
+        <p className="text-sm text-slate-600">
+          Upload Logo
+        </p>
+        <span className="mt-2 text-xs text-slate-500">
+          PNG / JPG
+        </span>
+      </>
+    )}
+  </label>
 
-              <p className="text-sm text-slate-600">
-                Upload Logo
-              </p>
-
-              <span className="mt-2 text-xs text-slate-500">
-                PNG / JPG
-              </span>
-            </div>
-          </div>
-
-          {/* Banner */}
+  <input
+    id="logo-upload"
+    type="file"
+    accept="image/*"
+    className="hidden"
+    onChange={(e) => handleImageUpload(e, "logo")}
+  />
+</div>
 <div>
   <label className="mb-3 block text-sm font-medium text-[#16522d]">
     Store Banner
@@ -54,31 +97,40 @@ const StoreProfileCard = () => {
 
   <label
     htmlFor="banner-upload"
-    className="flex h-40 cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed border-slate-300 bg-[#f8faf8] transition hover:border-[#16522d]"
+    className="flex h-40 cursor-pointer flex-col items-center justify-center overflow-hidden rounded-xl border-2 border-dashed border-slate-300 bg-[#f8faf8] transition hover:border-[#16522d]"
   >
-    <Upload
-      size={34}
-      className="mb-3 text-[#16522d]"
-    />
-
-    <p className="text-sm text-slate-600">
-      Upload Banner
-    </p>
-
-    <span className="mt-2 text-xs text-slate-500">
-      1200 × 400 Recommended
-    </span>
+    {formData.banner ? (
+      <img
+        src={formData.banner}
+        alt="Banner"
+        className="h-full w-full object-cover"
+      />
+    ) : (
+      <>
+        <Upload
+          size={34}
+          className="mb-3 text-[#16522d]"
+        />
+        <p className="text-sm text-slate-600">
+          Upload Banner max 4MB
+        </p>
+        <span className="mt-2 text-xs text-slate-500">
+          1200 × 400 Recommended  
+          
+        </span>
+        <span className="text-red-700">
+              ! Didnt have a Banner contact us</span>
+      </>
+    )}
   </label>
 
   <input
     id="banner-upload"
     type="file"
+    multiple
     accept="image/*"
     className="hidden"
-    onChange={(e) => {
-      const file = e.target.files?.[0];
-      console.log(file);
-    }}
+    onChange={(e) => handleImageUpload(e, "banner")}
   />
 </div>
           

@@ -3,7 +3,7 @@ import DeliveryProfileCard from "../../../components/delivery/DeliveryProfileCar
 import TodayEarnings from "../../../components/delivery/TodayEarnings";
 import DeliveryStats from "../../../components/delivery/DeliveryStats";
 import DeliveryTable from "../../../components/delivery/DeliveryTable";
-import deliveryData from "../../../data/deliveryData";
+
 
 export default function DeliveryDashboard() {
   const [orders, setOrders] = useState(deliveryData);

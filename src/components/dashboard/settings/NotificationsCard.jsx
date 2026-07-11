@@ -38,16 +38,16 @@ const notificationSettings = [
 ];
 
 const deliveryChannels = [
-  {
-    title: "Email Notifications",
-    icon: Mail,
-    enabled: true,
-  },
-  {
-    title: "SMS Notifications",
-    icon: Smartphone,
-    enabled: false,
-  },
+  // {
+  //   title: "Email Notifications",
+  //   icon: Mail,
+  //   enabled: true,
+  // },
+  // {
+  //   title: "SMS Notifications",
+  //   icon: Smartphone,
+  //   enabled: false,
+  // },
   {
     title: "Push Notifications",
     icon: Bell,

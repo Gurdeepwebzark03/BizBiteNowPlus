@@ -4,6 +4,7 @@ import RecentOrders from "../../../components/dashboard/widgets/RecentOrders/Rec
 import RecentActivity from "../../../components/dashboard/widgets/RecentActivity/RecentActivity";
 import LoyaltyChart from "../../../components/dashboard/analytics/LoyaltyChart";
 import { motion } from "framer-motion";
+import RedemptionTracking from "../../../components/dashboard/analytics/RedemptionTracking";
 export default function Analytics() {
   return (
         <motion.div
@@ -38,7 +39,8 @@ export default function Analytics() {
 
       {/* Timeline */}
       <RecentActivity />
-        <LoyaltyChart/>   
+        <LoyaltyChart/> 
+        <RedemptionTracking/>  
 
     </div>
     </div>

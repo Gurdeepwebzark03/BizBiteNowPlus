@@ -122,7 +122,7 @@ export default function EarningsSummaryCards({
 
             {/* Progress Line */}
             <div className="mt-5 h-1 overflow-hidden rounded-full bg-slate-200">
-              <div className="h-full w-4/5 rounded-full bg-indigo-500 transition-all duration-500 group-hover:w-full" />
+              <div className="h-full w-4/5 rounded-full bg-green-600 transition-all duration-500 group-hover:w-full" />
             </div>
           </div>
         );

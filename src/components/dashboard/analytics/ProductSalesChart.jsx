@@ -1,3 +1,4 @@
+import React, { memo, useMemo } from "react";
 import {
   ResponsiveContainer,
   BarChart,
@@ -9,11 +10,23 @@ import {
   Legend,
 } from "recharts";
 
-const CustomTooltip = ({
-  active,
-  payload,
-  label,
-}) => {
+const X_AXIS_TICK = {
+  fill: "#64748B",
+  fontSize: 12,
+};
+
+const Y_AXIS_TICK = {
+  fill: "#334155",
+  fontSize: 13,
+};
+
+const LEGEND_STYLE = {
+  paddingTop: 12,
+};
+
+const BAR_RADIUS = [0, 8, 8, 0];
+
+const CustomTooltip = memo(({ active, payload, label }) => {
   if (!active || !payload?.length) return null;
 
   return (
@@ -27,11 +40,7 @@ const CustomTooltip = ({
           key={item.dataKey}
           className="flex items-center justify-between gap-6 text-sm"
         >
-          <span
-            style={{
-              color: item.color,
-            }}
-          >
+          <span style={{ color: item.color }}>
             {item.name}
           </span>
 
@@ -42,13 +51,13 @@ const CustomTooltip = ({
       ))}
     </div>
   );
-};
+});
 
-export default function ProductSalesChart({
-  data,
-}) {
+function ProductSalesChart({ data }) {
+  const chartData = useMemo(() => data, [data]);
+
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-all duration-300 hover:shadow-lg">
+    <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm transition-shadow duration-300 hover:shadow-lg">
       <div className="mb-6">
         <h3 className="text-lg font-semibold text-slate-900">
           Top Selling Products
@@ -60,13 +69,16 @@ export default function ProductSalesChart({
       </div>
 
       <div className="h-[380px]">
-        <ResponsiveContainer
-          width="100%"
-          height="100%"
-        >
+        <ResponsiveContainer width="100%" height="100%">
           <BarChart
-            data={data}
+            data={chartData}
             layout="vertical"
+            margin={{
+              top: 5,
+              right: 20,
+              left: 0,
+              bottom: 5,
+            }}
             barGap={8}
             barCategoryGap={20}
           >
@@ -79,10 +91,7 @@ export default function ProductSalesChart({
               type="number"
               tickLine={false}
               axisLine={false}
-              tick={{
-                fill: "#64748B",
-                fontSize: 12,
-              }}
+              tick={X_AXIS_TICK}
             />
 
             <YAxis
@@ -91,34 +100,27 @@ export default function ProductSalesChart({
               tickLine={false}
               axisLine={false}
               width={110}
-              tick={{
-                fill: "#334155",
-                fontSize: 13,
-              }}
+              tick={Y_AXIS_TICK}
             />
 
-            <Tooltip
-              content={<CustomTooltip />}
-            />
+            <Tooltip content={<CustomTooltip />} />
 
-            <Legend
-              wrapperStyle={{
-                paddingTop: 12,
-              }}
-            />
+            <Legend wrapperStyle={LEGEND_STYLE} />
 
             <Bar
               dataKey="actual"
               name="Units Sold"
               fill="#16522D"
-              radius={[0, 8, 8, 0]}
+              radius={BAR_RADIUS}
+              isAnimationActive={false}
             />
 
             <Bar
               dataKey="budget"
               name="Target"
               fill="#1E3A5F"
-              radius={[0, 8, 8, 0]}
+              radius={BAR_RADIUS}
+              isAnimationActive={false}
             />
           </BarChart>
         </ResponsiveContainer>
@@ -126,3 +128,5 @@ export default function ProductSalesChart({
     </div>
   );
 }
+
+export default memo(ProductSalesChart);
