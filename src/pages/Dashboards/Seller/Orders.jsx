@@ -11,6 +11,10 @@ import OrderDrawer from "../../../components/orders/OrderDrawer";
 import OrderBoard from "../../../components/orders/OrderBoard";
 import BulkActions from "../../../components/orders/BulkActions";
 import ExportModal from "../../../components/orders/ExportModal";
+// import AssignDeliveryModal from "../../../components/orders/AssignDeliveryModal";
+import deliveryBoyData from "../../../data/deliveryBoyData";
+import AssignOrderModal from "../../../components/delivery/AssignOrderModal.jsx";
+import AssignDeliveryModal from "../../../components/orders/AssignDeliveryModal";
 
 import { orders as initialOrders } from "../../../data/ordersData.js";
 
@@ -32,6 +36,8 @@ export default function Orders() {
   const [payment, setPayment] = useState("All");
   const [sort, setSort] = useState("Newest");
 
+  
+
   // ==========================
   // Pagination
   // ==========================
@@ -44,7 +50,7 @@ export default function Orders() {
   // ==========================
 
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [selectedOrder, setSelectedOrder] = useState(null);
+  // const [selectedOrder, setSelectedOrder] = useState(null);
 
   // ==========================
   // Bulk Selection
@@ -63,6 +69,23 @@ export default function Orders() {
   // ==========================
 
   const [exportOpen, setExportOpen] = useState(false);
+  const [assignModal, setAssignModal] = useState(false);
+
+const [selectedOrder, setSelectedOrder] = useState(null);
+
+const [deliveryBoys, setDeliveryBoys] = useState(() => {
+  const saved = localStorage.getItem("deliveryBoys");
+
+  return saved
+    ? JSON.parse(saved)
+    : deliveryBoyData;
+});
+useEffect(() => {
+  localStorage.setItem(
+    "deliveryBoys",
+    JSON.stringify(deliveryBoys)
+  );
+}, [deliveryBoys]);
 
   // ==========================
   // Subscription
@@ -287,6 +310,87 @@ export default function Orders() {
     );
   };
 
+//   const handleAssignClick = (order) => {
+//   setSelectedOrder(order);
+//   setAssignModal(true);
+// };
+
+// handle assign
+const handleAssignDelivery = (boyId) => {
+  // Selected Delivery Boy
+
+  const boy = deliveryBoys.find(
+    (item) => item.id === boyId
+  );
+
+  if (!boy || !selectedOrder) return;
+
+  // Order Object
+
+  const assignedOrder = {
+    id: Date.now(),
+    orderId: selectedOrder.orderId,
+    customer: selectedOrder.customer,
+    phone: selectedOrder.phone,
+    amount: selectedOrder.amount,
+    payment: selectedOrder.payment,
+    deliveryBoy: boy.name,
+    deliveryBoyId: boy.id,
+    status: "Assigned",
+    assignedAt: new Date().toLocaleString(),
+  };
+
+  // Previous Orders
+
+  const previousOrders =
+    JSON.parse(
+      
+      localStorage.getItem("assignedOrders")
+    ) || [];
+
+  // Save LocalStorage
+
+  localStorage.setItem(
+    "assignedOrders",
+    JSON.stringify([
+      ...previousOrders,
+      assignedOrder,
+    ])
+  );
+
+  // Increase Assigned Count
+
+  const updatedBoys = deliveryBoys.map((item) =>
+    item.id === boy.id
+      ? {
+          ...item,
+          assignedOrders:
+            item.assignedOrders + 1,
+        }
+      : item
+  );
+
+  setDeliveryBoys(updatedBoys);
+
+// Save Updated Delivery Boys
+localStorage.setItem(
+  "deliveryBoys",
+  JSON.stringify(updatedBoys)
+);
+
+  // Close Modal
+
+  setAssignModal(false);
+  setSelectedOrder(null);
+
+  alert("Order Assigned Successfully");
+};
+
+// Open Assign Delivery Modal
+const handleAssignClick = (order) => {
+  setSelectedOrder(order);
+  setAssignModal(true);
+};
   // =====================================
   // Export
   // =====================================
@@ -367,6 +471,7 @@ export default function Orders() {
               onDelivery={(o) => updateStatus(o.id, "Out for Delivery")}
               onDelivered={(o) => updateStatus(o.id, "Delivered")}
               onCancel={(o) => updateStatus(o.id, "Cancelled")}
+              onAssign={handleAssignClick}
             />
 
             <OrderPagination
@@ -395,6 +500,21 @@ export default function Orders() {
           onClose={() => setExportOpen(false)}
           onExport={exportOrders}
         />
+<AssignDeliveryModal
+  isOpen={assignModal}
+  onClose={() => setAssignModal(false)}
+  order={selectedOrder}
+  deliveryBoys={deliveryBoys}
+  onAssign={handleAssignDelivery}
+/>
+
+        <AssignDeliveryModal
+  isOpen={assignModal}
+  onClose={() => setAssignModal(false)}
+  order={selectedOrder}
+  deliveryBoys={deliveryBoys}
+  onAssign={handleAssignDelivery}
+/>
       </div>
     </motion.div>
   );
