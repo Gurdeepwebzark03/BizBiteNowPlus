@@ -1,5 +1,4 @@
 import { Clock3, Star } from "lucide-react";
-import { motion } from "framer-motion";
 
 const HeroBanner = ({
   banner,
@@ -40,18 +39,7 @@ const HeroBanner = ({
 
         {/* Floating Store Card */}
 
-        <motion.div
-          initial={{
-            opacity: 0,
-            y: 20,
-          }}
-          animate={{
-            opacity: 1,
-            y: 0,
-          }}
-          transition={{
-            duration: 0.35,
-          }}
+        <div
           className="
             absolute
             bottom-5
@@ -61,6 +49,7 @@ const HeroBanner = ({
             rounded-[28px]
 
             bg-white/90
+
             backdrop-blur-xl
 
             p-5
@@ -68,6 +57,7 @@ const HeroBanner = ({
             shadow-xl
           "
         >
+
           <div className="flex items-center gap-5">
 
             {/* Logo */}
@@ -90,6 +80,7 @@ const HeroBanner = ({
               "
             />
 
+
             {/* Info */}
 
             <div className="flex-1">
@@ -98,15 +89,32 @@ const HeroBanner = ({
                 {name}
               </h1>
 
+
               <p className="mt-1 text-sm text-slate-500">
                 {tagline}
               </p>
+
 
               <div className="mt-4 flex flex-wrap gap-2">
 
                 {/* Rating */}
 
-                <div className="flex items-center gap-1 rounded-full bg-slate-100 px-3 py-1 text-sm">
+                <div
+                  className="
+                    flex
+                    items-center
+                    gap-1
+
+                    rounded-full
+
+                    bg-slate-100
+
+                    px-3
+                    py-1
+
+                    text-sm
+                  "
+                >
 
                   <Star
                     size={15}
@@ -122,9 +130,25 @@ const HeroBanner = ({
 
                 </div>
 
+
                 {/* Delivery */}
 
-                <div className="flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1 text-sm">
+                <div
+                  className="
+                    flex
+                    items-center
+                    gap-2
+
+                    rounded-full
+
+                    bg-slate-100
+
+                    px-3
+                    py-1
+
+                    text-sm
+                  "
+                >
 
                   <Clock3 size={15} />
 
@@ -132,30 +156,52 @@ const HeroBanner = ({
 
                 </div>
 
+
                 {/* Status */}
 
                 <div
-                  className="rounded-full px-3 py-1 text-sm font-semibold text-white"
+                  className="
+                    rounded-full
+
+                    px-3
+                    py-1
+
+                    text-sm
+
+                    font-semibold
+
+                    text-white
+                  "
                   style={{
                     background: isOpen
                       ? "var(--primary)"
                       : "#EF4444",
                   }}
                 >
+
                   {isOpen ? "Open" : "Closed"}
+
                 </div>
+
 
               </div>
 
+
             </div>
 
+
           </div>
-        </motion.div>
+
+
+        </div>
+
 
       </div>
+
 
     </section>
   );
 };
+
 
 export default HeroBanner;

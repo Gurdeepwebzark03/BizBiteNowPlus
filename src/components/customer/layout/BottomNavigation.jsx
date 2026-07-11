@@ -1,4 +1,5 @@
 import { NavLink } from "react-router-dom";
+
 import {
   House,
   UtensilsCrossed,
@@ -6,6 +7,7 @@ import {
   Gift,
   User,
 } from "lucide-react";
+
 
 const navItems = [
   {
@@ -35,107 +37,185 @@ const navItems = [
   },
 ];
 
+
 const BottomNavigation = () => {
+
   return (
+
     <nav
       className="
         fixed
-        bottom-0
-        left-0
-        right-0
+
+        bottom-4
+
+        left-4
+
+        right-4
+
         z-50
-
-        border-t
-        border-slate-200/70
-
-        bg-white/90
-        backdrop-blur-xl
 
         lg:hidden
       "
     >
+
       <div
         className="
           flex
+
           items-center
+
           justify-around
 
+          rounded-[28px]
+
+          border
+
+          border-slate-200
+
+          bg-white/90
+
           px-2
-          pt-2
-          pb-[calc(env(safe-area-inset-bottom)+10px)]
+
+          py-2
+
+          shadow-2xl
+
+          backdrop-blur-xl
         "
       >
-        {navItems.map(({ label, icon: Icon, path }) => (
-          <NavLink
-            key={path}
-            to={path}
-            className={({ isActive }) =>
-              `
-                relative
-                flex
-                w-full
-                flex-col
-                items-center
-                justify-center
 
-                rounded-2xl
+        {
+          navItems.map(
+            ({
+              label,
+              icon: Icon,
+              path,
+            }) => (
 
-                py-2
-
-                transition-all
-                duration-300
-
-                ${
-                  isActive
-                    ? "text-white"
-                    : "text-slate-500 hover:text-slate-900"
+              <NavLink
+                key={path}
+                to={path}
+                end={
+                  path === "/customer"
                 }
-              `
-            }
-            style={({ isActive }) => ({
-              backgroundColor: isActive
-                ? "var(--primary)"
-                : "transparent",
-            })}
-          >
-            {({ isActive }) => (
-              <>
-                <Icon
-                  size={21}
-                  strokeWidth={2.2}
-                />
 
-                <span
-                  className="
-                    mt-1
-                    text-[11px]
-                    font-medium
-                  "
-                >
-                  {label}
-                </span>
+                className="
+                  flex
 
-                {isActive && (
-                  <span
-                    className="
-                      absolute
-                      -top-1
+                  flex-1
 
-                      h-1.5
-                      w-8
+                  justify-center
+                "
+              >
 
-                      rounded-full
-                      bg-white
-                    "
-                  />
-                )}
-              </>
-            )}
-          </NavLink>
-        ))}
+                {
+                  ({isActive}) => (
+
+                    <div
+                      className={`
+                        relative
+
+                        flex
+
+                        h-12
+
+                        w-12
+
+                        flex-col
+
+                        items-center
+
+                        justify-center
+
+                        rounded-2xl
+
+                        transition-all
+
+                        duration-300
+
+                        ${
+                          isActive
+                          ?
+                          "text-white shadow-lg"
+                          :
+                          "text-slate-500 hover:bg-slate-100"
+                        }
+                      `}
+
+                      style={{
+                        background:
+                          isActive
+                          ?
+                          "var(--primary)"
+                          :
+                          "transparent",
+                      }}
+                    >
+
+                      <Icon
+                        size={20}
+                        strokeWidth={2.3}
+                      />
+
+
+                      <span
+                        className="
+                          mt-0.5
+
+                          text-[10px]
+
+                          font-semibold
+                        "
+                      >
+                        {label}
+                      </span>
+
+
+
+                      {
+                        isActive && (
+
+                          <span
+                            className="
+                              absolute
+
+                              -bottom-1
+
+                              h-1
+
+                              w-5
+
+                              rounded-full
+
+                              bg-white
+                            "
+                          />
+
+                        )
+                      }
+
+
+                    </div>
+
+                  )
+                }
+
+
+              </NavLink>
+
+            )
+          )
+        }
+
+
       </div>
+
+
     </nav>
+
   );
+
 };
+
 
 export default BottomNavigation;

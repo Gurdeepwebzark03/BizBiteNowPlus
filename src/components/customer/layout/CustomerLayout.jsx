@@ -1,63 +1,86 @@
-import { motion } from "framer-motion";
+import { Outlet } from "react-router-dom";
 
-const CustomerLayout = ({ children }) => {
+import DesktopSidebar from "./DesktopSidebar";
+import CustomerHeader from "./CustomerHeader";
+import BottomNavigation from "./BottomNavigation";
+import FloatingCartButton from "./FloatingCartButton";
+import PageTransition from "./PageTransition";
+
+
+const CustomerLayout = () => {
+
   return (
+
     <div
       className="
         min-h-screen
-        bg-slate-50
-        text-slate-900
         overflow-x-hidden
+        bg-slate-100
       "
     >
-      {/* App Shell */}
-      <div
+
+      {/* Sidebar */}
+
+      <DesktopSidebar />
+
+
+      {/* Main */}
+
+      <main
         className="
-          relative
-          flex
           min-h-screen
+
           w-full
+
+          lg:pl-20
+
+          transition-all
+
+          duration-300
+
+          peer-hover:lg:pl-72
         "
       >
-        {/* Desktop Sidebar */}
-        <aside
-          className="
-            hidden
-            lg:block
-            lg:w-24
-            xl:w-28
-            shrink-0
-          "
-        />
 
-        {/* Main Content */}
-        <main
+        <CustomerHeader />
+
+
+        <div
           className="
-            flex-1
-            min-w-0
-            pb-24
-            lg:pb-0
+            pt-24
+
+            px-3
+
+            sm:px-5
+
+            lg:px-8
+
+            w-full
           "
         >
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0 }}
-            transition={{
-              duration: 0.3,
-              ease: [0.22, 1, 0.36, 1],
-            }}
-            className="
-              min-h-screen
-              w-full
-            "
-          >
-            {children}
-          </motion.div>
-        </main>
-      </div>
+
+          <PageTransition>
+
+            <Outlet />
+
+          </PageTransition>
+
+        </div>
+
+
+      </main>
+
+
+
+      <FloatingCartButton />
+
+      <BottomNavigation />
+
     </div>
+
   );
+
 };
+
 
 export default CustomerLayout;

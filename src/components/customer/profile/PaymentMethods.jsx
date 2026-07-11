@@ -1,7 +1,5 @@
 import {
-  CreditCard,
   Smartphone,
-  Wallet,
   Banknote,
   Pencil,
   Trash2,
@@ -11,16 +9,15 @@ import {
 import Card from "../common/Card";
 import Badge from "../common/Badge";
 import EmptyState from "../common/EmptyState";
-import PrimaryButton from "../common/PrimaryButton";
 import SecondaryButton from "../common/SecondaryButton";
 import SectionHeader from "../common/SectionHeader";
 
+
 const icons = {
-  card: CreditCard,
   upi: Smartphone,
-  wallet: Wallet,
   cod: Banknote,
 };
+
 
 const PaymentMethods = ({
   methods = [],
@@ -29,9 +26,10 @@ const PaymentMethods = ({
   onDelete,
   onSelect,
 }) => {
+
   return (
     <section className="space-y-6">
-      {/* Header */}
+
 
       <SectionHeader
         title="Payment Methods"
@@ -40,35 +38,56 @@ const PaymentMethods = ({
         onAction={onAdd}
       />
 
-      {/* Payment Methods */}
+
 
       {methods.length > 0 ? (
+
         <div className="grid gap-6 lg:grid-cols-2">
+
           {methods.map((method) => {
+
             const Icon =
               icons[method.type] ||
-              CreditCard;
+              Smartphone;
+
 
             return (
+
               <Card
                 key={method.id}
-                className={`relative ${
-                  method.default
-                    ? "border-[var(--primary)]"
-                    : ""
-                }`}
+
+                className={`
+                  relative
+
+                  ${
+                    method.default
+                      ? "border-[var(--primary)]"
+                      : ""
+                  }
+                `}
               >
-                {/* Default */}
+
 
                 {method.default && (
+
                   <Badge
                     variant="premium"
-                    className="absolute right-5 top-5"
+                    className="
+                      absolute
+                      right-5
+                      top-5
+                    "
                   >
+
                     <CheckCircle2 size={14} />
+
                     Default
+
                   </Badge>
+
                 )}
+
+
 
                 {/* Icon */}
 
@@ -87,65 +106,110 @@ const PaymentMethods = ({
 
                     text-white
                   "
+
                   style={{
                     background:
                       "var(--primary)",
                   }}
                 >
-                  <Icon size={24} />
+
+                  <Icon size={24}/>
+
                 </div>
 
+
+
                 {/* Details */}
+
 
                 <h3 className="text-xl font-bold text-slate-900">
                   {method.title}
                 </h3>
 
+
+
                 <p className="mt-2 text-slate-500">
                   {method.subtitle}
                 </p>
 
-                {method.type ===
-                "card" ? (
-                  <p className="mt-4 font-mono text-lg tracking-widest text-slate-800">
-                    •••• •••• ••••{" "}
-                    {method.last4}
-                  </p>
-                ) : (
+
+
+                {method.type === "upi" && (
+
                   <p className="mt-4 font-semibold text-slate-800">
                     {method.value}
                   </p>
+
                 )}
+
+
+
+                {method.type === "cod" && (
+
+                  <p className="mt-4 font-semibold text-slate-800">
+                    Cash on Delivery
+                  </p>
+
+                )}
+
+
+
 
                 {/* Actions */}
 
                 <div className="mt-8 flex gap-3">
+
+
                   {!method.default && (
+
                     <SecondaryButton
+
                       fullWidth
+
                       size="sm"
+
                       onClick={() =>
                         onSelect?.(method)
                       }
+
                     >
                       Set Default
+
                     </SecondaryButton>
+
                   )}
 
+
+
                   <SecondaryButton
+
                     size="sm"
+
                     onClick={() =>
                       onEdit?.(method)
                     }
-                    className="!h-11 !w-11 !min-w-[44px] !p-0"
+
+                    className="
+                      !h-11
+                      !w-11
+                      !min-w-[44px]
+                      !p-0
+                    "
                   >
-                    <Pencil size={18} />
+
+                    <Pencil size={18}/>
+
                   </SecondaryButton>
 
+
+
+
                   <button
+
                     onClick={() =>
                       onDelete?.(method)
                     }
+
                     className="
                       flex
                       h-11
@@ -166,24 +230,46 @@ const PaymentMethods = ({
                       hover:bg-red-50
                     "
                   >
-                    <Trash2 size={18} />
+
+                    <Trash2 size={18}/>
+
                   </button>
+
+
                 </div>
+
+
               </Card>
+
             );
+
           })}
+
         </div>
+
+
       ) : (
+
         <EmptyState
+
           icon="package"
+
           title="No Payment Method"
+
           description="Save your preferred payment option for faster checkout."
+
           actionText="Add Payment Method"
+
           onAction={onAdd}
+
         />
+
       )}
+
+
     </section>
   );
 };
+
 
 export default PaymentMethods;

@@ -1,5 +1,5 @@
 import { Leaf } from "lucide-react";
-import { motion } from "framer-motion";
+
 
 const options = [
   {
@@ -16,102 +16,141 @@ const options = [
   },
 ];
 
+
 const VegToggle = ({
   value = "all",
   onChange,
 }) => {
+
   return (
+
     <div
       className="
-        relative
         inline-flex
+
         items-center
 
         rounded-2xl
 
         border
+
         border-slate-200
 
-        bg-slate-100
+        bg-white
+        shadow-lg
 
         p-1
+        
 
         shadow-sm
       "
     >
-      {options.map((option) => {
-        const active = value === option.id;
 
-        return (
-          <button
-            key={option.id}
-            onClick={() => onChange?.(option.id)}
-            className="
-              relative
-              z-10
+      {
+        options.map(
+          (option)=>{
 
-              flex
-              min-w-[95px]
-              items-center
-              justify-center
-              gap-2
+            const active =
+              value === option.id;
 
-              rounded-xl
 
-              px-4
-              py-2.5
+            return (
 
-              text-sm
-              font-semibold
+              <button
 
-              transition-colors
-              duration-300
-            "
-            style={{
-              color: active
-                ? "#fff"
-                : "#475569",
-            }}
-          >
-            {(option.id === "veg" ||
-              option.id === "nonveg") && (
-              <Leaf
-                size={15}
-                color={
-                  option.id === "veg"
-                    ? "#16A34A"
-                    : "#DC2626"
+                key={option.id}
+
+                onClick={() =>
+                  onChange?.(
+                    option.id
+                  )
                 }
-              />
-            )}
 
-            {option.label}
-
-            {active && (
-              <motion.div
-                layoutId="vegToggle"
-                transition={{
-                  type: "spring",
-                  stiffness: 400,
-                  damping: 30,
-                }}
                 className="
-                  absolute
-                  inset-0
-                  -z-10
+                  flex
+
+                  min-w-[95px]
+
+                  items-center
+
+                  justify-center
+
+                  gap-2
 
                   rounded-xl
+
+                  px-4
+
+                  py-2.5
+
+                  text-sm
+
+                  font-semibold
+
+                  transition-all
+
+                  duration-300
                 "
+
                 style={{
-                  background: "var(--primary)",
+
+                  background:
+                    active
+                    ?
+                    "var(--primary)"
+                    :
+                    "transparent",
+
+
+                  color:
+                    active
+                    ?
+                    "#ffffff"
+                    :
+                    "#475569",
+
                 }}
-              />
-            )}
-          </button>
-        );
-      })}
+
+              >
+
+                {
+                  option.id !== "all" && (
+
+                    <Leaf
+
+                      size={15}
+
+                      color={
+                        option.id === "veg"
+                        ?
+                        "#16A34A"
+                        :
+                        "#DC2626"
+                      }
+
+                    />
+
+                  )
+                }
+
+
+                {option.label}
+
+
+              </button>
+
+            );
+
+          }
+        )
+      }
+
+
     </div>
+
   );
+
 };
+
 
 export default VegToggle;

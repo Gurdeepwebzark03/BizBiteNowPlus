@@ -23,13 +23,7 @@ const HeroActions = ({
       icon: UtensilsCrossed,
       action: onMenu,
     },
-    {
-      id: 2,
-      title: "Book",
-      subtitle: "Reserve table",
-      icon: CalendarDays,
-      action: onBookTable,
-    },
+
     {
       id: 3,
       title: "Orders",

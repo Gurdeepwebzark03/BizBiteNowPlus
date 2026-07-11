@@ -1,5 +1,4 @@
 import { ChevronRight } from "lucide-react";
-import { motion } from "framer-motion";
 
 const SectionHeader = ({
   title,
@@ -11,21 +10,7 @@ const SectionHeader = ({
   centered = false,
 }) => {
   return (
-    <motion.div
-      initial={{
-        opacity: 0,
-        y: 10,
-      }}
-      whileInView={{
-        opacity: 1,
-        y: 0,
-      }}
-      viewport={{
-        once: true,
-      }}
-      transition={{
-        duration: 0.25,
-      }}
+    <div
       className={`
         flex
         flex-col
@@ -40,6 +25,7 @@ const SectionHeader = ({
         ${className}
       `}
     >
+
       {/* Left */}
 
       <div className="min-w-0">
@@ -70,23 +56,43 @@ const SectionHeader = ({
             </div>
           )}
 
+
           <div>
 
-            <h2 className="text-2xl font-bold text-slate-900">
+            <h2
+              className="
+                text-3xl
+
+                font-bold
+
+                text-slate-900
+              "
+            >
               {title}
             </h2>
 
+
             {subtitle && (
-              <p className="mt-1 text-sm text-slate-500">
+              <p
+                className="
+                  mt-1
+
+                  text-sm
+
+                  text-slate-500
+                "
+              >
                 {subtitle}
               </p>
             )}
 
           </div>
 
+
         </div>
 
       </div>
+
 
       {/* Right */}
 
@@ -95,7 +101,9 @@ const SectionHeader = ({
           onClick={onAction}
           className="
             inline-flex
+
             items-center
+
             gap-2
 
             self-start
@@ -103,25 +111,30 @@ const SectionHeader = ({
             rounded-xl
 
             px-4
+
             py-2
 
             text-sm
+
             font-semibold
 
-            transition-all
+            transition
 
-            hover:scale-105
+            hover:opacity-80
           "
           style={{
             color: "var(--primary)",
           }}
         >
+
           {action}
 
           <ChevronRight size={16} />
+
         </button>
       )}
-    </motion.div>
+
+    </div>
   );
 };
 

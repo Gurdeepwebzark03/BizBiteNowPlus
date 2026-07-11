@@ -1,4 +1,5 @@
 import { NavLink } from "react-router-dom";
+
 import {
   House,
   UtensilsCrossed,
@@ -7,6 +8,7 @@ import {
   User,
   ShoppingCart,
 } from "lucide-react";
+
 
 const navItems = [
   {
@@ -36,22 +38,35 @@ const navItems = [
   },
 ];
 
+
 const DesktopSidebar = ({
   store = {},
   cartCount = 0,
 }) => {
+
   return (
+
     <aside
-      className="
-        hidden
-        lg:flex
 
-        sticky
+  className="
+    group
+
+    hidden
+    lg:flex
+     peer
+        fixed
+
+        left-5
         top-5
+        bottom-5
 
-        h-[calc(100vh-40px)]
+        z-50
+
         w-24
-        shrink-0
+
+        hover:w-60
+
+        overflow-hidden
 
         flex-col
         items-center
@@ -62,156 +77,325 @@ const DesktopSidebar = ({
         border-slate-200
 
         bg-white/90
+
         backdrop-blur-xl
 
         shadow-xl
+
+        transition-all
+        duration-300
+        ease-in-out
+
       "
     >
+
+
       {/* Logo */}
 
       <div className="pt-5 pb-8">
+
         <div
           className="
             flex
             h-14
             w-14
+            shrink-0
+
             items-center
             justify-center
 
             rounded-2xl
 
-            font-bold
             text-lg
+            font-black
+
             text-white
 
             shadow-lg
           "
+
           style={{
-            background: "var(--primary)",
+            background:
+            "var(--primary)",
           }}
         >
+
           {store.initials || "BB"}
+
         </div>
+
       </div>
+
+
+
+
 
       {/* Navigation */}
 
-      <nav className="flex flex-1 flex-col gap-4">
-        {navItems.map(({ icon: Icon, path, label }) => (
-          <NavLink
-            key={path}
-            to={path}
-            title={label}
-          >
-            {({ isActive }) => (
-              <div
-                className={`
-                  relative
+      <nav
+        className="
+          flex
+          flex-1
 
-                  flex
-                  h-14
-                  w-14
+          w-full
 
-                  items-center
-                  justify-center
+          flex-col
 
-                  rounded-2xl
+          gap-4
 
-                  transition-all
-                  duration-300
+          px-5
+        "
+      >
 
-                  ${
+        {navItems.map(
+          ({
+            icon: Icon,
+            path,
+            label,
+          }) => (
+
+            <NavLink
+              key={path}
+              to={path}
+              title={label}
+              end={
+                path === "/customer"
+              }
+
+              className="w-full"
+            >
+
+              {({isActive}) => (
+
+                <div
+                  className={`
+                    relative
+
+                    flex
+
+                    h-14
+
+                    w-full
+
+                    items-center
+
+                    gap-4
+
+                    rounded-2xl
+
+                    transition-all
+
+                    duration-300
+
+                    ${
+                      isActive
+                      ?
+                      "text-white shadow-lg"
+                      :
+                      "text-slate-500 hover:bg-slate-100 hover:text-slate-900"
+                    }
+                  `}
+
+                  style={{
+                    background:
                     isActive
-                      ? "text-white shadow-lg"
-                      : "text-slate-500 hover:bg-slate-100 hover:text-slate-900"
-                  }
-                `}
-                style={{
-                  background: isActive
-                    ? "var(--primary)"
-                    : "transparent",
-                }}
-              >
-                <Icon size={22} />
+                    ?
+                    "var(--primary)"
+                    :
+                    "transparent",
+                  }}
+                >
 
-                {isActive && (
-                  <span
+                  <div
                     className="
-                      absolute
-                      -right-3
+                      flex
+                      h-14
+                      w-14
+                      shrink-0
 
-                      h-8
-                      w-1
-
-                      rounded-full
+                      items-center
+                      justify-center
                     "
-                    style={{
-                      background: "var(--primary)",
-                    }}
-                  />
-                )}
-              </div>
-            )}
-          </NavLink>
-        ))}
+                  >
+
+                    <Icon size={22}/>
+
+                  </div>
+
+
+                  {/* Label */}
+
+<span
+  className="
+    whitespace-nowrap
+
+    text-sm
+
+    font-semibold
+
+    opacity-0
+    
+    group-hover:opacity-100
+
+    transition-all
+
+    duration-300
+  "
+>
+  {label}
+</span>
+
+
+                </div>
+
+              )}
+
+            </NavLink>
+
+          )
+        )}
+
       </nav>
+
+
+
+
 
       {/* Cart */}
 
-      <div className="pb-5">
-        <button
+     <div className="pb-5 px-5 w-full">
+
+  <NavLink
+    to="/customer/cart"
+    className="block group"
+  >
+
+    <div
+      className="
+        relative
+
+        flex
+
+        h-14
+
+        w-full
+
+        items-center
+
+        gap-4
+
+        rounded-2xl
+
+        bg-slate-100
+
+        text-slate-700
+
+        transition
+
+        hover:bg-slate-200
+      "
+    >
+
+      <div
+        className="
+          flex
+
+          h-14
+
+          w-14
+
+          shrink-0
+
+          items-center
+
+          justify-center
+        "
+      >
+
+        <ShoppingCart size={22}/>
+
+      </div>
+
+
+      <span
+        className="
+          whitespace-nowrap
+
+          text-sm
+
+          font-semibold
+
+          opacity-0
+
+          group-hover:opacity-100
+
+          transition-all
+
+          duration-300
+        "
+      >
+        Cart
+      </span>
+
+
+
+      {cartCount > 0 && (
+
+        <span
           className="
-            relative
+            absolute
+
+            left-10
+
+            top-0
 
             flex
-            h-14
-            w-14
+
+            h-5
+
+            w-5
 
             items-center
+
             justify-center
 
-            rounded-2xl
+            rounded-full
 
-            bg-slate-100
+            text-[10px]
 
-            transition
+            font-bold
 
-            hover:bg-slate-200
+            text-white
           "
+
+          style={{
+            background:
+            "var(--primary)",
+          }}
         >
-          <ShoppingCart size={22} />
+          {
+            cartCount > 99
+            ? "99+"
+            : cartCount
+          }
 
-          {cartCount > 0 && (
-            <span
-              className="
-                absolute
-                -right-1
-                -top-1
+        </span>
 
-                flex
-                h-5
-                w-5
+      )}
 
-                items-center
-                justify-center
 
-                rounded-full
+    </div>
 
-                text-[10px]
-                font-bold
-                text-white
-              "
-              style={{
-                background: "var(--primary)",
-              }}
-            >
-              {cartCount > 99 ? "99+" : cartCount}
-            </span>
-          )}
-        </button>
-      </div>
+  </NavLink>
+
+</div>
+
+
     </aside>
+
   );
+
 };
+
 
 export default DesktopSidebar;

@@ -158,67 +158,9 @@ const StoreCard = ({
           </span>
         </button>
 
-        <button
-          onClick={onBookTable}
-          className="
-            flex
-            flex-col
-            items-center
-            justify-center
 
-            gap-2
 
-            rounded-2xl
 
-            bg-slate-100
-
-            py-4
-
-            transition-all
-
-            hover:bg-slate-200
-          "
-        >
-          <CalendarDays
-            size={20}
-            style={{ color: "var(--primary)" }}
-          />
-
-          <span className="text-xs font-medium">
-            Book
-          </span>
-        </button>
-
-        <button
-          onClick={onFavorite}
-          className="
-            flex
-            flex-col
-            items-center
-            justify-center
-
-            gap-2
-
-            rounded-2xl
-
-            bg-slate-100
-
-            py-4
-
-            transition-all
-
-            hover:bg-slate-200
-          "
-        >
-          <Heart
-            size={20}
-            style={{ color: "var(--primary)" }}
-          />
-
-          <span className="text-xs font-medium">
-            Favorite
-          </span>
-        </button>
 
         <button
           onClick={onShare}
@@ -251,28 +193,7 @@ const StoreCard = ({
           </span>
         </button>
 
-        <button
-          className="
-            rounded-2xl
 
-            px-4
-
-            py-4
-
-            font-semibold
-
-            text-white
-
-            transition-all
-
-            hover:opacity-90
-          "
-          style={{
-            background: "var(--primary)",
-          }}
-        >
-          Order Now
-        </button>
 
       </div>
     </div>

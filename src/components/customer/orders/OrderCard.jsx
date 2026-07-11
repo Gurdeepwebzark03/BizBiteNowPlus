@@ -48,7 +48,7 @@ const OrderCard = ({
 
           <Badge
             icon={false}
-            className="text-white"
+            
             style={{
               background:
                 statusColor[order.status] ||

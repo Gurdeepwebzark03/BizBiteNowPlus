@@ -164,7 +164,7 @@ const AchievementCard = ({
               variant="success"
               className="flex w-full justify-center py-4 text-base"
             >
-              <CheckCircle2 size={20} />
+              
 
               Claimed
             </Badge>

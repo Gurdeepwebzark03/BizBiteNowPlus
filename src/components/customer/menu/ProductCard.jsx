@@ -47,15 +47,103 @@ const ProductCard = ({
     >
       {/* Image */}
 
-      <div
-        onClick={onClick}
-        className="
-          relative
-          h-56
-          cursor-pointer
-          overflow-hidden
-        "
-      >
+{/* Image */}
+
+<div
+  onClick={onClick}
+  className="
+    relative
+    h-56
+    cursor-pointer
+    overflow-hidden
+    rounded-t-[28px]
+    bg-slate-100
+  "
+>
+
+  <img
+    src={
+      image ||
+      "https://via.placeholder.com/600x400?text=Food+Image"
+    }
+    alt={name || "Food Item"}
+    onError={(e) => {
+      e.currentTarget.src =
+        "https://via.placeholder.com/600x400?text=Image+Not+Found";
+    }}
+    className="
+      h-full
+      w-full
+      object-cover
+      transition
+      duration-500
+      group-hover:scale-105
+    "
+  />
+
+
+  {/* Image Overlay */}
+
+  <div
+    className="
+      absolute
+      inset-0
+      bg-gradient-to-t
+      from-black/20
+      via-transparent
+      to-transparent
+    "
+  />
+
+
+  {/* Favourite */}
+
+  <button
+    onClick={(e) => {
+      e.stopPropagation();
+      onFavourite?.();
+    }}
+    className="
+      absolute
+      right-4
+      top-4
+
+      flex
+      h-11
+      w-11
+
+      items-center
+      justify-center
+
+      rounded-2xl
+
+      bg-white/90
+
+      backdrop-blur
+
+      shadow-md
+
+      transition
+
+      hover:scale-105
+    "
+  >
+
+    <Heart
+      size={20}
+      fill={
+        isFavourite
+          ? "currentColor"
+          : "none"
+      }
+      style={{
+        color: isFavourite
+          ? "var(--primary)"
+          : "#64748B",
+      }}
+    />
+
+  </button>
                 {/* Favourite */}
 
         <button

@@ -1,53 +1,96 @@
-import { Search, Bell, User } from "lucide-react";
+import { Bell, User, ShoppingBag, Gift } from "lucide-react";
 
-const CustomerHeader = ({
-  store = {},
-  customer = {},
-  onSearch,
-  onNotificationClick,
-  onProfileClick,
-}) => {
+import { useEffect, useRef, useState } from "react";
+
+import { useNavigate } from "react-router-dom";
+
+const CustomerHeader = ({ store = {} }) => {
+  const navigate = useNavigate();
+
+  const [notificationOpen, setNotificationOpen] = useState(false);
+
+  const wrapperRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
+        setNotificationOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const notifications = [
+    {
+      id: 1,
+      icon: ShoppingBag,
+      title: "Order Delivered",
+      message: "Your order has been delivered.",
+      time: "10 min ago",
+    },
+    {
+      id: 2,
+      icon: Gift,
+      title: "Reward Earned",
+      message: "You earned 50 loyalty points.",
+      time: "2 hours ago",
+    },
+  ];
+
   return (
     <header
       className="
-        sticky
-        top-0
+        fixed
+        top-5
+        left-0
+        right-0
         z-50
-        border-b
-        border-slate-200/70
-        bg-white/90
-        backdrop-blur-xl
+        flex
+        justify-center
+        px-4
       "
     >
       <div
+        ref={wrapperRef}
         className="
-          mx-auto
+          relative
           flex
           h-16
+          w-full
+          max-w-[650px]
           items-center
           justify-between
-          gap-4
-          px-4
-          sm:px-6
-          lg:px-8
+          rounded-[28px]
+          border
+          border-slate-200
+          bg-white/90
+          px-5
+          shadow-2xl
+          backdrop-blur-xl
         "
       >
         {/* Store */}
 
-        <div className="flex items-center gap-3 min-w-0">
+        <div
+          className="
+            flex
+            items-center
+            gap-3
+          "
+        >
           <div
             className="
               flex
               h-11
               w-11
-              shrink-0
               items-center
               justify-center
               rounded-2xl
-              text-sm
-              font-bold
+              font-black
               text-white
-              shadow-md
             "
             style={{
               background: "var(--primary)",
@@ -56,78 +99,31 @@ const CustomerHeader = ({
             {store.initials || "BB"}
           </div>
 
-          <div className="min-w-0">
-            <h1 className="truncate text-base font-semibold text-slate-900">
-              {store.name || "Restaurant"}
-            </h1>
-
-            <p className="truncate text-xs text-slate-500">
-              Powered by BizBiteNow
-            </p>
-          </div>
-        </div>
-
-        {/* Search */}
-
-        <div className="hidden flex-1 px-8 md:block">
-          <div
-            className="
-              flex
-              h-11
-              items-center
-              rounded-full
-              border
-              border-slate-200
-              bg-slate-50
-              px-4
-            "
-          >
-            <Search
-              size={18}
-              className="mr-3 text-slate-400"
-            />
-
-            <input
-              type="text"
-              placeholder="Search menu..."
-              onChange={(e) => onSearch?.(e.target.value)}
+          <div className="hidden sm:block">
+            <p
               className="
-                w-full
-                bg-transparent
-                text-sm
-                outline-none
-                placeholder:text-slate-400
+                font-bold
+                text-slate-900
               "
-            />
+            >
+              {store.name || "Restaurant"}
+            </p>
           </div>
         </div>
 
         {/* Actions */}
 
-        <div className="flex items-center gap-2">
-
-          {/* Mobile Search */}
-
-          <button
-            className="
-              flex
-              h-11
-              w-11
-              items-center
-              justify-center
-              rounded-2xl
-              transition
-              hover:bg-slate-100
-              md:hidden
-            "
-          >
-            <Search size={20} />
-          </button>
-
-          {/* Notifications */}
+        <div
+          className="
+            flex
+            items-center
+            gap-2
+          "
+        >
+          {/* Notification */}
 
           <button
-            onClick={onNotificationClick}
+            onClick={() => setNotificationOpen(!notificationOpen)}
             className="
               relative
               flex
@@ -157,45 +153,85 @@ const CustomerHeader = ({
             />
           </button>
 
-          {/* Customer */}
+          {/* Notification Panel */}
 
-          <button
-            onClick={onProfileClick}
-            className="
-              flex
-              items-center
-              gap-3
-              rounded-2xl
-              p-1
-              transition
-              hover:bg-slate-100
-            "
-          >
+          {notificationOpen && (
             <div
               className="
-                flex
-                h-10
-                w-10
-                items-center
-                justify-center
-                rounded-2xl
-                bg-slate-100
+                absolute
+                right-0
+                top-16
+                w-80
+                rounded-3xl
+                border
+                border-slate-200
+                bg-white
+                p-4
+                shadow-xl
               "
             >
-              <User size={18} />
-            </div>
+              <h3
+                className="
+                  mb-3
+                  font-bold
+                  text-slate-900
+                "
+              >
+                Notifications
+              </h3>
 
-            <div className="hidden text-left lg:block">
-              <p className="text-sm font-semibold text-slate-900">
-                {customer.name || "Guest"}
-              </p>
+              <div className="space-y-2">
+                {notifications.map((item) => {
+                  const Icon = item.icon;
 
-              <p className="text-xs text-slate-500">
-                Customer
-              </p>
+                  return (
+                    <div
+                      key={item.id}
+                      className="
+                        flex
+                        gap-3
+                        rounded-xl
+                        p-3
+                        transition
+                        hover:bg-slate-50
+                      "
+                    >
+                      <Icon size={20} />
+
+                      <div>
+                        <p className="font-semibold text-slate-900">
+                          {item.title}
+                        </p>
+
+                        <p className="text-sm text-slate-500">{item.message}</p>
+
+                        <p className="text-xs text-slate-400">{item.time}</p>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
+          )}
+
+          {/* Profile */}
+
+          <button
+            onClick={() => navigate("/customer/profile")}
+            className="
+              flex
+              h-11
+              w-11
+              items-center
+              justify-center
+              rounded-2xl
+              bg-slate-100
+              transition
+              hover:bg-slate-200
+            "
+          >
+            <User size={20} />
           </button>
-
         </div>
       </div>
     </header>

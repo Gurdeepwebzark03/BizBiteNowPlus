@@ -1,209 +1,173 @@
-import { useMemo, useState } from "react";
-import {
-  Search,
-  Package,
-  CheckCircle2,
-  XCircle,
-} from "lucide-react";
+import { Clock3 } from "lucide-react";
 
-import OrderCard from "./OrderCard";
-import EmptyState from "../common/EmptyState";
-
-const tabs = [
-  {
-    id: "ongoing",
-    label: "Ongoing",
-    icon: Package,
-  },
-  {
-    id: "completed",
-    label: "Completed",
-    icon: CheckCircle2,
-  },
-  {
-    id: "cancelled",
-    label: "Cancelled",
-    icon: XCircle,
-  },
-];
-
-const OrderHistory = ({
-  orders = [],
-  onViewOrder,
-  onReorder,
-  onRate,
-}) => {
-  const [activeTab, setActiveTab] =
-    useState("ongoing");
-
-  const [search, setSearch] =
-    useState("");
-
-  const filteredOrders = useMemo(() => {
-    return orders.filter((order) => {
-      const tabMatch =
-        activeTab === "ongoing"
-          ? [
-              "Pending",
-              "Confirmed",
-              "Preparing",
-              "Out for Delivery",
-            ].includes(order.status)
-          : activeTab === "completed"
-          ? order.status === "Delivered"
-          : order.status === "Cancelled";
-
-      const searchMatch =
-        order.id
-          .toLowerCase()
-          .includes(search.toLowerCase()) ||
-        order.items.some((item) =>
-          item.name
-            .toLowerCase()
-            .includes(search.toLowerCase())
-        );
-
-      return tabMatch && searchMatch;
-    });
-  }, [orders, activeTab, search]);
+const OrderHistoryCard = ({ order, onView }) => {
+  if (!order) return null;
 
   return (
-    <div className="space-y-6">
+    <div
+      onClick={() => onView?.(order)}
+      className="
+        rounded-[28px]
 
-      {/* Header */}
+        border
+        border-slate-200
 
-      <div>
+        bg-white
 
-        <h1 className="text-3xl font-bold text-slate-900">
-          My Orders
-        </h1>
+        p-5
+        hover:shadow-lg
+        shadow-sm
+      "
+    >
+      <div
+        className="
+          flex
+          gap-4
+        "
+      >
+        {/* Image */}
 
-        <p className="mt-2 text-slate-500">
-          Track, reorder and review your orders.
-        </p>
-
-      </div>
-
-      {/* Search */}
-
-      <div className="relative">
-
-        <Search
-          size={18}
+        <img
+          src={order.items?.[0]?.image}
+          alt={order.items?.[0]?.name}
           className="
-            absolute
-            left-4
-            top-1/2
-            -translate-y-1/2
-            text-slate-400
-          "
-        />
+            h-20
+            w-20
 
-        <input
-          value={search}
-          onChange={(e) =>
-            setSearch(e.target.value)
-          }
-          placeholder="Search by order ID or food..."
-          className="
-            w-full
+            shrink-0
 
             rounded-2xl
 
-            border
-            border-slate-200
-
-            bg-white
-
-            py-4
-            pl-12
-            pr-4
-
-            outline-none
-
-            transition
-
-            focus:border-[var(--primary)]
+            object-cover
           "
         />
 
-      </div>
+        {/* Content */}
 
-      {/* Tabs */}
+        <div
+          className="
+            flex-1
+          "
+        >
+          <div
+            className="
+              flex
 
-      <div className="flex gap-3 overflow-x-auto scrollbar-hide">
+              items-start
 
-        {tabs.map((tab) => {
-          const Icon = tab.icon;
+              justify-between
 
-          const active =
-            activeTab === tab.id;
+              gap-3
+            "
+          >
+            <div>
+              <h3
+                className="
+                  font-bold
 
-          return (
-            <button
-              key={tab.id}
-              onClick={() =>
-                setActiveTab(tab.id)
-              }
-              className={`
-                flex
-                shrink-0
-                items-center
-                gap-2
+                  text-slate-900
+                "
+              >
+                {order.items?.[0]?.name}
+              </h3>
 
+              <p
+                className="
+                  mt-1
+
+                  text-sm
+
+                  text-slate-500
+                "
+              >
+                {order.date}
+              </p>
+            </div>
+
+            <span
+              className="
                 rounded-full
 
-                px-5
-                py-3
+                bg-slate-100
 
-                font-medium
+                px-3
 
-                transition-all
+                py-1.5
 
-                ${
-                  active
-                    ? "text-white"
-                    : "bg-white border border-slate-200 text-slate-700"
-                }
-              `}
-              style={{
-                background: active
-                  ? "var(--primary)"
-                  : undefined,
-              }}
+                text-xs
+
+                font-semibold
+
+                text-slate-700
+
+                whitespace-nowrap
+              "
             >
-              <Icon size={18} />
+              {order.status}
+            </span>
+          </div>
 
-              {tab.label}
-            </button>
-          );
-        })}
+          <div
+            className="
+              mt-4
 
-      </div>
+              flex
 
-      {/* Orders */}
+              items-center
 
-      {filteredOrders.length === 0 ? (
-        <EmptyState
-          title="No Orders Found"
-          description="Orders matching your filters will appear here."
-        />
-      ) : (
-        <div className="space-y-6">
-          {filteredOrders.map((order) => (
-            <OrderCard
-              key={order.id}
-              order={order}
-              onView={onViewOrder}
-              onReorder={onReorder}
-              onRate={onRate}
-            />
-          ))}
+              justify-between
+            "
+          >
+            <div
+              className="
+                flex
+
+                items-center
+
+                gap-2
+
+                text-sm
+
+                text-slate-500
+              "
+            >
+              <Clock3 size={15} />
+              {order.items?.length || 0} items
+            </div>
+
+            <p
+              className="
+                font-bold
+
+                text-slate-900
+              "
+            >
+              ₹{order.summary?.total || order.total}
+            </p>
+          </div>
+
+          <button
+            onClick={() => onView?.(order)}
+            className="
+              mt-4
+
+              text-sm
+
+              font-semibold
+
+              text-green-700
+
+              transition
+
+              hover:underline
+            "
+          >
+            View Order
+          </button>
         </div>
-      )}
-
+      </div>
     </div>
   );
 };
 
-export default OrderHistory;
+export default OrderHistoryCard;
