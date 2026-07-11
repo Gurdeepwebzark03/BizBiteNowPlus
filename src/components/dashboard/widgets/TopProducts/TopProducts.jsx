@@ -12,7 +12,7 @@ const TopProducts = () => {
       action={
         <Link
           to="/seller/products"
-          className="text-sm font-medium text-[#1A4D2E] hover:underline"
+          className="text-xs font-medium text-[#1A4D2E] hover:underline transition-colors"
         >
           View All
         </Link>
@@ -24,15 +24,15 @@ const TopProducts = () => {
           description="Products will appear here."
         />
       ) : (
-        <div className="space-y-3">
-          {topProducts.map((product, index) => (
-            <ProductItem
-              key={product.id}
-              product={product}
-              rank={index + 1}
-            />
-          ))}
-        </div>
+      <div className="max-h-[700px] space-y-3 overflow-y-auto scrollbar-hide pr-1">
+        {topProducts.map((product, index) => (
+          <ProductItem
+            key={product.id}
+            product={product}
+            rank={index + 1}
+          />
+        ))}
+      </div>
       )}
     </DashboardWidget>
   );

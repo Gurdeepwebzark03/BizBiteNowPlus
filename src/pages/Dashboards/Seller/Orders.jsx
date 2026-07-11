@@ -11,6 +11,10 @@ import OrderDrawer from "../../../components/orders/OrderDrawer";
 import OrderBoard from "../../../components/orders/OrderBoard";
 import BulkActions from "../../../components/orders/BulkActions";
 import ExportModal from "../../../components/orders/ExportModal";
+// import AssignDeliveryModal from "../../../components/orders/AssignDeliveryModal";
+import deliveryBoyData from "../../../data/deliveryBoyData";
+import AssignOrderModal from "../../../components/delivery/AssignOrderModal.jsx";
+import AssignDeliveryModal from "../../../components/orders/AssignDeliveryModal";
 
 import { orders as initialOrders } from "../../../data/ordersData.js";
 
@@ -32,6 +36,8 @@ export default function Orders() {
   const [payment, setPayment] = useState("All");
   const [sort, setSort] = useState("Newest");
 
+  
+
   // ==========================
   // Pagination
   // ==========================
@@ -44,7 +50,7 @@ export default function Orders() {
   // ==========================
 
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [selectedOrder, setSelectedOrder] = useState(null);
+  // const [selectedOrder, setSelectedOrder] = useState(null);
 
   // ==========================
   // Bulk Selection
@@ -63,12 +69,29 @@ export default function Orders() {
   // ==========================
 
   const [exportOpen, setExportOpen] = useState(false);
+  const [assignModal, setAssignModal] = useState(false);
+
+const [selectedOrder, setSelectedOrder] = useState(null);
+
+const [deliveryBoys, setDeliveryBoys] = useState(() => {
+  const saved = localStorage.getItem("deliveryBoys");
+
+  return saved
+    ? JSON.parse(saved)
+    : deliveryBoyData;
+});
+useEffect(() => {
+  localStorage.setItem(
+    "deliveryBoys",
+    JSON.stringify(deliveryBoys)
+  );
+}, [deliveryBoys]);
 
   // ==========================
   // Subscription
   // ==========================
 
-  const isPlusUser = true;
+  const isPlusUser = false;
 
   // =====================================
   // Filter Orders
@@ -83,9 +106,24 @@ export default function Orders() {
       data = data.filter((order) => order.status !== "Delivered");
     }
 
-    if (activeTab === "completed") {
-      data = data.filter((order) => order.status === "Delivered");
-    }
+if (activeTab === "completed") {
+  data = data.filter(
+    (order) => order.status === "Delivered"
+  );
+
+  // Free Tier: Today's completed orders only
+  if (!isPlusUser) {
+    const today = new Date("2026-07-05").toDateString();
+
+    data = data.filter((order) => {
+      const completedDate = new Date(
+        order.deliveredAt || order.createdAt
+      ).toDateString();
+
+      return completedDate === today;
+    });
+  }
+}
 
     // Search
 
@@ -287,6 +325,87 @@ export default function Orders() {
     );
   };
 
+//   const handleAssignClick = (order) => {
+//   setSelectedOrder(order);
+//   setAssignModal(true);
+// };
+
+// handle assign
+const handleAssignDelivery = (boyId) => {
+  // Selected Delivery Boy
+
+  const boy = deliveryBoys.find(
+    (item) => item.id === boyId
+  );
+
+  if (!boy || !selectedOrder) return;
+
+  // Order Object
+
+  const assignedOrder = {
+    id: Date.now(),
+    orderId: selectedOrder.orderId,
+    customer: selectedOrder.customer,
+    phone: selectedOrder.phone,
+    amount: selectedOrder.amount,
+    payment: selectedOrder.payment,
+    deliveryBoy: boy.name,
+    deliveryBoyId: boy.id,
+    status: "Assigned",
+    assignedAt: new Date().toLocaleString(),
+  };
+
+  // Previous Orders
+
+  const previousOrders =
+    JSON.parse(
+      
+      localStorage.getItem("assignedOrders")
+    ) || [];
+
+  // Save LocalStorage
+
+  localStorage.setItem(
+    "assignedOrders",
+    JSON.stringify([
+      ...previousOrders,
+      assignedOrder,
+    ])
+  );
+
+  // Increase Assigned Count
+
+  const updatedBoys = deliveryBoys.map((item) =>
+    item.id === boy.id
+      ? {
+          ...item,
+          assignedOrders:
+            item.assignedOrders + 1,
+        }
+      : item
+  );
+
+  setDeliveryBoys(updatedBoys);
+
+// Save Updated Delivery Boys
+localStorage.setItem(
+  "deliveryBoys",
+  JSON.stringify(updatedBoys)
+);
+
+  // Close Modal
+
+  setAssignModal(false);
+  setSelectedOrder(null);
+
+  alert("Order Assigned Successfully");
+};
+
+// Open Assign Delivery Modal
+const handleAssignClick = (order) => {
+  setSelectedOrder(order);
+  setAssignModal(true);
+};
   // =====================================
   // Export
   // =====================================
@@ -308,7 +427,8 @@ export default function Orders() {
       initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
-      className="space-y-6">
+      className="space-y-6"
+    >
       <div className="space-y-8">
         <OrdersHeader
           totalOrders={orders.length}
@@ -361,14 +481,69 @@ export default function Orders() {
               toggleOrder={toggleOrder}
               toggleAll={toggleAll}
               onView={openDrawer}
-              onAccept={(o) => updateStatus(o.id, "Preparing")}
-              onPreparing={(o) => updateStatus(o.id, "Preparing")}
-              onReady={(o) => updateStatus(o.id, "Ready")}
-              onDelivery={(o) => updateStatus(o.id, "Out for Delivery")}
-              onDelivered={(o) => updateStatus(o.id, "Delivered")}
-              onCancel={(o) => updateStatus(o.id, "Cancelled")}
+              onAccept={(id) => updateStatus(id, "Preparing")}
+              onPreparing={(id) => updateStatus(id, "Preparing")}
+              onReady={(id) => updateStatus(id, "Ready")}
+              onDelivery={(id) => updateStatus(id, "Out for Delivery")}
+              onDelivered={(id) => updateStatus(id, "Delivered")}
+              onCancel={(id) => updateStatus(id, "Cancelled")}
             />
+{activeTab === "completed" && !isPlusUser && (
+  <div className="relative mt-6 overflow-hidden rounded-2xl border border-slate-200 bg-slate-100">
 
+    {/* Fake History Rows */}
+
+    <div className="pointer-events-none blur-[2px] opacity-40">
+
+      {[1, 2, 3, 4, 5].map((item) => (
+        <div
+          key={item}
+          className="flex items-center justify-between border-b border-slate-200 px-6 py-5"
+        >
+          <div>
+            <div className="h-4 w-28 rounded bg-slate-300" />
+            <div className="mt-2 h-3 w-20 rounded bg-slate-200" />
+          </div>
+
+          <div className="h-4 w-24 rounded bg-slate-300" />
+
+          <div className="h-4 w-20 rounded bg-slate-300" />
+
+          <div className="h-8 w-28 rounded-full bg-slate-300" />
+        </div>
+      ))}
+
+    </div>
+
+    {/* Lock Overlay */}
+
+    <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/75 backdrop-blur-sm">
+
+      <div className="mb-5 flex h-20 w-20 items-center justify-center rounded-full bg-amber-100 text-4xl">
+        🔒
+      </div>
+
+      <h3 className="text-2xl font-bold text-slate-800">
+        Older Orders Locked
+      </h3>
+
+      <p className="mt-3 max-w-md text-center text-slate-600">
+        Order history beyond today is available on
+        <span className="font-semibold text-[#16522d]">
+          {" "}BizBite Plus
+        </span>.
+      </p>
+
+      <button
+        className="mt-6 rounded-xl bg-[#16522d] px-6 py-3 font-semibold text-white transition hover:bg-[#124324]"
+      >
+        Upgrade Now
+      </button>
+
+    </div>
+
+  </div>
+)}
             <OrderPagination
               currentPage={currentPage}
               totalPages={totalPages}
@@ -395,6 +570,21 @@ export default function Orders() {
           onClose={() => setExportOpen(false)}
           onExport={exportOrders}
         />
+<AssignDeliveryModal
+  isOpen={assignModal}
+  onClose={() => setAssignModal(false)}
+  order={selectedOrder}
+  deliveryBoys={deliveryBoys}
+  onAssign={handleAssignDelivery}
+/>
+
+        <AssignDeliveryModal
+  isOpen={assignModal}
+  onClose={() => setAssignModal(false)}
+  order={selectedOrder}
+  deliveryBoys={deliveryBoys}
+  onAssign={handleAssignDelivery}
+/>
       </div>
     </motion.div>
   );

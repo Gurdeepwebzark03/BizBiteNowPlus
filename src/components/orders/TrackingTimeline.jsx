@@ -5,29 +5,45 @@ import {
   Bike,
   PackageCheck,
 } from "lucide-react";
+// ==============================
+// Subscription
+// Replace with backend later
+// ==============================
 
-const steps = [
-  {
-    title: "Placed",
-    icon: ShoppingBag,
-  },
-  {
-    title: "Confirmed",
-    icon: CheckCircle2,
-  },
-  {
-    title: "Preparing",
-    icon: ChefHat,
-  },
-  {
-    title: "Out for Delivery",
-    icon: Bike,
-  },
-  {
-    title: "Delivered",
-    icon: PackageCheck,
-  },
-];
+const isPlusUser = false;
+const steps = isPlusUser
+  ? [
+      {
+        title: "Placed",
+        icon: ShoppingBag,
+      },
+      {
+        title: "Confirmed",
+        icon: CheckCircle2,
+      },
+      {
+        title: "Preparing",
+        icon: ChefHat,
+      },
+      {
+        title: "Out for Delivery",
+        icon: Bike,
+      },
+      {
+        title: "Delivered",
+        icon: PackageCheck,
+      },
+    ]
+  : [
+      {
+        title: "Preparing",
+        icon: ChefHat,
+      },
+      {
+        title: "Delivered",
+        icon: PackageCheck,
+      },
+    ];
 
 export default function TrackingTimeline({
   currentStep = 0,
@@ -45,15 +61,23 @@ export default function TrackingTimeline({
 
         <div
           className="absolute left-0 top-5 h-1 rounded-full bg-[#16522d] transition-all duration-500"
-          style={{
-            width: `${(currentStep / 4) * 100}%`,
-          }}
+style={{
+  width: `${
+    isPlusUser
+      ? (currentStep / 4) * 100
+      : (currentStep >= 4 ? 100 : 50)
+  }%`,
+}}
         />
 
         {steps.map((step, index) => {
           const Icon = step.icon;
 
-          const completed = index <= currentStep;
+          const completed = isPlusUser
+  ? index <= currentStep
+  : currentStep >= 4
+    ? true
+    : index === 0;
 
           return (
             <div

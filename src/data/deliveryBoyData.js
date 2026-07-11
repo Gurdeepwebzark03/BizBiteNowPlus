@@ -6,7 +6,7 @@ const deliveryBoyData = [
     vehicle: "Bike",
     vehicleNo: "UP65 AB 1234",
     status: "Online",
-    assignedOrders: 3,
+    assignedOrders: 0,
   },
   {
     id: 2,
@@ -15,7 +15,7 @@ const deliveryBoyData = [
     vehicle: "Scooty",
     vehicleNo: "UP32 CD 4567",
     status: "Offline",
-    assignedOrders: 1,
+    assignedOrders: 0,
   },
   {
     id: 3,
@@ -24,7 +24,7 @@ const deliveryBoyData = [
     vehicle: "Bike",
     vehicleNo: "MP17 EF 7890",
     status: "Online",
-    assignedOrders: 5,
+    assignedOrders: 0,
   },
   {
     id: 4,
@@ -33,7 +33,7 @@ const deliveryBoyData = [
     vehicle: "Scooty",
     vehicleNo: "DL08 GH 2468",
     status: "Offline",
-    assignedOrders: 2,
+    assignedOrders: 0,
   },
 ];
 

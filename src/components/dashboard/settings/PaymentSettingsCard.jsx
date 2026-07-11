@@ -5,8 +5,11 @@ import {
  Landmark,
   Smartphone,
   Save,
+  Banknote,
 } from "lucide-react";
-
+// Temporary
+// Replace with backend value
+const isPlusUser = false;
 const PaymentSettingsCard = () => {
   return (
     <motion.section
@@ -41,11 +44,12 @@ const PaymentSettingsCard = () => {
 
           <div className="grid gap-4 md:grid-cols-2">
             {[
-              { icon: Smartphone, label: "UPI" },
-              { icon: CreditCard, label: "Credit / Debit Cards" },
-              { icon: Wallet, label: "Wallets" },
-              { icon: Landmark, label: "Cash On Delivery" },
-            ].map((item) => (
+  ...(isPlusUser
+    ? [{ icon: Smartphone, label: "UPI" }]
+    : []),
+
+  { icon: Banknote, label: "Cash On Delivery" },
+].map((item) => (
               <label
                 key={item.label}
                 className="flex items-center justify-between rounded-xl border border-slate-200 bg-[#f8faf8] p-4"
@@ -72,7 +76,7 @@ const PaymentSettingsCard = () => {
         </div>
 
         {/* Settlement */}
-        <div className="grid gap-5 md:grid-cols-2">
+        {/* <div className="grid gap-5 md:grid-cols-2">
           <div>
             <label className="mb-2 block text-sm font-medium text-[#16522d]">
               Account Holder Name
@@ -116,8 +120,8 @@ const PaymentSettingsCard = () => {
               placeholder="SBIN000000"
             />
           </div>
-        </div>
-      </div>
+        </div>*/}
+      </div> 
 
       {/* Footer */}
       <div className="flex justify-end border-t border-slate-200 px-6 py-5">
