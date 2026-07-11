@@ -4,16 +4,20 @@ import { BrowserRouter } from 'react-router-dom'; // <-- Yeh import hona zaroori
 import App from './App';
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
-import './index.css';
+
+import { ThemeProvider } from "./context/ThemeContext";
+import "./styles/theme.css";
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <BrowserRouter>
+    <ThemeProvider>
       <AuthProvider>
         <CartProvider>
           <App />
         </CartProvider>
       </AuthProvider>
+      </ThemeProvider>
     </BrowserRouter>
   </React.StrictMode>
 );

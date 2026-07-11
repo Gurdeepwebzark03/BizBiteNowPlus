@@ -68,7 +68,7 @@ export default function Orders() {
   // Subscription
   // ==========================
 
-  const isPlusUser = false;
+  const isPlusUser = true;
 
   // =====================================
   // Filter Orders

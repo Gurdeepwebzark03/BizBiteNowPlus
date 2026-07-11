@@ -18,7 +18,7 @@ import SidebarItem from "./SidebarItem";
 
 // Temporary - replace with backend value later
 const user = {
-  subscription: "free", // "free" | "plus"
+  subscription: "plus", // "free" | "plus"
 };
 
 const isPlus = user.subscription === "plus";

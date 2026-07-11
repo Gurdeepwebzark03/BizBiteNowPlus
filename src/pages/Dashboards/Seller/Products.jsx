@@ -30,7 +30,7 @@ export default function Products() {
 // Replace with backend later
 // =========================
 
-const isPlusUser = false;
+const isPlusUser = true;
 
 // =========================
 // Free Tier Limits
@@ -41,7 +41,7 @@ const FREE_PRODUCT_LIMIT = 10;
 // Free Category Limit
 // =========================
 
-const FREE_CATEGORY_LIMIT = 3;
+const FREE_CATEGORY_LIMIT = 4;
 
 const [categoryError, setCategoryError] =
   useState("");

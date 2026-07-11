@@ -1,0 +1,128 @@
+import { SlidersHorizontal, Flame, BadgePercent, Star } from "lucide-react";
+
+const ProductFilters = ({
+  filters = {},
+  onChange,
+  onMoreFilters,
+}) => {
+  const toggleFilter = (key) => {
+    onChange?.({
+      ...filters,
+      [key]: !filters[key],
+    });
+  };
+
+  const FilterChip = ({
+    label,
+    active,
+    icon: Icon,
+    onClick,
+  }) => (
+    <button
+      onClick={onClick}
+      className={`
+        flex
+        shrink-0
+        items-center
+        gap-2
+
+        rounded-full
+
+        border
+
+        px-4
+        py-2.5
+
+        text-sm
+        font-medium
+
+        transition-all
+        duration-300
+
+        ${
+          active
+            ? "text-white shadow-lg"
+            : "border-slate-200 bg-white text-slate-700 hover:border-slate-300 hover:bg-slate-50"
+        }
+      `}
+      style={{
+        background: active ? "var(--primary)" : undefined,
+        borderColor: active ? "var(--primary)" : undefined,
+      }}
+    >
+      {Icon && <Icon size={16} />}
+      {label}
+    </button>
+  );
+
+  return (
+    <section className="flex items-center gap-3 overflow-x-auto scrollbar-hide py-2">
+
+      <FilterChip
+        label="Bestseller"
+        icon={Flame}
+        active={filters.bestseller}
+        onClick={() => toggleFilter("bestseller")}
+      />
+
+      <FilterChip
+        label="Offers"
+        icon={BadgePercent}
+        active={filters.offers}
+        onClick={() => toggleFilter("offers")}
+      />
+
+      <FilterChip
+        label="4★ & Above"
+        icon={Star}
+        active={filters.rating}
+        onClick={() => toggleFilter("rating")}
+      />
+
+      <FilterChip
+        label="Available"
+        active={filters.available}
+        onClick={() => toggleFilter("available")}
+      />
+
+      <button
+        onClick={onMoreFilters}
+        className="
+          flex
+          shrink-0
+          items-center
+          gap-2
+
+          rounded-full
+
+          border
+          border-slate-200
+
+          bg-white
+
+          px-4
+          py-2.5
+
+          text-sm
+          font-medium
+
+          transition-all
+
+          hover:bg-slate-50
+        "
+      >
+        <SlidersHorizontal
+          size={16}
+          style={{
+            color: "var(--primary)",
+          }}
+        />
+
+        More
+      </button>
+
+    </section>
+  );
+};
+
+export default ProductFilters;
