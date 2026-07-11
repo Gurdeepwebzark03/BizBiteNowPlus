@@ -1,29 +1,16 @@
-import { useState, useCallback, useRef, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useState, useCallback, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay, Pagination } from "swiper/modules";
 import "swiper/css";
 import "swiper/css/pagination";
 import {
-  Search, Bell, LayoutGrid, ShoppingCart,
-  RefreshCw, User, LogOut, CheckCircle, Star, Check,
+  CheckCircle, Star, Check,
   ChevronRight, Clock, MapPin,
 } from "lucide-react";
 import { categories, allProducts } from "../../data/products";
 import { useCart } from "../../context/CartContext";
 import FoodTypeIndicator from "../../components/customer/FoodTypeIndicator";
-import NotificationPanel from "../../components/customer/NotificationPanel";
-import {
-  isCustomerLoggedIn,
-  logoutCustomer,
-  getMyProfile,
-} from "../../api/customer/authApi";
-
-const storeInfo = {
-  name: "Store Name",
-  initials: "SN",
-  brandColor: "#E8622D",
-};
 
 const loyalty = { earned: 6, total: 10 };
 
@@ -58,39 +45,15 @@ const heroSlides = [
 
 const allTabs = [{ id: 0, name: "All items" }, ...categories];
 
-const notificationTags = ["New", "Offer", "Trending", "Back in stock", "Chef's pick"];
-const notifications = allProducts.slice(0, 5).map((p, i) => ({
-  id: p.id,
-  image: p.image,
-  tag: notificationTags[i % notificationTags.length],
-  title: p.name,
-  meta: p.category,
-  price: p.price,
-}));
-
 const StoreFront = () => {
   const navigate = useNavigate();
-  const location = useLocation();
-  const { totalItems, addToCart } = useCart();
+  const { addToCart } = useCart();
   const [activeCategory, setActiveCategory] = useState(0);
-  const [search, setSearch] = useState("");
   const [toast, setToast] = useState("");
-  const [customerName, setCustomerName] = useState(null);
-  const [showNotifications, setShowNotifications] = useState(false);
-  const searchRef = useRef(null);
   const menuRef = useRef(null);
-
-  useEffect(() => {
-    if (isCustomerLoggedIn()) {
-      getMyProfile()
-        .then((user) => setCustomerName(user.name))
-        .catch(() => {});
-    }
-  }, []);
 
   const jumpToCategory = (categoryId) => {
     setActiveCategory(categoryId);
-    setSearch("");
     menuRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
@@ -99,219 +62,21 @@ const StoreFront = () => {
     setTimeout(() => setToast(""), 2000);
   }, []);
 
-  const filteredProducts = (() => {
-    let products =
-      activeCategory === 0
-        ? allProducts
-        : categories.find((c) => c.id === activeCategory)?.products || [];
-    if (search)
-      products = products.filter((p) =>
-        p.name.toLowerCase().includes(search.toLowerCase())
-      );
-    return products;
-  })();
+  const filteredProducts =
+    activeCategory === 0
+      ? allProducts
+      : categories.find((c) => c.id === activeCategory)?.products || [];
 
   const currentCategoryName =
     activeCategory === 0
       ? "All items"
       : categories.find((c) => c.id === activeCategory)?.name || "";
 
-  const handleLogout = async () => {
-    await logoutCustomer();
-    window.location.href = "/";
-  };
-
-  const sidebarItems = [
-    { icon: LayoutGrid, label: "Menu", action: () => navigate("/menu"), match: ["/storefront", "/menu"] },
-    { icon: Search, label: "Search", action: () => { searchRef.current?.focus(); } },
-    {
-      icon: ShoppingCart,
-      label: "Cart",
-      action: () => navigate("/cart"),
-      badge: totalItems,
-      match: ["/cart"],
-    },
-    { icon: RefreshCw, label: "Reorder", action: () => {} },
-    {
-      icon: User,
-      label: "Profile",
-      action: () =>
-        navigate(
-          isCustomerLoggedIn() ? "/customer/profile" : "/customer/onboarding"
-        ),
-      match: ["/customer/profile"],
-    },
-  ];
-
   return (
     <div style={{ fontFamily: "Arial, sans-serif" }} className="bg-[#FAFAF5] min-h-screen">
 
-      {/* TOP HEADER */}
-      <header className="sticky top-0 z-40 bg-white border-b border-gray-100 shadow-sm">
-        <div className="flex items-center gap-3 px-4 py-3">
-
-          {/* Store Avatar + Name */}
-          <div className="flex items-center gap-2 shrink-0">
-            <div
-              className="w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-[16px] shrink-0"
-              style={{ backgroundColor: storeInfo.brandColor }}
-            >
-              {storeInfo.initials}
-            </div>
-            <div className="hidden sm:block">
-              <p className="font-bold text-[#1C1C1C] leading-tight" style={{ fontSize: "16px" }}>
-                {storeInfo.name}
-              </p>
-              <p className="text-gray-400 leading-tight" style={{ fontSize: "12px" }}>
-                POWERED BY BIZBITENOW
-              </p>
-            </div>
-          </div>
-
-          {/* Search bar */}
-          <div
-            className="flex-1 flex items-center bg-gray-50 border border-gray-200 rounded-full px-4 gap-2"
-            style={{ minHeight: "42px" }}
-          >
-            <Search size={16} className="text-gray-400 shrink-0" />
-            <input
-              ref={searchRef}
-              type="text"
-              placeholder={`Search in ${storeInfo.name}...`}
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="w-full outline-none text-[15px] bg-transparent text-[#1C1C1C] placeholder-gray-400"
-              style={{ fontFamily: "Arial, sans-serif" }}
-            />
-          </div>
-
-          {/* Menu + Bell + Cart + Customer */}
-          <div className="flex items-center gap-3 shrink-0">
-            <button
-              onClick={() => navigate("/menu")}
-              className="relative flex items-center justify-center text-gray-500 shrink-0 rounded-xl hover:bg-[#FBE7DD] hover:text-[#E8622D] transition-colors lg:hidden cursor-pointer"
-              style={{ minHeight: "40px", minWidth: "40px" }}
-            >
-              <LayoutGrid size={20} />
-            </button>
-
-            <div className="relative">
-              <button
-                onClick={() => setShowNotifications((v) => !v)}
-                className="relative flex items-center justify-center text-gray-500 shrink-0 rounded-xl hover:bg-[#FBE7DD] hover:text-[#E8622D] transition-colors cursor-pointer"
-                style={{ minHeight: "40px", minWidth: "40px" }}
-              >
-                <Bell size={20} />
-                <span
-                  className="absolute rounded-full"
-                  style={{ top: "8px", right: "9px", width: "7px", height: "7px", backgroundColor: "#E8622D" }}
-                />
-              </button>
-              {showNotifications && (
-                <NotificationPanel
-                  notifications={notifications}
-                  onClose={() => setShowNotifications(false)}
-                  onBrowseMenu={() => {
-                    setShowNotifications(false);
-                    navigate("/menu");
-                  }}
-                />
-              )}
-            </div>
-
-            <button
-              onClick={() => navigate("/cart")}
-              className="relative flex items-center justify-center text-gray-500 shrink-0 rounded-xl hover:bg-[#FBE7DD] hover:text-[#E8622D] transition-colors lg:hidden cursor-pointer"
-              style={{ minHeight: "40px", minWidth: "40px" }}
-            >
-              <ShoppingCart size={20} />
-              {totalItems > 0 && (
-                <span
-                  className="absolute bg-[#E8622D] text-white font-bold rounded-full flex items-center justify-center"
-                  style={{ top: "2px", right: "0px", fontSize: "10px", width: "16px", height: "16px" }}
-                >
-                  {totalItems > 9 ? "9+" : totalItems}
-                </span>
-              )}
-            </button>
-
-            <button
-              onClick={() =>
-                navigate(
-                  isCustomerLoggedIn() ? "/customer/profile" : "/customer/onboarding"
-                )
-              }
-              className="flex items-center gap-2 pl-2 sm:border-l border-gray-100 cursor-pointer"
-            >
-              <span
-                className="w-9 h-9 rounded-full flex items-center justify-center shrink-0"
-                style={{ backgroundColor: "#FBE7DD" }}
-              >
-                <User size={18} style={{ color: "#E8622D" }} />
-              </span>
-              <div className="hidden sm:block text-left">
-                <p className="font-bold text-[#1C1C1C] leading-tight" style={{ fontSize: "13px" }}>
-                  {customerName || "Guest"}
-                </p>
-                <p className="text-gray-400 leading-tight" style={{ fontSize: "11px" }}>
-                  {customerName ? "Customer" : "Sign in"}
-                </p>
-              </div>
-            </button>
-          </div>
-        </div>
-      </header>
-
-      {/* BODY */}
-      <div className="flex">
-
-        {/* LEFT SIDEBAR — desktop only, icon-only rail */}
-        <aside
-          className="hidden lg:flex flex-col items-center gap-2 py-3 bg-white rounded-2xl shadow-sm mx-3 mt-4 mb-4 sticky top-20 h-fit"
-          style={{ width: "72px" }}
-        >
-          {sidebarItems.map(({ icon: Icon, label, action, badge, match }) => {
-            const active = match?.includes(location.pathname);
-            return (
-              <button
-                key={label}
-                onClick={action}
-                title={label}
-                className="relative flex items-center justify-center rounded-xl transition-colors shrink-0 cursor-pointer"
-                style={{
-                  width: "44px",
-                  height: "44px",
-                  color: active ? "#E8622D" : "#9CA3AF",
-                  backgroundColor: active ? "#FBE7DD" : "transparent",
-                }}
-              >
-                <Icon size={20} />
-                {badge > 0 && (
-                  <span
-                    className="absolute -top-1 -right-1 bg-[#E8622D] text-white font-bold rounded-full flex items-center justify-center"
-                    style={{ fontSize: "10px", width: "16px", height: "16px" }}
-                  >
-                    {badge > 9 ? "9+" : badge}
-                  </span>
-                )}
-              </button>
-            );
-          })}
-
-          <div className="w-full h-px bg-gray-100 my-1" />
-
-          <button
-            onClick={handleLogout}
-            title="Log out"
-            className="flex items-center justify-center rounded-xl text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors shrink-0 cursor-pointer"
-            style={{ width: "44px", height: "44px" }}
-          >
-            <LogOut size={20} />
-          </button>
-        </aside>
-
-        {/* MAIN CONTENT */}
-        <main className="flex-1 min-w-0 px-3 lg:pr-4 lg:pl-0 py-4 pb-24 lg:pb-8">
+      {/* MAIN CONTENT */}
+      <main className="px-3 lg:px-4 py-4 pb-24 lg:pb-8">
 
           {/* HERO */}
           <div className="storefront-banner rounded-2xl overflow-hidden mb-4" style={{ minHeight: "260px" }}>
@@ -508,7 +273,7 @@ const StoreFront = () => {
             {allTabs.map((tab) => (
               <button
                 key={tab.id}
-                onClick={() => { setActiveCategory(tab.id); setSearch(""); }}
+                onClick={() => setActiveCategory(tab.id)}
                 className="shrink-0 px-4 rounded-full text-[16px] font-semibold transition-all shadow-sm cursor-pointer"
                 style={{
                   minHeight: "38px",
@@ -535,7 +300,7 @@ const StoreFront = () => {
               No products found
             </div>
           ) : (
-            <div className="grid grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {filteredProducts.map((product) => (
                 <div
                   key={product.id}
@@ -580,7 +345,6 @@ const StoreFront = () => {
             </div>
           )}
         </main>
-      </div>
 
       {/* TOAST */}
       {toast && (
