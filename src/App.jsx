@@ -3,7 +3,8 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import Login from "./pages/Auth/Login";
 import RegisterSeller from "./pages/Auth/RegisterSeller";
 import DashboardLayout from "./components/Shared/DashboardLayout";
-import Orders from "./pages/Dashboards/Seller/Orders";
+// import Orders from "./pages/Dashboards/Seller/Orders";
+import Orders from "./pages/Dashboards/Seller/Orders"
 import OrderDetails from "./pages/Dashboards/Seller/OrderDetails";
 import SellerDashboard from "./pages/Dashboards/Seller/SellerDashboard";
 import Profile from "./pages/Dashboards/Seller/profile";
@@ -111,7 +112,6 @@ export default function App() {
 
           <Route path="festivemenu" element={<FestiveMenu/>}/>
           {/* <Route path="festivemenu/create" element={<CreateFestiveMenu />} /> */}
-
 
 
           <Route path="festivemenu" element={<FestiveMenu/>}/>

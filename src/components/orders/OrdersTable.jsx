@@ -17,6 +17,7 @@ export default function OrdersTable({
   onDelivery,
   onDelivered,
   onCancel,
+   onAssign,
 }) {
   const [actionModalOpen, setActionModalOpen] = useState(false);
 

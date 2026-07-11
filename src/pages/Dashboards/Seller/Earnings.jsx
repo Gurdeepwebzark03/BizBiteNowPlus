@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import * as XLSX from "xlsx";
+// import * as XLSX from "xlsx";
 
 import EarningsSummaryCards from "../../../components/dashboard/earnings/EarningsSummaryCards";
 import EarningsChart from "../../../components/dashboard/earnings/EarningsChart";

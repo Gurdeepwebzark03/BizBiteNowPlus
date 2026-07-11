@@ -99,14 +99,14 @@ export default function DeliveryBoyTable({
 
                       {/* Assign Order */}
 
-                      <button
+                      {/* <button
                         onClick={() => onAssign(boy)}
                         className="bg-green-900 hover:bg-green-800 text-white px-3 py-2 rounded-lg text-sm flex items-center gap-2 cursor-pointer"
                         title="Assign Order"
                       >
                         <FaPlus />
                         Assign
-                      </button>
+                      </button> */}
 
                       {/* Edit */}
 
