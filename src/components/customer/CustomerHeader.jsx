@@ -53,13 +53,6 @@ const CustomerHeader = () => {
   };
 
   useEffect(() => {
-    if (location.pathname === "/menu") {
-      const params = new URLSearchParams(location.search);
-      setSearch(params.get("search") || "");
-    }
-  }, [location.pathname, location.search]);
-
-  useEffect(() => {
     if (isCustomerLoggedIn()) {
       getMyProfile()
         .then((user) => setCustomerName(user.name))
