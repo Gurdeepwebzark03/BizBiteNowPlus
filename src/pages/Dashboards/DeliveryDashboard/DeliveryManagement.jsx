@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import deliveryBoyData from "../../../data/deliveryBoyData";
 
 import DeliveryBoyTable from "../../../components/delivery/DeliveryBoyTable";
@@ -12,8 +12,13 @@ export default function DeliveryManagement() {
   // Delivery Boys
   // =============================
 
-  const [deliveryBoys, setDeliveryBoys] =
-    useState(deliveryBoyData);
+const [deliveryBoys, setDeliveryBoys] = useState(() => {
+  const saved = localStorage.getItem("deliveryBoys");
+
+  return saved
+    ? JSON.parse(saved)
+    : deliveryBoyData;
+});
 
   // =============================
   // Search & Filter
@@ -54,6 +59,12 @@ export default function DeliveryManagement() {
 
   const [assignedOrders, setAssignedOrders] =
     useState([]);
+    useEffect(() => {
+  const orders =
+    JSON.parse(localStorage.getItem("assignedOrders")) || [];
+
+  setAssignedOrders(orders);
+}, []);
 
   // =============================
   // Search + Filter
@@ -79,34 +90,42 @@ export default function DeliveryManagement() {
   // Add / Update
   // =============================
 
-  const handleSave = (data) => {
-    if (editData) {
-      const updated = deliveryBoys.map((boy) =>
-        boy.id === editData.id
-          ? {
-              ...boy,
-              ...data,
-            }
-          : boy
-      );
+const handleSave = (data) => {
+  let updatedDeliveryBoys;
 
-      setDeliveryBoys(updated);
-    } else {
-      const newBoy = {
-        ...data,
-        id: Date.now(),
-        assignedOrders: 0,
-      };
+  if (editData) {
+    updatedDeliveryBoys = deliveryBoys.map((boy) =>
+      boy.id === editData.id
+        ? {
+            ...boy,
+            ...data,
+          }
+        : boy
+    );
+  } else {
+    const newBoy = {
+      ...data,
+      id: Date.now(),
+      assignedOrders: 0,
+    };
 
-      setDeliveryBoys([
-        ...deliveryBoys,
-        newBoy,
-      ]);
-    }
+    updatedDeliveryBoys = [
+      ...deliveryBoys,
+      newBoy,
+    ];
+  }
 
-    setEditData(null);
-    setIsModalOpen(false);
-  };
+  setDeliveryBoys(updatedDeliveryBoys);
+
+  // LocalStorage Save
+  localStorage.setItem(
+    "deliveryBoys",
+    JSON.stringify(updatedDeliveryBoys)
+  );
+
+  setEditData(null);
+  setIsModalOpen(false);
+};
 
   // =============================
   // Edit
@@ -135,6 +154,10 @@ export default function DeliveryManagement() {
     );
 
     setDeliveryBoys(updated);
+    localStorage.setItem(
+  "deliveryBoys",
+  JSON.stringify(updated)
+);
   };
 
   // =============================
@@ -162,6 +185,10 @@ const handleAssignOrder = (orderData) => {
   );
 
   setDeliveryBoys(updatedDeliveryBoys);
+  localStorage.setItem(
+  "deliveryBoys",
+  JSON.stringify(updatedDeliveryBoys)
+);
 
   // Save Assigned Order
 
@@ -195,29 +222,34 @@ const handleCompleteOrder = (id) => {
 
   if (!completedOrder) return;
 
-  // Reduce Assigned Order Count
-
   const updatedDeliveryBoys = deliveryBoys.map((boy) =>
     boy.id === completedOrder.deliveryBoyId
       ? {
           ...boy,
-          assignedOrders: Math.max(
-            0,
-            boy.assignedOrders - 1
-          ),
+          assignedOrders: Math.max(0, boy.assignedOrders - 1),
         }
       : boy
   );
 
   setDeliveryBoys(updatedDeliveryBoys);
 
-  // Remove Completed Order
+  // Save updated delivery boys
+  localStorage.setItem(
+    "deliveryBoys",
+    JSON.stringify(updatedDeliveryBoys)
+  );
 
   const updatedOrders = assignedOrders.filter(
     (order) => order.id !== id
   );
 
   setAssignedOrders(updatedOrders);
+
+  // Save updated assigned orders
+  localStorage.setItem(
+    "assignedOrders",
+    JSON.stringify(updatedOrders)
+  );
 };
 
 // =============================
@@ -239,7 +271,10 @@ const confirmDelete = () => {
   );
 
   setDeliveryBoys(updated);
-
+localStorage.setItem(
+  "deliveryBoys",
+  JSON.stringify(updated)
+);
   setDeleteModal(false);
   setSelectedBoy(null);
 };

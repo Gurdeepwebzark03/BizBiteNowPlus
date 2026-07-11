@@ -68,6 +68,26 @@ import Rewards from "./pages/Customer/Rewards";
 import CustomerProfile from "./pages/Customer/Profile";
 
 
+import Analytics from "./pages/Dashboards/Seller/Analytics";
+import CreateFestiveMenu from "./pages/Dashboards/Seller/CreateFestiveMenu";
+import StoreFront from "./pages/customer/StoreFront";
+import AllMenu from "./pages/customer/AllMenu";
+import Cart from "./pages/customer/Cart";
+import ProductDetail from "./pages/customer/ProductDetail";
+import Checkout from "./pages/customer/Checkout";
+import OrderConfirmation from "./pages/customer/OrderConfirmation";
+import CustomerProfile from "./pages/customer/Profile";
+import MyOrders from "./pages/customer/MyOrders";
+import CustomerOnboarding from "./pages/customer/CustomerOnboarding";
+import CustomerGate from "./components/customer/CustomerGate";
+import CustomerLayout from "./components/customer/CustomerLayout";
+import Earnings from "./pages/Dashboards/Seller/Earnings";
+import SpecialOffers from "./components/special offers/SpecialOffers";
+
+// Future Modules
+// import Orders from './pages/Dashboards/Seller/Orders';
+// import Customers from './pages/Dashboards/Seller/Customers';
+// import Analytics from './pages/Dashboards/Seller/Analytics';
 
 export default function App() {
 
