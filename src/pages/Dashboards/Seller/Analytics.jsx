@@ -3,9 +3,8 @@ import TopProducts from "../../../components/dashboard/widgets/TopProducts/TopPr
 import RecentOrders from "../../../components/dashboard/widgets/RecentOrders/RecentOrders";
 import RecentActivity from "../../../components/dashboard/widgets/RecentActivity/RecentActivity";
 import LoyaltyChart from "../../../components/dashboard/analytics/LoyaltyChart";
-import RedemptionTracking from "../../../components/dashboard/analytics/RedemptionTracking";
-
 import { motion } from "framer-motion";
+import RedemptionTracking from "../../../components/dashboard/analytics/RedemptionTracking";
 export default function Analytics() {
   return (
         <motion.div

@@ -1,5 +1,5 @@
 import { useMemo, useRef, useState } from "react";
-import * as XLSX from "xlsx";
+// import * as XLSX from "xlsx";
 import ProductsHeader from "../../../components/products/ProductsHeader";
 import ProductStats from "../../../components/products/ProductStats";
 import ProductFilters from "../../../components/products/ProductFilters";
@@ -8,7 +8,7 @@ import ProductDrawer from "../../../components/products/ProductDrawer";
 import ProductModal from "../../../components/products/ProductModal";
 import DeleteProductModal from "../../../components/products/DeleteProductModal";
 import { motion } from "framer-motion";
-import { products } from "../../../data/productsData";
+import { products } from "../../../data/productsData.js";
 
 export default function Products() {
   const [search, setSearch] = useState("");
@@ -25,7 +25,37 @@ export default function Products() {
   const [modalMode, setModalMode] = useState("add");
 
   const [productList, setProductList] = useState(products);
+// =========================
+// Subscription (Temporary)
+// Replace with backend later
+// =========================
 
+const isPlusUser = false;
+
+// =========================
+// Free Tier Limits
+// =========================
+
+const FREE_PRODUCT_LIMIT = 10;
+// =========================
+// Free Category Limit
+// =========================
+
+const FREE_CATEGORY_LIMIT = 3;
+
+const [categoryError, setCategoryError] =
+  useState("");
+  
+const hasReachedProductLimit =
+  !isPlusUser &&
+  productList.length >= FREE_PRODUCT_LIMIT;
+
+// =========================
+// Upgrade Modal
+// =========================
+
+const [showUpgradeModal, setShowUpgradeModal] =
+  useState(false);
   // =========================
   // Dynamic Stats
   // =========================
@@ -33,8 +63,12 @@ export default function Products() {
   const productStats = useMemo(
     () => ({
       totalProducts: productList.length,
-      activeProducts: productList.filter((p) => p.available).length,
-      outOfStock: productList.filter((p) => !p.available).length,
+      activeProducts: productList.filter(
+  (p) => p.available === true
+).length,
+outOfStock: productList.filter(
+  (p) => p.available === false
+).length,
       categories: new Set(productList.map((p) => p.category)).size,
     }),
     [productList],
@@ -53,22 +87,84 @@ export default function Products() {
   // Add
   // =========================
 
-  const handleAdd = () => {
-    setSelectedProduct(null);
-    setModalMode("add");
-    setModalOpen(true);
-  };
+const handleAdd = () => {
+  // Free Tier Product Limit
+  if (hasReachedProductLimit) {
+    setShowUpgradeModal(true);
+    return;
+  }
 
+  setSelectedProduct(null);
+  setModalMode("add");
+  setModalOpen(true);
+};
   // =========================
   // Edit
   // =========================
 
-  const handleEdit = (product) => {
-    setSelectedProduct(product);
-    setModalMode("edit");
-    setModalOpen(true);
+const handleEdit = (product) => {
+  setSelectedProduct({ ...product });
+  setModalMode("edit");
+  setModalOpen(true);
+};
+
+// =========================
+// Save Product
+// =========================
+
+const handleSaveProduct = (productData) => {
+  const formattedProduct = {
+    id:
+      modalMode === "add"
+        ? Date.now()
+        : productData.id,
+
+    sku:
+      productData.sku ||
+      `SKU-${Date.now().toString().slice(-5)}`,
+
+    name: productData.name,
+
+    description:
+      productData.description || "",
+
+    category: productData.category,
+
+    price: Number(productData.price),
+
+    stock: Number(productData.stock),
+
+    available: productData.available,
+
+    featured: productData.featured,
+
+    combo: productData.combo,
+
+    delivery: productData.delivery,
+
+    image:
+      productData.image ||
+      "https://placehold.co/600x600?text=Food",
   };
 
+  if (modalMode === "add") {
+    setProductList((prev) => [
+      formattedProduct,
+      ...prev,
+    ]);
+  } else {
+    setProductList((prev) =>
+      prev.map((item) =>
+        item.id === formattedProduct.id
+          ? formattedProduct
+          : item
+      )
+    );
+  }
+
+  setModalOpen(false);
+  setSelectedProduct(null);
+};
   // =========================
   // Delete
   // =========================
@@ -93,17 +189,19 @@ export default function Products() {
 
   const filteredProducts = useMemo(() => {
     return productList.filter((product) => {
-      const matchesSearch = product.name
-        .toLowerCase()
-        .includes(search.toLowerCase());
+      const matchesSearch = product.name.toLowerCase().includes(search.toLowerCase()) || 
+      product.sku.toLowerCase().includes(search.toLowerCase());
+        
 
       const matchesCategory =
         category === "All" || product.category === category;
 
       const matchesStatus =
         status === "All" ||
-        (status === "Available" && product.available) ||
-        (status === "Out of Stock" && !product.available);
+        (status === "Available" &&
+          product.available === true) ||
+        (status === "Out of Stock" &&
+          product.available === false);
 
       return matchesSearch && matchesCategory && matchesStatus;
     });
@@ -255,6 +353,7 @@ export default function Products() {
         onClose={() => setModalOpen(false)}
         mode={modalMode}
         product={selectedProduct}
+        onSave={handleSaveProduct}
       />
 
       <DeleteProductModal
@@ -263,6 +362,68 @@ export default function Products() {
         onDelete={confirmDelete}
         product={selectedProduct}
       />
+      {showUpgradeModal && (
+  <div className="fixed inset-0 z-[99999] flex items-center justify-center bg-black/50 backdrop-blur-sm">
+
+    <div className="w-full max-w-md rounded-3xl bg-white p-8 shadow-2xl">
+
+      <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-amber-100">
+
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-10 w-10 text-amber-500"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth={2}
+            d="M12 3l2.5 5 5.5.8-4 3.9.9 5.5L12 15.8 7.1 18.2l.9-5.5-4-3.9L9.5 8 12 3z"
+          />
+        </svg>
+
+      </div>
+
+      <h2 className="mt-6 text-center text-2xl font-bold text-slate-800">
+        Product Limit Reached
+      </h2>
+
+      <p className="mt-3 text-center text-slate-500">
+        You've used all <strong>10 product slots</strong>.
+      </p>
+
+      <p className="mt-1 text-center text-slate-500">
+        Upgrade to <strong>BizBite Plus</strong> for unlimited products.
+      </p>
+
+      <div className="mt-8 flex gap-3">
+
+        <button
+          onClick={() => setShowUpgradeModal(false)}
+          className="flex-1 rounded-xl border border-slate-300 px-5 py-3 font-medium hover:bg-slate-50"
+        >
+          Maybe Later
+        </button>
+
+        <button
+          onClick={() => {
+            setShowUpgradeModal(false);
+
+            // TODO: Navigate to Upgrade page
+          }}
+          className="flex-1 rounded-xl bg-[#16522d] px-5 py-3 font-semibold text-white hover:bg-[#124324]"
+        >
+          Upgrade Now
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+)}
     </div>
     </motion.div>
   );

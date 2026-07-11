@@ -1,6 +1,6 @@
 import DashboardWidget from "../../DashboardWidget";
 import QuickActionCard from "./QuickActionCard";
-import { QUICK_ACTIONS } from "./actions";
+import { QUICK_ACTIONS } from "./actions.js";
 
 const QuickActions = () => {
   return (

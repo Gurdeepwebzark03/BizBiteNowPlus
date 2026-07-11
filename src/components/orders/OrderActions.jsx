@@ -49,7 +49,7 @@ export default function OrderActions({
   return (
     <div
       ref={menuRef}
-      className="relative"
+      className="relative z-[1000]"
     >
       <button
         onClick={() => setOpen(!open)}
@@ -60,17 +60,6 @@ export default function OrderActions({
 
       {open && (
         <div className="absolute right-0 z-50 mt-2 w-60 overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xl">
-
-          <button
-            onClick={() => {
-              onView?.(order);
-              setOpen(false);
-            }}
-            className={`${actionButton} hover:bg-slate-50`}
-          >
-            <Eye size={16} />
-            View Details
-          </button>
 
           {order.status === "Pending" && (
             <>

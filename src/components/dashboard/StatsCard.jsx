@@ -1,6 +1,6 @@
 import React from "react";
 import { ArrowUpRight, ArrowDownRight } from "lucide-react";
-import Card from "../ui/Card";
+import Card from "../UI/Card";
 
 const StatsCard = ({
   title,

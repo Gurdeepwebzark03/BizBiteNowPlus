@@ -45,16 +45,7 @@ const DeliverySettingsCard = () => {
           />
         </label>
 
-        <label className="flex items-center justify-between rounded-xl border border-slate-200 bg-[#f8faf8] p-4">
-          <span className="font-medium text-[#16522d]">
-            Enable Pickup
-          </span>
 
-          <input
-            type="checkbox"
-            className="h-5 w-5 accent-[#16522d]"
-          />
-        </label>
 
         <div>
           <label className="mb-2 flex items-center gap-2 text-sm font-medium text-[#16522d]">
@@ -106,7 +97,7 @@ const DeliverySettingsCard = () => {
           />
         </div>
 
-        <div className="md:col-span-2">
+        <div >
           <label className="mb-2 flex items-center gap-2 text-sm font-medium text-[#16522d]">
             <Clock3 size={16} />
             Estimated Delivery Time

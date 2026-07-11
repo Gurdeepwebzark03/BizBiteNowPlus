@@ -23,7 +23,7 @@ export const stats = [
   {
     id: 2,
     title: "Orders",
-    value: "42",
+    value: "10",
     trend: 8.2,
     subtitle: "vs yesterday",
     icon: ShoppingCart,
@@ -33,7 +33,7 @@ export const stats = [
   {
     id: 3,
     title: "Products",
-    value: "20",
+    value: "8",
     trend: 6,
     subtitle: "this week",
     icon: Package,

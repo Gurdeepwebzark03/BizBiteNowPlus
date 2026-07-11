@@ -3,19 +3,44 @@ import React, { useState } from "react";
 export default function AssignOrderModal({
   isOpen,
   onClose,
-  deliveryBoys,
   onAssign,
+  deliveryBoy,
 }) {
-  const [selectedBoy, setSelectedBoy] = useState("");
+  const [formData, setFormData] = useState({
+    orderId: "",
+    customer: "",
+    items: "",
+    address: "",
+  });
 
   if (!isOpen) return null;
 
-  const handleAssign = () => {
-    if (!selectedBoy) return;
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
 
-    onAssign(Number(selectedBoy));
+  const handleSubmit = () => {
+    if (
+      !formData.orderId ||
+      !formData.customer ||
+      !formData.items ||
+      !formData.address
+    ) {
+      alert("Please fill all fields");
+      return;
+    }
 
-    setSelectedBoy("");
+    onAssign(formData);
+
+    setFormData({
+      orderId: "",
+      customer: "",
+      items: "",
+      address: "",
+    });
 
     onClose();
   };
@@ -23,51 +48,76 @@ export default function AssignOrderModal({
   return (
     <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
 
-      <div className="bg-white rounded-xl w-full max-w-md p-6 shadow-lg">
+      <div className="bg-white rounded-xl p-6 w-full max-w-lg">
 
-        <h2 className="text-2xl font-bold text-amber-700 mb-5">
+        <h2 className="text-2xl text-black font-bold mb-5">
           Assign Order
         </h2>
 
+        <div className="mb-4">
+          <label className="font-semibold">
+            Delivery Boy
+          </label>
+
+          <div className="mt-2 bg-gray-100 rounded-lg px-4 py-3">
+            {deliveryBoy?.name}
+          </div>
+        </div>
+
         <div className="space-y-4">
 
-          <div>
-            <label className="block mb-2 font-medium">
-              Select Delivery Boy
-            </label>
+          <input
+            type="text"
+            name="orderId"
+            placeholder="Order ID"
+            value={formData.orderId}
+            onChange={handleChange}
+            className="w-full border rounded-lg px-4 py-2"
+          />
 
-            <select
-              value={selectedBoy}
-              onChange={(e) => setSelectedBoy(e.target.value)}
-              className="w-full border rounded-lg px-4 py-2"
-            >
-              <option value="">Choose Delivery Boy</option>
+          <input
+            type="text"
+            name="customer"
+            placeholder="Customer Name"
+            value={formData.customer}
+            onChange={handleChange}
+            className="w-full border rounded-lg px-4 py-2"
+          />
 
-              {deliveryBoys.map((boy) => (
-                <option key={boy.id} value={boy.id}>
-                  {boy.name}
-                </option>
-              ))}
-            </select>
-          </div>
+          <input
+            type="text"
+            name="items"
+            placeholder="Food Item"
+            value={formData.items}
+            onChange={handleChange}
+            className="w-full border rounded-lg px-4 py-2"
+          />
 
-          <div className="flex justify-end gap-3">
+          <textarea
+            name="address"
+            placeholder="Delivery Address"
+            value={formData.address}
+            onChange={handleChange}
+            className="w-full border rounded-lg px-4 py-2"
+          />
 
-            <button
-              onClick={onClose}
-              className="px-5 py-2 rounded-lg bg-gray-300"
-            >
-              Cancel
-            </button>
+        </div>
 
-            <button
-              onClick={handleAssign}
-              className="px-5 py-2 rounded-lg bg-amber-500 text-white"
-            >
-              Assign
-            </button>
+        <div className="flex justify-end gap-3 mt-6">
 
-          </div>
+          <button
+            onClick={onClose}
+            className="px-5 py-2 rounded-lg bg-gray-200 hover:bg-gray-100 cursor-pointer"
+          >
+            Cancel
+          </button>
+
+          <button
+            onClick={handleSubmit}
+            className="px-5 py-2 rounded-lg bg-green-900 hover:bg-green-800 text-white cursor-pointer"
+          >
+            Assign Order
+          </button>
 
         </div>
 

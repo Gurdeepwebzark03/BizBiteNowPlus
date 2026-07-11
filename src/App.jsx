@@ -11,9 +11,7 @@ import Products from "./pages/Dashboards/Seller/Products";
 import Settings from "./pages/Dashboards/Seller/Settings";
 import RegisterSuccess from "./pages/Auth/RegisterSuccess";
 import DeliveryDashboard from "./pages/Dashboards/DeliveryDashboard/DeliveryDashboard";
-
 import DeliveryManagement from "./pages/Dashboards/DeliveryDashboard/DeliveryManagement";
-
 
 import FestiveMenu from "./pages/Dashboards/Seller/FestiveMenu";
 import FestiveMenuDetails from "./pages/Dashboards/Seller/FestiveMenuDetails";
@@ -32,11 +30,18 @@ import OrderConfirmation from "./pages/customer/OrderConfirmation";
 import CustomerProfile from "./pages/customer/Profile";
 import CustomerOnboarding from "./pages/customer/CustomerOnboarding";
 import CustomerGate from "./components/customer/CustomerGate";
+import Earnings from "./pages/Dashboards/Seller/Earnings";
 import SpecialOffers from "./components/special offers/SpecialOffers";
+
+// Future Modules
+// import Orders from './pages/Dashboards/Seller/Orders';
+// import Customers from './pages/Dashboards/Seller/Customers';
+// import Analytics from './pages/Dashboards/Seller/Analytics';
+
 
 export default function App() {
   return (
-    <div className="w-full min-h-screen bg-slate-950 m-0 p-0 box-border overflow-x-hidden">
+    <div className="w-full min-h-screen bg-slate-100 m-0 p-0 box-border overflow-x-hidden">
       <Routes>
         {/* Default */}
         <Route path="/" element={<Navigate to="/storefront" replace />} />
@@ -49,38 +54,10 @@ export default function App() {
         {/* Customer */}
 
         <Route path="/customer/onboarding" element={<CustomerOnboarding />} />
-        <Route
-          path="/storefront"
-          element={
-            <CustomerGate>
-              <StoreFront />
-            </CustomerGate>
-          }
-        />
-        <Route
-          path="/menu"
-          element={
-            <CustomerGate>
-              <AllMenu />
-            </CustomerGate>
-          }
-        />
-        <Route
-          path="/cart"
-          element={
-            <CustomerGate>
-              <Cart />
-            </CustomerGate>
-          }
-        />
-        <Route
-          path="/product/:id"
-          element={
-            <CustomerGate>
-              <ProductDetail />
-            </CustomerGate>
-          }
-        />
+        <Route path="/storefront" element={<StoreFront />} />
+        <Route path="/menu" element={<AllMenu />} />
+        <Route path="/cart" element={<Cart />} />
+        <Route path="/product/:id" element={<ProductDetail />} />
         <Route
           path="/checkout"
           element={
@@ -120,15 +97,22 @@ export default function App() {
           <Route path="dashboard" element={<SellerDashboard />} />
           <Route path="orders" element={<Orders />} />
           <Route path="orders/:orderId" element={<OrderDetails />} />
-          <Route path="delivery" element={<DeliveryDashboard />} />
+          <Route path="delivery" element={<DeliveryManagement />} />
+          <Route path="special-offers" element={<SpecialOffers />} />
           <Route path="settings" element={<Settings />} />
           <Route path="products" element={<Products />} />
-          <Route path="special-offers" element={<SpecialOffers />} />
           <Route path="analytics" element={<Analytics />} />
+          <Route path="earnings" element={<Earnings />} />
           <Route path="profile" element={<Profile />} />
-
-          <Route  path="delivery-management" element={<DeliveryManagement />}
+          <Route  path="delivery-management" element={<DeliveryDashboard />}
+          
 />
+
+
+          <Route path="festivemenu" element={<FestiveMenu/>}/>
+          {/* <Route path="festivemenu/create" element={<CreateFestiveMenu />} /> */}
+
+
 
           <Route path="festivemenu" element={<FestiveMenu/>}/>
           <Route path="festivemenu/create" element={<CreateFestiveMenu />} />
@@ -138,7 +122,6 @@ export default function App() {
           <Route path="festivemenu/create" element={<CreateFestiveMenu />} />
           <Route path="festivemenu/edit/:id" element={<CreateFestiveMenu />} />
           <Route path="festivemenu/:id" element={<FestiveMenuDetails />} />
-          <Route path="festivemenu/history" element={<FestiveMenuHistory />} />
           <Route path="festivemenu/history" element={<FestiveMenuHistory/>}/>
 
 

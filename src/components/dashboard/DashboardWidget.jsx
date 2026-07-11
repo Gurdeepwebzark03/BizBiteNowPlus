@@ -1,12 +1,12 @@
-import { MoreHorizontal } from "lucide-react";
+import React, { memo } from "react";
 
-const DashboardWidget = ({
+function DashboardWidget({
   title,
   subtitle,
   action,
   children,
   className = "",
-}) => {
+}) {
   return (
     <section
       className={`
@@ -15,14 +15,13 @@ const DashboardWidget = ({
         border-gray-200
         bg-white
         shadow-sm
-        transition-all
+        transition-shadow
         duration-300
         hover:shadow-lg
         ${className}
       `}
     >
-      {/* Header */}
-      <div className="flex items-start justify-between border-b border-gray-100 px-6 py-5">
+      <div className="flex items-start overflow-y-auto justify-between border-b border-gray-100 px-6 py-5">
         <div>
           <h2 className="text-lg font-semibold text-[#1A4D2E]">
             {title}
@@ -35,19 +34,14 @@ const DashboardWidget = ({
           )}
         </div>
 
-        {action || (
-          <button className="rounded-xl p-2 transition hover:bg-gray-100">
-            <MoreHorizontal size={18} />
-          </button>
-        )}
+        {action}
       </div>
 
-      {/* Content */}
       <div className="p-6">
         {children}
       </div>
     </section>
   );
-};
+}
 
-export default DashboardWidget;
+export default memo(DashboardWidget);

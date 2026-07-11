@@ -85,17 +85,17 @@ export default function ProductCard({
 
           <div className="text-right">
             <p className="text-sm text-slate-500">
-              Stock
+              SKU
             </p>
 
             <h3
               className={`font-bold ${
-                product.stock <= 5
+                product.sku <= 5
                   ? "text-red-600"
                   : "text-slate-900"
               }`}
             >
-              {product.stock}
+              {product.sku}
             </h3>
           </div>
 
