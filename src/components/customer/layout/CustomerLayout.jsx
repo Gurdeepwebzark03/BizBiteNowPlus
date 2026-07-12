@@ -1,14 +1,27 @@
-import { Outlet } from "react-router-dom";
+import {
+  Outlet,
+  useLocation,
+} from "react-router-dom";
 
 import DesktopSidebar from "./DesktopSidebar";
 import CustomerHeader from "./CustomerHeader";
 import BottomNavigation from "./BottomNavigation";
 import FloatingCartButton from "./FloatingCartButton";
-import PageTransition from "./PageTransition";
+import { useCart } from "../../../context/CartContext";
+import { motion } from "framer-motion";
 
 
 const CustomerLayout = () => {
+const {
+  totalItems,
+  totalPrice,
+} = useCart();
+const location = useLocation();
 
+const hideFloatingCart = [
+  "/customer/cart",
+  "/customer/checkout",
+].includes(location.pathname);
   return (
 
     <div
@@ -59,11 +72,11 @@ const CustomerLayout = () => {
           "
         >
 
-          <PageTransition>
+
 
             <Outlet />
 
-          </PageTransition>
+          
 
         </div>
 
@@ -72,8 +85,12 @@ const CustomerLayout = () => {
 
 
 
-      <FloatingCartButton />
-
+{!hideFloatingCart && (
+  <FloatingCartButton
+    totalItems={totalItems}
+    totalPrice={totalPrice}
+  />
+)}
       <BottomNavigation />
 
     </div>

@@ -1,16 +1,14 @@
 import { useMemo, useState } from "react";
+import { useCart } from "../../context/CartContext";
 import { useNavigate } from "react-router-dom";
 
 import SectionHeader from "../../components/customer/common/SectionHeader";
 import PrimaryButton from "../../components/customer/common/PrimaryButton";
 import OrderSummary from "../../components/customer/orders/OrderSummary";
-import ProductCard from "../../components/customer/menu/ProductCard";
 
+import { motion } from "framer-motion";
 import CouponCard from "../../components/customer/rewards/CouponCard";
-import LoyaltyCard from "../../components/customer/rewards/LoyaltyCard";
-import RewardProgress from "../../components/customer/rewards/RewardProgress";
 
-import { menuData } from "../../data/customer/menuData";
 import couponsData from "../../data/customer/couponsData";
 import {
   loyaltyData,
@@ -19,66 +17,42 @@ import {
 const Cart = () => {
   const navigate = useNavigate();
 
-  const [cartItems, setCartItems] =
-    useState([
-      {
-        ...menuData[0],
-        quantity: 2,
-      },
-      {
-        ...menuData[3],
-        quantity: 1,
-      },
-    ]);
+const {
+  cartItems,
+  updateItem,
+  removeItem,
+} = useCart();
 
   const [selectedCoupon, setSelectedCoupon] =
     useState(null);
 
-  const updateQuantity = (
-    id,
-    type
-  ) => {
-    setCartItems((prev) =>
-      prev
-        .map((item) => {
-          if (item.id !== id)
-            return item;
+const updateQuantity = async (
+  item,
+  type
+) => {
+  const quantity =
+    type === "inc"
+      ? item.quantity + 1
+      : item.quantity - 1;
 
-          return {
-            ...item,
-            quantity:
-              type === "inc"
-                ? item.quantity + 1
-                : Math.max(
-                    1,
-                    item.quantity - 1
-                  ),
-          };
-        })
-        .filter(
-          (item) =>
-            item.quantity > 0
-        )
-    );
-  };
+  if (quantity <= 0) {
+    await removeItem(item.id);
+    return;
+  }
 
-  const removeItem = (id) => {
-    setCartItems((prev) =>
-      prev.filter(
-        (item) => item.id !== id
-      )
-    );
-  };
+  await updateItem(
+    item.id,
+    quantity
+  );
+};
 
   const summary = useMemo(() => {
     const subtotal =
       cartItems.reduce(
-        (sum, item) =>
-          sum +
-          item.price *
-            item.quantity,
-        0
-      );
+  (sum, item) =>
+    sum + item.total,
+  0
+)
 
 const discount = selectedCoupon
   ? selectedCoupon.discountType === "flat"
@@ -113,13 +87,27 @@ const discount = selectedCoupon
     selectedCoupon,
   ]);
     return (
+               <motion.div
+  initial={{ opacity: 0, y: 15 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{
+    duration: 0.4,
+    ease: [0.22, 1, 0.36, 1],
+  }}
+  className="space-y-6"
+>
     <div className="space-y-8 lg:pl-10 pb-32">
 
       {/* Header */}
 
       <SectionHeader
         title="Cart"
-        subtitle={`${cartItems.length} items in your cart`}
+        subtitle={`${
+  cartItems.reduce(
+    (sum, item) => sum + item.quantity,
+    0
+  )
+} items in your cart`}
       />
 
 
@@ -221,12 +209,12 @@ const discount = selectedCoupon
                       >
 
                         <button
-                          onClick={() =>
-                            updateQuantity(
-                              item.id,
-                              "dec"
-                            )
-                          }
+onClick={() =>
+  updateQuantity(
+    item,
+    "dec"
+  )
+}
                           className="
                             h-9
                             w-9
@@ -247,12 +235,12 @@ const discount = selectedCoupon
 
 
                         <button
-                          onClick={() =>
-                            updateQuantity(
-                              item.id,
-                              "inc"
-                            )
-                          }
+onClick={() =>
+  updateQuantity(
+    item,
+    "inc"
+  )
+}
                           className="
                             h-9
                             w-9
@@ -372,6 +360,7 @@ const discount = selectedCoupon
         </PrimaryButton>
 </section>        
     </div>
+    </motion.div>
   );
 };
 

@@ -1,18 +1,12 @@
 import { useState } from "react";
 
 import SectionHeader from "../../components/customer/common/SectionHeader";
-
+import { motion } from "framer-motion";
 import LoyaltyCard from "../../components/customer/rewards/LoyaltyCard";
 import RewardProgress from "../../components/customer/rewards/RewardProgress";
 import Coupons from "../../components/customer/rewards/Coupons";
-import GiftCard from "../../components/customer/rewards/GiftCard";
-import AchievementCard from "../../components/customer/rewards/AchievementCard";
-
 import {
   loyaltyData,
-  rewardsData,
-  achievementsData,
-  giftCardsData,
 } from "../../data/customer/rewardsData";
 
 import couponsData from "../../data/customer/couponsData";
@@ -24,40 +18,33 @@ const Rewards = () => {
     useState(couponsData);
 
 
-  const [appliedCoupon, setAppliedCoupon] =
-    useState(null);
+const [appliedCoupon, setAppliedCoupon] = useState(null);
+const [usedCoupons, setUsedCoupons] = useState([]);
 
 
-  const [achievements, setAchievements] =
-    useState(
-      achievementsData
-    );
 
 
-  const applyCoupon = (coupon) => {
 
-    setAppliedCoupon(
-      coupon.code
-    );
+const applyCoupon = (coupon) => {
+  if (usedCoupons.includes(coupon.code)) return;
 
-  };
+  localStorage.setItem(
+    "appliedCoupon",
+    JSON.stringify(coupon)
+  );
+};
 
 
-  const claimReward = (achievement) => {
-
-    setAchievements((prev) =>
-      prev.map((item) =>
-        item.id === achievement.id
-          ? {
-              ...item,
-              claimed: true,
-            }
-          : item
-      )
-    );
-
-  };
     return (
+                     <motion.div
+  initial={{ opacity: 0, y: 15 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{
+    duration: 0.4,
+    ease: [0.22, 1, 0.36, 1],
+  }}
+  className="space-y-6"
+>
     <div className="space-y-8 lg:pl-10 pb-32">
 
       {/* Header */}
@@ -88,104 +75,22 @@ const Rewards = () => {
 
       <section className="space-y-5">
 
-        <Coupons
-          coupons={coupons}
-          appliedCoupon={appliedCoupon}
-          onApply={applyCoupon}
-          onCopy={(code) =>
-            navigator.clipboard.writeText(
-              code
-            )
-          }
-        />
+
+<Coupons
+  coupons={coupons}
+  appliedCoupon={appliedCoupon}
+  usedCoupons={usedCoupons}
+  onApply={applyCoupon}
+/>
 
       </section>
 
 
-      {/* Gift Cards */}
-
-      <section className="space-y-5">
-
-        <h2 className="text-xl font-bold text-slate-900">
-          Gift Cards
-        </h2>
-
-
-        <div
-          className="
-            grid
-            gap-5
-
-            sm:grid-cols-2
-            lg:grid-cols-3
-          "
-        >
-
-          {giftCardsData.map(
-            (gift) => (
-
-              <GiftCard
-                key={gift.id}
-                gift={gift}
-              />
-
-            )
-          )}
-
-        </div>
-
-      </section>
-            {/* Achievements */}
-
-      <section className="space-y-5">
-
-        <div>
-
-          <h2 className="text-xl font-bold text-slate-900">
-            Achievements
-          </h2>
-
-          <p className="mt-1 text-slate-500">
-            Complete challenges and unlock exclusive rewards.
-          </p>
-
-        </div>
-
-
-        <div
-          className="
-            grid
-            gap-6
-
-            md:grid-cols-2
-            xl:grid-cols-3
-          "
-        >
-
-          {achievements.map(
-            (achievement) => (
-
-              <AchievementCard
-                key={
-                  achievement.id
-                }
-                achievement={
-                  achievement
-                }
-                onClaim={
-                  claimReward
-                }
-              />
-
-            )
-          )}
-
-        </div>
-
-      </section>
-
+      
+      
 
     </div>
+    </motion.div>
   );
 };
 

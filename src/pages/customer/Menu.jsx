@@ -1,22 +1,62 @@
-import { useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 
+import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 import CategoryTabs from "../../components/customer/menu/CategoryTabs";
 import ProductFilters from "../../components/customer/menu/ProductFilters";
 import VegToggle from "../../components/customer/menu/VegToggle";
 import SortDropdown from "../../components/customer/menu/SortDropdown";
 import MenuGrid from "../../components/customer/menu/MenuGrid";
 import ProductCard from "../../components/customer/menu/ProductCard";
-
+import { useCart } from "../../context/CartContext";
 import {
-  categories,
-  menuData,
-} from "../../data/customer/menuData";
+  getMenu,
+  getCategories,
+  getFavorites,
+  toggleFavorite,
+} from "../../api/customerApi";
 
 
 const Menu = () => {
-
+const {
+  cartItems,
+  addItem,
+} = useCart();
   const navigate = useNavigate();
+
+
+  const [categories, setCategories] =
+    useState([]);
+
+
+  const [menuData, setMenuData] =
+    useState([]);
+
+const CUSTOMER_ID = "CUSTOMER_001";
+
+const [favorites, setFavorites] =
+  useState([]);
+
+  const [cursor, setCursor] =
+    useState(null);
+
+
+  const [loading, setLoading] =
+    useState(true);
+
+
+  const [loadingMore, setLoadingMore] =
+    useState(false);
+
+
+  const loadMoreRef =
+    useRef(null);
+
 
 
   const [activeCategory, setActiveCategory] =
@@ -31,191 +71,405 @@ const Menu = () => {
     useState("featured");
 
 
+
   const [filters, setFilters] =
     useState({
-      bestseller: false,
-      offers: false,
-      rating: false,
-      available: true,
+      bestseller:false,
+      offers:false,
+      rating:false,
+      available:true,
     });
 
 
 
-  const filteredProducts = useMemo(() => {
+  const loadMenu = async(
+    reset = false
+  ) => {
 
-    let products = [...menuData];
+    try {
+
+      if(reset){
+
+        setLoading(true);
+
+      }
+      else{
+
+        setLoadingMore(true);
+
+      }
 
 
-    // Category filter
+      const response =
+        await getMenu({
+          limit:12,
+          cursor: reset ? "" : cursor,
+        });
 
-    if (activeCategory !== "all") {
 
-      products =
-        products.filter(
-          (item) =>
-            item.category === activeCategory
+      const newProducts =
+        response.data.data;
+
+
+      if(reset){
+
+        setMenuData(
+          newProducts
         );
+
+      }
+      else{
+
+        setMenuData(
+          prev => [
+            ...prev,
+            ...newProducts,
+          ]
+        );
+
+      }
+
+
+      setCursor(
+        response.data.nextCursor
+      );
+
+
+    }
+    catch(error){
+
+      console.log(
+        "Menu Loading Error:",
+        error
+      );
+
+    }
+    finally{
+
+      setLoading(false);
+
+      setLoadingMore(false);
 
     }
 
+  };
 
 
-    // Veg filter
 
-    if (vegType === "veg") {
+  useEffect(()=>{
 
-      products =
-        products.filter(
-          (item) =>
-            item.isVeg === true
+
+    const loadInitial =
+    async()=>{
+
+      try{
+
+        const categoryResponse =
+          await getCategories();
+
+
+        setCategories(
+          categoryResponse.data.data
         );
 
-    }
 
+        await loadMenu(true);
+const favoriteResponse =
+  await getFavorites(CUSTOMER_ID);
 
-    if (vegType === "nonveg") {
+setFavorites(
+  favoriteResponse.data.data.map(
+    (item) => item.productId
+  )
+);
 
-      products =
-        products.filter(
-          (item) =>
-            item.isVeg === false
+      }
+      catch(error){
+
+        console.log(
+          "Initial Menu Error",
+          error
         );
 
-    }
+      }
+
+    };
 
 
+    loadInitial();
 
 
-    // Availability
+  },[]);
+    useEffect(() => {
 
-    if (filters.available) {
-
-      products =
-        products.filter(
-          (item) =>
-            item.available
-        );
-
-    }
+    if(!loadMoreRef.current)
+      return;
 
 
+    const observer =
+      new IntersectionObserver(
+        (entries)=>{
+
+          if(
+            entries[0].isIntersecting &&
+            cursor &&
+            !loadingMore
+          ){
+
+            loadMenu();
+
+          }
+
+        },
+        {
+          threshold:1,
+        }
+      );
 
 
-    // Bestseller
-
-    if (filters.bestseller) {
-
-      products =
-        products.filter(
-          (item) =>
-            item.bestseller
-        );
-
-    }
+    observer.observe(
+      loadMoreRef.current
+    );
 
 
+    return()=>{
 
-    // Rating
+      observer.disconnect();
 
-    if (filters.rating) {
-
-      products =
-        products.filter(
-          (item) =>
-            item.rating >= 4
-        );
-
-    }
-
-
-
-
-    // Offers
-
-    if (filters.offers) {
-
-      products =
-        products.filter(
-          (item) =>
-            item.originalPrice
-        );
-
-    }
-
-
-
-
-    // Sorting
-
-    switch(sortBy) {
-
-      case "priceLow":
-
-        products.sort(
-          (a,b)=>
-            a.price - b.price
-        );
-
-        break;
-
-
-
-      case "priceHigh":
-
-        products.sort(
-          (a,b)=>
-            b.price - a.price
-        );
-
-        break;
-
-
-
-      case "rating":
-
-        products.sort(
-          (a,b)=>
-            b.rating - a.rating
-        );
-
-        break;
-
-
-
-      default:
-
-        products.sort(
-          (a,b)=>
-            b.featured - a.featured
-        );
-
-    }
-
-
-    return products;
+    };
 
 
   },[
-    activeCategory,
-    vegType,
-    filters,
-    sortBy,
+    cursor,
+    loadingMore,
   ]);
 
 
 
-  return (
 
+  const filteredProducts =
+    useMemo(()=>{
+
+      let products =
+        [...menuData];
+
+
+
+if (activeCategory !== "all") {
+  products = products.filter((item) => {
+    const productCategory =
+      (item.category?.id ??
+        item.category ??
+        "")
+        .toString()
+        .toLowerCase();
+
+    const selectedCategory =
+      activeCategory
+        .toString()
+        .toLowerCase();
+
+    return productCategory === selectedCategory;
+  });
+}
+
+
+
+      if(
+        vegType === "veg"
+      ){
+
+        products =
+          products.filter(
+            (item)=>
+              item.isVeg === true
+          );
+
+      }
+
+
+
+      if(
+        vegType === "nonveg"
+      ){
+
+        products =
+          products.filter(
+            (item)=>
+              item.isVeg === false
+          );
+
+      }
+
+
+
+
+      if(
+        filters.available
+      ){
+
+        products =
+          products.filter(
+            (item)=>
+              item.available
+          );
+
+      }
+
+
+
+
+      if(
+        filters.bestseller
+      ){
+
+        products =
+          products.filter(
+            (item)=>
+              item.bestseller
+          );
+
+      }
+
+
+
+
+
+      if(
+        filters.rating
+      ){
+
+products =
+  products.filter(
+    (item)=>
+      (item.rating?.average ?? 0) >= 4
+  );
+
+      }
+
+
+
+
+      if(
+        filters.offers
+      ){
+
+        products =
+          products.filter(
+            (item)=>
+              item.originalPrice
+          );
+
+      }
+
+
+
+
+switch (sortBy) {
+  case "price-low":
+    products.sort((a, b) => a.price - b.price);
+    break;
+
+  case "price-high":
+    products.sort((a, b) => b.price - a.price);
+    break;
+
+  case "rating":
+    products.sort(
+      (a, b) =>
+        (b.rating?.average ?? 0) -
+        (a.rating?.average ?? 0)
+    );
+    break;
+
+  case "popular":
+    products.sort(
+      (a, b) =>
+        (b.rating?.count ?? 0) -
+        (a.rating?.count ?? 0)
+    );
+    break;
+
+  case "fastest":
+    products.sort(
+      (a, b) =>
+        parseInt(a.preparationTime) -
+        parseInt(b.preparationTime)
+    );
+    break;
+
+  case "recommended":
+  default:
+    products.sort(
+      (a, b) =>
+        (b.featured ? 1 : 0) -
+        (a.featured ? 1 : 0)
+    );
+}
+
+
+
+      return products;
+
+
+    },[
+      menuData,
+      activeCategory,
+      vegType,
+      filters,
+      sortBy,
+    ]);
+    const handleFavorite = async (
+  product
+) => {
+  try {
+    await toggleFavorite({
+      customerId: CUSTOMER_ID,
+      productId: product.id,
+    });
+
+    const exists =
+      favorites.includes(product.id);
+
+    setFavorites((prev) =>
+      exists
+        ? prev.filter(
+            (id) => id !== product.id
+          )
+        : [...prev, product.id]
+    );
+
+    alert(
+      exists
+        ? "Removed from favourites"
+        : "Added to favourites"
+    );
+  } catch (err) {
+    console.log(err);
+  }
+};
+const getCartItem = (productId) =>
+  cartItems.find(
+    (item) => item.productId === productId
+  );
+      return (
+               <motion.div
+  initial={{ opacity: 0, y: 15 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{
+    duration: 0.4,
+    ease: [0.22, 1, 0.36, 1],
+  }}
+  className="space-y-6"
+>
     <div
       className="
         w-full
-
         space-y-8
         lg:pl-10
         pb-28
       "
     >
-
 
       {/* Categories */}
 
@@ -232,34 +486,24 @@ const Menu = () => {
       <div
         className="
           flex
-
           flex-col
-
           gap-5
-
           px-4
-
           lg:px-6
         "
       >
 
-
         <div
           className="
             flex
-
             flex-col
-
             gap-4
 
             lg:flex-row
-
             lg:items-center
-
             lg:justify-between
           "
         >
-
 
           <VegToggle
             value={vegType}
@@ -267,12 +511,10 @@ const Menu = () => {
           />
 
 
-
           <SortDropdown
             value={sortBy}
             onChange={setSortBy}
           />
-
 
         </div>
 
@@ -281,11 +523,8 @@ const Menu = () => {
         <ProductFilters
           filters={filters}
           onChange={setFilters}
-          onMoreFilters={() =>
-            console.log("Open Filters")
-          }
-        />
 
+        />
 
       </div>
 
@@ -297,24 +536,18 @@ const Menu = () => {
       <section
         className="
           w-full
-
           space-y-6
-
           px-4
-
           lg:px-6
         "
       >
-
 
         <div>
 
           <h2
             className="
               text-2xl
-
               font-bold
-
               text-slate-900
             "
           >
@@ -325,45 +558,66 @@ const Menu = () => {
           <p
             className="
               mt-1
-
               text-slate-500
             "
           >
             {filteredProducts.length} items available
           </p>
 
-
         </div>
 
 
 
-
         {
-          filteredProducts.length === 0 ? (
+          loading ? (
+
+            <div
+              className="
+                py-20
+                text-center
+                text-slate-500
+              "
+            >
+              Loading menu...
+            </div>
+
+
+          ) : filteredProducts.length === 0 ? (
+
 
             <div
               className="
                 rounded-[28px]
-
                 border-2
-
                 border-dashed
-
                 border-slate-300
-
                 bg-white
-
                 px-6
-
                 py-16
-
                 text-center
               "
             >
 
-              <h3 className="text-xl font-bold">
+              <h3
+                className="
+                  text-xl
+                  font-bold
+                  text-slate-900
+                "
+              >
                 No Products Found
               </h3>
+
+
+              <p
+                className="
+                  mt-2
+                  text-slate-500
+                "
+              >
+                Try changing your filters.
+              </p>
+
 
             </div>
 
@@ -371,35 +625,102 @@ const Menu = () => {
           ) : (
 
 
-            <MenuGrid>
+            <>
+
+              <MenuGrid>
+
+                {
+                  filteredProducts.map(
+                    (product)=>(
+
+<ProductCard
+  key={product.id}
+  product={product}
+  quantity={
+    getCartItem(product.id)?.quantity ?? 0
+  }
+  isFavourite={favorites.includes(product.id)}
+  onFavourite={() =>
+    handleFavorite(product)
+  }
+  onAdd={() =>
+    addItem(product, 1)
+  }
+  onIncrease={() =>
+    addItem(product, 1)
+  }
+  onDecrease={() => {
+    const item = getCartItem(product.id);
+
+    if (item) {
+      updateItem(
+        item.id,
+        item.quantity - 1
+      );
+    }
+  }}
+  onClick={() =>
+    navigate(
+      `/customer/product/${product.id}`
+    )
+  }
+/>
+
+                    )
+                  )
+                }
+
+              </MenuGrid>
+
+
+
+              {/* Cursor Loader */}
 
               {
-                filteredProducts.map(
-                  (product)=>(
+                cursor && (
 
-                    <ProductCard
+                  <div
+                    ref={loadMoreRef}
+                    className="
+                      flex
+                      justify-center
+                      py-8
+                    "
+                  >
 
-                      key={product.id}
+                    {
+                      loadingMore ? (
 
-                      product={product}
+                        <p
+                          className="
+                            text-sm
+                            text-slate-500
+                          "
+                        >
+                          Loading more items...
+                        </p>
 
-                      onClick={() =>
-                        navigate(
-                          `/customer/product/${product.id}`
-                        )
-                      }
+                      ) : (
 
-                    />
+                        <div
+                          className="
+                            h-6
+                          "
+                        />
 
-                  )
+                      )
+                    }
+
+                  </div>
+
                 )
               }
 
 
-            </MenuGrid>
-
+            </>
 
           )
+
         }
 
 
@@ -407,6 +728,7 @@ const Menu = () => {
 
 
     </div>
+    </motion.div>
 
   );
 

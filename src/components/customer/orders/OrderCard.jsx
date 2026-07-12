@@ -109,25 +109,32 @@ const OrderCard = ({
         <div className="flex flex-wrap items-center justify-between gap-4">
           {/* Left */}
 
-          <div className="space-y-2">
-            <div className="flex items-center gap-2 text-sm text-slate-500">
-              <Clock3 size={15} />
-              {order.date}
-            </div>
+<div className="flex items-center gap-2 text-sm text-slate-500">
+  <Clock3 size={15} />
+  {order.createdAt
+    ? new Date(order.createdAt).toLocaleString("en-IN", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+        hour: "numeric",
+        minute: "2-digit",
+      })
+    : "--"}
+</div>
 
-            <div className="flex items-center gap-2">
-              <Receipt
-                size={16}
-                style={{
-                  color: "var(--primary)",
-                }}
-              />
+<div className="flex items-center gap-2">
+  <Receipt
+    size={16}
+    style={{
+      color: "var(--primary)",
+    }}
+  />
 
-              <span className="font-semibold text-slate-900">
-                ₹{order.total}
-              </span>
-            </div>
-          </div>
+<span className="font-semibold text-slate-900">
+  ₹{(order.summary?.total ?? 0).toLocaleString("en-IN")}
+</span>
+</div>
+       
 
           {/* Right */}
 

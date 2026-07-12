@@ -1,198 +1,410 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
+import { motion } from "framer-motion";
+import { useCart } from "../../context/CartContext";
 import HeroBanner from "../../components/customer/hero/HeroBanner";
 import StoreCard from "../../components/customer/hero/StoreCard";
 import HeroActions from "../../components/customer/hero/HeroActions";
-
-import CategoryTabs from "../../components/customer/menu/CategoryTabs";
-import ProductFilters from "../../components/customer/menu/ProductFilters";
 import MenuGrid from "../../components/customer/menu/MenuGrid";
 import ProductCard from "../../components/customer/menu/ProductCard";
 
-import storeData from "../../data/customer/storeData";
-import { categories, menuData } from "../../data/customer/menuData";
+import {
+  getStore,
+  getMenu,
+  getFavorites,
+  getCurrentOrder,
+  toggleFavorite,
+} from "../../api/customerApi";
 
 const Home = () => {
   const navigate = useNavigate();
 
-  const [activeCategory, setActiveCategory] = useState("all");
+  const [store, setStore] = useState(null);
 
-  const [filters, setFilters] = useState({
-    bestseller: false,
-    offers: false,
-    rating: false,
-    available: true,
-  });
+  const [menuData, setMenuData] = useState([]);
 
-  const filteredProducts = useMemo(() => {
-    return menuData.filter((product) => {
-      if (activeCategory !== "all" && product.category !== activeCategory) {
-        return false;
-      }
+  const [favoriteProducts, setFavoriteProducts] = useState([]);
 
-      if (filters.available && !product.available) {
-        return false;
-      }
+  const [recentProducts, setRecentProducts] = useState([]);
 
-      if (filters.bestseller && !product.bestseller) {
-        return false;
-      }
+  const [offerProducts, setOfferProducts] = useState([]);
+  const { cartItems, addItem, updateItem, removeItem } = useCart();
+  const increaseQuantity = (product) => {
+    const item = cartItems.find(
+      (cartItem) => cartItem.productId === product.id,
+    );
 
-      if (filters.rating && product.rating < 4) {
-        return false;
-      }
+    if (!item) {
+      addItem(product);
+      return;
+    }
 
-      if (filters.offers && !product.originalPrice) {
-        return false;
-      }
+    updateItem(item.id, item.quantity + 1);
+  };
 
-      return true;
-    });
-  }, [activeCategory, filters]);
-  return (
-    <div
-      className="
-      w-full
+  const decreaseQuantity = (product) => {
+    const item = cartItems.find(
+      (cartItem) => cartItem.productId === product.id,
+    );
 
-      max-w-[1600px]
+    if (!item) return;
 
-      mx-auto
-      lg:pl-10
-      space-y-8
+    if (item.quantity === 1) {
+      removeItem(item.id);
+      return;
+    }
 
-      pb-28
-    "
-    >
-      <HeroBanner
-        banner={storeData.coverImage}
-        logo={storeData.logo}
-        name={storeData.name}
-        tagline={storeData.tagline}
-        rating={storeData.rating}
-        reviews={storeData.totalReviews}
-        deliveryTime={storeData.averageDeliveryTime}
-        isOpen={storeData.isOpen}
-      />
+    updateItem(item.id, item.quantity - 1);
+  };
+  const loadData = async () => {
+    try {
+      const [storeRes, menuRes, favRes, orderRes] = await Promise.all([
+        getStore(),
+        getMenu(),
+        getFavorites("CUSTOMER_001"),
+        getCurrentOrder("CUSTOMER_001"),
+      ]);
 
-      <StoreCard
-        address={`${storeData.address.line1}, ${storeData.address.city}, ${storeData.address.state}`}
-        phone={storeData.contact.phone}
-        distance={storeData.distance}
-        deliveryTime={storeData.averageDeliveryTime}
-        isOpen={storeData.isOpen}
-        onCall={() => window.open(`tel:${storeData.contact.phone}`)}
-        onDirections={() => window.open("https://maps.google.com", "_blank")}
-        onShare={() => {
-          if (navigator.share) {
-            navigator.share({
-              title: storeData.name,
-              text: storeData.tagline,
-            });
-          }
-        }}
-        onFavorite={() => console.log("Favorite Store")}
-        onBookTable={() => navigate("/customer/book-table")}
-      />
+      const menu = menuRes.data.data || [];
 
-      <HeroActions
-        onMenu={() =>
-          document.getElementById("menu-section")?.scrollIntoView({
-            behavior: "smooth",
-          })
+      setStore(storeRes.data.data);
+
+      setMenuData(menu);
+
+      const favourites = favRes.data.data || [];
+
+      setFavoriteProducts(
+        menu.filter((item) =>
+          favourites.some((fav) => fav.productId === item.id),
+        ),
+      );
+
+      const orderedIds =
+        orderRes.data.data?.items?.map((item) => item.productId) || [];
+
+      setRecentProducts(menu.filter((item) => orderedIds.includes(item.id)));
+
+      setOfferProducts(menu.filter((item) => item.originalPrice > item.price));
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  const favouriteCount = useMemo(
+    () => favoriteProducts.length,
+    [favoriteProducts],
+  );
+
+  const recentCount = useMemo(() => recentProducts.length, [recentProducts]);
+
+  const offerCount = useMemo(() => offerProducts.length, [offerProducts]);
+  const handleFavourite = async (productId) => {
+    try {
+      await toggleFavorite({
+        customerId: "CUSTOMER_001",
+        productId,
+        storeId: store?.id || "STORE_001",
+      });
+
+      setFavoriteProducts((prev) => {
+        const exists = prev.some((item) => item.id === productId);
+
+        if (exists) {
+          return prev.filter((item) => item.id !== productId);
         }
-        onBookTable={() => navigate("/customer/book-table")}
-        onOrders={() => navigate("/customer/orders")}
-        onRewards={() => navigate("/customer/rewards")}
-        onDirections={() => window.open("https://maps.google.com", "_blank")}
-        onCall={() => window.open(`tel:${storeData.contact.phone}`)}
-      />
-      {/* Categories */}
 
-      <CategoryTabs
-        categories={categories}
-        activeCategory={activeCategory}
-        onChange={setActiveCategory}
-      />
+        const product = menuData.find((item) => item.id === productId);
 
-      {/* Filters */}
-
+        return product ? [...prev, product] : prev;
+      });
+    } catch (err) {
+      console.error(err);
+    }
+  };
+  return (
+    <motion.div
+      initial={{
+        opacity: 0,
+        y: 15,
+      }}
+      animate={{
+        opacity: 1,
+        y: 0,
+      }}
+      transition={{
+        duration: 0.4,
+        ease: [0.22, 1, 0.36, 1],
+      }}
+      className="space-y-6"
+    >
       <div
         className="
-  w-full
-
-  px-2
-
- 
-
-  
-"
+        mx-auto
+        w-full
+        max-w-[1600px]
+        space-y-8
+        pb-28
+        lg:pl-10
+      "
       >
-        <ProductFilters
-          filters={filters}
-          onChange={setFilters}
-          onMoreFilters={() => console.log("More Filters")}
+        <HeroBanner
+          banner={
+            store?.coverImage ||
+            "https://images.unsplash.com/photo-1515003197210-e0cd71810b5f"
+          }
+          logo={
+            store?.logo ||
+            "https://images.unsplash.com/photo-1515003197210-e0cd71810b5f?auto=format&fit=crop&w=200&q=80"
+          }
+          name={store?.name || "BizBiteNow Kitchen"}
+          tagline={store?.tagline}
+          rating={store?.rating}
+          reviews={store?.totalReviews}
+          isOpen={store?.timings?.status === "Open"}
         />
-      </div>
 
-      {/* Products */}
+        <StoreCard
+          address={
+            store?.address
+              ? `${store.address.line1}, ${store.address.city}, ${store.address.state}`
+              : "Loading..."
+          }
+          phone={store?.phone || ""}
+          distance={store?.distance || "2.4 km"}
+          deliveryTime={store?.delivery?.averageTime || "25-35 mins"}
+          isOpen={store?.timings?.status === "Open"}
+          onCall={() => store?.phone && window.open(`tel:${store.phone}`)}
+          onDirections={() => window.open("https://maps.google.com", "_blank")}
+          onShare={() => {
+            if (navigator.share) {
+              navigator.share({
+                title: store?.name,
+                text: store?.tagline,
+              });
+            }
+          }}
+          onFavorite={() => navigate("/customer/favorites")}
+          onBookTable={() => navigate("/customer/book-table")}
+        />
 
-      <section
-        id="menu-section"
-        className="
-    w-full
+        <HeroActions
+          onMenu={() => navigate("/customer/menu")}
+          onBookTable={() => navigate("/customer/book-table")}
+          onOrders={() => navigate("/customer/orders")}
+          onRewards={() => navigate("/customer/rewards")}
+          onDirections={() => window.open("https://maps.google.com", "_blank")}
+          onCall={() => store?.phone && window.open(`tel:${store.phone}`)}
+        />
+        {/* Recently Ordered */}
 
-    space-y-6
+        {recentCount > 0 && (
+          <section className="space-y-6 px-2 sm:px-4 lg:px-6 xl:px-8">
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-2xl font-bold text-slate-900">
+                  Recently Ordered
+                </h2>
 
-    px-2
+                <p className="mt-1 text-slate-500">
+                  Order your favourites again in one tap.
+                </p>
+              </div>
 
-    sm:px-4
+              <button
+                onClick={() => navigate("/customer/orders")}
+                className="
+                text-sm
+                font-semibold
+                transition
+                hover:opacity-80
+              "
+                style={{
+                  color: "var(--primary)",
+                }}
+              >
+                View Orders
+              </button>
+            </div>
 
-    lg:px-6
+            <MenuGrid>
+              {recentProducts.map((product) => (
+                <ProductCard
+                  key={product.id}
+                  product={product}
+                  quantity={
+                    cartItems.find((item) => item.productId === product.id)
+                      ?.quantity || 0
+                  }
+                  isFavourite={favoriteProducts.some(
+                    (item) => item.id === product.id,
+                  )}
+                  onAdd={() => addItem(product)}
+                  onIncrease={() => increaseQuantity(product)}
+                  onDecrease={() => decreaseQuantity(product)}
+                  onFavourite={() => handleFavourite(product.id)}
+                  onClick={() => navigate(`/customer/product/${product.id}`)}
+                />
+              ))}
+            </MenuGrid>
+          </section>
+        )}
+        {/* Favourite Items */}
 
-    xl:px-8
-  "
-      >
-        <div className="flex items-center justify-between">
-          <div>
-            <h2 className="text-2xl font-bold text-slate-900">
-              Popular Dishes
+        {favouriteCount > 0 && (
+          <section className="space-y-6 px-2 sm:px-4 lg:px-6 xl:px-8">
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-2xl font-bold text-slate-900">
+                  Your Favorites ❤️
+                </h2>
+
+                <p className="mt-1 text-slate-500">
+                  Dishes you've marked as favourites.
+                </p>
+              </div>
+
+              <button
+                onClick={() => navigate("/customer/favorites")}
+                className="
+                text-sm
+                font-semibold
+                transition
+                hover:opacity-80
+              "
+                style={{
+                  color: "var(--primary)",
+                }}
+              >
+                View All
+              </button>
+            </div>
+
+            <MenuGrid>
+              {favoriteProducts.map((product) => (
+                <ProductCard
+                  key={product.id}
+                  product={product}
+                  quantity={
+                    cartItems.find((item) => item.productId === product.id)
+                      ?.quantity || 0
+                  }
+                  isFavourite={favoriteProducts.some(
+                    (item) => item.id === product.id,
+                  )}
+                  onAdd={() => addItem(product)}
+                  onIncrease={() => increaseQuantity(product)}
+                  onDecrease={() => decreaseQuantity(product)}
+                  onFavourite={() => handleFavourite(product.id)}
+                  onClick={() => navigate(`/customer/product/${product.id}`)}
+                />
+              ))}
+            </MenuGrid>
+          </section>
+        )}
+        {/* Today's Offers */}
+
+        {offerCount > 0 && (
+          <section className="space-y-6 px-2 sm:px-4 lg:px-6 xl:px-8">
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-2xl font-bold text-slate-900">
+                  Today's Offers 🔥
+                </h2>
+
+                <p className="mt-1 text-slate-500">
+                  Save more with exclusive deals available today.
+                </p>
+              </div>
+
+              <button
+                onClick={() => navigate("/customer/menu")}
+                className="
+                text-sm
+                font-semibold
+                transition
+                hover:opacity-80
+              "
+                style={{
+                  color: "var(--primary)",
+                }}
+              >
+                View All Offers
+              </button>
+            </div>
+
+            <MenuGrid>
+              {offerProducts.map((product) => (
+                <ProductCard
+                  key={product.id}
+                  product={product}
+                  quantity={
+                    cartItems.find((item) => item.productId === product.id)
+                      ?.quantity || 0
+                  }
+                  isFavourite={favoriteProducts.some(
+                    (item) => item.id === product.id,
+                  )}
+                  onAdd={() => addItem(product)}
+                  onIncrease={() => increaseQuantity(product)}
+                  onDecrease={() => decreaseQuantity(product)}
+                  onFavourite={() => handleFavourite(product.id)}
+                  onClick={() => navigate(`/customer/product/${product.id}`)}
+                />
+              ))}
+            </MenuGrid>
+          </section>
+        )}
+
+        {/* Browse Full Menu */}
+
+        <section className="px-2 sm:px-4 lg:px-6 xl:px-8">
+          <div
+            className="
+            rounded-[32px]
+            border
+            border-slate-200
+            bg-white
+            p-8
+            text-center
+            shadow-sm
+          "
+          >
+            <h2 className="text-3xl font-bold text-slate-900">
+              Looking for something else?
             </h2>
 
-            <p className="mt-1 text-slate-500">
-              Freshly prepared favorites from our kitchen.
+            <p className="mt-3 text-slate-500">
+              Explore our complete menu with all categories, latest dishes,
+              combos and beverages.
             </p>
-          </div>
 
-          <button
-            onClick={() => navigate("/customer/menu")}
-            className="
-              text-sm
+            <button
+              onClick={() => navigate("/customer/menu")}
+              className="
+              mt-6
+              rounded-2xl
+              px-8
+              py-4
+              text-lg
               font-semibold
-
+              text-white
               transition
-
-              hover:opacity-80
+              hover:scale-[1.02]
             "
-            style={{
-              color: "var(--primary)",
-            }}
-          >
-            View All
-          </button>
-        </div>
-
-        <MenuGrid>
-          {filteredProducts.map((product) => (
-            <ProductCard
-              key={product.id}
-              product={product}
-              onClick={() => navigate(`/customer/product/${product.id}`)}
-            />
-          ))}
-        </MenuGrid>
-      </section>
-    </div>
+              style={{
+                background: "var(--primary)",
+              }}
+            >
+              Browse Full Menu
+            </button>
+          </div>
+        </section>
+      </div>
+    </motion.div>
   );
 };
 

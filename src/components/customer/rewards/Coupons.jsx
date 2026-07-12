@@ -13,10 +13,7 @@ const tabs = [
     id: "available",
     label: "Available",
   },
-  {
-    id: "applied",
-    label: "Applied",
-  },
+
   {
     id: "expired",
     label: "Expired",
@@ -25,7 +22,7 @@ const tabs = [
 
 const Coupons = ({
   coupons = [],
-  appliedCoupon = null,
+  usedCoupons = [],
   onApply,
   onCopy,
 }) => {
@@ -34,13 +31,21 @@ const Coupons = ({
 
   const [search, setSearch] =
     useState("");
+const [copiedCode, setCopiedCode] = useState(null);
+const handleCopy = (code) => {
+  navigator.clipboard.writeText(code);
+  setCopiedCode(code);
 
+  setTimeout(() => {
+    setCopiedCode(null);
+  }, 2000);
+};
   const filteredCoupons = useMemo(() => {
     return coupons.filter((coupon) => {
       const tabMatch =
         activeTab === "available"
           ? !coupon.expired &&
-            coupon.code !== appliedCoupon
+            !usedCoupons.includes(coupon.code)
           : activeTab === "applied"
           ? coupon.code === appliedCoupon
           : coupon.expired;
@@ -59,7 +64,7 @@ const Coupons = ({
     coupons,
     activeTab,
     search,
-    appliedCoupon,
+    
   ]);
 
   return (
@@ -127,41 +132,7 @@ const Coupons = ({
         ))}
       </div>
 
-      {/* Applied */}
-
-      {appliedCoupon &&
-        activeTab === "applied" && (
-          <Card
-            shadow="none"
-            className="border-[var(--primary)] bg-[var(--primary-light)]"
-          >
-            <div className="flex items-center gap-4">
-              <TicketPercent
-                size={28}
-                style={{
-                  color: "var(--primary)",
-                }}
-              />
-
-              <div className="flex-1">
-                <h3
-                  className="font-bold"
-                  style={{
-                    color:
-                      "var(--primary)",
-                  }}
-                >
-                  Coupon Applied
-                </h3>
-
-                <p className="text-sm text-slate-600">
-                  {appliedCoupon}
-                </p>
-              </div>
-            </div>
-          </Card>
-        )}
-
+    
       {/* Coupons */}
 
       {filteredCoupons.length === 0 ? (
@@ -174,13 +145,13 @@ const Coupons = ({
         <div className="grid gap-6 lg:grid-cols-2">
           {filteredCoupons.map(
             (coupon) => (
-              <CouponCard
-                key={coupon.code}
-                coupon={coupon}
-                copied={false}
-                onCopy={onCopy}
-                onApply={onApply}
-              />
+            <CouponCard
+              key={coupon.code}
+              coupon={coupon}
+              copied={copiedCode === coupon.code}
+              onCopy={handleCopy}
+              onApply={onApply}
+            />
             )
           )}
         </div>

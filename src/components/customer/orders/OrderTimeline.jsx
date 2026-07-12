@@ -7,21 +7,35 @@ import {
   Home,
 } from "lucide-react";
 
-const iconMap = {
-  placed: PackageCheck,
-  confirmed: CheckCircle2,
-  preparing: ChefHat,
-  delivery: Bike,
-  delivered: Home,
+const getIcon = (title) => {
+  switch (title.toLowerCase()) {
+    case "order placed":
+      return PackageCheck;
+
+    case "preparing food":
+      return ChefHat;
+
+    case "out for delivery":
+      return Bike;
+
+    case "delivered":
+      return Home;
+
+    default:
+      return Circle;
+  }
 };
 
 const OrderTimeline = ({
   currentStep = "placed",
   timeline = [],
 }) => {
-  const currentIndex = timeline.findIndex(
+ const currentIndex = Math.max(
+  0,
+  timeline.findIndex(
     (step) => step.id === currentStep
-  );
+  )
+);
 
   return (
     <section
@@ -95,8 +109,7 @@ const OrderTimeline = ({
         <div className="space-y-8">
 
           {timeline.map((step, index) => {
-            const Icon =
-              iconMap[step.id] || Circle;
+           const Icon = getIcon(step.title);
 
             const completed =
               index <= currentIndex;

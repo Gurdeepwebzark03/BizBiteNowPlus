@@ -9,6 +9,7 @@ import {
 const CouponCard = ({
   coupon,
   copied = false,
+  used = false,
   onCopy,
   onApply,
 }) => {
@@ -202,30 +203,27 @@ const CouponCard = ({
 
           </div>
 
-          {!expired && (
-            <button
-              onClick={() => onApply?.(coupon)}
-              className="
-                rounded-xl
-
-                px-5
-                py-3
-
-                font-semibold
-
-                text-white
-
-                transition
-
-                hover:scale-[1.03]
-              "
-              style={{
-                background: "var(--primary)",
-              }}
-            >
-              Apply
-            </button>
-          )}
+{!expired && (
+  <button
+    disabled={used}
+    onClick={() => !used && onApply?.(coupon)}
+    className="
+      rounded-xl
+      px-5
+      py-3
+      font-semibold
+      text-white
+      transition
+      disabled:cursor-not-allowed
+      disabled:bg-slate-300
+    "
+    style={{
+      background: used ? "#CBD5E1" : "var(--primary)",
+    }}
+  >
+    {used ? "Used" : "use"}
+  </button>
+)}
 
         </div>
 

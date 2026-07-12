@@ -1,11 +1,11 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import {
   CheckCircle2,
   ShoppingBag,
 } from "lucide-react";
-
+import { motion } from "framer-motion";
 import SectionHeader from "../../components/customer/common/SectionHeader";
 
 import CurrentOrderCard from "../../components/customer/orders/OrderCard";
@@ -16,7 +16,7 @@ import ReorderButton from "../../components/customer/orders/ReorderButton";
 import {
   getCurrentOrder,
   getOrderHistory,
-} from "../../data/customer/ordersData";
+} from "../../api/customerApi";
 
 
 const Orders = () => {
@@ -25,13 +25,15 @@ const Orders = () => {
 
 
 const [selectedOrder, setSelectedOrder] =
-  useState(getCurrentOrder());
+  useState(null);
 
 
-const [history] =
-  useState(
-    getOrderHistory()
-  );
+const [history, setHistory] =
+  useState([]);
+
+
+const [loading, setLoading] =
+  useState(true);
 
   const [reordering, setReordering] =
     useState(null);
@@ -78,10 +80,83 @@ const [history] =
 
   };
 
+useEffect(() => {
+
+  const loadOrders = async () => {
+
+    try {
+
+      const customerId = "CUSTOMER_001";
+
+
+      const [
+        currentRes,
+        historyRes,
+      ] = await Promise.all([
+        getCurrentOrder(customerId),
+        getOrderHistory(customerId),
+      ]);
+
+
+
+setSelectedOrder(
+  currentRes.data?.data || null
+);
+
+
+setHistory(
+  historyRes.data?.data || []
+);
+
+
+    } catch(error) {
+
+      console.log(
+        "Orders API Error:",
+        error
+      );
+
+
+    } finally {
+
+      setLoading(false);
+
+    }
+
+  };
+
+
+  loadOrders();
+
+
+}, []);
+if (loading) {
+  return (
+    <div
+      className="
+        flex
+        min-h-[400px]
+        items-center
+        justify-center
+        text-slate-500
+      "
+    >
+      Loading Orders...
+    </div>
+  );
+}
 
 
   return (
-
+               <motion.div
+  initial={{ opacity: 0, y: 15 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{
+    duration: 0.4,
+    ease: [0.22, 1, 0.36, 1],
+  }}
+  className="space-y-6"
+>
     <div
       className="
         space-y-10
@@ -173,17 +248,10 @@ const [history] =
 
 
 
-        <OrderTimeline
-
-          steps={
-            selectedOrder?.tracking?.steps || []
-          }
-
-          currentStep={
-            selectedOrder?.tracking?.currentStep || 0
-          }
-
-        />
+<OrderTimeline
+  timeline={selectedOrder?.tracking?.steps || []}
+  currentStep={selectedOrder?.tracking?.currentStep}
+/>
 
 
       </section>
@@ -317,7 +385,7 @@ const [history] =
 
 
     </div>
-
+</motion.div>
   );
 
 };

@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import NotificationPanel from "../../components/customer/NotificationPanel";
 import { allProducts } from "../../data/products";
+import { motion } from "framer-motion";
 
 const ORANGE = "#E8622D";
 const CREAM = "#FBE7DD";
@@ -186,7 +187,16 @@ const Profile = () => {
   ];
 
   return (
-    <div
+                   <motion.div
+  initial={{ opacity: 0, y: 15 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{
+    duration: 0.4,
+    ease: [0.22, 1, 0.36, 1],
+  }}
+  className="space-y-6"
+>
+      <div
       className="min-h-screen bg-[#FAFAF5] px-4 py-5"
       style={{ fontFamily: "Arial, sans-serif" }}
     >
@@ -800,6 +810,7 @@ const Profile = () => {
         </div>
       )}
     </div>
+    </motion.div>
   );
 };
 

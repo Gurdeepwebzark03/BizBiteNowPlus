@@ -1,36 +1,65 @@
-// ThemeContext.jsx
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
 
-import { createContext, useContext, useEffect, useState } from "react";
+const defaultTheme = {
+  primary: "#16522D",
+  secondary: "#ffd000",
+  storeName: "BizBiteNow",
+  logo: "",
+};
 
-const ThemeContext = createContext();
+const ThemeContext = createContext(defaultTheme);
 
-export const ThemeProvider = ({ children }) => {
-  const [primaryColor, setPrimaryColor] = useState("#16522d");
+export const ThemeProvider = ({
+  children,
+  initialTheme = defaultTheme,
+}) => {
+  const [theme, setTheme] = useState(initialTheme);
 
-  useEffect(() => {
-    document.documentElement.style.setProperty(
-      "--primary",
-      primaryColor
-    );
+useEffect(() => {
+  const root = document.documentElement;
 
-    localStorage.setItem("themeColor", primaryColor);
-  }, [primaryColor]);
+  root.style.setProperty("--primary", theme.primary);
 
-  useEffect(() => {
-    const saved = localStorage.getItem("themeColor");
+  root.style.setProperty("--secondary", "#CA8A04"); // Tailwind yellow-600
 
-    if (saved) {
-      setPrimaryColor(saved);
-    }
-  }, []);
+  root.style.setProperty(
+    "--primary-light",
+    `${theme.primary}15`
+  );
+
+  root.style.setProperty(
+    "--primary-border",
+    `${theme.primary}35`
+  );
+
+  root.style.setProperty(
+    "--primary-shadow",
+    `${theme.primary}25`
+  );
+}, [theme]);
+
+  const updateTheme = (updates) => {
+    setTheme((prev) => ({
+      ...prev,
+      ...updates,
+    }));
+  };
+
+  const value = useMemo(
+    () => ({
+      theme,
+      updateTheme,
+    }),
+    [theme]
+  );
 
   return (
-    <ThemeContext.Provider
-      value={{ primaryColor, setPrimaryColor }}
-    >
+    <ThemeContext.Provider value={value}>
       {children}
     </ThemeContext.Provider>
   );
 };
 
 export const useTheme = () => useContext(ThemeContext);
+
+export default ThemeProvider;

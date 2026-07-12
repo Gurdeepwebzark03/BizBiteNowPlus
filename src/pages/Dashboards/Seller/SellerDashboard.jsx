@@ -9,7 +9,7 @@ import { stats } from "../../../data/dashboardData";
 
 // Example
 const user = {
-  subscription: "plus",
+  subscription: "free",
 };
 
 export default function SellerDashboard() {

@@ -25,20 +25,19 @@ const ProductCard = ({
 }) => {
   if (!product) return null;
 
-  const {
-    image,
-    name,
-    description,
-    category,
-    price,
-    originalPrice,
-    rating,
-    reviews,
-    preparationTime,
-    isVeg,
-    bestseller,
-    available,
-  } = product;
+const {
+  image,
+  name,
+  description,
+  category,
+  price,
+  originalPrice,
+  rating,
+  preparationTime,
+  isVeg,
+  bestseller,
+  available,
+} = product;
 
   return (
     <Card
@@ -95,55 +94,6 @@ const ProductCard = ({
     "
   />
 
-
-  {/* Favourite */}
-
-  <button
-    onClick={(e) => {
-      e.stopPropagation();
-      onFavourite?.();
-    }}
-    className="
-      absolute
-      right-4
-      top-4
-
-      flex
-      h-11
-      w-11
-
-      items-center
-      justify-center
-
-      rounded-2xl
-
-      bg-white/90
-
-      backdrop-blur
-
-      shadow-md
-
-      transition
-
-      hover:scale-105
-    "
-  >
-
-    <Heart
-      size={20}
-      fill={
-        isFavourite
-          ? "currentColor"
-          : "none"
-      }
-      style={{
-        color: isFavourite
-          ? "var(--primary)"
-          : "#64748B",
-      }}
-    />
-
-  </button>
                 {/* Favourite */}
 
         <button
@@ -181,7 +131,7 @@ const ProductCard = ({
             fill={isFavourite ? "currentColor" : "none"}
             style={{
               color: isFavourite
-                ? "var(--primary)"
+                ? "#EF4444"
                 : "#64748B",
             }}
           />
@@ -277,35 +227,35 @@ const ProductCard = ({
 
         {/* Rating */}
 
-        <div className="flex flex-wrap items-center gap-4">
+<div className="flex flex-wrap items-center gap-4">
 
-          <div className="flex items-center gap-1">
+  <div className="flex items-center gap-1">
 
-            <Star
-              size={16}
-              fill="#FACC15"
-              color="#FACC15"
-            />
+    <Star
+      size={16}
+      fill="#FACC15"
+      color="#FACC15"
+    />
 
-            <span className="font-semibold">
-              {rating}
-            </span>
+    <span className="font-semibold">
+      {rating?.average ?? 0}
+    </span>
 
-            <span className="text-sm text-slate-500">
-              ({reviews})
-            </span>
+    <span className="text-sm text-slate-500">
+      ({rating?.count ?? 0})
+    </span>
 
-          </div>
+  </div>
 
-          <div className="flex items-center gap-2 text-sm text-slate-500">
+  <div className="flex items-center gap-2 text-sm text-slate-500">
 
-            <Clock3 size={15} />
+    <Clock3 size={15} />
 
-            <span>{preparationTime}</span>
+    <span>{preparationTime}</span>
 
-          </div>
+  </div>
 
-        </div>
+</div>
               {/* Price & Cart */}
 
       <div

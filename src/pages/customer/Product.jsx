@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-
+import { motion } from "framer-motion";
 import ProductHero from "../../components/customer/product/ProductHero";
 import ProductGallery from "../../components/customer/product/ProductGallery";
 import ProductInfo from "../../components/customer/product/ProductInfo";
@@ -89,6 +89,15 @@ const Product = () => {
     );
   }
     return (
+                     <motion.div
+  initial={{ opacity: 0, y: 15 }}
+  animate={{ opacity: 1, y: 0 }}
+  transition={{
+    duration: 0.4,
+    ease: [0.22, 1, 0.36, 1],
+  }}
+  className="space-y-6"
+>
     <div className="space-y-8 lg:pl-10 pb-32">
 
       {/* Hero */}
@@ -171,6 +180,7 @@ const Product = () => {
       />
 
     </div>
+    </motion.div>
   );
 };
 

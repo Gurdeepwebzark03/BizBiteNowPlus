@@ -72,12 +72,6 @@ const ProductFilters = ({
         onClick={() => toggleFilter("offers")}
       />
 
-      <FilterChip
-        label="4★ & Above"
-        icon={Star}
-        active={filters.rating}
-        onClick={() => toggleFilter("rating")}
-      />
 
       <FilterChip
         label="Available"
@@ -85,41 +79,7 @@ const ProductFilters = ({
         onClick={() => toggleFilter("available")}
       />
 
-      <button
-        onClick={onMoreFilters}
-        className="
-          flex
-          shrink-0
-          items-center
-          gap-2
 
-          rounded-full
-
-          border
-          border-slate-200
-
-          bg-white
-
-          px-4
-          py-2.5
-
-          text-sm
-          font-medium
-
-          transition-all
-
-          hover:bg-slate-50
-        "
-      >
-        <SlidersHorizontal
-          size={16}
-          style={{
-            color: "var(--primary)",
-          }}
-        />
-
-        More
-      </button>
 
     </section>
   );
