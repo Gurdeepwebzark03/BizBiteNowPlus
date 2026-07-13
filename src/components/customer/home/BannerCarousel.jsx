@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 const BannerCarousel = ({
   banners = [],
   autoPlay = true,
-  interval = 4000,
+  interval = 2000,
 }) => {
   const [active, setActive] = useState(0);
 
@@ -51,64 +51,59 @@ const BannerCarousel = ({
 
   return (
     <section className="relative lg:hidden">
+<div
+  className="relative h-44 overflow-hidden rounded-[14px]"
+  onTouchStart={handleTouchStart}
+  onTouchEnd={handleTouchEnd}
+>
+  <div
+    className="flex h-full transition-transform duration-500 ease-in-out"
+    style={{
+      transform: `translateX(-${active * 100}%)`,
+    }}
+  >
+    {banners.map((banner) => (
       <div
-        className="relative h-44 overflow-hidden  rounded-[14px]"
-        onTouchStart={handleTouchStart}
-        onTouchEnd={handleTouchEnd}
+        key={banner.id}
+        className="relative h-full w-full flex-shrink-0"
       >
         <img
-          src={banners[active].image}
-          alt={banners[active].title}
-          className="
-            h-full
-            w-full
-            object-cover
-            select-none
-            pointer-events-none
-          "
+          src={banner.image}
+          alt={banner.title}
+          className="h-full w-full object-cover select-none pointer-events-none"
           draggable={false}
         />
 
-        {/* Overlay */}
-
         <div className="absolute inset-0 bg-black/30" />
 
-        {/* Content */}
-
         <div className="absolute inset-0 flex flex-col justify-end p-5">
-          {banners[active].tag && (
+          {banner.tag && (
             <span
-              className="
-                mb-2
-                w-fit
-                 rounded-[7px]
-                px-3
-                py-1
-                text-xs
-                font-semibold
-                text-white
-              "
+              className="mb-2 w-fit rounded-[7px] px-3 py-1 text-xs font-semibold text-white"
               style={{
-                background: banners[active].isOpen
+                background: banner.isOpen
                   ? "#16A34A"
                   : "#DC2626",
               }}
             >
-              {banners[active].tag}
+              {banner.tag}
             </span>
           )}
 
           <h2 className="text-xl font-bold text-white">
-            {banners[active].title}
+            {banner.title}
           </h2>
 
-          {banners[active].subtitle && (
+          {banner.subtitle && (
             <p className="mt-1 text-sm text-white/90">
-              {banners[active].subtitle}
+              {banner.subtitle}
             </p>
           )}
         </div>
       </div>
+    ))}
+  </div>
+</div>
 
       {/* Indicators */}
 

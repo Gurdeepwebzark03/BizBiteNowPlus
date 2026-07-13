@@ -36,20 +36,11 @@ const navItems = [
   },
 ];
 
-const DesktopSidebar = ({
-  store = {},
-  onLogout,
-  expanded,
-  setExpanded,
-}) => {
+const DesktopSidebar = ({ store = {}, onLogout, expanded, setExpanded }) => {
   return (
     <aside
-      onMouseEnter={() =>
-        setExpanded(true)
-      }
-      onMouseLeave={() =>
-        setExpanded(false)
-      }
+      onMouseEnter={() => setExpanded(true)}
+      onMouseLeave={() => setExpanded(false)}
       className={`
         hidden
         lg:flex
@@ -65,7 +56,7 @@ const DesktopSidebar = ({
         flex-col
         items-center
 
-        rounded-[30px]
+        rounded-[14px]
 
         border
         border-slate-200
@@ -80,11 +71,7 @@ const DesktopSidebar = ({
         duration-300
         ease-in-out
 
-        ${
-          expanded
-            ? "w-60"
-            : "w-24"
-        }
+        ${expanded ? "w-60" : "w-24"}
       `}
     >
       {/* Logo */}
@@ -98,7 +85,7 @@ const DesktopSidebar = ({
             items-center
             justify-center
 
-            rounded-2xl
+            rounded-[14px]
 
             text-lg
             font-black
@@ -107,8 +94,7 @@ const DesktopSidebar = ({
             shadow-lg
           "
           style={{
-            background:
-              "var(--primary)",
+            background: "var(--primary)",
           }}
         >
           {store.initials || "BB"}
@@ -118,25 +104,16 @@ const DesktopSidebar = ({
       {/* Navigation */}
 
       <nav className="flex w-full flex-1 flex-col gap-4 px-5">
-        {navItems.map(
-          ({
-            icon: Icon,
-            path,
-            label,
-          }) => (
-            <NavLink
-              key={path}
-              to={path}
-              end={
-                path === "/customer"
-              }
-              className="w-full"
-            >
-              {({
-                isActive,
-              }) => (
-                <div
-                  className={`
+        {navItems.map(({ icon: Icon, path, label }) => (
+          <NavLink
+            key={path}
+            to={path}
+            end={path === "/customer"}
+            className="w-full"
+          >
+            {({ isActive }) => (
+              <div
+                className={`
                     relative
 
                     flex
@@ -146,7 +123,7 @@ const DesktopSidebar = ({
                     items-center
                     gap-4
 
-                    rounded-2xl
+                    rounded-[14px]
 
                     transition-all
                     duration-300
@@ -157,15 +134,12 @@ const DesktopSidebar = ({
                         : "text-green-700 hover:bg-slate-100 hover:text-yellow-600"
                     }
                   `}
-                  style={{
-                    background:
-                      isActive
-                        ? "var(--secondary)"
-                        : "transparent",
-                  }}
-                >
-                  <div
-                    className="
+                style={{
+                  background: isActive ? "var(--secondary)" : "transparent",
+                }}
+              >
+                <div
+                  className="
                       flex
                       h-14
                       w-14
@@ -173,12 +147,12 @@ const DesktopSidebar = ({
                       items-center
                       justify-center
                     "
-                  >
-                    <Icon size={22} />
-                  </div>
+                >
+                  <Icon size={22} />
+                </div>
 
-                  <span
-                    className={`
+                <span
+                  className={`
                       whitespace-nowrap
                       text-sm
                       font-semibold
@@ -186,20 +160,15 @@ const DesktopSidebar = ({
                       transition-all
                       duration-300
 
-                      ${
-                        expanded
-                          ? "opacity-100"
-                          : "opacity-0"
-                      }
+                      ${expanded ? "opacity-100" : "opacity-0"}
                     `}
-                  >
-                    {label}
-                  </span>
-                </div>
-              )}
-            </NavLink>
-          ),
-        )}
+                >
+                  {label}
+                </span>
+              </div>
+            )}
+          </NavLink>
+        ))}
       </nav>
 
       {/* Logout */}
@@ -246,11 +215,7 @@ const DesktopSidebar = ({
               transition-all
               duration-300
 
-              ${
-                expanded
-                  ? "opacity-100"
-                  : "opacity-0"
-              }
+              ${expanded ? "opacity-100" : "opacity-0"}
             `}
           >
             Logout

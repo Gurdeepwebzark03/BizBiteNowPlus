@@ -1,15 +1,6 @@
-import {
-  Bell,
-  User,
-  ShoppingBag,
-  Gift,
-} from "lucide-react";
+import { Bell, User, ShoppingBag, Gift } from "lucide-react";
 
-import {
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 
@@ -19,59 +10,37 @@ import {
   getProfile,
 } from "../../../api/customerApi";
 
-const CustomerHeader = ({
-  sidebarExpanded,
-  isDesktop,
-}) => {
+const CustomerHeader = ({ sidebarExpanded, isDesktop }) => {
   const navigate = useNavigate();
 
   const [store, setStore] = useState({});
 
   const [customer, setCustomer] = useState({});
 
-  const [notifications, setNotifications] =
-    useState([]);
+  const [notifications, setNotifications] = useState([]);
 
-  const [notificationOpen, setNotificationOpen] =
-    useState(false);
+  const [notificationOpen, setNotificationOpen] = useState(false);
 
   const wrapperRef = useRef(null);
 
   useEffect(() => {
     const loadData = async () => {
       try {
-        const [
-          storeRes,
-          notificationRes,
-          profileRes,
-        ] = await Promise.all([
+        const [storeRes, notificationRes, profileRes] = await Promise.all([
           getStore(),
           getNotifications(),
           getProfile(),
         ]);
 
-        setStore(
-          storeRes.data.data ||
-            storeRes.data ||
-            {},
-        );
+        setStore(storeRes.data.data || storeRes.data || {});
 
         setNotifications(
-          notificationRes.data.data ||
-            notificationRes.data ||
-            [],
+          notificationRes.data.data || notificationRes.data || [],
         );
 
-        setCustomer(
-          profileRes.data.data ||
-            profileRes.data ||
-            {},
-        );
+        setCustomer(profileRes.data.data || profileRes.data || {});
       } catch (error) {
-        console.error(
-          "Header API Error:",
-          error,
-        );
+        console.error("Header API Error:", error);
       }
     };
 
@@ -79,37 +48,21 @@ const CustomerHeader = ({
   }, []);
 
   useEffect(() => {
-    const handleClickOutside = (
-      event,
-    ) => {
-      if (
-        wrapperRef.current &&
-        !wrapperRef.current.contains(
-          event.target,
-        )
-      ) {
+    const handleClickOutside = (event) => {
+      if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
         setNotificationOpen(false);
       }
     };
 
-    document.addEventListener(
-      "mousedown",
-      handleClickOutside,
-    );
+    document.addEventListener("mousedown", handleClickOutside);
 
     return () => {
-      document.removeEventListener(
-        "mousedown",
-        handleClickOutside,
-      );
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
 
-  const getNotificationIcon = (
-    type,
-  ) => {
-    if (type === "reward")
-      return Gift;
+  const getNotificationIcon = (type) => {
+    if (type === "reward") return Gift;
 
     return ShoppingBag;
   };
@@ -118,13 +71,11 @@ const CustomerHeader = ({
     ? `${store.address.line1 ?? ""}, ${store.address.city ?? ""}`
     : "Tap to view restaurant";
 
-  const storeLogo =
-    store?.logo ||
-    "https://via.placeholder.com/100";
+  const storeLogo = store?.logo || "https://via.placeholder.com/100";
 
-return (
-<header
-  className="
+  return (
+    <header
+      className="
     fixed
     top-3
     z-50
@@ -137,26 +88,24 @@ return (
     lg:px-5
     lg:pr-10
   "
-  style={
-    isDesktop
-      ? {
-          left: sidebarExpanded
-            ? "16.25rem"
-            : "7.25rem",
+      style={
+        isDesktop
+          ? {
+              left: sidebarExpanded ? "16.25rem" : "7.25rem",
 
-          width: sidebarExpanded
-            ? "calc(100vw - 16.25rem)"
-            : "calc(100vw - 7.25rem)",
-        }
-      : {
-          left: 0,
-          width: "100%",
-        }
-  }
->
-<div
-  ref={wrapperRef}
-  className="
+              width: sidebarExpanded
+                ? "calc(100vw - 16.25rem)"
+                : "calc(100vw - 7.25rem)",
+            }
+          : {
+              left: 0,
+              width: "100%",
+            }
+      }
+    >
+      <div
+        ref={wrapperRef}
+        className="
     relative
 
     flex
@@ -185,14 +134,12 @@ return (
 duration-300
 ease-in-out
   "
->
-      {/* Store */}
+      >
+        {/* Store */}
 
-      <button
-        onClick={() =>
-          navigate("/customer/store")
-        }
-        className="
+        <button
+          onClick={() => navigate("/customer/store")}
+          className="
           flex
           min-w-0
           flex-1
@@ -200,17 +147,17 @@ ease-in-out
           gap-3
           text-left
         "
-      >
-        {/* Logo */}
+        >
+          {/* Logo */}
 
-        <img
-          src={storeLogo}
-          alt={store?.name}
-          className="
+          <img
+            src={storeLogo}
+            alt={store?.name}
+            className="
             h-11
             w-11
 
-            rounded-2xl
+            rounded-[10px]
 
             border
             border-slate-200
@@ -218,13 +165,13 @@ ease-in-out
             object-cover
             shadow-sm
           "
-        />
+          />
 
-        {/* Store Info */}
+          {/* Store Info */}
 
-        <div className="min-w-0 flex-1">
-          <h2
-            className="
+          <div className="min-w-0 flex-1">
+            <h2
+              className="
               truncate
 
               text-[15px]
@@ -232,45 +179,40 @@ ease-in-out
 
               text-slate-900
             "
-          >
-            {store?.name ||
-              "Restaurant"}
-          </h2>
+            >
+              {store?.name || "Restaurant"}
+            </h2>
 
-          <p
-            className="
+            <p
+              className="
               truncate
 
               text-xs
 
               text-slate-500
             "
-          >
-            {storeAddress}
-          </p>
-        </div>
-      </button>
+            >
+              {storeAddress}
+            </p>
+          </div>
+        </button>
 
-      {/* Actions */}
+        {/* Actions */}
 
-      <div
-        className="
+        <div
+          className="
           ml-3
 
           flex
           items-center
           gap-2
         "
-      >
-        {/* Notification */}
+        >
+          {/* Notification */}
 
-        <button
-          onClick={() =>
-            setNotificationOpen(
-              !notificationOpen,
-            )
-          }
-          className="
+          <button
+            onClick={() => setNotificationOpen(!notificationOpen)}
+            className="
             relative
 
             flex
@@ -286,19 +228,17 @@ ease-in-out
 
             bg-slate-200
           "
-        >
-          <Bell
-            size={20}
-            style={{
-              color:
-                "var(--primary)",
-            }}
-          />
+          >
+            <Bell
+              size={20}
+              style={{
+                color: "var(--primary)",
+              }}
+            />
 
-          {notifications.length >
-            0 && (
-            <span
-              className="
+            {notifications.length > 0 && (
+              <span
+                className="
                 absolute
 
                 right-2
@@ -318,27 +258,22 @@ ease-in-out
 
                 text-white
               "
-              style={{
-                background:
-                  "var(--primary)",
-              }}
-            >
-              {notifications.length}
-            </span>
-          )}
-        </button>
+                style={{
+                  background: "var(--primary)",
+                }}
+              >
+                {notifications.length}
+              </span>
+            )}
+          </button>
 
-        {/* Profile
+          {/* Profile
             Hidden on Mobile
         */}
 
-        <button
-          onClick={() =>
-            navigate(
-              "/customer/profile",
-            )
-          }
-          className="
+          <button
+            onClick={() => navigate("/customer/profile")}
+            className="
             hidden
             lg:flex
 
@@ -354,16 +289,16 @@ ease-in-out
 
             bg-slate-200
           "
-        >
-          <User size={20} />
-        </button>
-      </div>
+          >
+            <User size={20} />
+          </button>
+        </div>
 
-           {/* Notification Panel */}
+        {/* Notification Panel */}
 
-      {notificationOpen && (
-        <div
-          className="
+        {notificationOpen && (
+          <div
+            className="
             absolute
 
             right-0
@@ -383,47 +318,43 @@ ease-in-out
 
             shadow-2xl
           "
-        >
-          <div className="border-b border-slate-100 p-5">
-            <h3 className="text-lg font-bold text-slate-900">
-              Notifications
-            </h3>
+          >
+            <div className="border-b border-slate-100 p-5">
+              <h3 className="text-lg font-bold text-slate-900">
+                Notifications
+              </h3>
 
-            <p className="mt-1 text-sm text-slate-500">
-              Latest updates from the restaurant.
-            </p>
-          </div>
+              <p className="mt-1 text-sm text-slate-500">
+                Latest updates from the restaurant.
+              </p>
+            </div>
 
-          <div
-            className="
+            <div
+              className="
               max-h-[420px]
               overflow-y-auto
             "
-          >
-            {notifications.length === 0 ? (
-              <div className="p-8 text-center">
-                <Bell
-                  size={34}
-                  className="mx-auto mb-3 text-slate-300"
-                />
+            >
+              {notifications.length === 0 ? (
+                <div className="p-8 text-center">
+                  <Bell size={34} className="mx-auto mb-3 text-slate-300" />
 
-                <p className="font-semibold text-slate-700">
-                  No notifications
-                </p>
+                  <p className="font-semibold text-slate-700">
+                    No notifications
+                  </p>
 
-                <p className="mt-1 text-sm text-slate-500">
-                  You're all caught up.
-                </p>
-              </div>
-            ) : (
-              notifications.map((item) => {
-                const Icon =
-                  getNotificationIcon(item.type);
+                  <p className="mt-1 text-sm text-slate-500">
+                    You're all caught up.
+                  </p>
+                </div>
+              ) : (
+                notifications.map((item) => {
+                  const Icon = getNotificationIcon(item.type);
 
-                return (
-                  <button
-                    key={item.id}
-                    className="
+                  return (
+                    <button
+                      key={item.id}
+                      className="
                       flex
                       w-full
                       gap-4
@@ -439,9 +370,9 @@ ease-in-out
 
                       hover:bg-slate-50
                     "
-                  >
-                    <div
-                      className="
+                    >
+                      <div
+                        className="
                         flex
                         h-11
                         w-11
@@ -453,40 +384,38 @@ ease-in-out
 
                         bg-slate-100
                       "
-                    >
-                      <Icon
-                        size={20}
-                        style={{
-                          color:
-                            "var(--primary)",
-                        }}
-                      />
-                    </div>
+                      >
+                        <Icon
+                          size={20}
+                          style={{
+                            color: "var(--primary)",
+                          }}
+                        />
+                      </div>
 
-                    <div className="min-w-0 flex-1">
-                      <p className="font-semibold text-slate-900">
-                        {item.title}
-                      </p>
+                      <div className="min-w-0 flex-1">
+                        <p className="font-semibold text-slate-900">
+                          {item.title}
+                        </p>
 
-                      <p className="mt-1 text-sm text-slate-500">
-                        {item.message}
-                      </p>
+                        <p className="mt-1 text-sm text-slate-500">
+                          {item.message}
+                        </p>
 
-                      <p className="mt-2 text-xs text-slate-400">
-                        {item.time}
-                      </p>
-                    </div>
-                  </button>
-                );
-              })
-            )}
+                        <p className="mt-2 text-xs text-slate-400">
+                          {item.time}
+                        </p>
+                      </div>
+                    </button>
+                  );
+                })
+              )}
+            </div>
           </div>
-        </div>
-      )}
-    </div>
-  </header>
-);
-
+        )}
+      </div>
+    </header>
+  );
 };
 
 export default CustomerHeader;

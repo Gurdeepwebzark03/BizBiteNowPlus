@@ -11,7 +11,7 @@ const HeroBanner = ({
   isOpen = true,
 }) => {
   return (
-    <section className="relative overflow-hidden rounded-[32px]">
+    <section className="relative overflow-hidden rounded-[14px]">
 
       {/* Banner */}
 
@@ -46,7 +46,7 @@ const HeroBanner = ({
             left-5
             right-5
 
-            rounded-[28px]
+            rounded-[14px]
 
             bg-white/90
 
@@ -69,7 +69,7 @@ const HeroBanner = ({
                 h-20
                 w-20
 
-                rounded-3xl
+                rounded-[14px]
 
                 border-4
                 border-white
@@ -105,7 +105,7 @@ const HeroBanner = ({
                     items-center
                     gap-1
 
-                    rounded-full
+                    rounded-[10px]
 
                     bg-slate-100
 
@@ -139,7 +139,7 @@ const HeroBanner = ({
                     items-center
                     gap-2
 
-                    rounded-full
+                    rounded-[10px]
 
                     bg-slate-100
 
@@ -161,7 +161,7 @@ const HeroBanner = ({
 
                 <div
                   className="
-                    rounded-full
+                    rounded-[10px]
 
                     px-3
                     py-1
