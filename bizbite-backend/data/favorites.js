@@ -89,7 +89,7 @@ const removeFavorite = (
 // =======================================
 
 const toggleFavorite = (data = {}) => {
-  console.log("toggleFavorite received:", data);
+
 
   const {
     customerId,
@@ -97,12 +97,10 @@ const toggleFavorite = (data = {}) => {
     storeId,
   } = data;
 
-  console.log("customerId:", customerId);
-  console.log("productId:", productId);
-  console.log("storeId:", storeId);
+
 
   if (!customerId || !productId) {
-    console.log("Missing values");
+  
     throw new Error(
       "customerId and productId are required."
     );
@@ -113,24 +111,24 @@ const toggleFavorite = (data = {}) => {
     productId
   );
 
-  console.log("exists:", exists);
+
 
   if (exists) {
-    console.log("Removing favorite");
+ 
 
     removeFavorite(
       customerId,
       productId
     );
 
-    console.log("Returning false");
+
 
     return {
       favorite: false,
     };
   }
 
-  console.log("Adding favorite");
+
 
   const added = addFavorite({
     customerId,
@@ -138,9 +136,7 @@ const toggleFavorite = (data = {}) => {
     storeId,
   });
 
-  console.log("Added:", added);
 
-  console.log("Returning true");
 
   return {
     favorite: true,

@@ -19,551 +19,474 @@ import {
   getProfile,
 } from "../../../api/customerApi";
 
-
-const CustomerHeader = () => {
-
+const CustomerHeader = ({
+  sidebarExpanded,
+  isDesktop,
+}) => {
   const navigate = useNavigate();
 
+  const [store, setStore] = useState({});
 
-  const [store,setStore] =
-    useState({});
+  const [customer, setCustomer] = useState({});
 
-
-  const [customer,setCustomer] =
-    useState({});
-
-
-  const [notifications,setNotifications] =
+  const [notifications, setNotifications] =
     useState([]);
 
-
-  const [notificationOpen,setNotificationOpen] =
+  const [notificationOpen, setNotificationOpen] =
     useState(false);
 
+  const wrapperRef = useRef(null);
 
-  const wrapperRef =
-    useRef(null);
-
-
-
-  useEffect(()=>{
-
-
-    const loadData = async()=>{
-
-      try{
-
+  useEffect(() => {
+    const loadData = async () => {
+      try {
         const [
           storeRes,
           notificationRes,
           profileRes,
         ] = await Promise.all([
-
           getStore(),
-
           getNotifications(),
-
           getProfile(),
-
         ]);
-
 
         setStore(
           storeRes.data.data ||
-          storeRes.data
+            storeRes.data ||
+            {},
         );
-
 
         setNotifications(
           notificationRes.data.data ||
-          notificationRes.data ||
-          []
+            notificationRes.data ||
+            [],
         );
-
 
         setCustomer(
           profileRes.data.data ||
-          profileRes.data
+            profileRes.data ||
+            {},
         );
-
-
-      }
-      catch(error){
-
-        console.log(
+      } catch (error) {
+        console.error(
           "Header API Error:",
-          error
+          error,
         );
-
       }
-
     };
-
 
     loadData();
+  }, []);
 
-
-  },[]);
-
-
-
-  useEffect(()=>{
-
-
-    const handleClickOutside=(event)=>{
-
-
-      if(
+  useEffect(() => {
+    const handleClickOutside = (
+      event,
+    ) => {
+      if (
         wrapperRef.current &&
         !wrapperRef.current.contains(
-          event.target
+          event.target,
         )
-      ){
-
+      ) {
         setNotificationOpen(false);
-
       }
-
-
     };
-
 
     document.addEventListener(
       "mousedown",
-      handleClickOutside
+      handleClickOutside,
     );
 
-
-    return()=>{
-
+    return () => {
       document.removeEventListener(
         "mousedown",
-        handleClickOutside
+        handleClickOutside,
       );
-
     };
+  }, []);
 
-
-  },[]);
-
-
-
-
-
-  const getNotificationIcon=(type)=>{
-
-    if(type==="reward")
+  const getNotificationIcon = (
+    type,
+  ) => {
+    if (type === "reward")
       return Gift;
 
-
     return ShoppingBag;
-
   };
 
+  const storeAddress = store?.address
+    ? `${store.address.line1 ?? ""}, ${store.address.city ?? ""}`
+    : "Tap to view restaurant";
 
+  const storeLogo =
+    store?.logo ||
+    "https://via.placeholder.com/100";
 
+return (
+<header
+  className="
+    fixed
+    top-3
+    z-50
 
+    transition-all
+    duration-300
+    ease-in-out
 
-  return (
+    px-3
+    lg:px-5
+    lg:pr-10
+  "
+  style={
+    isDesktop
+      ? {
+          left: sidebarExpanded
+            ? "16.25rem"
+            : "7.25rem",
 
-    <header
-      className="
-        fixed
-        top-5
-        left-0
-        right-0
-        z-50
+          width: sidebarExpanded
+            ? "calc(100vw - 16.25rem)"
+            : "calc(100vw - 7.25rem)",
+        }
+      : {
+          left: 0,
+          width: "100%",
+        }
+  }
+>
+<div
+  ref={wrapperRef}
+  className="
+    relative
 
-        flex
-        justify-center
+    flex
 
-        px-4
-      "
-    >
+    h-20
 
+    w-full
 
-      <div
-        ref={wrapperRef}
+    items-center
+    justify-between
 
+    rounded-[10px]
+
+    border
+    border-slate-200
+
+    bg-white/90
+
+    px-5
+
+    shadow-xl
+
+    backdrop-blur-xl
+
+    transition-all
+duration-300
+ease-in-out
+  "
+>
+      {/* Store */}
+
+      <button
+        onClick={() =>
+          navigate("/customer/store")
+        }
         className="
-          relative
-
           flex
-          h-16
-
-          w-full
-          max-w-[650px]
-
+          min-w-0
+          flex-1
           items-center
-          justify-between
-
-          rounded-[28px]
-
-          border
-          border-slate-200
-
-          bg-white/90
-
-          px-5
-
-          shadow-2xl
-
-          backdrop-blur-xl
+          gap-3
+          text-left
         "
       >
+        {/* Logo */}
 
-
-
-        {/* Store */}
-
-
-        <div
+        <img
+          src={storeLogo}
+          alt={store?.name}
           className="
+            h-11
+            w-11
+
+            rounded-2xl
+
+            border
+            border-slate-200
+
+            object-cover
+            shadow-sm
+          "
+        />
+
+        {/* Store Info */}
+
+        <div className="min-w-0 flex-1">
+          <h2
+            className="
+              truncate
+
+              text-[15px]
+              font-bold
+
+              text-slate-900
+            "
+          >
+            {store?.name ||
+              "Restaurant"}
+          </h2>
+
+          <p
+            className="
+              truncate
+
+              text-xs
+
+              text-slate-500
+            "
+          >
+            {storeAddress}
+          </p>
+        </div>
+      </button>
+
+      {/* Actions */}
+
+      <div
+        className="
+          ml-3
+
+          flex
+          items-center
+          gap-2
+        "
+      >
+        {/* Notification */}
+
+        <button
+          onClick={() =>
+            setNotificationOpen(
+              !notificationOpen,
+            )
+          }
+          className="
+            relative
+
             flex
+            h-11
+            w-11
+
             items-center
-            gap-3
+            justify-center
+
+            rounded-[10px]
+
+            transition
+
+            bg-slate-200
           "
         >
+          <Bell
+            size={20}
+            style={{
+              color:
+                "var(--primary)",
+            }}
+          />
 
+          {notifications.length >
+            0 && (
+            <span
+              className="
+                absolute
+
+                right-2
+                top-2
+
+                flex
+
+                h-4
+                w-4
+
+                items-center
+                justify-center
+
+                rounded-full
+
+                text-[10px]
+
+                text-white
+              "
+              style={{
+                background:
+                  "var(--primary)",
+              }}
+            >
+              {notifications.length}
+            </span>
+          )}
+        </button>
+
+        {/* Profile
+            Hidden on Mobile
+        */}
+
+        <button
+          onClick={() =>
+            navigate(
+              "/customer/profile",
+            )
+          }
+          className="
+            hidden
+            lg:flex
+
+            h-11
+            w-11
+
+            items-center
+            justify-center
+
+            rounded-[10px]
+
+            transition
+
+            bg-slate-200
+          "
+        >
+          <User size={20} />
+        </button>
+      </div>
+
+           {/* Notification Panel */}
+
+      {notificationOpen && (
+        <div
+          className="
+            absolute
+
+            right-0
+            top-[72px]
+
+            w-[320px]
+            max-w-[calc(100vw-24px)]
+
+            overflow-hidden
+
+            rounded-3xl
+
+            border
+            border-slate-200
+
+            bg-white
+
+            shadow-2xl
+          "
+        >
+          <div className="border-b border-slate-100 p-5">
+            <h3 className="text-lg font-bold text-slate-900">
+              Notifications
+            </h3>
+
+            <p className="mt-1 text-sm text-slate-500">
+              Latest updates from the restaurant.
+            </p>
+          </div>
 
           <div
             className="
-              flex
-              h-11
-              w-11
-
-              items-center
-              justify-center
-
-              rounded-2xl
-
-              font-black
-
-              text-white
-            "
-
-            style={{
-              background:
-              "var(--primary)",
-            }}
-          >
-
-            {
-              store.initials ||
-              store.name?.slice(0,2)
-                .toUpperCase()
-              ||
-              "BB"
-            }
-
-          </div>
-
-
-
-          <div className="hidden sm:block">
-
-            <p className="
-              font-bold
-              text-slate-900
-            ">
-
-              {
-                store.name ||
-                "Restaurant"
-              }
-
-            </p>
-
-
-          </div>
-
-
-        </div>
-
-
-
-
-
-        {/* Actions */}
-
-
-        <div
-          className="
-            flex
-            items-center
-            gap-2
-          "
-        >
-
-
-
-          {/* Notification */}
-
-
-          <button
-
-            onClick={()=>
-              setNotificationOpen(
-                !notificationOpen
-              )
-            }
-
-            className="
-              relative
-
-              flex
-              h-11
-              w-11
-
-              items-center
-              justify-center
-
-              rounded-2xl
-
-              hover:bg-slate-100
+              max-h-[420px]
+              overflow-y-auto
             "
           >
-
-            <Bell size={20}/>
-
-
-            {
-              notifications.length > 0 && (
-
-                <span
-                  className="
-                    absolute
-
-                    right-2
-                    top-2
-
-                    flex
-
-                    h-4
-                    w-4
-
-                    items-center
-                    justify-center
-
-                    rounded-full
-
-                    text-[10px]
-
-                    text-white
-                  "
-
-                  style={{
-                    background:
-                    "var(--primary)",
-                  }}
-                >
-
-                  {
-                    notifications.length
-                  }
-
-                </span>
-
-              )
-            }
-
-
-          </button>
-
-
-
-
-
-          {/* Notification Panel */}
-
-
-          {
-            notificationOpen && (
-
-              <div
-                className="
-                  absolute
-
-                  right-0
-
-                  top-16
-
-                  w-80
-
-                  rounded-3xl
-
-                  border
-
-                  border-slate-200
-
-                  bg-white
-
-                  p-4
-
-                  shadow-xl
-                "
-              >
-
-
-                <h3 className="
-                  mb-3
-                  font-bold
-                ">
-
-                  Notifications
-
-                </h3>
-
-
-
-                <div className="space-y-2">
-
-
-                {
-                  notifications.length === 0 ? (
-
-                    <p className="
-                      text-sm
-                      text-slate-500
-                    ">
-                      No notifications
-                    </p>
-
-                  ) : (
-
-
-                  notifications.map(
-                    (item)=>(
-
-                      <div
-                        key={item.id}
-
-                        className="
-                          flex
-                          gap-3
-
-                          rounded-xl
-
-                          p-3
-
-                          hover:bg-slate-50
-                        "
-                      >
-
-                        {
-                          (()=>{
-
-                            const Icon =
-                              getNotificationIcon(
-                                item.type
-                              );
-
-                            return <Icon size={20}/>
-
-                          })()
-                        }
-
-
-                        <div>
-
-                          <p className="font-semibold">
-
-                            {item.title}
-
-                          </p>
-
-
-                          <p className="
-                            text-sm
-                            text-slate-500
-                          ">
-
-                            {item.message}
-
-                          </p>
-
-
-                          <p className="
-                            text-xs
-                            text-slate-400
-                          ">
-
-                            {item.time}
-
-                          </p>
-
-
-                        </div>
-
-
-                      </div>
-
-                    )
-                  )
-
-
-                  )
-
-                }
-
-
-                </div>
-
-
+            {notifications.length === 0 ? (
+              <div className="p-8 text-center">
+                <Bell
+                  size={34}
+                  className="mx-auto mb-3 text-slate-300"
+                />
+
+                <p className="font-semibold text-slate-700">
+                  No notifications
+                </p>
+
+                <p className="mt-1 text-sm text-slate-500">
+                  You're all caught up.
+                </p>
               </div>
+            ) : (
+              notifications.map((item) => {
+                const Icon =
+                  getNotificationIcon(item.type);
 
-            )
-          }
+                return (
+                  <button
+                    key={item.id}
+                    className="
+                      flex
+                      w-full
+                      gap-4
 
+                      border-b
+                      border-slate-100
 
+                      p-4
 
+                      text-left
 
+                      transition
 
-          {/* Profile */}
+                      hover:bg-slate-50
+                    "
+                  >
+                    <div
+                      className="
+                        flex
+                        h-11
+                        w-11
 
+                        items-center
+                        justify-center
 
-          <button
+                        rounded-2xl
 
-            onClick={()=>
-              navigate(
-                "/customer/profile"
-              )
-            }
+                        bg-slate-100
+                      "
+                    >
+                      <Icon
+                        size={20}
+                        style={{
+                          color:
+                            "var(--primary)",
+                        }}
+                      />
+                    </div>
 
-            className="
-              flex
-              h-11
-              w-11
+                    <div className="min-w-0 flex-1">
+                      <p className="font-semibold text-slate-900">
+                        {item.title}
+                      </p>
 
-              items-center
-              justify-center
+                      <p className="mt-1 text-sm text-slate-500">
+                        {item.message}
+                      </p>
 
-              rounded-2xl
-
-              bg-slate-100
-
-              hover:bg-slate-200
-            "
-          >
-
-            <User size={20}/>
-
-
-          </button>
-
-
+                      <p className="mt-2 text-xs text-slate-400">
+                        {item.time}
+                      </p>
+                    </div>
+                  </button>
+                );
+              })
+            )}
+          </div>
         </div>
-
-
-
-      </div>
-
-
-    </header>
-
-  );
+      )}
+    </div>
+  </header>
+);
 
 };
-
 
 export default CustomerHeader;

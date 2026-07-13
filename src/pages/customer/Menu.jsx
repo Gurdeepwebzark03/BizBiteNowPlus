@@ -462,14 +462,20 @@ const getCartItem = (productId) =>
   }}
   className="space-y-6"
 >
-    <div
-      className="
-        w-full
-        space-y-8
-        lg:pl-10
-        pb-28
-      "
-    >
+<div
+  className="
+    w-full
+    min-w-0
+    max-w-[1760px]
+
+    space-y-6
+    pb-28
+
+    px-1
+    sm:px-2
+
+  "
+>
 
       {/* Categories */}
 

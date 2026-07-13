@@ -46,17 +46,7 @@ const OrderCard = ({
             </h3>
           </div>
 
-          <Badge
-            icon={false}
-            
-            style={{
-              background:
-                statusColor[order.status] ||
-                "var(--primary)",
-            }}
-          >
-            {order.status}
-          </Badge>
+
         </div>
       </div>
 

@@ -14,7 +14,7 @@ import OrderTimeline from "../../components/customer/orders/OrderTimeline";
 import ReorderButton from "../../components/customer/orders/ReorderButton";
 
 import {
-  getCurrentOrder,
+  getCurrentOrders,
   getOrderHistory,
 } from "../../api/customerApi";
 
@@ -24,8 +24,8 @@ const Orders = () => {
   const navigate = useNavigate();
 
 
-const [selectedOrder, setSelectedOrder] =
-  useState(null);
+const [currentOrders, setCurrentOrders] =
+  useState([]);
 
 
 const [history, setHistory] =
@@ -64,21 +64,13 @@ const [loading, setLoading] =
 
 
 
-  const handleViewOrder = (order) => {
-
-    setSelectedOrder(order);
-
-
-    navigate(
-      `/customer/orders/${order.id}`,
-      {
-        state:{
-          order
-        }
-      }
-    );
-
-  };
+ const handleViewOrder = (order) => {
+  navigate(`/customer/orders/${order.id}`, {
+    state: {
+      order,
+    },
+  });
+};
 
 useEffect(() => {
 
@@ -90,17 +82,15 @@ useEffect(() => {
 
 
       const [
-        currentRes,
-        historyRes,
-      ] = await Promise.all([
-        getCurrentOrder(customerId),
-        getOrderHistory(customerId),
-      ]);
+  currentRes,
+  historyRes,
+] = await Promise.all([
+  getCurrentOrders(customerId),
+  getOrderHistory(customerId),
+]);
 
-
-
-setSelectedOrder(
-  currentRes.data?.data || null
+setCurrentOrders(
+  currentRes.data?.data || []
 );
 
 
@@ -157,13 +147,20 @@ if (loading) {
   }}
   className="space-y-6"
 >
-    <div
-      className="
-        space-y-10
-        pb-32
-        lg:pl-10
-      "
-    >
+<div
+  className="
+    w-full
+    min-w-0
+    max-w-[1760px]
+
+    space-y-6
+    pb-28
+
+    px-1
+    sm:px-2
+    lg:px-10
+  "
+>
 
 
       <SectionHeader
@@ -223,35 +220,44 @@ if (loading) {
 
 
 
+{currentOrders.length === 0 ? (
+  <div className="rounded-[28px] border-2 border-dashed border-slate-300 bg-white p-12 text-center">
+    <ShoppingBag
+      className="mx-auto text-slate-400"
+      size={40}
+    />
+
+    <h3 className="mt-4 text-xl font-bold">
+      No Active Orders
+    </h3>
+
+    <p className="mt-2 text-slate-500">
+      You don't have any active orders.
+    </p>
+  </div>
+) : (
+  <div className="space-y-6">
+    {currentOrders.map((order) => (
+      <div key={order.id} className="space-y-4">
         <CurrentOrderCard
-
-          order={selectedOrder}
-
+          order={order}
           onTrack={() =>
-            navigate(
-              `/customer/orders/${selectedOrder.id}`,
-              {
-                state:{
-                  order:selectedOrder
-                }
-              }
-            )
+            navigate(`/customer/orders/${order.id}`, {
+              state: { order },
+            })
           }
-
-          onView={() =>
-            handleViewOrder(
-              selectedOrder
-            )
-          }
-
+          onView={() => handleViewOrder(order)}
         />
 
+        <OrderTimeline
+          timeline={order.tracking?.steps || []}
+          currentStep={order.tracking?.currentStep}
+        />
+      </div>
+    ))}
+  </div>
+)}
 
-
-<OrderTimeline
-  timeline={selectedOrder?.tracking?.steps || []}
-  currentStep={selectedOrder?.tracking?.currentStep}
-/>
 
 
       </section>
