@@ -63,18 +63,20 @@ const CustomerLayout = () => {
       >
         {/* Header */}
 
-        <CustomerHeader
-          sidebarExpanded={sidebarExpanded}
-          isDesktop={isDesktop}
-        />
+{location.pathname === "/customer" && (
+  <CustomerHeader
+    sidebarExpanded={sidebarExpanded}
+    isDesktop={isDesktop}
+  />
+)}
 
         {/* Content */}
-
-        <div
-          className="            w-full
-            pt-22
-
-          "
+<div
+  className={`w-full ${
+    location.pathname === "/customer"
+      ? "pt-22"
+      : "pt-0"
+  }`}
         >
           <Outlet />
         </div>
