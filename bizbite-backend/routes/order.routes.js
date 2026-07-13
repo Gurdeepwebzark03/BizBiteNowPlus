@@ -2,7 +2,7 @@ const router = require("express").Router();
 
 const {
   addOrder,
-  getCurrentOrder,
+  getCurrentOrders,
   getOrderHistory,
   getOrderById,
   getAllOrders,
@@ -28,7 +28,7 @@ const {
 router.get("/current/:customerId", (req, res) => {
   res.json({
     success: true,
-    data: getCurrentOrder(req.params.customerId),
+    data: getCurrentOrders(req.params.customerId),
   });
 });
 

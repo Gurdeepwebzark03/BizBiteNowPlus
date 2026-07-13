@@ -13,9 +13,13 @@ const addOrder = (order) => {
 // Current Active Order
 // ===============================
 
-const getCurrentOrder = (customerId) => {
-  return (
-    orders.find(
+// ===============================
+// Current Active Orders
+// ===============================
+
+const getCurrentOrders = (customerId) => {
+  return orders
+    .filter(
       (order) =>
         order.customerId === customerId &&
         [
@@ -24,8 +28,12 @@ const getCurrentOrder = (customerId) => {
           "Preparing",
           "Out for Delivery",
         ].includes(order.status)
-    ) || null
-  );
+    )
+    .sort(
+      (a, b) =>
+        new Date(b.createdAt) -
+        new Date(a.createdAt)
+    );
 };
 
 // ===============================
@@ -102,7 +110,7 @@ const updateOrderStatus = (
 
 module.exports = {
   addOrder,
-  getCurrentOrder,
+  getCurrentOrders,
   getOrderHistory,
   getOrderById,
   updateOrderStatus,

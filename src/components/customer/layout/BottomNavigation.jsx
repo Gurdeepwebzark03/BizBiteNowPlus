@@ -46,7 +46,7 @@ const BottomNavigation = () => {
       className="
         fixed
 
-        bottom-4
+        bottom-2
 
         left-4
 
@@ -66,7 +66,7 @@ const BottomNavigation = () => {
 
           justify-around
 
-          rounded-[28px]
+          rounded-[10px]
 
           border
 
@@ -127,7 +127,7 @@ const BottomNavigation = () => {
 
                         justify-center
 
-                        rounded-2xl
+                        rounded-[10px]
 
                         transition-all
 
@@ -185,7 +185,7 @@ const BottomNavigation = () => {
 
                               w-5
 
-                              rounded-full
+                              rounded-[14px]
 
                               bg-white
                             "

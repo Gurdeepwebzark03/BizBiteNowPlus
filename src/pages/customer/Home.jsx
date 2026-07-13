@@ -1,23 +1,35 @@
 import { useMemo, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
+
 import { useCart } from "../../context/CartContext";
+
 import HeroBanner from "../../components/customer/hero/HeroBanner";
 import StoreCard from "../../components/customer/hero/StoreCard";
 import HeroActions from "../../components/customer/hero/HeroActions";
+
 import MenuGrid from "../../components/customer/menu/MenuGrid";
 import ProductCard from "../../components/customer/menu/ProductCard";
+
+/* ---------- New Mobile Components ---------- */
+
+
+import BannerCarousel from "../../components/customer/home/BannerCarousel";
+import QROrderCard from "../../components/customer/home/QROrderCard";
+import DeliveryChecker from "../../components/customer/home/DeliveryChecker";
+import HorizontalSection from "../../components/customer/home/HorizontalSection";
 
 import {
   getStore,
   getMenu,
   getFavorites,
-  getCurrentOrder,
+  getCurrentOrders,
   toggleFavorite,
 } from "../../api/customerApi";
 
 const Home = () => {
   const navigate = useNavigate();
+  
 
   const [store, setStore] = useState(null);
 
@@ -62,7 +74,7 @@ const Home = () => {
         getStore(),
         getMenu(),
         getFavorites("CUSTOMER_001"),
-        getCurrentOrder("CUSTOMER_001"),
+        getCurrentOrders("CUSTOMER_001"),
       ]);
 
       const menu = menuRes.data.data || [];
@@ -125,33 +137,207 @@ const Home = () => {
       console.error(err);
     }
   };
-  return (
-    <motion.div
-      initial={{
-        opacity: 0,
-        y: 15,
-      }}
-      animate={{
-        opacity: 1,
-        y: 0,
-      }}
-      transition={{
-        duration: 0.4,
-        ease: [0.22, 1, 0.36, 1],
-      }}
-      className="space-y-6"
-    >
-      <div
-        className="
-        mx-auto
+const isRestaurantOpen =
+  store?.timings?.status?.toLowerCase() === "open";
+
+const mobileBanners = [
+  {
+    id: 1,
+    image:
+      store?.coverImage ||
+      "https://images.unsplash.com/photo-1515003197210-e0cd71810b5f",
+    title: store?.name || "BizBiteNow Kitchen",
+    subtitle:
+      store?.tagline ||
+      "Fresh Food • Great Taste • Fast Delivery",
+    tag: isRestaurantOpen
+      ? "Open"
+      : "Closed",
+    isOpen: isRestaurantOpen,
+  },
+
+  {
+    id: 2,
+    image:
+      store?.bannerImages?.[0] ||
+      store?.coverImage ||
+      "https://images.unsplash.com/photo-1550547660-d9450f859349",
+    title: "Fresh Ingredients",
+    subtitle: "Prepared with premium quality ingredients.",
+    tag: isRestaurantOpen
+      ? "Open"
+      : "Closed",
+    isOpen: isRestaurantOpen,
+  },
+
+  {
+    id: 3,
+    image:
+      store?.bannerImages?.[1] ||
+      store?.coverImage ||
+      "https://images.unsplash.com/photo-1504674900247-0877df9cc836",
+    title: "Fast Delivery",
+    subtitle: "Delivered hot and fresh to your doorstep.",
+    tag: isRestaurantOpen
+      ? "Open"
+      : "Closed",
+    isOpen: isRestaurantOpen,
+  },
+];
+return (
+  <motion.div
+    initial={{
+      opacity: 0,
+      y: 15,
+    }}
+    animate={{
+      opacity: 1,
+      y: 0,
+    }}
+    transition={{
+      duration: 0.4,
+      ease: [0.22, 1, 0.36, 1],
+    }}
+    className="space-y-6"
+  >
+<div
+  className="
+    w-full
+    min-w-0
+    max-w-[1760px]
+
+    space-y-6
+    pb-28
+
+    px-1
+    sm:px-2
+    lg:px-10
+  "
+>
+      {/* ========================================================= */}
+{/* Mobile Home */}
+{/* ========================================================= */}
+
+<div className="space-y-5 lg:hidden">
+ <div className="px-1">
+
+  </div>
+  <div className="px-1">
+  <BannerCarousel
+    banners={mobileBanners.map((banner) => ({
+      ...banner,
+      image: store?.coverImage || banner.image,
+    }))}
+  />
+  </div>
+ <div className="px-1">
+  <QROrderCard
+    tableNumber={store?.tableNumber}
+    onScan={() =>
+      navigate("/customer/scan-qr")
+    }
+  />
+  </div>
+ <div className="px-1">
+  <HorizontalSection
+    title="Today's Offers 🔥"
+    subtitle="Save more today."
+    buttonText="View All"
+    onViewAll={() =>
+      navigate("/customer/menu")
+    }
+    products={offerProducts}
+    cartItems={cartItems}
+    favouriteProducts={favoriteProducts}
+    onProductClick={(product) =>
+      navigate(`/customer/product/${product.id}`)
+    }
+    onFavourite={handleFavourite}
+    onAdd={addItem}
+    onIncrease={increaseQuantity}
+    onDecrease={decreaseQuantity}
+  />
+  </div>
+ <div className="px-1">
+  <DeliveryChecker
+    location={store?.address?.city}
+    onCheck={() =>
+      navigate("/customer/address")
+    }
+  />
+  </div>
+ 
+
+  <HorizontalSection
+    title="Your Favorites ❤️"
+    subtitle="Your favourite dishes."
+    buttonText="View All"
+    onViewAll={() =>
+      navigate("/customer/favorites")
+    }
+    products={favoriteProducts}
+    cartItems={cartItems}
+    favouriteProducts={favoriteProducts}
+    onProductClick={(product) =>
+      navigate(`/customer/product/${product.id}`)
+    }
+    onFavourite={handleFavourite}
+    onAdd={addItem}
+    onIncrease={increaseQuantity}
+    onDecrease={decreaseQuantity}
+  />
+
+
+  <HorizontalSection
+    title="Recently Ordered"
+    subtitle="Order again in one tap."
+    buttonText="Orders"
+    onViewAll={() =>
+      navigate("/customer/orders")
+    }
+    products={recentProducts}
+    cartItems={cartItems}
+    favouriteProducts={favoriteProducts}
+    onProductClick={(product) =>
+      navigate(`/customer/product/${product.id}`)
+    }
+    onFavourite={handleFavourite}
+    onAdd={addItem}
+    onIncrease={increaseQuantity}
+    onDecrease={decreaseQuantity}
+  />
+  <section className="px-1">
+    <button
+      onClick={() =>
+        navigate("/customer/menu")
+      }
+      className="
         w-full
-        max-w-[1600px]
-        space-y-8
-        pb-28
-        lg:pl-10
+        rounded-3xl
+        py-4
+        text-lg
+        font-semibold
+        text-white
       "
-      >
-        <HeroBanner
+      style={{
+        background: "var(--primary)",
+      }}
+    >
+      Browse Full Menu
+    </button>
+  </section>
+</div>
+
+
+        <div
+  className="
+    hidden
+    space-y-8
+    lg:block
+
+  "
+>
+  <HeroBanner
           banner={
             store?.coverImage ||
             "https://images.unsplash.com/photo-1515003197210-e0cd71810b5f"
@@ -191,14 +377,6 @@ const Home = () => {
           onBookTable={() => navigate("/customer/book-table")}
         />
 
-        <HeroActions
-          onMenu={() => navigate("/customer/menu")}
-          onBookTable={() => navigate("/customer/book-table")}
-          onOrders={() => navigate("/customer/orders")}
-          onRewards={() => navigate("/customer/rewards")}
-          onDirections={() => window.open("https://maps.google.com", "_blank")}
-          onCall={() => store?.phone && window.open(`tel:${store.phone}`)}
-        />
         {/* Recently Ordered */}
 
         {recentCount > 0 && (
@@ -403,6 +581,7 @@ const Home = () => {
             </button>
           </div>
         </section>
+        </div>
       </div>
     </motion.div>
   );
