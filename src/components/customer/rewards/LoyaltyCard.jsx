@@ -1,30 +1,51 @@
 import { motion } from "framer-motion";
 import {
-  Coins,
-  Crown,
+  Stamp,
   Gift,
-  Sparkles,
-  ChevronRight,
+  Percent,
+  Bike,
   Trophy,
+  ChevronRight,
+  PauseCircle,
 } from "lucide-react";
 
-const tierColors = {
-  Bronze: "#CD7F32",
-  Silver: "#9CA3AF",
-  Gold: "#FACC15",
-  Platinum: "#8B5CF6",
+const REWARD_ICONS = {
+  item: Gift,
+  discount: Percent,
+  delivery: Bike,
 };
 
-const LoyaltyCard = ({
-  points = 2450,
-  tier = "Gold",
-  nextTier = "Platinum",
-  pointsToNextTier = 550,
-  progress = 82,
-  expiringPoints = 120,
-  onViewBenefits,
-  onRedeem,
-}) => {
+const REWARD_LABELS = {
+  item: "Free item",
+  discount: "Discount",
+  delivery: "Free delivery",
+};
+
+/**
+ * data: { active, threshold, stampsCollected, rewardType, rewardDetail }
+ * — same shape as api/customer/loyalty.js's getCustomerLoyaltyStatus().
+ *
+ * Same visual scaffolding as the original points/tier version (gradient
+ * hero, decorative circles, motion, var(--primary) theming) — only the
+ * data-bound content changed.
+ */
+const LoyaltyCard = ({ data, onViewBenefits, onRedeem }) => {
+  const {
+    active = true,
+    threshold = 5,
+    stampsCollected = 0,
+    rewardType = "item",
+    rewardDetail = "a reward",
+  } = data || {};
+
+  const remaining = Math.max(0, threshold - stampsCollected);
+  const rewardReady = stampsCollected >= threshold;
+  const progress = Math.min(
+    100,
+    Math.round((stampsCollected / threshold) * 100),
+  );
+  const RewardIcon = REWARD_ICONS[rewardType] || Gift;
+
   return (
     <motion.section
       initial={{ opacity: 0, y: 15 }}
@@ -41,8 +62,7 @@ const LoyaltyCard = ({
         text-white
       "
       style={{
-        background:
-          "linear-gradient(135deg,var(--primary),#111827)",
+        background: "linear-gradient(135deg,var(--primary),#111827)",
       }}
     >
       {/* Background */}
@@ -52,25 +72,18 @@ const LoyaltyCard = ({
       <div className="absolute -bottom-16 -left-12 h-48 w-48 rounded-full bg-white/5" />
 
       <div className="relative p-7">
-
         {/* Header */}
 
         <div className="flex items-center justify-between">
-
           <div>
-
-            <p className="text-sm text-white/70">
-              Loyalty Balance
-            </p>
+            <p className="text-sm text-white/70">Loyalty Progress</p>
 
             <h2 className="mt-2 text-5xl font-bold">
-              {points.toLocaleString()}
+              {stampsCollected}
+              <span className="text-2xl text-white/50">/{threshold}</span>
             </h2>
 
-            <p className="mt-2 text-white/70">
-              Available Reward Points
-            </p>
-
+            <p className="mt-2 text-white/70">Stamps collected</p>
           </div>
 
           <div
@@ -88,12 +101,11 @@ const LoyaltyCard = ({
               backdrop-blur
             "
           >
-            <Coins size={38} />
+            <Stamp size={34} />
           </div>
-
         </div>
 
-        {/* Tier */}
+        {/* Reward */}
 
         <div
           className="
@@ -109,28 +121,16 @@ const LoyaltyCard = ({
           "
         >
           <div className="flex items-center justify-between">
-
             <div className="flex items-center gap-3">
-
-              <Crown
-                size={24}
-                color={
-                  tierColors[tier] || "#fff"
-                }
-              />
+              <RewardIcon size={24} />
 
               <div>
-
-                <h3 className="text-xl font-bold">
-                  {tier} Member
-                </h3>
+                <h3 className="text-xl font-bold">{rewardDetail}</h3>
 
                 <p className="text-sm text-white/70">
-                  Premium Loyalty Member
+                  {REWARD_LABELS[rewardType] || "Reward"} on card completion
                 </p>
-
               </div>
-
             </div>
 
             <Trophy size={28} />
@@ -139,17 +139,13 @@ const LoyaltyCard = ({
           {/* Progress */}
 
           <div className="mt-6">
-
             <div className="mb-3 flex justify-between text-sm">
+              <span>0</span>
 
-              <span>{tier}</span>
-
-              <span>{nextTier}</span>
-
+              <span>{threshold} stamps</span>
             </div>
 
             <div className="h-3 overflow-hidden rounded-full bg-white/20">
-
               <motion.div
                 initial={{
                   width: 0,
@@ -162,21 +158,19 @@ const LoyaltyCard = ({
                 }}
                 className="h-full rounded-full bg-white"
               />
-
             </div>
 
             <p className="mt-3 text-sm text-white/70">
-              {pointsToNextTier} more points to unlock{" "}
-              {nextTier}.
+              {rewardReady
+                ? "Reward unlocked — applied automatically at your next checkout."
+                : `${remaining} more order${remaining === 1 ? "" : "s"} for your ${REWARD_LABELS[rewardType]?.toLowerCase() || "reward"}.`}
             </p>
-
           </div>
-
         </div>
 
-        {/* Expiring */}
+        {/* Paused notice */}
 
-        {expiringPoints > 0 && (
+        {!active && (
           <div
             className="
               mt-6
@@ -189,30 +183,22 @@ const LoyaltyCard = ({
             "
           >
             <div className="flex items-center gap-3">
-
-              <Sparkles size={20} />
+              <PauseCircle size={20} />
 
               <div>
-
-                <h4 className="font-semibold">
-                  {expiringPoints} Points Expiring Soon
-                </h4>
+                <h4 className="font-semibold">Loyalty programme paused</h4>
 
                 <p className="text-sm text-white/70">
-                  Redeem before they expire.
+                  This store has paused new stamps for now.
                 </p>
-
               </div>
-
             </div>
-
           </div>
         )}
 
         {/* Quick Stats */}
 
         <div className="mt-6 grid gap-4 sm:grid-cols-2">
-
           <div
             className="
               rounded-2xl
@@ -224,16 +210,11 @@ const LoyaltyCard = ({
               backdrop-blur
             "
           >
-            <Gift size={22} />
+            <Stamp size={22} />
 
-            <h4 className="mt-3 text-2xl font-bold">
-              8
-            </h4>
+            <h4 className="mt-3 text-2xl font-bold">{remaining}</h4>
 
-            <p className="text-sm text-white/70">
-              Rewards Available
-            </p>
-
+            <p className="text-sm text-white/70">Stamps to go</p>
           </div>
 
           <div
@@ -247,26 +228,22 @@ const LoyaltyCard = ({
               backdrop-blur
             "
           >
-            <Crown size={22} />
+            <RewardIcon size={22} />
 
             <h4 className="mt-3 text-2xl font-bold">
-              3
+              {REWARD_LABELS[rewardType] || "Reward"}
             </h4>
 
-            <p className="text-sm text-white/70">
-              Tier Benefits Active
-            </p>
-
+            <p className="text-sm text-white/70">Your reward type</p>
           </div>
-
         </div>
 
         {/* Buttons */}
 
         <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-
           <button
             onClick={onRedeem}
+            disabled={!rewardReady}
             className="
               flex
               flex-1
@@ -288,11 +265,15 @@ const LoyaltyCard = ({
               transition
 
               hover:scale-[1.02]
+
+              disabled:cursor-not-allowed
+              disabled:opacity-50
+              disabled:hover:scale-100
             "
           >
             <Gift size={20} />
 
-            Redeem Rewards
+            {rewardReady ? "Reward ready!" : "Keep ordering to unlock"}
           </button>
 
           <button
@@ -323,13 +304,10 @@ const LoyaltyCard = ({
               hover:bg-white/20
             "
           >
-            View Benefits
-
+            How it works
             <ChevronRight size={18} />
           </button>
-
         </div>
-
       </div>
     </motion.section>
   );
