@@ -15,7 +15,7 @@ const CompactCategoryTabs = ({
         pb-2
 
         scrollbar-hide
-
+        
         lg:hidden
       "
     >
@@ -30,10 +30,10 @@ const CompactCategoryTabs = ({
           className={`
             whitespace-nowrap
 
-            rounded-full
+            rounded-xl
 
             px-5
-            py-2.5
+            py-2
 
             text-sm
             font-semibold
@@ -43,7 +43,7 @@ const CompactCategoryTabs = ({
             ${
               activeCategory === category.id
                 ? "text-white"
-                : "bg-white text-slate-700 border border-slate-200"
+                : "bg-white text-slate-700 "
             }
           `}
           style={

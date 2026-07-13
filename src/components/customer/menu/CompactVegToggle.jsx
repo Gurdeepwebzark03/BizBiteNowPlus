@@ -15,10 +15,7 @@ const options = [
   },
 ];
 
-const CompactVegToggle = ({
-  value = "all",
-  onChange,
-}) => {
+const CompactVegToggle = ({ value = "all", onChange }) => {
   return (
     <div
       className="
@@ -28,7 +25,7 @@ const CompactVegToggle = ({
 
         gap-1
 
-        rounded-full
+        rounded-xl
 
         border
         border-slate-200
@@ -43,15 +40,12 @@ const CompactVegToggle = ({
       "
     >
       {options.map((option) => {
-        const active =
-          value === option.id;
+        const active = value === option.id;
 
         return (
           <button
             key={option.id}
-            onClick={() =>
-              onChange?.(option.id)
-            }
+            onClick={() => onChange?.(option.id)}
             className={`
               flex
               items-center
@@ -60,7 +54,7 @@ const CompactVegToggle = ({
 
               whitespace-nowrap
 
-              rounded-full
+              rounded-xl
 
               px-3
               py-2
@@ -70,29 +64,40 @@ const CompactVegToggle = ({
 
               transition-all
 
-              ${
-                active
-                  ? "text-white"
-                  : "text-slate-600"
-              }
+              ${active ? "text-white" : "text-slate-600"}
             `}
             style={{
-              background: active
-                ? "var(--primary)"
-                : "transparent",
+              background: active ? "var(--primary)" : "transparent",
             }}
           >
             {option.id !== "all" && (
-              <Leaf
-                size={12}
-                color={
-                  active
-                    ? "#ffffff"
-                    : option.id === "veg"
-                    ? "#16A34A"
-                    : "#DC2626"
-                }
-              />
+              <div
+                className={`
+    flex h-4 w-4 items-center justify-center
+    rounded-[2px]
+    border
+    ${
+      active
+        ? "border-white"
+        : option.id === "veg"
+          ? "border-[#008000]"
+          : "border-[#D32F2F]"
+    }
+  `}
+              >
+                <div
+                  className={`
+      h-2 w-2 rounded-full
+      ${
+        active
+          ? "bg-white"
+          : option.id === "veg"
+            ? "bg-[#008000]"
+            : "bg-[#D32F2F]"
+      }
+    `}
+                />
+              </div>
             )}
 
             {option.label}

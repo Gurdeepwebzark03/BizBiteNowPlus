@@ -263,24 +263,24 @@ const Home = () => {
             onIncrease={increaseQuantity}
             onDecrease={decreaseQuantity}
           />
-          <section className="px-1">
-            <button
-              onClick={() => navigate("/customer/menu")}
-              className="
-        w-full
-        rounded-3xl
-        py-4
-        text-lg
-        font-semibold
-        text-white
-      "
-              style={{
-                background: "var(--primary)",
-              }}
-            >
-              Browse Full Menu
-            </button>
-          </section>
+<section className="flex justify-center px-1">
+  <button
+    onClick={() => navigate("/customer/menu")}
+    className="
+      w-[60%]
+      rounded-[14px]
+      py-4
+      text-sm
+      font-semibold
+      text-white
+    "
+    style={{
+      background: "var(--primary)",
+    }}
+  >
+    Browse Full Menu
+  </button>
+</section>
         </div>
 
         <div

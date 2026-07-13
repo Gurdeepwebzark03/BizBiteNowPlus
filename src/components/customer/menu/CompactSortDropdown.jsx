@@ -89,7 +89,7 @@ const CompactSortDropdown = ({
           items-center
           gap-1
 
-          rounded-full
+          rounded-xl
 
           border
           border-slate-200
@@ -97,7 +97,7 @@ const CompactSortDropdown = ({
           bg-white
 
           px-3
-          py-2
+          py-3
 
           shadow-sm
 

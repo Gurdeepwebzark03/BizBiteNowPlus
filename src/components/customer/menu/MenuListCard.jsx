@@ -49,34 +49,65 @@ const MenuListCard = ({
         hover:shadow-md
       "
     >
-      {/* Image */}
+{/* Image */}
 
-      <div
-        onClick={onClick}
-        className="
-          h-20
-          w-20
+<div
+  className="
+    relative
+    h-20
+    w-20
+    flex-shrink-0
+  "
+>
+  <div
+    onClick={onClick}
+    className="
+      h-full
+      w-full
+      cursor-pointer
+      overflow-hidden
+      rounded-xl
+      bg-slate-100
+    "
+  >
+    <img
+      src={
+        image ||
+        "https://via.placeholder.com/300x300?text=Food"
+      }
+      alt={name}
+      className="h-full w-full object-cover"
+    />
+  </div>
 
-          flex-shrink-0
+  {/* Favourite */}
 
-          cursor-pointer
-
-          overflow-hidden
-
-          rounded-xl
-
-          bg-slate-100
-        "
-      >
-        <img
-          src={
-            image ||
-            "https://via.placeholder.com/300x300?text=Food"
-          }
-          alt={name}
-          className="h-full w-full object-cover"
-        />
-      </div>
+  <button
+    onClick={onFavourite}
+    className="
+      absolute
+      -left-1
+      -top-1
+      flex
+      h-7
+      w-7
+      items-center
+      justify-center
+      rounded-full
+      bg-white/95
+      shadow-md
+      backdrop-blur-sm
+      transition
+      hover:scale-105
+    "
+  >
+    <Heart
+      size={15}
+      fill={isFavourite ? "#EF4444" : "none"}
+      stroke={isFavourite ? "#EF4444" : "#94A3B8"}
+    />
+  </button>
+</div>
 
       {/* Content */}
 
@@ -112,32 +143,30 @@ const MenuListCard = ({
           </h3>
 
           <div className="flex items-center gap-2">
-            <Leaf
-              size={14}
-              color={
-                isVeg
-                  ? "#16A34A"
-                  : "#DC2626"
-              }
-            />
+<div
+  className={`
+    flex h-4 w-4 items-center justify-center
+    rounded-[2px]
+    border
+    ${
+      isVeg
+        ? "border-[#008000]"
+        : "border-[#D32F2F]"
+    }
+  `}
+>
+  <div
+    className={`
+      h-2 w-2 rounded-full
+      ${
+        isVeg
+          ? "bg-[#008000]"
+          : "bg-[#D32F2F]"
+      }
+    `}
+  />
+</div>
 
-            <button
-              onClick={onFavourite}
-            >
-              <Heart
-                size={16}
-                fill={
-                  isFavourite
-                    ? "#ef4444"
-                    : "none"
-                }
-                stroke={
-                  isFavourite
-                    ? "#ef4444"
-                    : "#94a3b8"
-                }
-              />
-            </button>
           </div>
         </div>
 

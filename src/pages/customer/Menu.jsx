@@ -13,6 +13,7 @@ import CompactCategoryTabs from "../../components/customer/menu/CompactCategoryT
 import CompactSortDropdown from "../../components/customer/menu/CompactSortDropdown";
 import CompactVegToggle from "../../components/customer/menu/CompactVegToggle";
 import { useCart } from "../../context/CartContext";
+import { Bell } from "lucide-react";
 import {
   getMenu,
   getCategories,
@@ -213,7 +214,7 @@ const Menu = () => {
         exists ? prev.filter((id) => id !== product.id) : [...prev, product.id],
       );
 
-      alert(exists ? "Removed from favourites" : "Added to favourites");
+      
     } catch (err) {
       console.log(err);
     }
@@ -243,12 +244,52 @@ const Menu = () => {
     sm:px-2
 
   "
-      >
-        <SectionHeader
-          title="Our Menu"
-          subtitle="Freshly prepared dishes made just for you."
-        />
+      ><div className="flex items-center justify-between">
+  <SectionHeader
+    title="Our Menu"
+    subtitle="Freshly prepared dishes made just for you."
+  />
 
+  <button
+    className="
+      relative
+      flex
+      h-11
+      w-11
+      items-center
+      justify-center
+      rounded-[10px]
+      
+      transition
+      bg-slate-200
+    "
+  >
+    <Bell
+      size={22}
+      className="text-slate-700 "
+    />
+
+    <span
+      className="
+        absolute
+        -right-1
+        -top-1
+        flex
+        h-5
+        w-5
+        items-center
+        justify-center
+        rounded-full
+        bg-red-500
+        text-[10px]
+        font-bold
+        text-white
+      "
+    >
+      3
+    </span>
+  </button>
+</div>
         {/* Categories */}
 
 {/* Mobile Only */}
@@ -298,23 +339,23 @@ const Menu = () => {
   {/* Mobile */}
 
 <div className="relative lg:hidden">
-  <div
-    className="
-      flex
-      items-center
-      "
+<div
+  className="
+    flex
+    items-center
+    justify-between
+    w-full
+  "
+>
+  <CompactVegToggle
+    value={vegType}
+    onChange={setVegType}
+  />
 
-  >
-    <CompactVegToggle
-      value={vegType}
-      onChange={setVegType}
-    />
-
-    <CompactSortDropdown className="right-1"
-      value={sortBy}
-      onChange={setSortBy}
-    />
-  
+  <CompactSortDropdown
+    value={sortBy}
+    onChange={setSortBy}
+  />
 </div>
 </div>
   {/* Desktop */}
@@ -338,7 +379,6 @@ const Menu = () => {
 </>
           </div>
 
-          <ProductFilters filters={filters} onChange={setFilters} />
         </div>
 
         {/* Products */}
