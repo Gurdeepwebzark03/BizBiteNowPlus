@@ -117,10 +117,10 @@ const Orders = () => {
     lg:px-10
   "
       >
-      <div className="flex items-center justify-between">
+      <div className="w-full flex items-center bg-white mt-5 z-50 shadow-sm rounded-xl p-2 justify-between">
   <SectionHeader
-    title="MY ORDERS"
-    subtitle="Freshly prepared dishes made just for you."
+    title="Your Orders"
+    subtitle="Track your orders in real time"
   />
 
   <button

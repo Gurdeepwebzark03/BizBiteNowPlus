@@ -136,25 +136,11 @@ const Home = () => {
   };
   const isRestaurantOpen = store?.timings?.status?.toLowerCase() === "open";
 
-  const mobileBanners =
-    store?.banners?.map((image, index) => ({
-      id: index + 1,
-      image,
-      title:
-        index === 0
-          ? store.name
-          : index === 1
-            ? "Fresh Ingredients"
-            : "Fast Delivery",
-      subtitle:
-        index === 0
-          ? store.tagline || "Fresh Food • Great Taste • Fast Delivery"
-          : index === 1
-            ? "Prepared with premium quality ingredients."
-            : "Delivered hot and fresh to your doorstep.",
-      tag: isRestaurantOpen ? "Open" : "Closed",
-      isOpen: isRestaurantOpen,
-    })) || [];
+const mobileBanners =
+  store?.banners?.map((image, index) => ({
+    id: index + 1,
+    image,
+  })) || [];
   return (
     <motion.div
       initial={{
@@ -171,7 +157,7 @@ const Home = () => {
       }}
       className="space-y-6"
     >
-      <div
+     <div
         className="
     w-full
     min-w-0
@@ -192,12 +178,7 @@ const Home = () => {
         <div className="space-y-5 lg:hidden">
           <div className="px-1"></div>
           <div className="px-1">
-            <BannerCarousel
-              banners={mobileBanners.map((banner) => ({
-                ...banner,
-                image: banner.image,
-              }))}
-            />
+          <BannerCarousel banners={mobileBanners} />
           </div>
           <div className="px-1">
             <QROrderCard
@@ -543,6 +524,8 @@ const Home = () => {
           </section>
         </div>
       </div>
+
+ 
     </motion.div>
   );
 };

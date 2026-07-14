@@ -239,12 +239,12 @@ const Menu = () => {
 
     space-y-6
     pb-28
-
+    
     px-1
     sm:px-2
 
   "
-      ><div className="flex items-center justify-between">
+      ><div className="w-full flex items-center bg-white mt-5 z-50 shadow-sm rounded-xl p-2 justify-between">
   <SectionHeader
     title="Our Menu"
     subtitle="Freshly prepared dishes made just for you."

@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import {
   ShoppingBag,
   CheckCircle2,
+  Bell,
 } from "lucide-react";
 
 import SectionHeader from "../common/SectionHeader";
@@ -113,12 +114,54 @@ const MobileOrders = () => {
       }}
       className="space-y-5 pb-24"
     >
-      <div className="px-4">
+      <div className="px-1">
 
-        <SectionHeader
-          title="My Orders"
-          subtitle="Track your orders in real time"
-        />
+<div className="w-full flex items-center bg-white mt-5 z-50 shadow-sm rounded-xl p-2 justify-between">
+  <SectionHeader
+    title="Your Orders"
+    subtitle="Track your orders in real time"
+  />
+
+  <button
+    className="
+      relative
+      flex
+      h-11
+      w-11
+      items-center
+      justify-center
+      rounded-[10px]
+      
+      transition
+      bg-slate-200
+    "
+  >
+    <Bell
+      size={22}
+      className="text-slate-700 "
+    />
+
+    <span
+      className="
+        absolute
+        -right-1
+        -top-1
+        flex
+        h-5
+        w-5
+        items-center
+        justify-center
+        rounded-full
+        bg-red-500
+        text-[10px]
+        font-bold
+        text-white
+      "
+    >
+      3
+    </span>
+  </button>
+</div>
 
         {/* Current Order */}
 

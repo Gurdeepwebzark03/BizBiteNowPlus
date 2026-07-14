@@ -69,7 +69,7 @@ const BannerCarousel = ({
       >
         <img
           src={banner.image}
-          alt={banner.title}
+          
           className="h-full w-full object-cover select-none pointer-events-none"
           draggable={false}
         />
@@ -107,27 +107,7 @@ const BannerCarousel = ({
 
       {/* Indicators */}
 
-      {banners.length > 1 && (
-        <div className="mt-4 flex justify-center gap-2">
-          {banners.map((_, index) => (
-            <button
-              key={index}
-              onClick={() => setActive(index)}
-              className={`h-2 rounded-full transition-all duration-300 ${
-                active === index
-                  ? "w-8"
-                  : "w-2 bg-slate-300"
-              }`}
-              style={{
-                background:
-                  active === index
-                    ? "var(--primary)"
-                    : undefined,
-              }}
-            />
-          ))}
-        </div>
-      )}
+
     </section>
   );
 };
