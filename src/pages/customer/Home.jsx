@@ -93,12 +93,12 @@ const [
   getRecentlyOrderedProducts(),
 ]);
 
-setMenuData(menuRes.data.data);
-setTodaySpecialProducts(todayRes.data.data);
-setComboMealProducts(comboRes.data.data);
-setRecentProducts(recentRes.data.data);
+setMenuData(menuRes.data?.data || []);
+setTodaySpecialProducts(todayRes.data?.data || []);
+setComboMealProducts(comboRes.data?.data || []);
+setRecentProducts(recentRes.data?.data || []);
 
-      const menu = menuRes.data.data || [];
+const menu = menuRes.data?.data || [];
 
       setStore(storeRes.data.data);
 

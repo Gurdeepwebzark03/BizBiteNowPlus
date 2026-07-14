@@ -71,7 +71,7 @@ const CustomerHeader = ({ sidebarExpanded, isDesktop }) => {
     ? `${store.address.line1 ?? ""}, ${store.address.city ?? ""}`
     : "Tap to view restaurant";
 
-  const storeLogo = store?.logo || "https://via.placeholder.com/100";
+  const storeLogo = store?.logo  ;
 
   return (
     <header

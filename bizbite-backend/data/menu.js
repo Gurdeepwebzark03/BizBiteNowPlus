@@ -125,7 +125,7 @@ const menu = [
     bestseller: true,
     recommended: true,
 
-    todaySpecial: true,
+    todaySpecial: false,
     comboMeal: false,
     recentlyOrdered: true,
 
