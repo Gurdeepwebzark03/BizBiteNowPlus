@@ -67,21 +67,7 @@ const Orders = () => {
 
     loadOrders();
   }, []);
-  if (loading) {
-    return (
-      <div
-        className="
-        flex
-        min-h-[400px]
-        items-center
-        justify-center
-        text-slate-500
-      "
-      >
-        Loading Orders...
-      </div>
-    );
-  }
+
 
   return (
       <>

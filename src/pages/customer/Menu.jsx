@@ -14,6 +14,8 @@ import CompactSortDropdown from "../../components/customer/menu/CompactSortDropd
 import CompactVegToggle from "../../components/customer/menu/CompactVegToggle";
 import { useCart } from "../../context/CartContext";
 import { Bell } from "lucide-react";
+import MenuSkeleton from "../../components/customer/skeleton/MenuSkeleton";
+import MenuPageSkeleton from "../../components/customer/skeleton/MenuPageSkeleton";
 import {
   getMenu,
   getCategories,
@@ -221,6 +223,10 @@ const Menu = () => {
   };
   const getCartItem = (productId) =>
     cartItems.find((item) => item.productId === productId);
+
+  if (loading) {
+  return <MenuPageSkeleton />;
+}
   return (
     <motion.div
       initial={{ opacity: 0, y: 15 }}
@@ -402,18 +408,8 @@ const Menu = () => {
             </p>
           </div>
 
-          {loading ? (
-            <div
-              className="
-                py-20
-                text-center
-                text-slate-500
-              "
-            >
-              Loading menu...
-            </div>
-          ) : filteredProducts.length === 0 ? (
-            <div
+{ filteredProducts.length === 0 ? (
+              <div
               className="
                 rounded-[28px]
                 border-2

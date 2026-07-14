@@ -11,7 +11,11 @@ import MenuGrid from "../../components/customer/menu/MenuGrid";
 import ProductCard from "../../components/customer/menu/ProductCard";
 
 /* ---------- New Mobile Components ---------- */
-
+import QROrderCardSkeleton from "../../components/customer/skeleton/QROrderCardSkeleton";
+import BannerSkeleton from "../../components/customer/skeleton/BannerSkeleton";
+import HeroSkeleton from "../../components/customer/skeleton/HeroSkeleton";
+import StoreCardSkeleton from "../../components/customer/skeleton/StoreCardSkeleton";
+import HorizontalSectionSkeleton from "../../components/customer/skeleton/HorizontalSectionSkeleton";
 import BannerCarousel from "../../components/customer/home/BannerCarousel";
 import QROrderCard from "../../components/customer/home/QROrderCard";
 import DeliveryChecker from "../../components/customer/home/DeliveryChecker";
@@ -23,15 +27,19 @@ import {
   getFavorites,
   getCurrentOrders,
   toggleFavorite,
+  getTodaySpecialProducts,
+  getComboMealProducts,
+  getRecentlyOrderedProducts,
 } from "../../api/customerApi";
 
 const Home = () => {
   const navigate = useNavigate();
-
+  const [loading, setLoading] = useState(true);
   const [store, setStore] = useState(null);
 
   const [menuData, setMenuData] = useState([]);
-
+const [todaySpecialProducts, setTodaySpecialProducts] = useState([]);
+const [comboMealProducts, setComboMealProducts] = useState([]);
   const [favoriteProducts, setFavoriteProducts] = useState([]);
 
   const [recentProducts, setRecentProducts] = useState([]);
@@ -66,13 +74,29 @@ const Home = () => {
     updateItem(item.id, item.quantity - 1);
   };
   const loadData = async () => {
+    setLoading(true);
+
     try {
-      const [storeRes, menuRes, favRes, orderRes] = await Promise.all([
-        getStore(),
-        getMenu(),
-        getFavorites("CUSTOMER_001"),
-        getCurrentOrders("CUSTOMER_001"),
-      ]);
+const [
+  storeRes,
+  menuRes,
+  favRes,
+  todayRes,
+  comboRes,
+  recentRes,
+] = await Promise.all([
+  getStore(),
+  getMenu(),
+  getFavorites("CUSTOMER_001"),
+  getTodaySpecialProducts(),
+  getComboMealProducts(),
+  getRecentlyOrderedProducts(),
+]);
+
+setMenuData(menuRes.data.data);
+setTodaySpecialProducts(todayRes.data.data);
+setComboMealProducts(comboRes.data.data);
+setRecentProducts(recentRes.data.data);
 
       const menu = menuRes.data.data || [];
 
@@ -88,14 +112,11 @@ const Home = () => {
         ),
       );
 
-      const orderedIds =
-        orderRes.data.data?.items?.map((item) => item.productId) || [];
-
-      setRecentProducts(menu.filter((item) => orderedIds.includes(item.id)));
-
       setOfferProducts(menu.filter((item) => item.originalPrice > item.price));
     } catch (err) {
       console.error(err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -136,11 +157,11 @@ const Home = () => {
   };
   const isRestaurantOpen = store?.timings?.status?.toLowerCase() === "open";
 
-const mobileBanners =
-  store?.banners?.map((image, index) => ({
-    id: index + 1,
-    image,
-  })) || [];
+  const mobileBanners =
+    store?.banners?.map((image, index) => ({
+      id: index + 1,
+      image,
+    })) || [];
   return (
     <motion.div
       initial={{
@@ -157,7 +178,7 @@ const mobileBanners =
       }}
       className="space-y-6"
     >
-     <div
+      <div
         className="
     w-full
     min-w-0
@@ -178,15 +199,54 @@ const mobileBanners =
         <div className="space-y-5 lg:hidden">
           <div className="px-1"></div>
           <div className="px-1">
-          <BannerCarousel banners={mobileBanners} />
+            {loading ? (
+              <BannerSkeleton />
+            ) : (
+              <BannerCarousel banners={mobileBanners} />
+            )}
           </div>
           <div className="px-1">
-            <QROrderCard
-              tableNumber={store?.tableNumber}
-              onScan={() => navigate("/customer/scan-qr")}
+            {loading ? (
+              <QROrderCardSkeleton />
+            ) : (
+              <QROrderCard
+                tableNumber={store?.tableNumber}
+                onScan={() => navigate("/customer/scan-qr")}
+              />
+            )}
+          </div>
+          <div className="px-1">
+            {loading ? (
+              <HorizontalSectionSkeleton />
+            ) : (
+              <HorizontalSection
+                title="Recently Orderd"
+                subtitle="Save more today."
+                buttonText="View All"
+                onViewAll={() => navigate("/customer/orders")}
+                products={recentProducts}
+                cartItems={cartItems}
+                favouriteProducts={favoriteProducts}
+                onProductClick={(product) =>
+                  navigate(`/customer/product/${product.id}`)
+                }
+                onFavourite={handleFavourite}
+                onAdd={addItem}
+                onIncrease={increaseQuantity}
+                onDecrease={decreaseQuantity}
+              />
+            )}
+          </div>
+          <div className="px-1">
+            <DeliveryChecker
+              location={store?.address?.city}
+              onCheck={() => navigate("/customer/address")}
             />
           </div>
-          <div className="px-1">
+
+          {loading ? (
+            <HorizontalSectionSkeleton />
+          ) : (
             <HorizontalSection
               title="Today's Offers 🔥"
               subtitle="Save more today."
@@ -203,51 +263,76 @@ const mobileBanners =
               onIncrease={increaseQuantity}
               onDecrease={decreaseQuantity}
             />
-          </div>
-          <div className="px-1">
-            <DeliveryChecker
-              location={store?.address?.city}
-              onCheck={() => navigate("/customer/address")}
+          )}
+
+  {loading ? (
+    <HorizontalSectionSkeleton />
+  ) : (
+    <HorizontalSection
+      title="Today's Special 🌟"
+      subtitle="Chef's handpicked favorites."
+      buttonText="View All"
+      onViewAll={() => navigate("/customer/menu")}
+      products={todaySpecialProducts}
+      cartItems={cartItems}
+      favouriteProducts={favoriteProducts}
+      onProductClick={(product) =>
+        navigate(`/customer/product/${product.id}`)
+      }
+      onFavourite={handleFavourite}
+      onAdd={addItem}
+      onIncrease={increaseQuantity}
+      onDecrease={decreaseQuantity}
+    />
+  )}
+
+
+  {loading ? (
+    <HorizontalSectionSkeleton />
+  ) : (
+    <HorizontalSection
+      title="Combo Meals 🍱"
+      subtitle="Great taste, better value."
+      buttonText="View All"
+      onViewAll={() => navigate("/customer/menu")}
+      products={comboMealProducts}
+      cartItems={cartItems}
+      favouriteProducts={favoriteProducts}
+      onProductClick={(product) =>
+        navigate(`/customer/product/${product.id}`)
+      }
+      onFavourite={handleFavourite}
+      onAdd={addItem}
+      onIncrease={increaseQuantity}
+      onDecrease={decreaseQuantity}
+    />
+  )}
+
+
+          {loading ? (
+            <HorizontalSectionSkeleton />
+          ) : (
+            <HorizontalSection
+              title="Your Favourites ❤️"
+              subtitle="Save more today."
+              buttonText="View All"
+              onViewAll={() => navigate("/customer/menu")}
+              products={favoriteProducts}
+              cartItems={cartItems}
+              favouriteProducts={favoriteProducts}
+              onProductClick={(product) =>
+                navigate(`/customer/product/${product.id}`)
+              }
+              onFavourite={handleFavourite}
+              onAdd={addItem}
+              onIncrease={increaseQuantity}
+              onDecrease={decreaseQuantity}
             />
-          </div>
-
-          <HorizontalSection
-            title="Your Favorites ❤️"
-            subtitle="Your favourite dishes."
-            buttonText="View All"
-            onViewAll={() => navigate("/customer/favorites")}
-            products={favoriteProducts}
-            cartItems={cartItems}
-            favouriteProducts={favoriteProducts}
-            onProductClick={(product) =>
-              navigate(`/customer/product/${product.id}`)
-            }
-            onFavourite={handleFavourite}
-            onAdd={addItem}
-            onIncrease={increaseQuantity}
-            onDecrease={decreaseQuantity}
-          />
-
-          <HorizontalSection
-            title="Recently Ordered"
-            subtitle="Order again in one tap."
-            buttonText="Orders"
-            onViewAll={() => navigate("/customer/orders")}
-            products={recentProducts}
-            cartItems={cartItems}
-            favouriteProducts={favoriteProducts}
-            onProductClick={(product) =>
-              navigate(`/customer/product/${product.id}`)
-            }
-            onFavourite={handleFavourite}
-            onAdd={addItem}
-            onIncrease={increaseQuantity}
-            onDecrease={decreaseQuantity}
-          />
-<section className="flex justify-center px-1">
-  <button
-    onClick={() => navigate("/customer/menu")}
-    className="
+          )}
+          <section className="flex justify-center px-1">
+            <button
+              onClick={() => navigate("/customer/menu")}
+              className="
       w-[60%]
       rounded-[14px]
       py-4
@@ -255,13 +340,13 @@ const mobileBanners =
       font-semibold
       text-white
     "
-    style={{
-      background: "var(--primary)",
-    }}
-  >
-    Browse Full Menu
-  </button>
-</section>
+              style={{
+                background: "var(--primary)",
+              }}
+            >
+              Browse Full Menu
+            </button>
+          </section>
         </div>
 
         <div
@@ -272,6 +357,9 @@ const mobileBanners =
 
   "
         >
+          {loading ? (
+            <HeroSkeleton />
+          ) : (
             <HeroBanner
               banners={store?.banners}
               logo={store?.logo}
@@ -280,43 +368,48 @@ const mobileBanners =
               deliveryTime={store?.deliveryTime}
               isOpen={store?.isOpen}
             />
+          )}
 
-          <StoreCard
-            address={
-              store?.address
-                ? `${store.address.line1}, ${store.address.city}, ${store.address.state}`
-                : "Loading..."
-            }
-            phone={store?.phone || ""}
-            distance={store?.distance || "2.4 km"}
-            deliveryTime={store?.delivery?.averageTime || "25-35 mins"}
-            isOpen={store?.timings?.status === "Open"}
-            onCall={() => store?.phone && window.open(`tel:${store.phone}`)}
-            onDirections={() =>
-              window.open("https://maps.google.com", "_blank")
-            }
-            onShare={async () => {
-              const shareData = {
-                title: store?.name || "Restaurant",
-                text: store?.tagline || "Check out this restaurant!",
-                url: window.location.origin,
-              };
-
-              try {
-                if (navigator.share) {
-                  await navigator.share(shareData);
-                } else {
-                  await navigator.clipboard.writeText(shareData.url);
-
-                  alert("Link copied to clipboard!");
-                }
-              } catch (error) {
-                console.log("Share cancelled:", error);
+          {loading ? (
+            <StoreCardSkeleton />
+          ) : (
+            <StoreCard
+              address={
+                store?.address
+                  ? `${store.address.line1}, ${store.address.city}, ${store.address.state}`
+                  : ""
               }
-            }}
-            onFavorite={() => navigate("/customer/favorites")}
-            onBookTable={() => navigate("/customer/book-table")}
-          />
+              phone={store?.phone || ""}
+              distance={store?.distance || "2.4 km"}
+              deliveryTime={store?.delivery?.averageTime || "25-35 mins"}
+              isOpen={store?.timings?.status === "Open"}
+              onCall={() => store?.phone && window.open(`tel:${store.phone}`)}
+              onDirections={() =>
+                window.open("https://maps.google.com", "_blank")
+              }
+              onShare={async () => {
+                const shareData = {
+                  title: store?.name || "Restaurant",
+                  text: store?.tagline || "Check out this restaurant!",
+                  url: window.location.origin,
+                };
+
+                try {
+                  if (navigator.share) {
+                    await navigator.share(shareData);
+                  } else {
+                    await navigator.clipboard.writeText(shareData.url);
+
+                    alert("Link copied to clipboard!");
+                  }
+                } catch (error) {
+                  console.log("Share cancelled:", error);
+                }
+              }}
+              onFavorite={() => navigate("/customer/favorites")}
+              onBookTable={() => navigate("/customer/book-table")}
+            />
+          )}
 
           {/* Recently Ordered */}
 
@@ -424,7 +517,7 @@ const mobileBanners =
               </MenuGrid>
             </section>
           )}
-          {/* Today's Offers */}
+        
 
           {offerCount > 0 && (
             <section className="space-y-6 px-2 sm:px-4 lg:px-6 xl:px-8">
@@ -524,8 +617,6 @@ const mobileBanners =
           </section>
         </div>
       </div>
-
- 
     </motion.div>
   );
 };

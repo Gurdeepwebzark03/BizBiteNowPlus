@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 
 import SectionHeader from "../common/SectionHeader";
-
+import MobileOrdersSkeleton from "../../../components/customer/skeleton/MobileOrdersSkeleton";
 import MobileCurrentCard from "./MobileCurrentCard";
 import MobileTimeline from "./MobileTimeline";
 import ContactDeliveryCard from "./ContactDeliveryCard";
@@ -90,21 +90,9 @@ const MobileOrders = () => {
     loadOrders();
   }, []);
 
-  if (loading) {
-    return (
-      <div
-        className="
-          flex
-          min-h-[60vh]
-          items-center
-          justify-center
-          text-slate-500
-        "
-      >
-        Loading Orders...
-      </div>
-    );
-  }
+if (loading) {
+  return <MobileOrdersSkeleton />;
+}
     return (
     <motion.div
       initial={{ opacity: 0, y: 15 }}
