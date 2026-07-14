@@ -9,7 +9,7 @@ import CurrentOrderCard from "../../components/customer/orders/OrderCard";
 import OrderHistoryCard from "../../components/customer/orders/OrderHistory";
 import OrderTimeline from "../../components/customer/orders/OrderTimeline";
 import ReorderButton from "../../components/customer/orders/ReorderButton";
-
+import { Bell } from "lucide-react";
 import { getCurrentOrders, getOrderHistory } from "../../api/customerApi";
 
 const Orders = () => {
@@ -117,10 +117,52 @@ const Orders = () => {
     lg:px-10
   "
       >
-        <SectionHeader
-          title="My Orders"
-          subtitle="Track current and previous orders"
-        />
+      <div className="flex items-center justify-between">
+  <SectionHeader
+    title="MY ORDERS"
+    subtitle="Freshly prepared dishes made just for you."
+  />
+
+  <button
+    className="
+      relative
+      flex
+      h-11
+      w-11
+      items-center
+      justify-center
+      rounded-[10px]
+      
+      transition
+      bg-slate-200
+    "
+  >
+    <Bell
+      size={22}
+      className="text-slate-700 "
+    />
+
+    <span
+      className="
+        absolute
+        -right-1
+        -top-1
+        flex
+        h-5
+        w-5
+        items-center
+        justify-center
+        rounded-full
+        bg-red-500
+        text-[10px]
+        font-bold
+        text-white
+      "
+    >
+      3
+    </span>
+  </button>
+</div>
 
         {/* Current Order */}
 

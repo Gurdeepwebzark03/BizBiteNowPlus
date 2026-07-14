@@ -17,7 +17,7 @@ const MobileCurrentCard = ({
     <div
       className="
         overflow-hidden
-        rounded-3xl
+        rounded-[14px]
         border
         border-slate-200
         bg-white

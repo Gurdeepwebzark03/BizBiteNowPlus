@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import SectionHeader from "../../components/customer/common/SectionHeader";
 import PrimaryButton from "../../components/customer/common/PrimaryButton";
 import OrderSummary from "../../components/customer/orders/OrderSummary";
-
+import { Bell } from "lucide-react";
 import { motion } from "framer-motion";
 import CouponCard from "../../components/customer/rewards/CouponCard";
 
@@ -99,8 +99,8 @@ const discount = selectedCoupon
     <div className="space-y-8 lg:pl-10 pb-32">
 
       {/* Header */}
-
-      <SectionHeader
+  <div className="flex items-center justify-between">
+  <SectionHeader
         title="Cart"
         subtitle={`${
   cartItems.reduce(
@@ -108,7 +108,50 @@ const discount = selectedCoupon
     0
   )
 } items in your cart`}
-      />
+  />
+
+  <button
+    className="
+      relative
+      flex
+      h-11
+      w-11
+      items-center
+      justify-center
+      rounded-[10px]
+      
+      transition
+      bg-slate-200
+    "
+  >
+    <Bell
+      size={22}
+      className="text-slate-700 "
+    />
+
+    <span
+      className="
+        absolute
+        -right-1
+        -top-1
+        flex
+        h-5
+        w-5
+        items-center
+        justify-center
+        rounded-full
+        bg-red-500
+        text-[10px]
+        font-bold
+        text-white
+      "
+    >
+      3
+    </span>
+  </button>
+</div>
+
+
 
 
       {/* Cart Items */}

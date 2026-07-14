@@ -112,30 +112,31 @@ const DesktopSidebar = ({ store = {}, onLogout, expanded, setExpanded }) => {
             className="w-full"
           >
             {({ isActive }) => (
-              <div
-                className={`
-                    relative
+          <div
+            className={`
+              group
+              relative
 
-                    flex
-                    h-14
-                    w-full
+              flex
+              h-14
+              w-full
 
-                    items-center
-                    gap-4
+              items-center
+              gap-4
 
-                    rounded-[14px]
+              rounded-[14px]
 
-                    transition-all
-                    duration-300
+              transition-all
+              duration-300
 
-                    ${
-                      isActive
-                        ? "text-white shadow-lg"
-                        : "text-green-700 hover:bg-slate-100 hover:text-yellow-600"
-                    }
-                  `}
+              ${
+                isActive
+                  ? "text-white shadow-lg"
+                  : "text-green-700 hover:bg-slate-100 hover:text-yellow-600"
+              }
+            `}
                 style={{
-                  background: isActive ? "var(--secondary)" : "transparent",
+                  background: isActive ? "var(--primary)" : "transparent",
                 }}
               >
                 <div
@@ -151,18 +152,26 @@ const DesktopSidebar = ({ store = {}, onLogout, expanded, setExpanded }) => {
                   <Icon size={22} />
                 </div>
 
-                <span
-                  className={`
-                      whitespace-nowrap
-                      text-sm
-                      font-semibold
+<span
+  className={`
+    whitespace-nowrap
+    transition-all
+    duration-300
+    ease-[cubic-bezier(.22,1,.36,1)]
 
-                      transition-all
-                      duration-300
+    ${
+      expanded
+        ? "opacity-100 translate-x-0"
+        : "opacity-0 -translate-x-2"
+    }
 
-                      ${expanded ? "opacity-100" : "opacity-0"}
-                    `}
-                >
+    ${
+      isActive
+        ? "text-white"
+        : "group-hover:text-[#F4A300] group-hover:-translate-y-0.5"
+    }
+  `}
+>
                   {label}
                 </span>
               </div>

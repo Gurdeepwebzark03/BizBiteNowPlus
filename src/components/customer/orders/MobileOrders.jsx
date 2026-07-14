@@ -156,7 +156,7 @@ const MobileOrders = () => {
               {currentOrders.map((order) => (
                 <div
                   key={order.id}
-                  className="space-y-4"
+                  className="space-y-4 bg-white shadow-sm rounded-[14px]"
                 >
 
                   <MobileCurrentCard
@@ -168,7 +168,7 @@ const MobileOrders = () => {
                       handleReorder(order)
                     }
                   />
-
+                   <div className="my-4 border-t border-slate-200" />
                   <MobileTimeline
                     timeline={
                       order.tracking?.steps || []

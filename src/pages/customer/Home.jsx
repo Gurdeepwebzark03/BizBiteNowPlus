@@ -291,21 +291,14 @@ const Home = () => {
 
   "
         >
-          <HeroBanner
-            banner={
-              store?.coverImage ||
-              "https://images.unsplash.com/photo-1515003197210-e0cd71810b5f"
-            }
-            logo={
-              store?.logo ||
-              "https://images.unsplash.com/photo-1515003197210-e0cd71810b5f?auto=format&fit=crop&w=200&q=80"
-            }
-            name={store?.name || "BizBiteNow Kitchen"}
-            tagline={store?.tagline}
-            rating={store?.rating}
-            reviews={store?.totalReviews}
-            isOpen={store?.timings?.status === "Open"}
-          />
+            <HeroBanner
+              banners={store?.banners}
+              logo={store?.logo}
+              name={store?.name}
+              tagline={store?.tagline}
+              deliveryTime={store?.deliveryTime}
+              isOpen={store?.isOpen}
+            />
 
           <StoreCard
             address={

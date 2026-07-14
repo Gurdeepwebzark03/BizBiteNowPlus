@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { Bell } from "lucide-react";
-import NotificationPanel from "./NotificationPanel";
+import NotificationPanel from "./NotificationPanel.jsx";
 import { AnimatePresence, motion } from "framer-motion";
 import { notifications } from "./notificationData.js";
 

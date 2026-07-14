@@ -1,4 +1,30 @@
-import { Check } from "lucide-react";
+import {
+  Check,
+  Circle,
+  PackageCheck,
+  ChefHat,
+  Bike,
+  Home,
+} from "lucide-react";
+
+const getIcon = (title) => {
+  switch (title.toLowerCase()) {
+    case "order placed":
+      return PackageCheck;
+
+    case "preparing food":
+      return ChefHat;
+
+    case "out for delivery":
+      return Bike;
+
+    case "delivered":
+      return Home;
+
+    default:
+      return Circle;
+  }
+};
 
 const MobileTimeline = ({
   timeline = [],
@@ -7,7 +33,7 @@ const MobileTimeline = ({
   if (!timeline.length) return null;
 
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+    <div className="rounded-2xl  bg-white p-4 ">
       <div className="mb-5 flex items-center justify-between">
         <h3 className="text-sm font-semibold text-slate-900">
           Order Progress
@@ -19,27 +45,23 @@ const MobileTimeline = ({
       </div>
 
       <div className="flex items-start">
-
         {timeline.map((step, index) => {
-
           const completed = index < currentStep;
-
           const active = index === currentStep;
+
+          const Icon = getIcon(step.title);
 
           return (
             <div
               key={step.id || index}
               className="flex flex-1 items-start"
             >
-              {/* Step */}
-
               <div className="flex flex-col items-center">
-
                 <div
                   className={`
                     flex
-                    h-8
-                    w-8
+                    h-10
+                    w-10
                     items-center
                     justify-center
                     rounded-full
@@ -52,26 +74,27 @@ const MobileTimeline = ({
                         ? "border-green-600 bg-green-600 text-white"
                         : active
                         ? "animate-pulse border-[var(--primary)] bg-[var(--primary)] text-white"
-                        : "border-slate-300 bg-white"
+                        : "border-slate-300 bg-white text-slate-400"
                     }
                   `}
                 >
                   {completed ? (
                     <Check
-                      size={16}
+                      size={18}
                       strokeWidth={3}
                     />
-                  ) : active ? (
-                    <div className="h-2.5 w-2.5 rounded-full bg-white" />
                   ) : (
-                    <div className="h-2.5 w-2.5 rounded-full bg-slate-300" />
+                    <Icon
+                      size={18}
+                      strokeWidth={2.3}
+                    />
                   )}
                 </div>
 
                 <span
                   className={`
                     mt-2
-                    w-14
+                    w-16
                     text-center
                     text-[10px]
                     leading-3
@@ -87,16 +110,11 @@ const MobileTimeline = ({
                 >
                   {step.title}
                 </span>
-
               </div>
 
-              {/* Progress Line */}
-
               {index < timeline.length - 1 && (
-                <div className="mt-[15px] flex-1">
-
+                <div className="mt-[19px] flex-1">
                   <div className="h-[3px] rounded-full bg-slate-200">
-
                     <div
                       className={`
                         h-full
@@ -111,16 +129,12 @@ const MobileTimeline = ({
                         }
                       `}
                     />
-
                   </div>
-
                 </div>
               )}
-
             </div>
           );
         })}
-
       </div>
     </div>
   );

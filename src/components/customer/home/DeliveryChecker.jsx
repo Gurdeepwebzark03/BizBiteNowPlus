@@ -12,7 +12,7 @@ const DeliveryChecker = ({
 
         <div className="flex flex-1 items-center gap-3 min-w-0">
 
-          <div className="flex h-15 w-9 shrink-0 items-center justify-center rounded-lg bg-[var(--primary-light)]">
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-[var(--primary-light)]">
             <MapPin
               size={30}
               style={{

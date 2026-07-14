@@ -271,27 +271,7 @@ ease-in-out
             Hidden on Mobile
         */}
 
-          <button
-            onClick={() => navigate("/customer/profile")}
-            className="
-            hidden
-            lg:flex
 
-            h-11
-            w-11
-
-            items-center
-            justify-center
-
-            rounded-[10px]
-
-            transition
-
-            bg-slate-200
-          "
-          >
-            <User size={20} />
-          </button>
         </div>
 
         {/* Notification Panel */}
