@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Search, TicketPercent } from "lucide-react";
+import { Search } from "lucide-react";
 
 import CouponCard from "./CouponCard";
 
@@ -9,63 +9,48 @@ import EmptyState from "../common/EmptyState";
 import SectionHeader from "../common/SectionHeader";
 
 const tabs = [
-  {
-    id: "available",
-    label: "Available",
-  },
-
-  {
-    id: "expired",
-    label: "Expired",
-  },
+  { id: "available", label: "Available" },
+  { id: "applied", label: "Applied" },
+  { id: "expired", label: "Expired" },
 ];
 
 const Coupons = ({
   coupons = [],
+  appliedCoupon = null,
   usedCoupons = [],
   onApply,
   onCopy,
 }) => {
-  const [activeTab, setActiveTab] =
-    useState("available");
+  const [activeTab, setActiveTab] = useState("available");
+  const [search, setSearch] = useState("");
+  const [copiedCode, setCopiedCode] = useState(null);
 
-  const [search, setSearch] =
-    useState("");
-const [copiedCode, setCopiedCode] = useState(null);
-const handleCopy = (code) => {
-  navigator.clipboard.writeText(code);
-  setCopiedCode(code);
+  const handleCopy = (code) => {
+    navigator.clipboard.writeText(code);
+    setCopiedCode(code);
+    onCopy?.(code);
 
-  setTimeout(() => {
-    setCopiedCode(null);
-  }, 2000);
-};
+    setTimeout(() => {
+      setCopiedCode(null);
+    }, 2000);
+  };
+
   const filteredCoupons = useMemo(() => {
     return coupons.filter((coupon) => {
       const tabMatch =
         activeTab === "available"
-          ? !coupon.expired &&
-            !usedCoupons.includes(coupon.code)
+          ? !coupon.expired && !usedCoupons.includes(coupon.code)
           : activeTab === "applied"
-          ? coupon.code === appliedCoupon
+          ? appliedCoupon?.code === coupon.code
           : coupon.expired;
 
       const searchMatch =
-        coupon.code
-          .toLowerCase()
-          .includes(search.toLowerCase()) ||
-        coupon.title
-          .toLowerCase()
-          .includes(search.toLowerCase());
+        coupon.code.toLowerCase().includes(search.toLowerCase()) ||
+        coupon.title.toLowerCase().includes(search.toLowerCase());
 
       return tabMatch && searchMatch;
     });
-  }, [
-    coupons,
-    activeTab,
-    search,
-    
-  ]);
+  }, [coupons, activeTab, search, appliedCoupon, usedCoupons]);
 
   return (
     <div className="space-y-6">
@@ -93,9 +78,7 @@ const handleCopy = (code) => {
 
           <input
             value={search}
-            onChange={(e) =>
-              setSearch(e.target.value)
-            }
+            onChange={(e) => setSearch(e.target.value)}
             placeholder="Search coupon..."
             className="
               w-full
@@ -122,17 +105,12 @@ const handleCopy = (code) => {
           <Chip
             key={tab.id}
             label={tab.label}
-            selected={
-              activeTab === tab.id
-            }
-            onClick={() =>
-              setActiveTab(tab.id)
-            }
+            selected={activeTab === tab.id}
+            onClick={() => setActiveTab(tab.id)}
           />
         ))}
       </div>
 
-    
       {/* Coupons */}
 
       {filteredCoupons.length === 0 ? (
@@ -143,17 +121,16 @@ const handleCopy = (code) => {
         />
       ) : (
         <div className="grid gap-6 lg:grid-cols-2">
-          {filteredCoupons.map(
-            (coupon) => (
+          {filteredCoupons.map((coupon) => (
             <CouponCard
               key={coupon.code}
               coupon={coupon}
               copied={copiedCode === coupon.code}
+              used={usedCoupons.includes(coupon.code)}
               onCopy={handleCopy}
               onApply={onApply}
             />
-            )
-          )}
+          ))}
         </div>
       )}
     </div>

@@ -1,23 +1,12 @@
+
+
 const loyaltyData = {
-  currentTier: "Gold",
-
-  nextTier: "Platinum",
-
-  currentPoints: 1860,
-
-  pointsToNextTier: 240,
-
-  lifetimePoints: 8450,
-
-  cashback: 320,
-
-  visits: 48,
-
-  memberSince: "Jan 2024",
-
-  expiry: "31 Dec 2026",
+  active: true,
+  threshold: 5,
+  stampsCollected: 3,
+  rewardType: "item", // "item" | "discount" | "delivery"
+  rewardDetail: "Free dessert",
 };
-
 const rewardsData = [
   {
     id: 1,

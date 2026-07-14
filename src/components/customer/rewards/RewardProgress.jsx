@@ -1,37 +1,42 @@
 import { motion } from "framer-motion";
-import {
-  Lock,
-  CheckCircle2,
-  Crown,
-  ChevronRight,
-} from "lucide-react";
+import { Lock, CheckCircle2, Stamp, Gift, Percent, Bike } from "lucide-react";
 
-const RewardProgress = ({
-  currentTier = "Gold",
-  currentPoints = 2450,
-  tiers = [
-    {
-      name: "Bronze",
-      required: 0,
-      benefits: "5% Cashback",
-    },
-    {
-      name: "Silver",
-      required: 1000,
-      benefits: "Free Delivery",
-    },
-    {
-      name: "Gold",
-      required: 2000,
-      benefits: "Priority Support",
-    },
-    {
-      name: "Platinum",
-      required: 3000,
-      benefits: "VIP Exclusive Rewards",
-    },
-  ],
-}) => {
+const REWARD_ICONS = {
+  item: Gift,
+  discount: Percent,
+  delivery: Bike,
+};
+
+/**
+ * data: { threshold, stampsCollected, rewardType, rewardDetail }
+ *
+ * Same timeline scaffolding as the original tier version (connecting line,
+ * icon nodes, card per step, var(--primary) theming) — but generated from
+ * the seller's single threshold + reward instead of a fixed 4-tier ladder.
+ * Each stamp is a step; the final stamp is visually distinct since it's the
+ * one that carries the actual reward.
+ */
+const RewardProgress = ({ data }) => {
+  const {
+    threshold = 5,
+    stampsCollected = 0,
+    rewardType = "item",
+    rewardDetail = "your reward",
+  } = data || {};
+
+  const RewardIcon = REWARD_ICONS[rewardType] || Gift;
+
+  const steps = Array.from({ length: threshold }, (_, i) => {
+    const stampNumber = i + 1;
+    const isFinal = stampNumber === threshold;
+    return {
+      stampNumber,
+      isFinal,
+      unlocked: stampsCollected >= stampNumber,
+      current: stampNumber === stampsCollected + 1,
+    };
+  });
+
   return (
     <section
       className="
@@ -46,19 +51,16 @@ const RewardProgress = ({
       {/* Header */}
 
       <div className="mb-8">
-        <h2 className="text-2xl font-bold text-slate-900">
-          Membership Journey
-        </h2>
+        <h2 className="text-2xl font-bold text-slate-900">Stamp Journey</h2>
 
         <p className="mt-2 text-slate-500">
-          Unlock more rewards as you earn points.
+          One stamp per order. Collect {threshold} for {rewardDetail}.
         </p>
       </div>
 
       {/* Timeline */}
 
       <div className="relative">
-
         <div
           className="
             absolute
@@ -75,17 +77,12 @@ const RewardProgress = ({
         />
 
         <div className="space-y-10">
-
-          {tiers.map((tier, index) => {
-            const unlocked =
-              currentPoints >= tier.required;
-
-            const active =
-              tier.name === currentTier;
+          {steps.map((step, index) => {
+            const StepIcon = step.isFinal ? RewardIcon : Stamp;
 
             return (
               <motion.div
-                key={tier.name}
+                key={step.stampNumber}
                 initial={{
                   opacity: 0,
                   x: -20,
@@ -98,7 +95,7 @@ const RewardProgress = ({
                   once: true,
                 }}
                 transition={{
-                  delay: index * 0.1,
+                  delay: index * 0.06,
                 }}
                 className="relative flex gap-6"
               >
@@ -125,21 +122,13 @@ const RewardProgress = ({
                     shadow-lg
                   "
                   style={{
-                    background: unlocked
-                      ? "var(--primary)"
-                      : "#E2E8F0",
+                    background: step.unlocked ? "var(--primary)" : "#E2E8F0",
                   }}
                 >
-                  {unlocked ? (
-                    <CheckCircle2
-                      size={26}
-                      color="#fff"
-                    />
+                  {step.unlocked ? (
+                    <CheckCircle2 size={26} color="#fff" />
                   ) : (
-                    <Lock
-                      size={24}
-                      className="text-slate-500"
-                    />
+                    <Lock size={24} className="text-slate-500" />
                   )}
                 </div>
 
@@ -157,54 +146,45 @@ const RewardProgress = ({
 
                     transition-all
 
-                    ${
-                      active
-                        ? "shadow-xl"
-                        : "shadow-sm"
-                    }
+                    ${step.current ? "shadow-xl" : "shadow-sm"}
                   `}
                   style={{
-                    borderColor: active
-                      ? "var(--primary)"
-                      : "#E2E8F0",
+                    borderColor: step.current ? "var(--primary)" : "#E2E8F0",
 
-                    background: active
-                      ? "var(--primary-light)"
-                      : "#fff",
+                    background: step.current ? "var(--primary-light)" : "#fff",
                   }}
                 >
                   <div className="flex items-center justify-between">
-
                     <div>
-
                       <div className="flex items-center gap-3">
-
-                        <Crown
+                        <StepIcon
                           size={22}
                           style={{
-                            color: unlocked
-                              ? "var(--primary)"
-                              : "#64748B",
+                            color: step.unlocked ? "var(--primary)" : "#64748B",
                           }}
                         />
 
                         <h3 className="text-xl font-bold text-slate-900">
-                          {tier.name}
+                          {step.isFinal
+                            ? "Reward"
+                            : `Stamp ${step.stampNumber}`}
                         </h3>
-
                       </div>
 
                       <p className="mt-2 text-slate-500">
-                        Unlock at{" "}
-                        <strong>
-                          {tier.required}
-                        </strong>{" "}
-                        points
+                        {step.isFinal ? (
+                          <>
+                            Unlocks at <strong>{threshold}</strong> stamps
+                          </>
+                        ) : (
+                          <>
+                            Order {step.stampNumber} of {threshold}
+                          </>
+                        )}
                       </p>
-
                     </div>
 
-                    {active && (
+                    {step.current && (
                       <span
                         className="
                           rounded-full
@@ -218,56 +198,44 @@ const RewardProgress = ({
                           text-white
                         "
                         style={{
-                          background:
-                            "var(--primary)",
+                          background: "var(--primary)",
                         }}
                       >
-                        Current Tier
+                        Next up
                       </span>
                     )}
-
                   </div>
 
-                  {/* Benefits */}
+                  {/* Benefit — only the final stamp carries the reward */}
 
-                  <div
-                    className="
-                      mt-5
+                  {step.isFinal && (
+                    <div
+                      className="
+                        mt-5
 
-                      rounded-2xl
+                        rounded-2xl
 
-                      bg-slate-50
+                        bg-slate-50
 
-                      p-4
-                    "
-                  >
-                    <p className="text-sm text-slate-500">
-                      Membership Benefit
-                    </p>
+                        p-4
+                      "
+                    >
+                      <p className="text-sm text-slate-500">Your reward</p>
 
-                    <div className="mt-2 flex items-center justify-between">
+                      <div className="mt-2 flex items-center justify-between">
+                        <h4 className="font-semibold text-slate-900">
+                          {rewardDetail}
+                        </h4>
 
-                      <h4 className="font-semibold text-slate-900">
-                        {tier.benefits}
-                      </h4>
-
-                      <ChevronRight
-                        size={18}
-                        className="text-slate-400"
-                      />
-
+                        <RewardIcon size={18} className="text-slate-400" />
+                      </div>
                     </div>
-
-                  </div>
-
+                  )}
                 </div>
-
               </motion.div>
             );
           })}
-
         </div>
-
       </div>
     </section>
   );
