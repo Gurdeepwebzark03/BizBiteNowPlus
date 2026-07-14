@@ -1,6 +1,7 @@
 import {
   Outlet,
   useLocation,
+  useNavigate,
 } from "react-router-dom";
 
 import DesktopSidebar from "./DesktopSidebar";
@@ -8,7 +9,7 @@ import CustomerHeader from "./CustomerHeader";
 import BottomNavigation from "./BottomNavigation";
 import FloatingCartButton from "./FloatingCartButton";
 import { useCart } from "../../../context/CartContext";
-import { motion } from "framer-motion";
+import { logoutCustomer } from "../../../api/customer/authApi";
 
 
 const CustomerLayout = () => {
@@ -17,6 +18,12 @@ const {
   totalPrice,
 } = useCart();
 const location = useLocation();
+const navigate = useNavigate();
+
+const handleLogout = async () => {
+  await logoutCustomer();
+  navigate("/", { replace: true });
+};
 
 const hideFloatingCart = [
   "/customer/cart",
@@ -34,7 +41,7 @@ const hideFloatingCart = [
 
       {/* Sidebar */}
 
-      <DesktopSidebar />
+      <DesktopSidebar onLogout={handleLogout} />
 
 
       {/* Main */}

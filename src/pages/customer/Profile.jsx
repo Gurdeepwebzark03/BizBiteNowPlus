@@ -2,39 +2,30 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { getMyProfile, saveProfile, logoutCustomer } from "../../api/customer/authApi";
 import {
-  Bell, Crown, Wallet, Gift, ClipboardList, MapPin,
-  CreditCard, HelpCircle, LogOut, ChevronRight,
-  X, Banknote, Smartphone, Check, Home, Loader2,
-  Flame, Utensils, Sandwich, Wine,
-  Headphones, Search, Truck, ReceiptText, ChevronDown,
-  MessageCircle, Phone, Mail,
+  ChevronRight, ChevronDown, X, Check, Loader2,
+  User, MapPin, CreditCard, SlidersHorizontal, Settings as SettingsIcon,
+  Home, Banknote, Smartphone,
+  Search, Truck, ReceiptText, Utensils,
+  MessageCircle, Phone, Mail, Headphones,
 } from "lucide-react";
-import NotificationPanel from "../../components/customer/NotificationPanel";
-import { allProducts } from "../../data/products";
 import { motion } from "framer-motion";
+import Modal from "../../components/customer/common/Modal";
+import Avatar from "../../components/customer/common/Avatar";
+import PrimaryButton from "../../components/customer/common/PrimaryButton";
+import SecondaryButton from "../../components/customer/common/SecondaryButton";
+import SettingsCard from "../../components/customer/profile/SettingsCard";
+import NotificationSettings from "../../components/customer/profile/NotificationSettings";
 
-const ORANGE = "#E8622D";
-const CREAM = "#FBE7DD";
-const CHARCOAL = "#1C1C1C";
+const PAYMENT_STORAGE_KEY = "customerPaymentMethod";
+const NOTIF_STORAGE_KEY = "customerNotificationSettings";
 
-const wallet = { balance: 0 };
-const rewards = { points: 0 };
-
-const rewardsData = { points: 2450, pointsToNext: 550, tier: "Plus member" };
-const rewardsProgress = Math.round(
-  (rewardsData.points / (rewardsData.points + rewardsData.pointsToNext)) * 100,
-);
-const rewardTiers = [
-  { icon: Utensils, label: "Free side", pts: 500 },
-  { icon: Sandwich, label: "Free entree", pts: 1200 },
-  { icon: Wine, label: "Free drink", pts: 300 },
-  { icon: Gift, label: "Surprise box", pts: 2400 },
-];
-const recentRewardActivity = [
-  { label: "Order #4821", delta: 120 },
-  { label: "Redeemed free drink", delta: -300 },
-  { label: "Order #4790", delta: 95 },
-];
+const defaultNotifSettings = {
+  orders: true,
+  offers: true,
+  rewards: true,
+  email: false,
+  security: true,
+};
 
 const helpQuickActions = [
   { icon: Truck, label: "Delivery and tracking" },
@@ -50,37 +41,53 @@ const faqItems = [
   { q: "Do you offer table reservations?", a: "Table reservations aren't available yet — we're working on it!" },
 ];
 
-const notificationTags = ["New", "Offer", "Trending", "Back in stock", "Chef's pick"];
-const notifications = allProducts.slice(0, 5).map((p, i) => ({
-  id: p.id,
-  image: p.image,
-  tag: notificationTags[i % notificationTags.length],
-  title: p.name,
-  meta: p.category,
-  price: p.price,
-}));
+const STEP_COUNT = 4;
 
 const Profile = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
-  const [showNotifications, setShowNotifications] = useState(false);
+
+  const [paymentMethod, setPaymentMethod] = useState(
+    () => localStorage.getItem(PAYMENT_STORAGE_KEY) || "upi",
+  );
+  const [paymentSet, setPaymentSet] = useState(
+    () => !!localStorage.getItem(PAYMENT_STORAGE_KEY),
+  );
   const [showPayment, setShowPayment] = useState(false);
-  const [paymentMethod, setPaymentMethod] = useState("upi");
+
+  const [showPersonal, setShowPersonal] = useState(false);
+  const [personalForm, setPersonalForm] = useState({ name: "", phone: "" });
+  const [personalErrors, setPersonalErrors] = useState({});
+  const [savingPersonal, setSavingPersonal] = useState(false);
+
   const [showAddresses, setShowAddresses] = useState(false);
-  const [showRewards, setShowRewards] = useState(false);
-  const [showHelp, setShowHelp] = useState(false);
-  const [helpSearch, setHelpSearch] = useState("");
-  const [openFaqIndex, setOpenFaqIndex] = useState(null);
   const [editingAddress, setEditingAddress] = useState(false);
-  const [addressForm, setAddressForm] = useState({ name: "", phone: "", address: "" });
+  const [addressForm, setAddressForm] = useState({ address: "" });
   const [addressErrors, setAddressErrors] = useState({});
   const [locLoading, setLocLoading] = useState(false);
   const [savingAddress, setSavingAddress] = useState(false);
 
+  const [showAccountSettings, setShowAccountSettings] = useState(false);
+  const [showAppSettings, setShowAppSettings] = useState(false);
+  const [notifSettings, setNotifSettings] = useState(() => {
+    const stored = localStorage.getItem(NOTIF_STORAGE_KEY);
+    if (!stored) return defaultNotifSettings;
+    try {
+      return JSON.parse(stored);
+    } catch {
+      return defaultNotifSettings;
+    }
+  });
+  const [darkMode, setDarkMode] = useState(false);
+
+  const [showHelp, setShowHelp] = useState(false);
+  const [helpSearch, setHelpSearch] = useState("");
+  const [openFaqIndex, setOpenFaqIndex] = useState(null);
+
   useEffect(() => {
     getMyProfile()
       .then(setUser)
-      .catch(() => navigate("/customer/onboarding", { replace: true }));
+      .catch(() => setUser({ name: "", phone: "", address: "" }));
   }, [navigate]);
 
   const handleLogout = async () => {
@@ -88,17 +95,54 @@ const Profile = () => {
     navigate("/", { replace: true });
   };
 
-  const openAddresses = () => {
-    setAddressForm({ name: user.name || "", phone: user.phone || "", address: user.address || "" });
-    setAddressErrors({});
-    setEditingAddress(false);
-    setShowAddresses(true);
+  // ---- Personal details ----
+  const openPersonalDetails = () => {
+    setPersonalForm({ name: user.name || "", phone: user.phone || "" });
+    setPersonalErrors({});
+    setShowPersonal(true);
   };
 
-  const handleAddressChange = (e) => {
+  const handlePersonalChange = (e) => {
     const { name, value } = e.target;
-    setAddressForm((prev) => ({ ...prev, [name]: value }));
-    if (addressErrors[name]) setAddressErrors((prev) => ({ ...prev, [name]: "" }));
+    setPersonalForm((prev) => ({ ...prev, [name]: value }));
+    if (personalErrors[name]) setPersonalErrors((prev) => ({ ...prev, [name]: "" }));
+  };
+
+  const validatePersonal = () => {
+    const errs = {};
+    if (!personalForm.name.trim()) errs.name = "Name is required";
+    if (personalForm.phone.trim() && !/^[6-9]\d{9}$/.test(personalForm.phone.trim()))
+      errs.phone = "Enter a valid 10-digit mobile number";
+    return errs;
+  };
+
+  const handleSavePersonal = async () => {
+    const errs = validatePersonal();
+    if (Object.keys(errs).length > 0) {
+      setPersonalErrors(errs);
+      return;
+    }
+    setSavingPersonal(true);
+    try {
+      const { user: updatedUser } = await saveProfile(
+        personalForm.name,
+        user.address || "",
+        personalForm.phone,
+      );
+      setUser(updatedUser);
+      setShowPersonal(false);
+    } catch (err) {
+      setPersonalErrors({ name: err.message || "Could not save details" });
+    }
+    setSavingPersonal(false);
+  };
+
+  // ---- Address ----
+  const openAddresses = () => {
+    setAddressForm({ address: user.address || "" });
+    setAddressErrors({});
+    setEditingAddress(!user.address);
+    setShowAddresses(true);
   };
 
   const getAddressLocation = () => {
@@ -134,28 +178,17 @@ const Profile = () => {
     );
   };
 
-  const validateAddress = () => {
-    const errs = {};
-    if (!addressForm.name.trim()) errs.name = "Name is required";
-    if (!addressForm.phone.trim()) errs.phone = "Phone number is required";
-    else if (!/^[6-9]\d{9}$/.test(addressForm.phone.trim()))
-      errs.phone = "Enter a valid 10-digit mobile number";
-    if (!addressForm.address.trim()) errs.address = "Address is required";
-    return errs;
-  };
-
   const handleSaveAddress = async () => {
-    const errs = validateAddress();
-    if (Object.keys(errs).length > 0) {
-      setAddressErrors(errs);
+    if (!addressForm.address.trim()) {
+      setAddressErrors({ address: "Address is required" });
       return;
     }
     setSavingAddress(true);
     try {
       const { user: updatedUser } = await saveProfile(
-        addressForm.name,
+        user.name || "",
         addressForm.address,
-        addressForm.phone,
+        user.phone || "",
       );
       setUser(updatedUser);
       setEditingAddress(false);
@@ -165,654 +198,533 @@ const Profile = () => {
     setSavingAddress(false);
   };
 
+  // ---- Payment ----
+  const handleSavePayment = () => {
+    localStorage.setItem(PAYMENT_STORAGE_KEY, paymentMethod);
+    setPaymentSet(true);
+    setShowPayment(false);
+  };
+
+  // ---- App settings ----
+  const handleToggleNotif = (id, value) => {
+    setNotifSettings((prev) => {
+      const next = { ...prev, [id]: value };
+      localStorage.setItem(NOTIF_STORAGE_KEY, JSON.stringify(next));
+      return next;
+    });
+  };
+
+  const handleSettingsItemClick = (id) => {
+    if (id === "support") {
+      setShowAccountSettings(false);
+      setShowHelp(true);
+    } else if (id === "favorites") {
+      navigate("/customer/menu");
+    }
+  };
+
+  const handleDeleteAccount = () => {
+    if (window.confirm("Are you sure you want to delete your account? This can't be undone.")) {
+      alert("Account deletion isn't available yet.");
+    }
+  };
+
   const filteredFaqs = faqItems.filter((item) =>
     item.q.toLowerCase().includes(helpSearch.trim().toLowerCase()),
   );
 
   if (!user) return null;
 
-  const initials = user.name
-    .split(" ")
-    .map((w) => w[0])
-    .slice(0, 2)
-    .join("")
-    .toUpperCase();
+  // ---- Profile completion ----
+  const steps = [
+    { key: "name", done: !!user.name, action: openPersonalDetails },
+    { key: "phone", done: !!user.phone, action: openPersonalDetails },
+    { key: "address", done: !!user.address, action: openAddresses },
+    { key: "payment", done: paymentSet, action: () => setShowPayment(true) },
+  ];
+  const completedCount = steps.filter((s) => s.done).length;
+  const percent = Math.round((completedCount / STEP_COUNT) * 100);
+  const nextStep = steps.find((s) => !s.done);
+  const stepMarks = [0, 25, 50, 75, 100];
 
   const menuItems = [
-    { icon: ClipboardList, label: "My Orders", action: () => navigate("/customer/orders") },
-    { icon: MapPin, label: "Addresses", action: openAddresses },
+    { icon: User, label: "Personal Details", action: openPersonalDetails },
+    { icon: MapPin, label: "Saved Addresses", action: openAddresses },
     { icon: CreditCard, label: "Payment Methods", action: () => setShowPayment(true) },
-    { icon: Gift, label: "Rewards & Offers", action: () => setShowRewards(true) },
-    { icon: HelpCircle, label: "Help & Support", action: () => setShowHelp(true) },
+    { icon: SettingsIcon, label: "Account Settings", action: () => setShowAccountSettings(true) },
+    { icon: SlidersHorizontal, label: "App Settings", action: () => setShowAppSettings(true) },
   ];
 
   return (
-                   <motion.div
-  initial={{ opacity: 0, y: 15 }}
-  animate={{ opacity: 1, y: 0 }}
-  transition={{
-    duration: 0.4,
-    ease: [0.22, 1, 0.36, 1],
-  }}
-  className="space-y-6"
->
-      <div
-      className="min-h-screen bg-[#FAFAF5] px-4 py-5"
-      style={{ fontFamily: "Arial, sans-serif" }}
+    <motion.div
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+      className="space-y-6"
     >
-      <div className="max-w-2xl mx-auto">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-5">
-          <div className="flex items-center gap-3">
-            <div
-              className="w-14 h-14 rounded-full flex items-center justify-center text-white font-bold shrink-0"
-              style={{ backgroundColor: ORANGE, fontSize: "18px" }}
-            >
-              {initials}
-            </div>
+      <div className="min-h-screen bg-[#FAFAF5] px-4 py-5">
+        <div className="max-w-2xl mx-auto">
+          {/* Header */}
+          <div className="flex items-start justify-between mb-6">
             <div>
-              <p className="font-bold" style={{ color: CHARCOAL, fontSize: "18px" }}>
-                {user.name}
+              <h1 className="font-bold text-slate-900" style={{ fontSize: "26px" }}>
+                My Profile
+              </h1>
+              <p className="text-slate-500 mt-1" style={{ fontSize: "14px" }}>
+                Manage your account, addresses, and preferences.
               </p>
-              <span
-                className="inline-flex items-center gap-1 text-white font-bold rounded-full px-2.5 py-0.5 mt-1"
-                style={{ backgroundColor: ORANGE, fontSize: "11px" }}
-              >
-                <Crown size={11} fill="currentColor" />
-                Premium Member
-              </span>
             </div>
-          </div>
-          <div className="relative">
-            <button
-              onClick={() => setShowNotifications((v) => !v)}
-              className="relative flex items-center justify-center text-gray-500 shrink-0 rounded-xl hover:bg-[#FBE7DD] hover:text-[#E8622D] transition-colors cursor-pointer"
-              style={{ minHeight: "40px", minWidth: "40px" }}
-            >
-              <Bell size={20} />
+            <button onClick={openPersonalDetails} className="shrink-0 cursor-pointer">
+              <Avatar name={user.name} size="md" />
             </button>
-            {showNotifications && (
-              <NotificationPanel
-                notifications={notifications}
-                onClose={() => setShowNotifications(false)}
-                onBrowseMenu={() => {
-                  setShowNotifications(false);
-                  navigate("/menu");
-                }}
-              />
+          </div>
+
+          {/* Complete your profile */}
+          {percent < 100 ? (
+            <div className="bg-white rounded-2xl shadow-sm p-5 mb-5">
+              {/* Stepper */}
+              <div className="flex items-center mb-4">
+                {stepMarks.map((mark, i) => (
+                  <div key={mark} className="flex items-center flex-1 last:flex-none">
+                    <div className="flex flex-col items-center">
+                      <div
+                        className="rounded-full flex items-center justify-center shrink-0"
+                        style={{
+                          width: "18px",
+                          height: "18px",
+                          backgroundColor: mark <= percent ? "var(--primary)" : "#E5E7EB",
+                        }}
+                      >
+                        {mark <= percent && mark > 0 && (
+                          <Check size={11} color="#fff" strokeWidth={3} />
+                        )}
+                      </div>
+                      <span className="text-gray-400 mt-1" style={{ fontSize: "10px" }}>
+                        {mark}%
+                      </span>
+                    </div>
+                    {i < stepMarks.length - 1 && (
+                      <div
+                        className="flex-1 h-[2px] mx-1 mb-4"
+                        style={{
+                          backgroundColor: stepMarks[i + 1] <= percent ? "var(--primary)" : "#E5E7EB",
+                        }}
+                      />
+                    )}
+                  </div>
+                ))}
+              </div>
+
+              <div className="flex items-center justify-between gap-4 flex-wrap">
+                <div>
+                  <p className="font-bold text-slate-900" style={{ fontSize: "15px" }}>
+                    Complete your profile
+                  </p>
+                  <p className="text-gray-500 mt-0.5" style={{ fontSize: "13px" }}>
+                    {STEP_COUNT - completedCount} step{STEP_COUNT - completedCount > 1 ? "s" : ""} left —
+                    unlock faster checkout and personalized offers.
+                  </p>
+                </div>
+                <PrimaryButton size="sm" onClick={nextStep?.action}>
+                  Continue
+                </PrimaryButton>
+              </div>
+            </div>
+          ) : (
+            <div
+              className="rounded-2xl p-5 mb-5 flex items-center gap-3"
+              style={{ backgroundColor: "var(--primary-light)", border: "1px solid var(--primary-border)" }}
+            >
+              <div
+                className="w-9 h-9 rounded-full flex items-center justify-center shrink-0"
+                style={{ backgroundColor: "var(--primary)" }}
+              >
+                <Check size={16} color="#fff" strokeWidth={3} />
+              </div>
+              <p className="font-semibold" style={{ color: "var(--primary)", fontSize: "14px" }}>
+                Your profile is complete!
+              </p>
+            </div>
+          )}
+
+          {/* Menu list */}
+          <div className="bg-white rounded-2xl shadow-sm overflow-hidden mb-5">
+            {menuItems.map(({ icon: Icon, label, action }, i) => (
+              <button
+                key={label}
+                onClick={action}
+                className={`w-full flex items-center gap-3 px-4 py-3.5 text-left hover:bg-gray-50 transition-colors cursor-pointer ${
+                  i < menuItems.length - 1 ? "border-b border-gray-100" : ""
+                }`}
+              >
+                <Icon size={19} className="text-gray-500 shrink-0" />
+                <span className="flex-1 font-medium text-slate-900" style={{ fontSize: "15px" }}>
+                  {label}
+                </span>
+                <ChevronRight size={18} className="text-gray-300 shrink-0" />
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Personal Details modal */}
+        <Modal
+          open={showPersonal}
+          onClose={() => setShowPersonal(false)}
+          title="Personal Details"
+          size="sm"
+        >
+          <div className="mb-3">
+            <label className="block text-[14px] font-semibold text-gray-500 mb-1">
+              Full Name *
+            </label>
+            <input
+              type="text"
+              name="name"
+              value={personalForm.name}
+              onChange={handlePersonalChange}
+              placeholder="Enter your full name"
+              className={`w-full border rounded-xl px-3 text-[15px] outline-none transition-colors ${
+                personalErrors.name ? "border-red-400" : "border-gray-200"
+              }`}
+              style={{ minHeight: "44px", color: "#0F172A" }}
+            />
+            {personalErrors.name && (
+              <p className="text-red-500 text-[13px] mt-1">{personalErrors.name}</p>
             )}
           </div>
-        </div>
 
-        {/* Wallet + Rewards */}
-        <div className="grid grid-cols-2 gap-3 mb-5">
-          <div className="bg-white rounded-2xl shadow-sm p-4 flex items-center gap-3">
-            <div
-              className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
-              style={{ backgroundColor: CREAM }}
-            >
-              <Wallet size={18} style={{ color: ORANGE }} />
-            </div>
-            <div className="min-w-0">
-              <p className="text-gray-400 truncate" style={{ fontSize: "12px" }}>
-                QuickBite Wallet
-              </p>
-              <p className="font-bold" style={{ color: CHARCOAL, fontSize: "16px" }}>
-                ₹{wallet.balance}
-              </p>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-2xl shadow-sm p-4 flex items-center gap-3">
-            <div
-              className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
-              style={{ backgroundColor: CREAM }}
-            >
-              <Gift size={18} style={{ color: ORANGE }} />
-            </div>
-            <div className="min-w-0">
-              <p className="text-gray-400 truncate" style={{ fontSize: "12px" }}>
-                Rewards Points
-              </p>
-              <p className="font-bold" style={{ color: CHARCOAL, fontSize: "16px" }}>
-                {rewards.points.toLocaleString("en-IN")}
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Menu list */}
-        <div className="bg-white rounded-2xl shadow-sm overflow-hidden mb-5">
-          {menuItems.map(({ icon: Icon, label, action }, i) => (
-            <button
-              key={label}
-              onClick={action}
-              className={`w-full flex items-center gap-3 px-4 py-3.5 text-left hover:bg-gray-50 transition-colors cursor-pointer ${
-                i < menuItems.length - 1 ? "border-b border-gray-100" : ""
+          <div>
+            <label className="block text-[14px] font-semibold text-gray-500 mb-1">
+              Phone Number
+            </label>
+            <input
+              type="tel"
+              name="phone"
+              value={personalForm.phone}
+              onChange={handlePersonalChange}
+              placeholder="10-digit mobile number"
+              maxLength={10}
+              className={`w-full border rounded-xl px-3 text-[15px] outline-none transition-colors ${
+                personalErrors.phone ? "border-red-400" : "border-gray-200"
               }`}
-            >
-              <Icon size={19} className="text-gray-500 shrink-0" />
-              <span className="flex-1 font-medium" style={{ color: CHARCOAL, fontSize: "15px" }}>
-                {label}
-              </span>
-              <ChevronRight size={18} className="text-gray-300 shrink-0" />
-            </button>
-          ))}
-        </div>
-
-        {/* Logout */}
-        <button
-          onClick={handleLogout}
-          className="w-full flex items-center gap-3 bg-white rounded-2xl shadow-sm px-4 py-3.5 text-red-500 font-semibold hover:bg-red-50 transition-colors cursor-pointer"
-          style={{ fontSize: "15px" }}
-        >
-          <LogOut size={19} className="shrink-0" />
-          Logout
-        </button>
-      </div>
-
-      {/* Payment method modal */}
-      {showPayment && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
-          <div className="absolute inset-0 bg-black/40" onClick={() => setShowPayment(false)} />
-          <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-sm p-5">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="font-bold" style={{ color: CHARCOAL, fontSize: "20px" }}>
-                Payment Method
-              </h2>
-              <button
-                onClick={() => setShowPayment(false)}
-                className="flex items-center justify-center rounded-full text-gray-500 hover:bg-gray-100 transition-colors cursor-pointer"
-                style={{ width: "32px", height: "32px" }}
-              >
-                <X size={18} />
-              </button>
-            </div>
-
-            <div className="space-y-3">
-              {[
-                { key: "cod", label: "Cash on Delivery", desc: "Pay when your order arrives", Icon: Banknote },
-                { key: "upi", label: "UPI", desc: "Pay instantly via UPI apps", Icon: Smartphone },
-              ].map(({ key, label, desc, Icon }) => {
-                const active = paymentMethod === key;
-                return (
-                  <button
-                    key={key}
-                    onClick={() => setPaymentMethod(key)}
-                    className="w-full flex items-center gap-3 rounded-2xl p-4 text-left transition-colors cursor-pointer"
-                    style={{
-                      border: `2px solid ${active ? ORANGE : "#E5E7EB"}`,
-                      backgroundColor: active ? CREAM : "#FFFFFF",
-                    }}
-                  >
-                    <div
-                      className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
-                      style={{ backgroundColor: active ? ORANGE : "#F3F4F6" }}
-                    >
-                      <Icon size={18} style={{ color: active ? "#FFFFFF" : "#6B7280" }} />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="font-bold" style={{ color: CHARCOAL, fontSize: "15px" }}>
-                        {label}
-                      </p>
-                      <p className="text-gray-400" style={{ fontSize: "12px" }}>
-                        {desc}
-                      </p>
-                    </div>
-                    {active && (
-                      <span
-                        className="shrink-0 rounded-full flex items-center justify-center"
-                        style={{ width: "22px", height: "22px", backgroundColor: ORANGE }}
-                      >
-                        <Check size={13} color="#fff" strokeWidth={3} />
-                      </span>
-                    )}
-                  </button>
-                );
-              })}
-            </div>
-
-            <button
-              onClick={() => setShowPayment(false)}
-              className="w-full mt-5 font-bold rounded-full text-white transition-opacity hover:opacity-90 cursor-pointer"
-              style={{ minHeight: "48px", fontSize: "15px", backgroundColor: ORANGE }}
-            >
-              Save
-            </button>
+              style={{ minHeight: "44px", color: "#0F172A" }}
+            />
+            {personalErrors.phone && (
+              <p className="text-red-500 text-[13px] mt-1">{personalErrors.phone}</p>
+            )}
           </div>
-        </div>
-      )}
 
-      {/* Address modal */}
-      {showAddresses && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
-          <div className="absolute inset-0 bg-black/40" onClick={() => setShowAddresses(false)} />
-          <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-sm p-5">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="font-bold" style={{ color: CHARCOAL, fontSize: "20px" }}>
-                Delivery Address
-              </h2>
-              <button
-                onClick={() => setShowAddresses(false)}
-                className="flex items-center justify-center rounded-full text-gray-500 hover:bg-gray-100 transition-colors cursor-pointer"
-                style={{ width: "32px", height: "32px" }}
-              >
-                <X size={18} />
-              </button>
-            </div>
+          <PrimaryButton fullWidth className="mt-5" onClick={handleSavePersonal} loading={savingPersonal}>
+            Save
+          </PrimaryButton>
+        </Modal>
 
-            {!editingAddress ? (
-              <>
-                {user.address ? (
+        {/* Address modal */}
+        <Modal
+          open={showAddresses}
+          onClose={() => setShowAddresses(false)}
+          title="Delivery Address"
+          size="sm"
+        >
+          {!editingAddress ? (
+            <>
+              {user.address ? (
+                <div
+                  className="w-full flex items-start gap-3 rounded-2xl p-4 text-left"
+                  style={{ border: "2px solid var(--primary)", backgroundColor: "var(--primary-light)" }}
+                >
                   <div
-                    className="w-full flex items-start gap-3 rounded-2xl p-4 text-left"
-                    style={{ border: `2px solid ${ORANGE}`, backgroundColor: CREAM }}
+                    className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
+                    style={{ backgroundColor: "var(--primary)" }}
                   >
-                    <div
-                      className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
-                      style={{ backgroundColor: ORANGE }}
-                    >
-                      <Home size={18} style={{ color: "#FFFFFF" }} />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="font-bold" style={{ color: CHARCOAL, fontSize: "15px" }}>
-                        {user.name}
-                      </p>
-                      {user.phone && (
-                        <p className="text-gray-500 mt-0.5" style={{ fontSize: "13px" }}>
-                          +91 {user.phone}
-                        </p>
-                      )}
-                      <p className="text-gray-400 mt-0.5" style={{ fontSize: "13px" }}>
-                        {user.address}
-                      </p>
-                    </div>
-                    <span
-                      className="shrink-0 rounded-full flex items-center justify-center"
-                      style={{ width: "22px", height: "22px", backgroundColor: ORANGE }}
-                    >
-                      <Check size={13} color="#fff" strokeWidth={3} />
-                    </span>
+                    <Home size={18} style={{ color: "#FFFFFF" }} />
                   </div>
-                ) : (
-                  <div className="text-center py-6">
-                    <MapPin size={28} className="mx-auto text-gray-300 mb-2" />
-                    <p className="text-gray-400" style={{ fontSize: "14px" }}>
-                      No address on file
+                  <div className="flex-1 min-w-0">
+                    <p className="font-bold text-slate-900" style={{ fontSize: "15px" }}>
+                      {user.name}
+                    </p>
+                    <p className="text-gray-400 mt-0.5" style={{ fontSize: "13px" }}>
+                      {user.address}
                     </p>
                   </div>
-                )}
-
-                <button
-                  onClick={() => setEditingAddress(true)}
-                  className="w-full mt-5 font-bold rounded-full transition-colors cursor-pointer"
-                  style={{ minHeight: "48px", fontSize: "15px", color: ORANGE, border: `2px solid ${ORANGE}` }}
-                >
-                  Change Address
-                </button>
-              </>
-            ) : (
-              <div>
-                <div className="mb-3">
-                  <label className="block text-[14px] font-semibold text-gray-500 mb-1">
-                    Full Name *
-                  </label>
-                  <input
-                    type="text"
-                    name="name"
-                    value={addressForm.name}
-                    onChange={handleAddressChange}
-                    placeholder="Enter your full name"
-                    className={`w-full border rounded-xl px-3 text-[15px] outline-none transition-colors ${
-                      addressErrors.name ? "border-red-400" : "border-gray-200"
-                    }`}
-                    style={{ minHeight: "44px", color: CHARCOAL, fontFamily: "Arial, sans-serif" }}
-                  />
-                  {addressErrors.name && (
-                    <p className="text-red-500 text-[13px] mt-1">{addressErrors.name}</p>
-                  )}
-                </div>
-
-                <div className="mb-3">
-                  <label className="block text-[14px] font-semibold text-gray-500 mb-1">
-                    Phone Number *
-                  </label>
-                  <input
-                    type="tel"
-                    name="phone"
-                    value={addressForm.phone}
-                    onChange={handleAddressChange}
-                    placeholder="10-digit mobile number"
-                    maxLength={10}
-                    className={`w-full border rounded-xl px-3 text-[15px] outline-none transition-colors ${
-                      addressErrors.phone ? "border-red-400" : "border-gray-200"
-                    }`}
-                    style={{ minHeight: "44px", color: CHARCOAL, fontFamily: "Arial, sans-serif" }}
-                  />
-                  {addressErrors.phone && (
-                    <p className="text-red-500 text-[13px] mt-1">{addressErrors.phone}</p>
-                  )}
-                </div>
-
-                <div>
-                  <label className="block text-[14px] font-semibold text-gray-500 mb-1">
-                    Delivery Address *
-                  </label>
-                  <textarea
-                    name="address"
-                    value={addressForm.address}
-                    onChange={handleAddressChange}
-                    placeholder="Enter your full delivery address"
-                    rows={3}
-                    className={`w-full border rounded-xl px-3 py-3 text-[15px] outline-none resize-none transition-colors ${
-                      addressErrors.address ? "border-red-400" : "border-gray-200"
-                    }`}
-                    style={{ color: CHARCOAL, fontFamily: "Arial, sans-serif" }}
-                  />
-                  {addressErrors.address && (
-                    <p className="text-red-500 text-[13px] mt-1">{addressErrors.address}</p>
-                  )}
-                  <button
-                    onClick={getAddressLocation}
-                    disabled={locLoading}
-                    className="mt-1 flex items-center gap-2 font-semibold text-[14px]"
-                    style={{ minHeight: "40px", color: ORANGE }}
+                  <span
+                    className="shrink-0 rounded-full flex items-center justify-center"
+                    style={{ width: "22px", height: "22px", backgroundColor: "var(--primary)" }}
                   >
-                    {locLoading ? <Loader2 size={14} className="animate-spin" /> : <MapPin size={14} />}
-                    {locLoading ? "Getting location..." : "Use my current location"}
-                  </button>
+                    <Check size={13} color="#fff" strokeWidth={3} />
+                  </span>
                 </div>
+              ) : (
+                <div className="text-center py-6">
+                  <MapPin size={28} className="mx-auto text-gray-300 mb-2" />
+                  <p className="text-gray-400" style={{ fontSize: "14px" }}>
+                    No address on file
+                  </p>
+                </div>
+              )}
 
-                <div className="flex gap-3 mt-4">
-                  <button
+              <SecondaryButton fullWidth className="mt-5" onClick={() => setEditingAddress(true)}>
+                Change Address
+              </SecondaryButton>
+            </>
+          ) : (
+            <div>
+              <label className="block text-[14px] font-semibold text-gray-500 mb-1">
+                Delivery Address *
+              </label>
+              <textarea
+                name="address"
+                value={addressForm.address}
+                onChange={(e) => {
+                  setAddressForm({ address: e.target.value });
+                  if (addressErrors.address) setAddressErrors({});
+                }}
+                placeholder="Enter your full delivery address"
+                rows={3}
+                className={`w-full border rounded-xl px-3 py-3 text-[15px] outline-none resize-none transition-colors ${
+                  addressErrors.address ? "border-red-400" : "border-gray-200"
+                }`}
+                style={{ color: "#0F172A" }}
+              />
+              {addressErrors.address && (
+                <p className="text-red-500 text-[13px] mt-1">{addressErrors.address}</p>
+              )}
+              <button
+                onClick={getAddressLocation}
+                disabled={locLoading}
+                className="mt-1 flex items-center gap-2 font-semibold text-[14px]"
+                style={{ minHeight: "40px", color: "var(--primary)" }}
+              >
+                {locLoading ? <Loader2 size={14} className="animate-spin" /> : <MapPin size={14} />}
+                {locLoading ? "Getting location..." : "Use my current location"}
+              </button>
+
+              <div className="flex gap-3 mt-4">
+                {user.address && (
+                  <SecondaryButton
+                    fullWidth
                     onClick={() => {
                       setEditingAddress(false);
                       setAddressErrors({});
                     }}
-                    className="flex-1 font-bold rounded-full transition-colors cursor-pointer"
-                    style={{ minHeight: "48px", fontSize: "15px", color: ORANGE, border: `2px solid ${ORANGE}` }}
                   >
                     Cancel
-                  </button>
-                  <button
-                    onClick={handleSaveAddress}
-                    disabled={savingAddress}
-                    className="flex-1 font-bold rounded-full text-white transition-opacity hover:opacity-90 cursor-pointer"
-                    style={{
-                      minHeight: "48px",
-                      fontSize: "15px",
-                      backgroundColor: ORANGE,
-                      opacity: savingAddress ? 0.8 : 1,
-                    }}
-                  >
-                    {savingAddress ? "Saving..." : "Save"}
-                  </button>
-                </div>
+                  </SecondaryButton>
+                )}
+                <PrimaryButton fullWidth onClick={handleSaveAddress} loading={savingAddress}>
+                  Save
+                </PrimaryButton>
               </div>
-            )}
-          </div>
-        </div>
-      )}
+            </div>
+          )}
+        </Modal>
 
-      {/* Rewards modal */}
-      {showRewards && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
-          <div className="absolute inset-0 bg-black/40" onClick={() => setShowRewards(false)} />
-          <div className="relative bg-white rounded-2xl shadow-2xl w-full max-w-sm p-5 max-h-[85vh] overflow-y-auto scrollbar-hide">
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="font-bold" style={{ color: CHARCOAL, fontSize: "20px" }}>
-                Rewards & Offers
-              </h2>
+        {/* Payment method modal */}
+        <Modal
+          open={showPayment}
+          onClose={() => setShowPayment(false)}
+          title="Payment Method"
+          size="sm"
+        >
+          <div className="space-y-3">
+            {[
+              { key: "cod", label: "Cash on Delivery", desc: "Pay when your order arrives", Icon: Banknote },
+              { key: "upi", label: "UPI", desc: "Pay instantly via UPI apps", Icon: Smartphone },
+            ].map(({ key, label, desc, Icon }) => {
+              const active = paymentMethod === key;
+              return (
+                <button
+                  key={key}
+                  onClick={() => setPaymentMethod(key)}
+                  className="w-full flex items-center gap-3 rounded-2xl p-4 text-left transition-colors cursor-pointer"
+                  style={{
+                    border: `2px solid ${active ? "var(--primary)" : "#E5E7EB"}`,
+                    backgroundColor: active ? "var(--primary-light)" : "#FFFFFF",
+                  }}
+                >
+                  <div
+                    className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
+                    style={{ backgroundColor: active ? "var(--primary)" : "#F3F4F6" }}
+                  >
+                    <Icon size={18} style={{ color: active ? "#FFFFFF" : "#6B7280" }} />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="font-bold text-slate-900" style={{ fontSize: "15px" }}>
+                      {label}
+                    </p>
+                    <p className="text-gray-400" style={{ fontSize: "12px" }}>
+                      {desc}
+                    </p>
+                  </div>
+                  {active && (
+                    <span
+                      className="shrink-0 rounded-full flex items-center justify-center"
+                      style={{ width: "22px", height: "22px", backgroundColor: "var(--primary)" }}
+                    >
+                      <Check size={13} color="#fff" strokeWidth={3} />
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+
+          <PrimaryButton fullWidth className="mt-5" onClick={handleSavePayment}>
+            Save
+          </PrimaryButton>
+        </Modal>
+
+        {/* Account Settings modal */}
+        <Modal
+          open={showAccountSettings}
+          onClose={() => setShowAccountSettings(false)}
+          size="md"
+        >
+          <SettingsCard
+            darkMode={darkMode}
+            onToggleDarkMode={() => setDarkMode((v) => !v)}
+            onItemClick={handleSettingsItemClick}
+            onLogout={handleLogout}
+            onDeleteAccount={handleDeleteAccount}
+          />
+        </Modal>
+
+        {/* App Settings modal */}
+        <Modal
+          open={showAppSettings}
+          onClose={() => setShowAppSettings(false)}
+          size="md"
+        >
+          <NotificationSettings settings={notifSettings} onToggle={handleToggleNotif} />
+        </Modal>
+
+        {/* Help & Support modal */}
+        {showHelp && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
+            <div className="absolute inset-0 bg-black/40" onClick={() => setShowHelp(false)} />
+            <div
+              className="relative rounded-2xl shadow-2xl w-full max-w-sm p-5 max-h-[85vh] overflow-y-auto scrollbar-hide"
+              style={{ backgroundColor: "#FFFFFF" }}
+            >
               <button
-                onClick={() => setShowRewards(false)}
-                className="flex items-center justify-center rounded-full text-gray-500 hover:bg-gray-100 transition-colors cursor-pointer"
+                onClick={() => setShowHelp(false)}
+                className="absolute top-4 right-4 flex items-center justify-center rounded-full text-gray-500 hover:bg-gray-100 transition-colors cursor-pointer"
                 style={{ width: "32px", height: "32px" }}
               >
                 <X size={18} />
               </button>
-            </div>
 
-            {/* Hero */}
-            <div className="rounded-2xl p-4 mb-4" style={{ backgroundColor: ORANGE }}>
-              <div
-                className="flex items-center gap-1.5 text-white/80 font-semibold"
-                style={{ fontSize: "13px" }}
-              >
-                <Flame size={14} fill="currentColor" />
-                Sizzle rewards
-              </div>
-              <p className="text-white font-bold mt-1" style={{ fontSize: "28px" }}>
-                {rewardsData.points.toLocaleString("en-IN")} pts
-              </p>
-              <p className="text-white/80 mt-0.5" style={{ fontSize: "13px" }}>
-                {rewardsData.pointsToNext} pts to your next reward
-              </p>
-              <div
-                className="mt-3 h-2 rounded-full"
-                style={{ backgroundColor: "rgba(255,255,255,0.3)" }}
-              >
+              <div className="flex flex-col items-center text-center mb-4">
                 <div
-                  className="h-2 rounded-full bg-white"
-                  style={{ width: `${rewardsProgress}%` }}
+                  className="w-14 h-14 rounded-full flex items-center justify-center mb-3"
+                  style={{ backgroundColor: "var(--primary-light)" }}
+                >
+                  <Headphones size={22} style={{ color: "var(--primary)" }} />
+                </div>
+                <h2 className="font-bold text-slate-900" style={{ fontSize: "19px" }}>
+                  Help and support
+                </h2>
+                <p className="text-gray-500 mt-1" style={{ fontSize: "13px" }}>
+                  We're here to help with your order, anytime.
+                </p>
+              </div>
+
+              <div className="relative mb-4">
+                <Search size={16} className="absolute top-1/2 -translate-y-1/2 left-3 text-white/70" />
+                <input
+                  type="text"
+                  value={helpSearch}
+                  onChange={(e) => setHelpSearch(e.target.value)}
+                  placeholder="Search for help, e.g. refund, delivery time"
+                  className="w-full rounded-xl pl-9 pr-3 text-[13px] outline-none transition-colors text-white placeholder-white/70"
+                  style={{ minHeight: "42px", backgroundColor: "var(--primary)", border: "1px solid transparent" }}
                 />
               </div>
-            </div>
 
-            {/* Tier */}
-            <div className="flex items-center justify-between mb-3">
-              <h3 className="font-bold" style={{ color: CHARCOAL, fontSize: "15px" }}>
-                Your tier
-              </h3>
-              <span
-                className="font-bold rounded-full px-2.5 py-1"
-                style={{ backgroundColor: CREAM, color: ORANGE, fontSize: "12px" }}
-              >
-                {rewardsData.tier}
-              </span>
-            </div>
-
-            {/* Reward tiles */}
-            <div className="grid grid-cols-2 gap-2.5 mb-4">
-              {rewardTiers.map(({ icon: Icon, label, pts }) => (
-                <div
-                  key={label}
-                  className="rounded-xl p-3 flex flex-col items-center justify-center text-center gap-1"
-                  style={{ backgroundColor: ORANGE, minHeight: "90px" }}
-                >
-                  <Icon size={17} style={{ color: "#FFFFFF" }} />
-                  <p className="font-bold text-white" style={{ fontSize: "13px" }}>
-                    {label}
-                  </p>
-                  <p className="text-white/80" style={{ fontSize: "11px" }}>
-                    {pts.toLocaleString("en-IN")} pts
-                  </p>
-                </div>
-              ))}
-            </div>
-
-            {/* Recent activity */}
-            <h3 className="font-bold mb-2" style={{ color: CHARCOAL, fontSize: "15px" }}>
-              Recent activity
-            </h3>
-            <div
-              className="rounded-xl overflow-hidden"
-              style={{ backgroundColor: "#F9FAFB", border: "1px solid #F0F0F0" }}
-            >
-              {recentRewardActivity.map((item, i) => (
-                <div
-                  key={item.label + i}
-                  className={`flex items-center justify-between px-3 py-2.5 ${
-                    i < recentRewardActivity.length - 1 ? "border-b border-gray-100" : ""
-                  }`}
-                >
-                  <span className="font-medium" style={{ color: CHARCOAL, fontSize: "13px" }}>
-                    {item.label}
-                  </span>
-                  <span className="font-bold" style={{ color: ORANGE, fontSize: "13px" }}>
-                    {item.delta > 0 ? "+" : ""}
-                    {item.delta} pts
-                  </span>
-                </div>
-              ))}
-            </div>
-
-            <button
-              onClick={() => setShowRewards(false)}
-              className="w-full mt-5 font-bold rounded-full text-white transition-opacity hover:opacity-90 cursor-pointer"
-              style={{ minHeight: "48px", fontSize: "15px", backgroundColor: ORANGE }}
-            >
-              Done
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Help & Support modal */}
-      {showHelp && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
-          <div className="absolute inset-0 bg-black/40" onClick={() => setShowHelp(false)} />
-          <div
-            className="relative rounded-2xl shadow-2xl w-full max-w-sm p-5 max-h-[85vh] overflow-y-auto scrollbar-hide"
-            style={{ backgroundColor: "#FFFFFF" }}
-          >
-            <button
-              onClick={() => setShowHelp(false)}
-              className="absolute top-4 right-4 flex items-center justify-center rounded-full text-gray-500 hover:bg-gray-100 transition-colors cursor-pointer"
-              style={{ width: "32px", height: "32px" }}
-            >
-              <X size={18} />
-            </button>
-
-            {/* Header */}
-            <div className="flex flex-col items-center text-center mb-4">
-              <div
-                className="w-14 h-14 rounded-full flex items-center justify-center mb-3"
-                style={{ backgroundColor: CREAM }}
-              >
-                <Headphones size={22} style={{ color: ORANGE }} />
-              </div>
-              <h2 className="font-bold" style={{ color: CHARCOAL, fontSize: "19px" }}>
-                Help and support
-              </h2>
-              <p className="text-gray-500 mt-1" style={{ fontSize: "13px" }}>
-                We're here to help with your order, anytime.
-              </p>
-            </div>
-
-            {/* Search */}
-            <div className="relative mb-4">
-              <Search
-                size={16}
-                className="absolute top-1/2 -translate-y-1/2 left-3 text-white/70"
-              />
-              <input
-                type="text"
-                value={helpSearch}
-                onChange={(e) => setHelpSearch(e.target.value)}
-                placeholder="Search for help, e.g. refund, delivery time"
-                className="w-full rounded-xl pl-9 pr-3 text-[13px] outline-none transition-colors text-white placeholder-white/70"
-                style={{
-                  minHeight: "42px",
-                  backgroundColor: ORANGE,
-                  border: "1px solid transparent",
-                }}
-              />
-            </div>
-
-            {/* Quick actions */}
-            <div className="grid grid-cols-2 gap-2.5 mb-5">
-              {helpQuickActions.map(({ icon: Icon, label }) => (
-                <div
-                  key={label}
-                  className="rounded-xl p-3 flex flex-col items-center justify-center text-center gap-1.5"
-                  style={{ backgroundColor: ORANGE, minHeight: "80px" }}
-                >
-                  <Icon size={17} style={{ color: "#FFFFFF" }} />
-                  <p className="font-bold text-white" style={{ fontSize: "12px" }}>
-                    {label}
-                  </p>
-                </div>
-              ))}
-            </div>
-
-            {/* Frequently asked */}
-            <p className="text-gray-500 mb-2" style={{ fontSize: "12px" }}>
-              Frequently asked
-            </p>
-            <div className="space-y-2 mb-5">
-              {filteredFaqs.map((item, i) => {
-                const open = openFaqIndex === i;
-                return (
+              <div className="grid grid-cols-2 gap-2.5 mb-5">
+                {helpQuickActions.map(({ icon: Icon, label }) => (
                   <div
-                    key={item.q}
-                    className="rounded-xl overflow-hidden"
-                    style={{ backgroundColor: ORANGE }}
+                    key={label}
+                    className="rounded-xl p-3 flex flex-col items-center justify-center text-center gap-1.5"
+                    style={{ backgroundColor: "var(--primary)", minHeight: "80px" }}
                   >
-                    <button
-                      onClick={() => setOpenFaqIndex(open ? null : i)}
-                      className="w-full flex items-center justify-between px-3.5 py-3 text-left cursor-pointer"
-                    >
-                      <span className="font-bold text-white" style={{ fontSize: "13px" }}>
-                        {item.q}
-                      </span>
-                      <ChevronDown
-                        size={16}
-                        className="text-white/80 shrink-0 transition-transform"
-                        style={{ transform: open ? "rotate(180deg)" : "none" }}
-                      />
-                    </button>
-                    {open && (
-                      <p
-                        className="px-3.5 pb-3 text-white/80"
-                        style={{ fontSize: "12px" }}
-                      >
-                        {item.a}
-                      </p>
-                    )}
+                    <Icon size={17} style={{ color: "#FFFFFF" }} />
+                    <p className="font-bold text-white" style={{ fontSize: "12px" }}>
+                      {label}
+                    </p>
                   </div>
-                );
-              })}
-              {filteredFaqs.length === 0 && (
-                <p className="text-center text-gray-500 py-3" style={{ fontSize: "13px" }}>
-                  No results for "{helpSearch}"
-                </p>
-              )}
-            </div>
+                ))}
+              </div>
 
-            {/* Still need help */}
-            <p className="text-gray-500 mb-2" style={{ fontSize: "12px" }}>
-              Still need help
-            </p>
-            <div className="grid grid-cols-2 gap-2.5">
-              <button
-                className="flex items-center justify-center gap-1.5 rounded-xl font-semibold text-white cursor-pointer"
-                style={{ minHeight: "44px", fontSize: "12.5px", backgroundColor: ORANGE }}
-              >
-                <MessageCircle size={15} />
-                Live chat
-              </button>
-              <button
-                className="flex items-center justify-center gap-1.5 rounded-xl font-semibold text-white cursor-pointer"
-                style={{ minHeight: "44px", fontSize: "12.5px", backgroundColor: ORANGE }}
-              >
-                <Phone size={15} />
-                Call us
-              </button>
-              <button
-                className="col-span-2 flex items-center justify-center gap-1.5 rounded-xl font-semibold text-white transition-opacity hover:opacity-90 cursor-pointer"
-                style={{ minHeight: "44px", fontSize: "12.5px", backgroundColor: ORANGE }}
-              >
-                <Mail size={15} />
-                Email support
-              </button>
+              <p className="text-gray-500 mb-2" style={{ fontSize: "12px" }}>
+                Frequently asked
+              </p>
+              <div className="space-y-2 mb-5">
+                {filteredFaqs.map((item, i) => {
+                  const open = openFaqIndex === i;
+                  return (
+                    <div key={item.q} className="rounded-xl overflow-hidden" style={{ backgroundColor: "var(--primary)" }}>
+                      <button
+                        onClick={() => setOpenFaqIndex(open ? null : i)}
+                        className="w-full flex items-center justify-between px-3.5 py-3 text-left cursor-pointer"
+                      >
+                        <span className="font-bold text-white" style={{ fontSize: "13px" }}>
+                          {item.q}
+                        </span>
+                        <ChevronDown
+                          size={16}
+                          className="text-white/80 shrink-0 transition-transform"
+                          style={{ transform: open ? "rotate(180deg)" : "none" }}
+                        />
+                      </button>
+                      {open && (
+                        <p className="px-3.5 pb-3 text-white/80" style={{ fontSize: "12px" }}>
+                          {item.a}
+                        </p>
+                      )}
+                    </div>
+                  );
+                })}
+                {filteredFaqs.length === 0 && (
+                  <p className="text-center text-gray-500 py-3" style={{ fontSize: "13px" }}>
+                    No results for "{helpSearch}"
+                  </p>
+                )}
+              </div>
+
+              <p className="text-gray-500 mb-2" style={{ fontSize: "12px" }}>
+                Still need help
+              </p>
+              <div className="grid grid-cols-2 gap-2.5">
+                <button
+                  className="flex items-center justify-center gap-1.5 rounded-xl font-semibold text-white cursor-pointer"
+                  style={{ minHeight: "44px", fontSize: "12.5px", backgroundColor: "var(--primary)" }}
+                >
+                  <MessageCircle size={15} />
+                  Live chat
+                </button>
+                <button
+                  className="flex items-center justify-center gap-1.5 rounded-xl font-semibold text-white cursor-pointer"
+                  style={{ minHeight: "44px", fontSize: "12.5px", backgroundColor: "var(--primary)" }}
+                >
+                  <Phone size={15} />
+                  Call us
+                </button>
+                <button
+                  className="col-span-2 flex items-center justify-center gap-1.5 rounded-xl font-semibold text-white transition-opacity hover:opacity-90 cursor-pointer"
+                  style={{ minHeight: "44px", fontSize: "12.5px", backgroundColor: "var(--primary)" }}
+                >
+                  <Mail size={15} />
+                  Email support
+                </button>
+              </div>
             </div>
           </div>
-        </div>
-      )}
-    </div>
+        )}
+      </div>
     </motion.div>
   );
 };
-
 
 export default Profile;
