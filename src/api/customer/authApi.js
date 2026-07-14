@@ -56,16 +56,16 @@ export const saveProfile = (name, address, phone) => {
       if (!name || !name.trim()) {
         return reject({ message: "Name is required" });
       }
-      if (!address || !address.trim()) {
-        return reject({ message: "Delivery address is required" });
-      }
 
-      const token = "mock_token_" + Date.now();
+      const existingRaw = localStorage.getItem(STORAGE_KEYS.USER);
+      const existing = existingRaw ? JSON.parse(existingRaw) : null;
+
+      const token = localStorage.getItem(STORAGE_KEYS.TOKEN) || "mock_token_" + Date.now();
       const user = {
-        id: "cust_" + Date.now(),
+        id: existing?.id || "cust_" + Date.now(),
         name: name.trim(),
         phone,
-        address: address.trim(),
+        address: address ? address.trim() : "",
       };
 
       localStorage.setItem(STORAGE_KEYS.TOKEN, token);
