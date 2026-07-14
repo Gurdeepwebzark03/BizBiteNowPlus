@@ -5,18 +5,23 @@
 */
 
 const formatDisplayDate = (iso) =>
-  new Date(iso).toLocaleDateString("en-IN", { day: "2-digit", month: "short", year: "numeric" });
+  new Date(iso).toLocaleDateString("en-IN", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
 
 export function offerToCoupon(offer) {
-  const expired = new Date(offer.validityEnd) < new Date(new Date().toDateString());
+  const expired =
+    new Date(offer.validityEnd) < new Date(new Date().toDateString());
 
   return {
     id: offer.id,
     code: offer.code,
     title: offer.label,
     description: offer.description || `Use code ${offer.code} at checkout.`,
-    discountType: offer.discountType, // "percentage" | "flat" | "delivery"
-    discount: offer.discountValue,
+    discountType: offer.discount.type, // "percentage" | "flat" | "delivery"
+    discount: offer.discount.value,
     minOrder: offer.minOrder,
     maxDiscount: offer.maxDiscount,
     expiry: formatDisplayDate(offer.validityEnd),
