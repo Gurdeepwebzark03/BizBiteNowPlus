@@ -96,7 +96,7 @@ export const clearCart = () =>
 // Orders
 // =======================================
 
-export const getCurrentOrder = (
+export const getCurrentOrders = (
   customerId
 ) =>
   API.get(

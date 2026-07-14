@@ -2,9 +2,9 @@ import React from "react";
 import { Menu, Clock } from "lucide-react";
 import { useLocation } from "react-router-dom";
 
-import SearchBar from "../../SearchBar";
+import SearchBar from "../SearchBar";
 import NotificationButton from "./NotificationButton";
-import ProfileMenu from "../../ProfileMenu";
+import ProfileMenu from "../ProfileMenu";
 const user = {
   subscription: "plus", // "free" | "plus"
 };
@@ -22,7 +22,10 @@ const pageTitles = {
   "/seller/settings": "Settings",
 };
 
-export default function Navbar({ openSidebar }) {
+export default function Navbar({
+  openSidebar,
+  sidebarExpanded,
+}) {
   const location = useLocation();
   const isDashboard = location.pathname === "/seller/dashboard";
 
@@ -51,38 +54,39 @@ export default function Navbar({ openSidebar }) {
 
   return (
 <header
-  className="
+  className={`
     fixed
-    top-0
-    left-0
-    z-30
+    z-40
 
     flex
     items-center
 
-    h-16
-    w-full
-
-    border-b
+    border
     border-slate-200
     bg-slate-100
 
-    px-3
     shadow-md
 
     max-[1024px]:relative
+    max-[1024px]:w-full
+    max-[1024px]:h-16
+    max-[1024px]:px-3
     max-[1024px]:shadow-none
-
-    min-[1025px]:fixed
     min-[1025px]:top-4
-    min-[1025px]:left-1/2
+    min-[1025px]:right-4
     min-[1025px]:h-[72px]
-    min-[1025px]:w-[55%]
-    min-[1025px]:-translate-x-1/2
     min-[1025px]:rounded-3xl
-    min-[1025px]:border
     min-[1025px]:px-6
-  "
+    min-[1025px]:transition-[left]
+    min-[1025px]:duration-300
+    min-[1025px]:ease-[cubic-bezier(.22,1,.36,1)]
+
+    ${
+      sidebarExpanded
+        ? "min-[1025px]:left-[256px]"
+        : "min-[1025px]:left-[112px]"
+    }
+  `}
 >
   {/* Left */}
 

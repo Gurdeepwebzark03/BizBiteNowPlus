@@ -8,7 +8,7 @@ const {
   toggleFavorite,
 } = require("../data/favorites");
 
-console.log(require("../data/favorites"));
+
 
 // =======================================
 // Get Customer Favorites
@@ -61,11 +61,11 @@ router.post("/", (req, res) => {
 // =======================================
 
 router.post("/toggle", (req, res) => {
-  console.log("BODY:", req.body);
+  
 
   const result = toggleFavorite(req.body);
 
-  console.log("RESULT:", result);
+  
 
   res.json({
     success: true,

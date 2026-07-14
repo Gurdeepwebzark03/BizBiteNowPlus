@@ -1,8 +1,5 @@
-import {
-  Outlet,
-  useLocation,
-  useNavigate,
-} from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Outlet, useLocation, useNavigate } from "react-router-dom";
 
 import DesktopSidebar from "./DesktopSidebar";
 import CustomerHeader from "./CustomerHeader";
@@ -11,100 +8,87 @@ import FloatingCartButton from "./FloatingCartButton";
 import { useCart } from "../../../context/CartContext";
 import { logoutCustomer } from "../../../api/customer/authApi";
 
-
 const CustomerLayout = () => {
-const {
-  totalItems,
-  totalPrice,
-} = useCart();
-const location = useLocation();
-const navigate = useNavigate();
+  const { totalItems, totalPrice } = useCart();
+  const location = useLocation();
+  const navigate = useNavigate();
 
-const handleLogout = async () => {
-  await logoutCustomer();
-  navigate("/", { replace: true });
-};
+  const handleLogout = async () => {
+    await logoutCustomer();
+    navigate("/", { replace: true });
+  };
 
-const hideFloatingCart = [
-  "/customer/cart",
-  "/customer/checkout",
-].includes(location.pathname);
+  const [sidebarExpanded, setSidebarExpanded] = useState(false);
+
+  const hideFloatingCart = ["/customer/cart", "/customer/checkout"].includes(
+    location.pathname,
+  );
+  const [isDesktop, setIsDesktop] = useState(window.innerWidth >= 1024);
+
+  useEffect(() => {
+    const handleResize = () => setIsDesktop(window.innerWidth >= 1024);
+
+    window.addEventListener("resize", handleResize);
+
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
   return (
-
     <div
       className="
         min-h-screen
         overflow-x-hidden
         bg-slate-100
-      "
-    >
-
+      ">
       {/* Sidebar */}
 
-      <DesktopSidebar onLogout={handleLogout} />
-
+      <DesktopSidebar
+        expanded={sidebarExpanded}
+        setExpanded={setSidebarExpanded}
+        onLogout={handleLogout}
+      />
 
       {/* Main */}
 
       <main
         className="
-          min-h-screen
+    min-h-screen
+    transition-all
+    duration-300
+    lg:mt-5
+  "
+        style={{
+          paddingLeft:
+            window.innerWidth >= 1024
+              ? sidebarExpanded
+                ? "17rem"
+                : "8rem"
+              : "0rem",
+        }}>
+        {/* Header */}
 
-          w-full
+        {location.pathname === "/customer" && (
+          <CustomerHeader
+            sidebarExpanded={sidebarExpanded}
+            isDesktop={isDesktop}
+          />
+        )}
 
-          lg:pl-20
-
-          transition-all
-
-          duration-300
-
-          peer-hover:lg:pl-72
-        "
-      >
-
-        <CustomerHeader />
-
-
+        {/* Content */}
         <div
-          className="
-            pt-24
-
-            px-3
-
-            sm:px-5
-
-            lg:px-8
-
-            w-full
-          "
-        >
-
-
-
-            <Outlet />
-
-          
-
+          className={`w-full ${
+            location.pathname === "/customer" ? "pt-22" : "pt-0"
+          }`}>
+          <Outlet />
         </div>
-
-
       </main>
 
+      {!hideFloatingCart && (
+        <FloatingCartButton totalItems={totalItems} totalPrice={totalPrice} />
+      )}
 
-
-{!hideFloatingCart && (
-  <FloatingCartButton
-    totalItems={totalItems}
-    totalPrice={totalPrice}
-  />
-)}
       <BottomNavigation />
-
     </div>
-
   );
-
 };
-
 
 export default CustomerLayout;

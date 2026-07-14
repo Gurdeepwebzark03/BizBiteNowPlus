@@ -1,12 +1,32 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getMyProfile, saveProfile, logoutCustomer } from "../../api/customer/authApi";
 import {
-  ChevronRight, ChevronDown, X, Check, Loader2,
-  User, MapPin, CreditCard, SlidersHorizontal, Settings as SettingsIcon,
-  Home, Banknote, Smartphone,
-  Search, Truck, ReceiptText, Utensils,
-  MessageCircle, Phone, Mail, Headphones,
+  getMyProfile,
+  saveProfile,
+  logoutCustomer,
+} from "../../api/customer/authApi";
+import {
+  ChevronRight,
+  ChevronDown,
+  X,
+  Check,
+  Loader2,
+  User,
+  MapPin,
+  CreditCard,
+  SlidersHorizontal,
+  Settings as SettingsIcon,
+  Home,
+  Banknote,
+  Smartphone,
+  Search,
+  Truck,
+  ReceiptText,
+  Utensils,
+  MessageCircle,
+  Phone,
+  Mail,
+  Headphones,
 } from "lucide-react";
 import { motion } from "framer-motion";
 import Modal from "../../components/customer/common/Modal";
@@ -35,10 +55,22 @@ const helpQuickActions = [
 ];
 
 const faqItems = [
-  { q: "Where is my order?", a: "Track your order in real time from the My Orders tab." },
-  { q: "How do I get a refund?", a: "Refunds are processed within 3-5 business days after approval." },
-  { q: "Can I edit my order after placing it?", a: "You can edit an order within 2 minutes of placing it, from My Orders." },
-  { q: "Do you offer table reservations?", a: "Table reservations aren't available yet — we're working on it!" },
+  {
+    q: "Where is my order?",
+    a: "Track your order in real time from the My Orders tab.",
+  },
+  {
+    q: "How do I get a refund?",
+    a: "Refunds are processed within 3-5 business days after approval.",
+  },
+  {
+    q: "Can I edit my order after placing it?",
+    a: "You can edit an order within 2 minutes of placing it, from My Orders.",
+  },
+  {
+    q: "Do you offer table reservations?",
+    a: "Table reservations aren't available yet — we're working on it!",
+  },
 ];
 
 const STEP_COUNT = 4;
@@ -105,13 +137,17 @@ const Profile = () => {
   const handlePersonalChange = (e) => {
     const { name, value } = e.target;
     setPersonalForm((prev) => ({ ...prev, [name]: value }));
-    if (personalErrors[name]) setPersonalErrors((prev) => ({ ...prev, [name]: "" }));
+    if (personalErrors[name])
+      setPersonalErrors((prev) => ({ ...prev, [name]: "" }));
   };
 
   const validatePersonal = () => {
     const errs = {};
     if (!personalForm.name.trim()) errs.name = "Name is required";
-    if (personalForm.phone.trim() && !/^[6-9]\d{9}$/.test(personalForm.phone.trim()))
+    if (
+      personalForm.phone.trim() &&
+      !/^[6-9]\d{9}$/.test(personalForm.phone.trim())
+    )
       errs.phone = "Enter a valid 10-digit mobile number";
     return errs;
   };
@@ -224,7 +260,11 @@ const Profile = () => {
   };
 
   const handleDeleteAccount = () => {
-    if (window.confirm("Are you sure you want to delete your account? This can't be undone.")) {
+    if (
+      window.confirm(
+        "Are you sure you want to delete your account? This can't be undone.",
+      )
+    ) {
       alert("Account deletion isn't available yet.");
     }
   };
@@ -250,9 +290,21 @@ const Profile = () => {
   const menuItems = [
     { icon: User, label: "Personal Details", action: openPersonalDetails },
     { icon: MapPin, label: "Saved Addresses", action: openAddresses },
-    { icon: CreditCard, label: "Payment Methods", action: () => setShowPayment(true) },
-    { icon: SettingsIcon, label: "Account Settings", action: () => setShowAccountSettings(true) },
-    { icon: SlidersHorizontal, label: "App Settings", action: () => setShowAppSettings(true) },
+    {
+      icon: CreditCard,
+      label: "Payment Methods",
+      action: () => setShowPayment(true),
+    },
+    {
+      icon: SettingsIcon,
+      label: "Account Settings",
+      action: () => setShowAccountSettings(true),
+    },
+    {
+      icon: SlidersHorizontal,
+      label: "App Settings",
+      action: () => setShowAppSettings(true),
+    },
   ];
 
   return (
@@ -260,21 +312,24 @@ const Profile = () => {
       initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-      className="space-y-6"
-    >
+      className="space-y-6">
       <div className="min-h-screen bg-[#FAFAF5] px-4 py-5">
         <div className="max-w-2xl mx-auto">
           {/* Header */}
           <div className="flex items-start justify-between mb-6">
             <div>
-              <h1 className="font-bold text-slate-900" style={{ fontSize: "26px" }}>
+              <h1
+                className="font-bold text-slate-900"
+                style={{ fontSize: "26px" }}>
                 My Profile
               </h1>
               <p className="text-slate-500 mt-1" style={{ fontSize: "14px" }}>
                 Manage your account, addresses, and preferences.
               </p>
             </div>
-            <button onClick={openPersonalDetails} className="shrink-0 cursor-pointer">
+            <button
+              onClick={openPersonalDetails}
+              className="shrink-0 cursor-pointer">
               <Avatar name={user.name} size="md" />
             </button>
           </div>
@@ -285,21 +340,25 @@ const Profile = () => {
               {/* Stepper */}
               <div className="flex items-center mb-4">
                 {stepMarks.map((mark, i) => (
-                  <div key={mark} className="flex items-center flex-1 last:flex-none">
+                  <div
+                    key={mark}
+                    className="flex items-center flex-1 last:flex-none">
                     <div className="flex flex-col items-center">
                       <div
                         className="rounded-full flex items-center justify-center shrink-0"
                         style={{
                           width: "18px",
                           height: "18px",
-                          backgroundColor: mark <= percent ? "var(--primary)" : "#E5E7EB",
-                        }}
-                      >
+                          backgroundColor:
+                            mark <= percent ? "var(--primary)" : "#E5E7EB",
+                        }}>
                         {mark <= percent && mark > 0 && (
                           <Check size={11} color="#fff" strokeWidth={3} />
                         )}
                       </div>
-                      <span className="text-gray-400 mt-1" style={{ fontSize: "10px" }}>
+                      <span
+                        className="text-gray-400 mt-1"
+                        style={{ fontSize: "10px" }}>
                         {mark}%
                       </span>
                     </div>
@@ -307,7 +366,10 @@ const Profile = () => {
                       <div
                         className="flex-1 h-[2px] mx-1 mb-4"
                         style={{
-                          backgroundColor: stepMarks[i + 1] <= percent ? "var(--primary)" : "#E5E7EB",
+                          backgroundColor:
+                            stepMarks[i + 1] <= percent
+                              ? "var(--primary)"
+                              : "#E5E7EB",
                         }}
                       />
                     )}
@@ -317,12 +379,17 @@ const Profile = () => {
 
               <div className="flex items-center justify-between gap-4 flex-wrap">
                 <div>
-                  <p className="font-bold text-slate-900" style={{ fontSize: "15px" }}>
+                  <p
+                    className="font-bold text-slate-900"
+                    style={{ fontSize: "15px" }}>
                     Complete your profile
                   </p>
-                  <p className="text-gray-500 mt-0.5" style={{ fontSize: "13px" }}>
-                    {STEP_COUNT - completedCount} step{STEP_COUNT - completedCount > 1 ? "s" : ""} left —
-                    unlock faster checkout and personalized offers.
+                  <p
+                    className="text-gray-500 mt-0.5"
+                    style={{ fontSize: "13px" }}>
+                    {STEP_COUNT - completedCount} step
+                    {STEP_COUNT - completedCount > 1 ? "s" : ""} left — unlock
+                    faster checkout and personalized offers.
                   </p>
                 </div>
                 <PrimaryButton size="sm" onClick={nextStep?.action}>
@@ -333,15 +400,18 @@ const Profile = () => {
           ) : (
             <div
               className="rounded-2xl p-5 mb-5 flex items-center gap-3"
-              style={{ backgroundColor: "var(--primary-light)", border: "1px solid var(--primary-border)" }}
-            >
+              style={{
+                backgroundColor: "var(--primary-light)",
+                border: "1px solid var(--primary-border)",
+              }}>
               <div
                 className="w-9 h-9 rounded-full flex items-center justify-center shrink-0"
-                style={{ backgroundColor: "var(--primary)" }}
-              >
+                style={{ backgroundColor: "var(--primary)" }}>
                 <Check size={16} color="#fff" strokeWidth={3} />
               </div>
-              <p className="font-semibold" style={{ color: "var(--primary)", fontSize: "14px" }}>
+              <p
+                className="font-semibold"
+                style={{ color: "var(--primary)", fontSize: "14px" }}>
                 Your profile is complete!
               </p>
             </div>
@@ -355,10 +425,11 @@ const Profile = () => {
                 onClick={action}
                 className={`w-full flex items-center gap-3 px-4 py-3.5 text-left hover:bg-gray-50 transition-colors cursor-pointer ${
                   i < menuItems.length - 1 ? "border-b border-gray-100" : ""
-                }`}
-              >
+                }`}>
                 <Icon size={19} className="text-gray-500 shrink-0" />
-                <span className="flex-1 font-medium text-slate-900" style={{ fontSize: "15px" }}>
+                <span
+                  className="flex-1 font-medium text-slate-900"
+                  style={{ fontSize: "15px" }}>
                   {label}
                 </span>
                 <ChevronRight size={18} className="text-gray-300 shrink-0" />
@@ -372,8 +443,7 @@ const Profile = () => {
           open={showPersonal}
           onClose={() => setShowPersonal(false)}
           title="Personal Details"
-          size="sm"
-        >
+          size="sm">
           <div className="mb-3">
             <label className="block text-[14px] font-semibold text-gray-500 mb-1">
               Full Name *
@@ -390,7 +460,9 @@ const Profile = () => {
               style={{ minHeight: "44px", color: "#0F172A" }}
             />
             {personalErrors.name && (
-              <p className="text-red-500 text-[13px] mt-1">{personalErrors.name}</p>
+              <p className="text-red-500 text-[13px] mt-1">
+                {personalErrors.name}
+              </p>
             )}
           </div>
 
@@ -411,11 +483,17 @@ const Profile = () => {
               style={{ minHeight: "44px", color: "#0F172A" }}
             />
             {personalErrors.phone && (
-              <p className="text-red-500 text-[13px] mt-1">{personalErrors.phone}</p>
+              <p className="text-red-500 text-[13px] mt-1">
+                {personalErrors.phone}
+              </p>
             )}
           </div>
 
-          <PrimaryButton fullWidth className="mt-5" onClick={handleSavePersonal} loading={savingPersonal}>
+          <PrimaryButton
+            fullWidth
+            className="mt-5"
+            onClick={handleSavePersonal}
+            loading={savingPersonal}>
             Save
           </PrimaryButton>
         </Modal>
@@ -425,33 +503,40 @@ const Profile = () => {
           open={showAddresses}
           onClose={() => setShowAddresses(false)}
           title="Delivery Address"
-          size="sm"
-        >
+          size="sm">
           {!editingAddress ? (
             <>
               {user.address ? (
                 <div
                   className="w-full flex items-start gap-3 rounded-2xl p-4 text-left"
-                  style={{ border: "2px solid var(--primary)", backgroundColor: "var(--primary-light)" }}
-                >
+                  style={{
+                    border: "2px solid var(--primary)",
+                    backgroundColor: "var(--primary-light)",
+                  }}>
                   <div
                     className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
-                    style={{ backgroundColor: "var(--primary)" }}
-                  >
+                    style={{ backgroundColor: "var(--primary)" }}>
                     <Home size={18} style={{ color: "#FFFFFF" }} />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="font-bold text-slate-900" style={{ fontSize: "15px" }}>
+                    <p
+                      className="font-bold text-slate-900"
+                      style={{ fontSize: "15px" }}>
                       {user.name}
                     </p>
-                    <p className="text-gray-400 mt-0.5" style={{ fontSize: "13px" }}>
+                    <p
+                      className="text-gray-400 mt-0.5"
+                      style={{ fontSize: "13px" }}>
                       {user.address}
                     </p>
                   </div>
                   <span
                     className="shrink-0 rounded-full flex items-center justify-center"
-                    style={{ width: "22px", height: "22px", backgroundColor: "var(--primary)" }}
-                  >
+                    style={{
+                      width: "22px",
+                      height: "22px",
+                      backgroundColor: "var(--primary)",
+                    }}>
                     <Check size={13} color="#fff" strokeWidth={3} />
                   </span>
                 </div>
@@ -464,7 +549,10 @@ const Profile = () => {
                 </div>
               )}
 
-              <SecondaryButton fullWidth className="mt-5" onClick={() => setEditingAddress(true)}>
+              <SecondaryButton
+                fullWidth
+                className="mt-5"
+                onClick={() => setEditingAddress(true)}>
                 Change Address
               </SecondaryButton>
             </>
@@ -488,15 +576,20 @@ const Profile = () => {
                 style={{ color: "#0F172A" }}
               />
               {addressErrors.address && (
-                <p className="text-red-500 text-[13px] mt-1">{addressErrors.address}</p>
+                <p className="text-red-500 text-[13px] mt-1">
+                  {addressErrors.address}
+                </p>
               )}
               <button
                 onClick={getAddressLocation}
                 disabled={locLoading}
                 className="mt-1 flex items-center gap-2 font-semibold text-[14px]"
-                style={{ minHeight: "40px", color: "var(--primary)" }}
-              >
-                {locLoading ? <Loader2 size={14} className="animate-spin" /> : <MapPin size={14} />}
+                style={{ minHeight: "40px", color: "var(--primary)" }}>
+                {locLoading ? (
+                  <Loader2 size={14} className="animate-spin" />
+                ) : (
+                  <MapPin size={14} />
+                )}
                 {locLoading ? "Getting location..." : "Use my current location"}
               </button>
 
@@ -507,12 +600,14 @@ const Profile = () => {
                     onClick={() => {
                       setEditingAddress(false);
                       setAddressErrors({});
-                    }}
-                  >
+                    }}>
                     Cancel
                   </SecondaryButton>
                 )}
-                <PrimaryButton fullWidth onClick={handleSaveAddress} loading={savingAddress}>
+                <PrimaryButton
+                  fullWidth
+                  onClick={handleSaveAddress}
+                  loading={savingAddress}>
                   Save
                 </PrimaryButton>
               </div>
@@ -525,12 +620,21 @@ const Profile = () => {
           open={showPayment}
           onClose={() => setShowPayment(false)}
           title="Payment Method"
-          size="sm"
-        >
+          size="sm">
           <div className="space-y-3">
             {[
-              { key: "cod", label: "Cash on Delivery", desc: "Pay when your order arrives", Icon: Banknote },
-              { key: "upi", label: "UPI", desc: "Pay instantly via UPI apps", Icon: Smartphone },
+              {
+                key: "cod",
+                label: "Cash on Delivery",
+                desc: "Pay when your order arrives",
+                Icon: Banknote,
+              },
+              {
+                key: "upi",
+                label: "UPI",
+                desc: "Pay instantly via UPI apps",
+                Icon: Smartphone,
+              },
             ].map(({ key, label, desc, Icon }) => {
               const active = paymentMethod === key;
               return (
@@ -540,17 +644,24 @@ const Profile = () => {
                   className="w-full flex items-center gap-3 rounded-2xl p-4 text-left transition-colors cursor-pointer"
                   style={{
                     border: `2px solid ${active ? "var(--primary)" : "#E5E7EB"}`,
-                    backgroundColor: active ? "var(--primary-light)" : "#FFFFFF",
-                  }}
-                >
+                    backgroundColor: active
+                      ? "var(--primary-light)"
+                      : "#FFFFFF",
+                  }}>
                   <div
                     className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
-                    style={{ backgroundColor: active ? "var(--primary)" : "#F3F4F6" }}
-                  >
-                    <Icon size={18} style={{ color: active ? "#FFFFFF" : "#6B7280" }} />
+                    style={{
+                      backgroundColor: active ? "var(--primary)" : "#F3F4F6",
+                    }}>
+                    <Icon
+                      size={18}
+                      style={{ color: active ? "#FFFFFF" : "#6B7280" }}
+                    />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="font-bold text-slate-900" style={{ fontSize: "15px" }}>
+                    <p
+                      className="font-bold text-slate-900"
+                      style={{ fontSize: "15px" }}>
                       {label}
                     </p>
                     <p className="text-gray-400" style={{ fontSize: "12px" }}>
@@ -560,8 +671,11 @@ const Profile = () => {
                   {active && (
                     <span
                       className="shrink-0 rounded-full flex items-center justify-center"
-                      style={{ width: "22px", height: "22px", backgroundColor: "var(--primary)" }}
-                    >
+                      style={{
+                        width: "22px",
+                        height: "22px",
+                        backgroundColor: "var(--primary)",
+                      }}>
                       <Check size={13} color="#fff" strokeWidth={3} />
                     </span>
                   )}
@@ -579,8 +693,7 @@ const Profile = () => {
         <Modal
           open={showAccountSettings}
           onClose={() => setShowAccountSettings(false)}
-          size="md"
-        >
+          size="md">
           <SettingsCard
             darkMode={darkMode}
             onToggleDarkMode={() => setDarkMode((v) => !v)}
@@ -594,35 +707,39 @@ const Profile = () => {
         <Modal
           open={showAppSettings}
           onClose={() => setShowAppSettings(false)}
-          size="md"
-        >
-          <NotificationSettings settings={notifSettings} onToggle={handleToggleNotif} />
+          size="md">
+          <NotificationSettings
+            settings={notifSettings}
+            onToggle={handleToggleNotif}
+          />
         </Modal>
 
         {/* Help & Support modal */}
         {showHelp && (
           <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
-            <div className="absolute inset-0 bg-black/40" onClick={() => setShowHelp(false)} />
+            <div
+              className="absolute inset-0 bg-black/40"
+              onClick={() => setShowHelp(false)}
+            />
             <div
               className="relative rounded-2xl shadow-2xl w-full max-w-sm p-5 max-h-[85vh] overflow-y-auto scrollbar-hide"
-              style={{ backgroundColor: "#FFFFFF" }}
-            >
+              style={{ backgroundColor: "#FFFFFF" }}>
               <button
                 onClick={() => setShowHelp(false)}
                 className="absolute top-4 right-4 flex items-center justify-center rounded-full text-gray-500 hover:bg-gray-100 transition-colors cursor-pointer"
-                style={{ width: "32px", height: "32px" }}
-              >
+                style={{ width: "32px", height: "32px" }}>
                 <X size={18} />
               </button>
 
               <div className="flex flex-col items-center text-center mb-4">
                 <div
                   className="w-14 h-14 rounded-full flex items-center justify-center mb-3"
-                  style={{ backgroundColor: "var(--primary-light)" }}
-                >
+                  style={{ backgroundColor: "var(--primary-light)" }}>
                   <Headphones size={22} style={{ color: "var(--primary)" }} />
                 </div>
-                <h2 className="font-bold text-slate-900" style={{ fontSize: "19px" }}>
+                <h2
+                  className="font-bold text-slate-900"
+                  style={{ fontSize: "19px" }}>
                   Help and support
                 </h2>
                 <p className="text-gray-500 mt-1" style={{ fontSize: "13px" }}>
@@ -631,14 +748,21 @@ const Profile = () => {
               </div>
 
               <div className="relative mb-4">
-                <Search size={16} className="absolute top-1/2 -translate-y-1/2 left-3 text-white/70" />
+                <Search
+                  size={16}
+                  className="absolute top-1/2 -translate-y-1/2 left-3 text-white/70"
+                />
                 <input
                   type="text"
                   value={helpSearch}
                   onChange={(e) => setHelpSearch(e.target.value)}
                   placeholder="Search for help, e.g. refund, delivery time"
                   className="w-full rounded-xl pl-9 pr-3 text-[13px] outline-none transition-colors text-white placeholder-white/70"
-                  style={{ minHeight: "42px", backgroundColor: "var(--primary)", border: "1px solid transparent" }}
+                  style={{
+                    minHeight: "42px",
+                    backgroundColor: "var(--primary)",
+                    border: "1px solid transparent",
+                  }}
                 />
               </div>
 
@@ -647,10 +771,14 @@ const Profile = () => {
                   <div
                     key={label}
                     className="rounded-xl p-3 flex flex-col items-center justify-center text-center gap-1.5"
-                    style={{ backgroundColor: "var(--primary)", minHeight: "80px" }}
-                  >
+                    style={{
+                      backgroundColor: "var(--primary)",
+                      minHeight: "80px",
+                    }}>
                     <Icon size={17} style={{ color: "#FFFFFF" }} />
-                    <p className="font-bold text-white" style={{ fontSize: "12px" }}>
+                    <p
+                      className="font-bold text-white"
+                      style={{ fontSize: "12px" }}>
                       {label}
                     </p>
                   </div>
@@ -664,22 +792,30 @@ const Profile = () => {
                 {filteredFaqs.map((item, i) => {
                   const open = openFaqIndex === i;
                   return (
-                    <div key={item.q} className="rounded-xl overflow-hidden" style={{ backgroundColor: "var(--primary)" }}>
+                    <div
+                      key={item.q}
+                      className="rounded-xl overflow-hidden"
+                      style={{ backgroundColor: "var(--primary)" }}>
                       <button
                         onClick={() => setOpenFaqIndex(open ? null : i)}
-                        className="w-full flex items-center justify-between px-3.5 py-3 text-left cursor-pointer"
-                      >
-                        <span className="font-bold text-white" style={{ fontSize: "13px" }}>
+                        className="w-full flex items-center justify-between px-3.5 py-3 text-left cursor-pointer">
+                        <span
+                          className="font-bold text-white"
+                          style={{ fontSize: "13px" }}>
                           {item.q}
                         </span>
                         <ChevronDown
                           size={16}
                           className="text-white/80 shrink-0 transition-transform"
-                          style={{ transform: open ? "rotate(180deg)" : "none" }}
+                          style={{
+                            transform: open ? "rotate(180deg)" : "none",
+                          }}
                         />
                       </button>
                       {open && (
-                        <p className="px-3.5 pb-3 text-white/80" style={{ fontSize: "12px" }}>
+                        <p
+                          className="px-3.5 pb-3 text-white/80"
+                          style={{ fontSize: "12px" }}>
                           {item.a}
                         </p>
                       )}
@@ -687,7 +823,9 @@ const Profile = () => {
                   );
                 })}
                 {filteredFaqs.length === 0 && (
-                  <p className="text-center text-gray-500 py-3" style={{ fontSize: "13px" }}>
+                  <p
+                    className="text-center text-gray-500 py-3"
+                    style={{ fontSize: "13px" }}>
                     No results for "{helpSearch}"
                   </p>
                 )}
@@ -699,22 +837,31 @@ const Profile = () => {
               <div className="grid grid-cols-2 gap-2.5">
                 <button
                   className="flex items-center justify-center gap-1.5 rounded-xl font-semibold text-white cursor-pointer"
-                  style={{ minHeight: "44px", fontSize: "12.5px", backgroundColor: "var(--primary)" }}
-                >
+                  style={{
+                    minHeight: "44px",
+                    fontSize: "12.5px",
+                    backgroundColor: "var(--primary)",
+                  }}>
                   <MessageCircle size={15} />
                   Live chat
                 </button>
                 <button
                   className="flex items-center justify-center gap-1.5 rounded-xl font-semibold text-white cursor-pointer"
-                  style={{ minHeight: "44px", fontSize: "12.5px", backgroundColor: "var(--primary)" }}
-                >
+                  style={{
+                    minHeight: "44px",
+                    fontSize: "12.5px",
+                    backgroundColor: "var(--primary)",
+                  }}>
                   <Phone size={15} />
                   Call us
                 </button>
                 <button
                   className="col-span-2 flex items-center justify-center gap-1.5 rounded-xl font-semibold text-white transition-opacity hover:opacity-90 cursor-pointer"
-                  style={{ minHeight: "44px", fontSize: "12.5px", backgroundColor: "var(--primary)" }}
-                >
+                  style={{
+                    minHeight: "44px",
+                    fontSize: "12.5px",
+                    backgroundColor: "var(--primary)",
+                  }}>
                   <Mail size={15} />
                   Email support
                 </button>
