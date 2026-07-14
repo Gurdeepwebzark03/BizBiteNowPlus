@@ -59,11 +59,28 @@ const [deliveryBoys, setDeliveryBoys] = useState(() => {
 
   const [assignedOrders, setAssignedOrders] =
     useState([]);
-    useEffect(() => {
-  const orders =
-    JSON.parse(localStorage.getItem("assignedOrders")) || [];
+useEffect(() => {
+  const loadOrders = () => {
+    const orders =
+      JSON.parse(
+        localStorage.getItem("assignedOrders")
+      ) || [];
 
-  setAssignedOrders(orders);
+    setAssignedOrders(orders);
+  };
+
+  loadOrders();
+
+  window.addEventListener(
+    "storage",
+    loadOrders
+  );
+
+  return () =>
+    window.removeEventListener(
+      "storage",
+      loadOrders
+    );
 }, []);
 
   // =============================

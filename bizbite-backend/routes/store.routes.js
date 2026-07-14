@@ -40,10 +40,14 @@ router.get("/status", (req, res) => {
   res.json({
     success: true,
     data: {
-      isOpen: store.isOpen,
-      averageDeliveryTime: store.averageDeliveryTime,
+      isOpen: store.timings.status === "Open",
+      status: store.timings.status,
+      open: store.timings.open,
+      close: store.timings.close,
+      averageDeliveryTime:
+        store.delivery.averageTime,
       rating: store.rating,
-      reviews: store.reviews,
+      totalReviews: store.totalReviews,
     },
   });
 });
@@ -57,7 +61,11 @@ router.get("/contact", (req, res) => {
 
   res.json({
     success: true,
-    data: store.contact,
+    data: {
+      phone: store.phone,
+      email: store.email,
+      social: store.social,
+    },
   });
 });
 

@@ -1,0 +1,294 @@
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
+
+import {
+  ShoppingBag,
+  CheckCircle2,
+} from "lucide-react";
+
+import SectionHeader from "../common/SectionHeader";
+
+import MobileCurrentCard from "./MobileCurrentCard";
+import MobileTimeline from "./MobileTimeline";
+import ContactDeliveryCard from "./ContactDeliveryCard";
+import CompactHistoryCard from "./CompactHistoryCard";
+
+import {
+  getCurrentOrders,
+  getOrderHistory,
+} from "../../../api/customerApi";
+
+const MobileOrders = () => {
+  const navigate = useNavigate();
+
+  const [currentOrders, setCurrentOrders] =
+    useState([]);
+
+  const [history, setHistory] =
+    useState([]);
+
+  const [loading, setLoading] =
+    useState(true);
+
+  const [reordering, setReordering] =
+    useState(null);
+
+  const handleViewOrder = (order) => {
+    navigate(`/customer/orders/${order.id}`, {
+      state: {
+        order,
+      },
+    });
+  };
+
+  const handleReorder = (order) => {
+    setReordering(order.id);
+
+    setTimeout(() => {
+      setReordering(null);
+
+      navigate("/customer/cart", {
+        state: {
+          reorder: order,
+        },
+      });
+    }, 500);
+  };
+
+  useEffect(() => {
+    const loadOrders = async () => {
+      try {
+        const customerId = "CUSTOMER_001";
+
+        const [
+          currentRes,
+          historyRes,
+        ] = await Promise.all([
+          getCurrentOrders(customerId),
+          getOrderHistory(customerId),
+        ]);
+
+        setCurrentOrders(
+          currentRes.data?.data || []
+        );
+
+        setHistory(
+          historyRes.data?.data || []
+        );
+      } catch (error) {
+        console.log(
+          "Orders API Error:",
+          error
+        );
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadOrders();
+  }, []);
+
+  if (loading) {
+    return (
+      <div
+        className="
+          flex
+          min-h-[60vh]
+          items-center
+          justify-center
+          text-slate-500
+        "
+      >
+        Loading Orders...
+      </div>
+    );
+  }
+    return (
+    <motion.div
+      initial={{ opacity: 0, y: 15 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{
+        duration: 0.35,
+      }}
+      className="space-y-5 pb-24"
+    >
+      <div className="px-4">
+
+        <SectionHeader
+          title="My Orders"
+          subtitle="Track your orders in real time"
+        />
+
+        {/* Current Order */}
+
+        {currentOrders.length > 0 && (
+          <section className="mt-6">
+
+            <div className="mb-3 flex items-center justify-between">
+
+              <h2 className="text-lg font-bold text-slate-900">
+                Current Order
+              </h2>
+
+              <div
+                className="
+                  flex
+                  items-center
+                  gap-1.5
+                  rounded-full
+                  bg-green-50
+                  px-3
+                  py-1
+                  text-xs
+                  font-semibold
+                  text-green-700
+                "
+              >
+                <CheckCircle2 size={14} />
+                Active
+              </div>
+
+            </div>
+
+            <div className="space-y-5">
+
+              {currentOrders.map((order) => (
+                <div
+                  key={order.id}
+                  className="space-y-4 bg-white shadow-sm rounded-[14px]"
+                >
+
+                  <MobileCurrentCard
+                    order={order}
+                    onView={() =>
+                      handleViewOrder(order)
+                    }
+                    onReorder={() =>
+                      handleReorder(order)
+                    }
+                  />
+                   <div className="my-4 border-t border-slate-200" />
+                  <MobileTimeline
+                    timeline={
+                      order.tracking?.steps || []
+                    }
+                    currentStep={
+                      order.tracking?.currentStep
+                    }
+                  />
+
+                  <ContactDeliveryCard
+                    order={order}
+                  />
+
+                </div>
+              ))}
+
+            </div>
+
+          </section>
+        )}
+
+        {/* Divider */}
+
+        <div
+          className="
+            my-6
+            flex
+            justify-center
+          "
+        >
+          <div
+            className="
+              h-1.5
+              w-16
+              rounded-full
+              bg-slate-300
+            "
+          />
+        </div>
+                {/* Order History */}
+
+        <section className="space-y-4">
+
+          <div className="flex items-center justify-between">
+
+            <h2 className="text-lg font-bold text-slate-900">
+              Order History
+            </h2>
+
+            {history.length > 0 && (
+              <span className="text-xs font-medium text-slate-500">
+                {history.length} Orders
+              </span>
+            )}
+
+          </div>
+
+          {history.length === 0 ? (
+            <div
+              className="
+                rounded-2xl
+                border-2
+                border-dashed
+                border-slate-300
+                bg-white
+                px-6
+                py-10
+                text-center
+              "
+            >
+              <ShoppingBag
+                size={34}
+                className="mx-auto text-slate-400"
+              />
+
+              <h3 className="mt-3 text-lg font-bold">
+                No Previous Orders
+              </h3>
+
+              <p className="mt-2 text-sm text-slate-500">
+                Your completed orders will appear here.
+              </p>
+
+            </div>
+          ) : (
+            <div
+              className="
+                space-y-3
+                pb-8
+              "
+            >
+              {history.map((order) => (
+                <CompactHistoryCard
+                  key={order.id}
+                  order={order}
+                  loading={
+                    reordering === order.id
+                  }
+                  onView={() =>
+                    handleViewOrder(order)
+                  }
+                  onRate={() => {
+                    console.log(
+                      "Rate Order",
+                      order.id
+                    );
+                  }}
+                  onReorder={() =>
+                    handleReorder(order)
+                  }
+                />
+              ))}
+            </div>
+          )}
+
+        </section>
+
+      </div>
+    </motion.div>
+  );
+};
+
+export default MobileOrders;

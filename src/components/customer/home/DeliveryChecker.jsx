@@ -1,104 +1,48 @@
-import { MapPin, ArrowRight } from "lucide-react";
+import { MapPin } from "lucide-react";
 
 const DeliveryChecker = ({
   location = "",
   onCheck,
 }) => {
   return (
-    <section className="lg:hidden">
-      <div
-        className="
-          relative
-          overflow-hidden
-          rounded-[14px]
-          border
-          border-slate-200
-          bg-white
-          p-5
-          shadow-sm
-        "
-      >
-        {/* Decorative Background */}
+    <section className="lg:hidden px-2">
+      <div className="flex items-center justify-between rounded-2xl bg-white px-5 py-2 shadow-[0_4px_12px_rgba(15,23,42,0.08)]">
 
-        <div
-          className="
-            absolute
-            -right-12
-            -top-12
-            h-32
-            w-32
-            rounded-full
-            bg-[var(--primary)]
-            opacity-40
-          "
-        />
-                <div
-          className="
-            absolute
-            -left-15
-            -bottom-12
-            h-32
-            w-32
-            rounded-full
-            bg-[var(--primary)]
-            opacity-40
-          "
-        />
+        {/* Left */}
 
-        <div className="relative  flex items-start gap-4">
-          {/* Icon */}
+        <div className="flex flex-1 items-center gap-3 min-w-0">
 
-          <div
-            className="
-              flex
-              h-14
-              w-14
-              items-center
-              justify-center
-              rounded-[10px]
-            "
-            style={{
-              background: "var(--primary-light)",
-            }}
-          >
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-[var(--primary-light)]">
             <MapPin
-              size={26}
+              size={30}
               style={{
                 color: "var(--primary)",
               }}
             />
           </div>
 
-          {/* Content */}
+          <div className="flex-1 min-w-0">
 
-          <div className="flex-1">
-            <h3 className="text-lg font-bold text-slate-900">
+            <h3 className="text-[14px] font-bold leading-tight text-slate-900">
               Delivery Available?
             </h3>
 
-            <p className="mt-1 text-sm leading-6 text-slate-500">
-              Check whether we deliver to your location.
+            <p className="mt-0 text-[10px] leading-3.5 text-slate-500">
+              Check delivery availability at your location.
             </p>
 
             {location && (
-              <div
-                className="
-                  mt-3
-                  inline-flex
-                  items-center
-                  rounded-[10px]
-                  bg-slate-100
-                  px-3
-                  py-1.5
-                  text-xs
-                  font-medium
-                  text-slate-700
-                "
-              >
-                <MapPin className="text-red-500" size={16} /> {location}
-              </div>
+              <span className="mt-1 inline-flex items-center gap-1 text-[13px] font-medium text-[var(--primary)]">
+                <MapPin
+                  size={15}
+                  className="text-red-500"
+                />
+                {location}
+              </span>
             )}
+
           </div>
+
         </div>
 
         {/* Button */}
@@ -106,14 +50,12 @@ const DeliveryChecker = ({
         <button
           onClick={onCheck}
           className="
-            mt-5
-            flex
-            w-full
-            items-center
-            justify-center
-            gap-2
-            rounded-[10px]
-            py-3.5
+            ml-4
+            h-8
+            shrink-0
+            rounded-xl
+            px-4
+            text-[12px]
             font-semibold
             text-white
             transition
@@ -121,12 +63,13 @@ const DeliveryChecker = ({
           "
           style={{
             background: "var(--primary)",
+            boxShadow:
+              "0 0 0 2px rgba(255,164,32,.55),0 4px 10px rgba(255,164,32,.28)",
           }}
         >
-          Check Delivery
-
-          <ArrowRight size={18} />
+          Check
         </button>
+
       </div>
     </section>
   );

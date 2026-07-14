@@ -3,8 +3,10 @@ import { MoreVertical, PackageOpen } from "lucide-react";
 
 import OrderStatusBadge from "./OrderStatusBadge";
 import OrderActionModal from "./OrderActionModal";
+
 export default function OrdersTable({
   orders,
+  deliveryBoys = [],
   activeTab = "new",
   selectedOrders = [],
   toggleOrder = () => {},
@@ -17,21 +19,33 @@ export default function OrdersTable({
   onDelivery,
   onDelivered,
   onCancel,
-   onAssign,
+  onAssign,
 }) {
-  const [actionModalOpen, setActionModalOpen] = useState(false);
+  const [actionModalOpen, setActionModalOpen] =
+    useState(false);
 
-  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [selectedOrderId, setSelectedOrderId] =
+    useState(null);
+
+  const selectedOrder =
+    orders.find(
+      (item) => item.id === selectedOrderId
+    ) || null;
 
   if (!orders.length) {
     return (
       <div className="rounded-2xl border border-slate-200 bg-white p-16 text-center shadow-sm">
         <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[#16522d]/10">
-          <PackageOpen size={30} className="text-[#16522d]" />
+          <PackageOpen
+            size={30}
+            className="text-[#16522d]"
+          />
         </div>
 
         <h3 className="text-lg font-semibold text-slate-800">
-          {activeTab === "new" ? "No New Orders" : "No Completed Orders"}
+          {activeTab === "new"
+            ? "No New Orders"
+            : "No Completed Orders"}
         </h3>
 
         <p className="mt-2 text-sm text-slate-500">
@@ -45,7 +59,7 @@ export default function OrdersTable({
 
   return (
     <>
-      <div className="overflow-hidden scrollbar-hide rounded-2xl border border-slate-200 bg-white shadow-sm">
+      <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
         <div className="overflow-x-auto scrollbar-hide">
           <table className="min-w-full">
             <thead className="bg-slate-50">
@@ -55,7 +69,8 @@ export default function OrdersTable({
                     type="checkbox"
                     checked={
                       orders.length > 0 &&
-                      selectedOrders.length === orders.length
+                      selectedOrders.length ===
+                        orders.length
                     }
                     onChange={toggleAll}
                   />
@@ -91,30 +106,32 @@ export default function OrdersTable({
               </tr>
             </thead>
 
-            <tbody className="overflow-y-auto scrollbar-hide">
+            <tbody>
               {orders.map((order) => (
                 <tr
                   key={order.id}
-                  className="border-t transition-colors hover:bg-slate-50"
+                  className="border-t transition hover:bg-slate-50"
                 >
                   <td className="px-5 py-4">
                     <input
                       type="checkbox"
-                      checked={selectedOrders.includes(order.id)}
-                      onChange={() => toggleOrder(order.id)}
+                      checked={selectedOrders.includes(
+                        order.id
+                      )}
+                      onChange={() =>
+                        toggleOrder(order.id)
+                      }
                     />
                   </td>
 
                   <td className="px-5 py-4">
-                    <div>
-                      <p className="font-semibold text-slate-800">
-                        {order.orderId}
-                      </p>
+                    <p className="font-semibold text-slate-800">
+                      {order.orderId}
+                    </p>
 
-                      <p className="text-xs text-slate-500">
-                        {order.createdAt}
-                      </p>
-                    </div>
+                    <p className="text-xs text-slate-500">
+                      {order.createdAt}
+                    </p>
                   </td>
 
                   <td className="px-5 py-4">
@@ -124,9 +141,13 @@ export default function OrdersTable({
                       </div>
 
                       <div>
-                        <p className="font-medium">{order.customer}</p>
+                        <p className="font-medium">
+                          {order.customer}
+                        </p>
 
-                        <p className="text-xs text-slate-500">{order.phone}</p>
+                        <p className="text-xs text-slate-500">
+                          {order.phone}
+                        </p>
                       </div>
                     </div>
                   </td>
@@ -158,13 +179,15 @@ export default function OrdersTable({
                   </td>
 
                   <td className="px-5 py-4 text-center">
-                    <OrderStatusBadge status={order.status} />
+                    <OrderStatusBadge
+                      status={order.status}
+                    />
                   </td>
 
                   <td className="px-5 py-4">
                     <button
                       onClick={() => {
-                        setSelectedOrder(order);
+                        setSelectedOrderId(order.id);
                         setActionModalOpen(true);
                       }}
                       className="rounded-lg p-2 transition hover:bg-slate-100"
@@ -178,20 +201,20 @@ export default function OrdersTable({
           </table>
         </div>
       </div>
-
-<OrderActionModal
-  open={actionModalOpen}
-  order={selectedOrder}
-  onClose={() => {
-    setActionModalOpen(false);
-    setSelectedOrder(null);
-  }}
-  acceptOrder={onAccept}
-  markReady={onReady}
-  assignDeliveryBoy={onDelivery}
-  markDelivered={onDelivered}
-  cancelOrder={onCancel}
-/>
+            <OrderActionModal
+        open={actionModalOpen}
+        order={selectedOrder}
+        deliveryBoys={deliveryBoys}
+        onClose={() => {
+          setActionModalOpen(false);
+          setSelectedOrderId(null);
+        }}
+        acceptOrder={onAccept}
+        markReady={onReady}
+        onAssign={onAssign}
+        markDelivered={onDelivered}
+        cancelOrder={onCancel}
+      />
     </>
   );
 }

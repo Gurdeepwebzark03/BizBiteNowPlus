@@ -23,11 +23,10 @@ const StoreCard = ({
   return (
     <div
       className="
-        -mt-8
+        -mt-7
         relative
-        z-20
-
-        rounded-[28px]
+        w-full
+        rounded-[14px]
 
         border
         border-slate-200
@@ -43,7 +42,7 @@ const StoreCard = ({
 
       <div className="flex flex-wrap gap-3">
 
-        <div className="flex items-center gap-2 rounded-full bg-slate-100 px-4 py-2">
+        <div className="flex items-center gap-2 rounded-[10px] bg-slate-100 px-4 py-2">
           <Clock3
             size={16}
             style={{ color: "var(--primary)" }}
@@ -54,7 +53,7 @@ const StoreCard = ({
           </span>
         </div>
 
-        <div className="flex items-center gap-2 rounded-full bg-slate-100 px-4 py-2">
+        <div className="flex items-center gap-2 rounded-[10px] bg-slate-100 px-4 py-2">
           <MapPin
             size={16}
             style={{ color: "var(--primary)" }}
@@ -66,7 +65,7 @@ const StoreCard = ({
         </div>
 
         <div
-          className="rounded-full px-4 py-2 text-sm font-semibold text-white"
+          className="rounded-[10px] px-4 py-2 text-sm font-semibold text-white"
           style={{
             background: isOpen
               ? "var(--primary)"
@@ -106,7 +105,7 @@ const StoreCard = ({
 
             gap-2
 
-            rounded-2xl
+            rounded-[14px]
 
             bg-slate-100
 
@@ -137,7 +136,7 @@ const StoreCard = ({
 
             gap-2
 
-            rounded-2xl
+            rounded-[14px]
 
             bg-slate-100
 
@@ -172,7 +171,7 @@ const StoreCard = ({
 
             gap-2
 
-            rounded-2xl
+            rounded-[14px]
 
             bg-slate-100
 
