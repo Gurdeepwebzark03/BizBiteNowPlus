@@ -29,7 +29,20 @@ const OrderDetails = () => {
   }}
   className="space-y-6"
 >
-    <div className="space-y-6 lg:pl-10">
+    <div
+  className="
+    w-full
+    min-w-0
+    max-w-[1760px]
+
+    space-y-6
+    pb-28
+
+    px-1
+    sm:px-2
+    lg:px-10
+  "
+>
 
       <h1 className="text-2xl font-bold">
         Order {order.id}

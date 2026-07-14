@@ -14,7 +14,7 @@ import ExportModal from "../../../components/orders/ExportModal";
 // import AssignDeliveryModal from "../../../components/orders/AssignDeliveryModal";
 import deliveryBoyData from "../../../data/deliveryBoyData";
 import AssignOrderModal from "../../../components/delivery/AssignOrderModal.jsx";
-import AssignDeliveryModal from "../../../components/orders/AssignDeliveryModal";
+import AssignDeliveryModal from "../../../components/delivery/AssignDeliveryModal";
 
 import { orders as initialOrders } from "../../../data/ordersData.js";
 
@@ -35,8 +35,6 @@ export default function Orders() {
   const [status, setStatus] = useState("All");
   const [payment, setPayment] = useState("All");
   const [sort, setSort] = useState("Newest");
-
-  
 
   // ==========================
   // Pagination
@@ -71,21 +69,21 @@ export default function Orders() {
   const [exportOpen, setExportOpen] = useState(false);
   const [assignModal, setAssignModal] = useState(false);
 
-const [selectedOrder, setSelectedOrder] = useState(null);
+  const [selectedOrder, setSelectedOrder] = useState(null);
 
-const [deliveryBoys, setDeliveryBoys] = useState(() => {
-  const saved = localStorage.getItem("deliveryBoys");
-
-  return saved
-    ? JSON.parse(saved)
-    : deliveryBoyData;
-});
+const [deliveryBoys, setDeliveryBoys] = useState([]);
 useEffect(() => {
-  localStorage.setItem(
-    "deliveryBoys",
-    JSON.stringify(deliveryBoys)
-  );
-}, [deliveryBoys]);
+  const saved =
+    JSON.parse(localStorage.getItem("deliveryBoys")) ||
+    deliveryBoyData;
+
+  setDeliveryBoys(saved);
+}, []);
+
+const [assignedOrders, setAssignedOrders] = useState([]);
+  useEffect(() => {
+    localStorage.setItem("deliveryBoys", JSON.stringify(deliveryBoys));
+  }, [deliveryBoys]);
 
   // ==========================
   // Subscription
@@ -106,24 +104,22 @@ useEffect(() => {
       data = data.filter((order) => order.status !== "Delivered");
     }
 
-if (activeTab === "completed") {
-  data = data.filter(
-    (order) => order.status === "Delivered"
-  );
+    if (activeTab === "completed") {
+      data = data.filter((order) => order.status === "Delivered");
 
-  // Free Tier: Today's completed orders only
-  if (!isPlusUser) {
-    const today = new Date("2026-07-05").toDateString();
+      // Free Tier: Today's completed orders only
+      if (!isPlusUser) {
+        const today = new Date("2026-07-05").toDateString();
 
-    data = data.filter((order) => {
-      const completedDate = new Date(
-        order.deliveredAt || order.createdAt
-      ).toDateString();
+        data = data.filter((order) => {
+          const completedDate = new Date(
+            order.deliveredAt || order.createdAt,
+          ).toDateString();
 
-      return completedDate === today;
-    });
-  }
-}
+          return completedDate === today;
+        });
+      }
+    }
 
     // Search
 
@@ -325,87 +321,106 @@ if (activeTab === "completed") {
     );
   };
 
-//   const handleAssignClick = (order) => {
-//   setSelectedOrder(order);
-//   setAssignModal(true);
-// };
+  //   const handleAssignClick = (order) => {
+  //   setSelectedOrder(order);
+  //   setAssignModal(true);
+  // };
 
-// handle assign
-const handleAssignDelivery = (boyId) => {
-  // Selected Delivery Boy
-
+  // handle assign
+ const handleAssignDelivery = (boyId) => {
   const boy = deliveryBoys.find(
     (item) => item.id === boyId
   );
 
   if (!boy || !selectedOrder) return;
 
-  // Order Object
-
   const assignedOrder = {
     id: Date.now(),
+
     orderId: selectedOrder.orderId,
+
     customer: selectedOrder.customer,
+
     phone: selectedOrder.phone,
+
+    address: selectedOrder.address,
+
+    items:
+      selectedOrder.items
+        ?.map((item) => item.name)
+        .join(", ") || "",
+
     amount: selectedOrder.amount,
+
     payment: selectedOrder.payment,
+
     deliveryBoy: boy.name,
+
     deliveryBoyId: boy.id,
+
     status: "Assigned",
+
     assignedAt: new Date().toLocaleString(),
   };
 
-  // Previous Orders
+  // Assigned Orders
+  const updatedAssignedOrders = [
+    ...assignedOrders,
+    assignedOrder,
+  ];
 
-  const previousOrders =
-    JSON.parse(
-      
-      localStorage.getItem("assignedOrders")
-    ) || [];
-
-  // Save LocalStorage
+  setAssignedOrders(updatedAssignedOrders);
 
   localStorage.setItem(
     "assignedOrders",
-    JSON.stringify([
-      ...previousOrders,
-      assignedOrder,
-    ])
+    JSON.stringify(updatedAssignedOrders)
   );
 
-  // Increase Assigned Count
-
-  const updatedBoys = deliveryBoys.map((item) =>
-    item.id === boy.id
-      ? {
-          ...item,
-          assignedOrders:
-            item.assignedOrders + 1,
-        }
-      : item
+  // Orders
+  setOrders((prev) =>
+    prev.map((order) =>
+      order.id === selectedOrder.id
+        ? {
+            ...order,
+            status: "Out for Delivery",
+            deliveryBoy: boy.name,
+            deliveryBoyId: boy.id,
+            trackingStep: 3,
+          }
+        : order
+    )
   );
 
-  setDeliveryBoys(updatedBoys);
+  // Delivery Boys
+  setDeliveryBoys((prev) => {
+    const updated = prev.map((item) =>
+      item.id === boy.id
+        ? {
+            ...item,
+            assignedOrders:
+              (item.assignedOrders || 0) + 1,
+          }
+        : item
+    );
 
-// Save Updated Delivery Boys
-localStorage.setItem(
-  "deliveryBoys",
-  JSON.stringify(updatedBoys)
-);
+    localStorage.setItem(
+      "deliveryBoys",
+      JSON.stringify(updated)
+    );
 
-  // Close Modal
+    return updated;
+  });
 
   setAssignModal(false);
   setSelectedOrder(null);
 
   alert("Order Assigned Successfully");
 };
-
-// Open Assign Delivery Modal
-const handleAssignClick = (order) => {
-  setSelectedOrder(order);
-  setAssignModal(true);
-};
+  // Open Assign Delivery Modal
+  const handleAssignClick = (order) => {
+    setSelectedOrder(order);
+    setAssignModal(true);
+  };
   // =====================================
   // Export
   // =====================================
@@ -421,7 +436,19 @@ const handleAssignClick = (order) => {
   const autoCancelOrder = (order) => {
     updateStatus(order.id, "Cancelled");
   };
+useEffect(() => {
+  console.log("Imported deliveryBoyData:", deliveryBoyData);
 
+  const saved = JSON.parse(localStorage.getItem("deliveryBoys"));
+  console.log("Saved deliveryBoys:", saved);
+
+  const data =
+    saved && saved.length > 0 ? saved : deliveryBoyData;
+
+  console.log("Using:", data);
+
+  setDeliveryBoys(data);
+}, []);
   return (
     <motion.div
       initial={{ opacity: 0, y: 15 }}
@@ -474,76 +501,71 @@ const handleAssignClick = (order) => {
           <OrderBoard orders={filteredOrders} onSelect={openDrawer} />
         ) : (
           <>
-            <OrdersTable
-              orders={paginatedOrders}
-              activeTab={activeTab}
-              selectedOrders={selectedOrders}
-              toggleOrder={toggleOrder}
-              toggleAll={toggleAll}
-              onView={openDrawer}
-              onAccept={(id) => updateStatus(id, "Preparing")}
-              onPreparing={(id) => updateStatus(id, "Preparing")}
-              onReady={(id) => updateStatus(id, "Ready")}
-              onDelivery={(id) => updateStatus(id, "Out for Delivery")}
-              onDelivered={(id) => updateStatus(id, "Delivered")}
-              onCancel={(id) => updateStatus(id, "Cancelled")}
-            />
-{activeTab === "completed" && !isPlusUser && (
-  <div className="relative mt-6 overflow-hidden rounded-2xl border border-slate-200 bg-slate-100">
+<OrdersTable
+  orders={paginatedOrders}
+  deliveryBoys={deliveryBoys}
+  activeTab={activeTab}
+  selectedOrders={selectedOrders}
+  toggleOrder={toggleOrder}
+  toggleAll={toggleAll}
+  onView={openDrawer}
+  onAccept={(id) => updateStatus(id, "Preparing")}
+  onPreparing={(id) => updateStatus(id, "Preparing")}
+  onReady={(id) => updateStatus(id, "Ready")}
+  onAssign={handleAssignClick}
+  onDelivered={(id) => updateStatus(id, "Delivered")}
+  onCancel={(id) => updateStatus(id, "Cancelled")}
+/>
+            {activeTab === "completed" && !isPlusUser && (
+              <div className="relative mt-6 overflow-hidden rounded-2xl border border-slate-200 bg-slate-100">
+                {/* Fake History Rows */}
 
-    {/* Fake History Rows */}
+                <div className="pointer-events-none blur-[2px] opacity-40">
+                  {[1, 2, 3, 4, 5].map((item) => (
+                    <div
+                      key={item}
+                      className="flex items-center justify-between border-b border-slate-200 px-6 py-5"
+                    >
+                      <div>
+                        <div className="h-4 w-28 rounded bg-slate-300" />
+                        <div className="mt-2 h-3 w-20 rounded bg-slate-200" />
+                      </div>
 
-    <div className="pointer-events-none blur-[2px] opacity-40">
+                      <div className="h-4 w-24 rounded bg-slate-300" />
 
-      {[1, 2, 3, 4, 5].map((item) => (
-        <div
-          key={item}
-          className="flex items-center justify-between border-b border-slate-200 px-6 py-5"
-        >
-          <div>
-            <div className="h-4 w-28 rounded bg-slate-300" />
-            <div className="mt-2 h-3 w-20 rounded bg-slate-200" />
-          </div>
+                      <div className="h-4 w-20 rounded bg-slate-300" />
 
-          <div className="h-4 w-24 rounded bg-slate-300" />
+                      <div className="h-8 w-28 rounded-full bg-slate-300" />
+                    </div>
+                  ))}
+                </div>
 
-          <div className="h-4 w-20 rounded bg-slate-300" />
+                {/* Lock Overlay */}
 
-          <div className="h-8 w-28 rounded-full bg-slate-300" />
-        </div>
-      ))}
+                <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/75 backdrop-blur-sm">
+                  <div className="mb-5 flex h-20 w-20 items-center justify-center rounded-full bg-amber-100 text-4xl">
+                    🔒
+                  </div>
 
-    </div>
+                  <h3 className="text-2xl font-bold text-slate-800">
+                    Older Orders Locked
+                  </h3>
 
-    {/* Lock Overlay */}
+                  <p className="mt-3 max-w-md text-center text-slate-600">
+                    Order history beyond today is available on
+                    <span className="font-semibold text-[#16522d]">
+                      {" "}
+                      BizBite Plus
+                    </span>
+                    .
+                  </p>
 
-    <div className="absolute inset-0 flex flex-col items-center justify-center bg-white/75 backdrop-blur-sm">
-
-      <div className="mb-5 flex h-20 w-20 items-center justify-center rounded-full bg-amber-100 text-4xl">
-        🔒
-      </div>
-
-      <h3 className="text-2xl font-bold text-slate-800">
-        Older Orders Locked
-      </h3>
-
-      <p className="mt-3 max-w-md text-center text-slate-600">
-        Order history beyond today is available on
-        <span className="font-semibold text-[#16522d]">
-          {" "}BizBite Plus
-        </span>.
-      </p>
-
-      <button
-        className="mt-6 rounded-xl bg-[#16522d] px-6 py-3 font-semibold text-white transition hover:bg-[#124324]"
-      >
-        Upgrade Now
-      </button>
-
-    </div>
-
-  </div>
-)}
+                  <button className="mt-6 rounded-xl bg-[#16522d] px-6 py-3 font-semibold text-white transition hover:bg-[#124324]">
+                    Upgrade Now
+                  </button>
+                </div>
+              </div>
+            )}
             <OrderPagination
               currentPage={currentPage}
               totalPages={totalPages}
@@ -570,19 +592,15 @@ const handleAssignClick = (order) => {
           onClose={() => setExportOpen(false)}
           onExport={exportOrders}
         />
+
+
 <AssignDeliveryModal
   isOpen={assignModal}
   onClose={() => setAssignModal(false)}
   order={selectedOrder}
-  deliveryBoys={deliveryBoys}
-  onAssign={handleAssignDelivery}
-/>
-
-        <AssignDeliveryModal
-  isOpen={assignModal}
-  onClose={() => setAssignModal(false)}
-  order={selectedOrder}
-  deliveryBoys={deliveryBoys}
+  deliveryBoys={deliveryBoys.filter(
+    (boy) => boy.status === "Online"
+  )}
   onAssign={handleAssignDelivery}
 />
       </div>

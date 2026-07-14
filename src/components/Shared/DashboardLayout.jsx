@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Outlet } from "react-router-dom";
 
 import Sidebar from "../dashboard/Sidebar";
-import Navbar from "../dashboard/widgets/navbar/Navbar";
+import Navbar from "../dashboard/navbar/Navbar";
 
 export default function DashboardLayout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -20,7 +20,7 @@ export default function DashboardLayout({ children }) {
   };
 
   return (
-    <div className="relative min-h-full mt-0 lg:mt-16 bg-slate-100">
+    <div className="relative min-h-full mt-0 lg:mt-19 bg-slate-100">
       {/* Mobile Overlay */}
       {sidebarOpen && (
         <div
@@ -48,7 +48,10 @@ export default function DashboardLayout({ children }) {
           }),
         }}
       >
-        <Navbar openSidebar={toggleSidebar} />
+        <Navbar
+  openSidebar={toggleSidebar}
+  sidebarExpanded={sidebarExpanded}
+/>
 
         <main className=" p-4 sm:p-6 lg:p-8">
           <div className="mx-auto max-w-[1700px]">{children || <Outlet />}</div>
