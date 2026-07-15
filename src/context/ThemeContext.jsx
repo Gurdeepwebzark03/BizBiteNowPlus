@@ -7,6 +7,9 @@ const defaultTheme = {
   logo: "",
 };
 
+const DARK_MODE_STORAGE_KEY = "customerDarkMode";
+const DARK_PRIMARY = "#124224";
+
 const ThemeContext = createContext(defaultTheme);
 
 export const ThemeProvider = ({
@@ -14,29 +17,36 @@ export const ThemeProvider = ({
   initialTheme = defaultTheme,
 }) => {
   const [theme, setTheme] = useState(initialTheme);
+  const [darkMode, setDarkMode] = useState(
+    () => localStorage.getItem(DARK_MODE_STORAGE_KEY) === "true",
+  );
 
 useEffect(() => {
   const root = document.documentElement;
 
-  root.style.setProperty("--primary", theme.primary);
+  root.classList.toggle("dark", darkMode);
+
+  const primary = darkMode ? DARK_PRIMARY : theme.primary;
+
+  root.style.setProperty("--primary", primary);
 
   root.style.setProperty("--secondary", "#CA8A04"); // Tailwind yellow-600
 
   root.style.setProperty(
     "--primary-light",
-    `${theme.primary}15`
+    `${primary}15`
   );
 
   root.style.setProperty(
     "--primary-border",
-    `${theme.primary}35`
+    `${primary}35`
   );
 
   root.style.setProperty(
     "--primary-shadow",
-    `${theme.primary}25`
+    `${primary}25`
   );
-}, [theme]);
+}, [theme, darkMode]);
 
   const updateTheme = (updates) => {
     setTheme((prev) => ({
@@ -45,12 +55,22 @@ useEffect(() => {
     }));
   };
 
+  const toggleDarkMode = () => {
+    setDarkMode((prev) => {
+      const next = !prev;
+      localStorage.setItem(DARK_MODE_STORAGE_KEY, String(next));
+      return next;
+    });
+  };
+
   const value = useMemo(
     () => ({
       theme,
       updateTheme,
+      darkMode,
+      toggleDarkMode,
     }),
-    [theme]
+    [theme, darkMode]
   );
 
   return (
@@ -60,6 +80,7 @@ useEffect(() => {
   );
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useTheme = () => useContext(ThemeContext);
 
 export default ThemeProvider;

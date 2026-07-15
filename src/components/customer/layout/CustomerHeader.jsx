@@ -1,4 +1,4 @@
-import { Bell, User, ShoppingBag, Gift } from "lucide-react";
+import { Bell, ShoppingBag, Gift } from "lucide-react";
 
 import { useEffect, useRef, useState } from "react";
 
@@ -7,15 +7,12 @@ import { useNavigate } from "react-router-dom";
 import {
   getStore,
   getNotifications,
-  getProfile,
 } from "../../../api/customerApi";
 
 const CustomerHeader = ({ sidebarExpanded, isDesktop }) => {
   const navigate = useNavigate();
 
   const [store, setStore] = useState({});
-
-  const [customer, setCustomer] = useState({});
 
   const [notifications, setNotifications] = useState([]);
 
@@ -26,10 +23,9 @@ const CustomerHeader = ({ sidebarExpanded, isDesktop }) => {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const [storeRes, notificationRes, profileRes] = await Promise.all([
+        const [storeRes, notificationRes] = await Promise.all([
           getStore(),
           getNotifications(),
-          getProfile(),
         ]);
 
         setStore(storeRes.data.data || storeRes.data || {});
@@ -37,8 +33,6 @@ const CustomerHeader = ({ sidebarExpanded, isDesktop }) => {
         setNotifications(
           notificationRes.data.data || notificationRes.data || [],
         );
-
-        setCustomer(profileRes.data.data || profileRes.data || {});
       } catch (error) {
         console.error("Header API Error:", error);
       }
@@ -120,9 +114,9 @@ const CustomerHeader = ({ sidebarExpanded, isDesktop }) => {
     rounded-[10px]
 
     border
-    border-slate-200
+    border-slate-200 dark:border-[#A9BDCF]/40
 
-    bg-white/90
+    bg-white/90 dark:bg-[#181A1B]
 
     px-5
 
@@ -177,7 +171,7 @@ ease-in-out
               text-[15px]
               font-bold
 
-              text-slate-900
+              text-slate-900 dark:text-white
             "
             >
               {store?.name || "Restaurant"}
@@ -189,7 +183,7 @@ ease-in-out
 
               text-xs
 
-              text-slate-500
+              text-slate-500 dark:text-slate-400
             "
             >
               {storeAddress}
@@ -226,7 +220,7 @@ ease-in-out
 
             transition
 
-            bg-slate-200
+            bg-slate-200 dark:bg-[#232627]
           "
           >
             <Bell
@@ -292,19 +286,19 @@ ease-in-out
             rounded-3xl
 
             border
-            border-slate-200
+            border-slate-200 dark:border-[#A9BDCF]/40
 
-            bg-white
+            bg-white dark:bg-[#181A1B]
 
             shadow-2xl
           "
           >
-            <div className="border-b border-slate-100 p-5">
-              <h3 className="text-lg font-bold text-slate-900">
+            <div className="border-b border-slate-100 dark:border-[#A9BDCF]/20 p-5">
+              <h3 className="text-lg font-bold text-slate-900 dark:text-white">
                 Notifications
               </h3>
 
-              <p className="mt-1 text-sm text-slate-500">
+              <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
                 Latest updates from the restaurant.
               </p>
             </div>
@@ -317,13 +311,13 @@ ease-in-out
             >
               {notifications.length === 0 ? (
                 <div className="p-8 text-center">
-                  <Bell size={34} className="mx-auto mb-3 text-slate-300" />
+                  <Bell size={34} className="mx-auto mb-3 text-slate-300 dark:text-slate-600" />
 
-                  <p className="font-semibold text-slate-700">
+                  <p className="font-semibold text-slate-700 dark:text-slate-200">
                     No notifications
                   </p>
 
-                  <p className="mt-1 text-sm text-slate-500">
+                  <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
                     You're all caught up.
                   </p>
                 </div>
@@ -340,7 +334,7 @@ ease-in-out
                       gap-4
 
                       border-b
-                      border-slate-100
+                      border-slate-100 dark:border-[#A9BDCF]/20
 
                       p-4
 
@@ -348,7 +342,7 @@ ease-in-out
 
                       transition
 
-                      hover:bg-slate-50
+                      hover:bg-slate-50 dark:hover:bg-white/5
                     "
                     >
                       <div
@@ -362,7 +356,7 @@ ease-in-out
 
                         rounded-2xl
 
-                        bg-slate-100
+                        bg-slate-100 dark:bg-[#232627]
                       "
                       >
                         <Icon
@@ -374,15 +368,15 @@ ease-in-out
                       </div>
 
                       <div className="min-w-0 flex-1">
-                        <p className="font-semibold text-slate-900">
+                        <p className="font-semibold text-slate-900 dark:text-white">
                           {item.title}
                         </p>
 
-                        <p className="mt-1 text-sm text-slate-500">
+                        <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
                           {item.message}
                         </p>
 
-                        <p className="mt-2 text-xs text-slate-400">
+                        <p className="mt-2 text-xs text-slate-400 dark:text-slate-500">
                           {item.time}
                         </p>
                       </div>

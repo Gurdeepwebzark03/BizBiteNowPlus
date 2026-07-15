@@ -50,22 +50,21 @@ export const verifyOtp = (phone, otp) => {
 };
 
 // POST /api/customer/save-profile
-export const saveProfile = (name, address, phone) => {
+export const saveProfile = (updates) => {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
-      if (!name || !name.trim()) {
+      if (updates.name !== undefined && !updates.name.trim()) {
         return reject({ message: "Name is required" });
       }
 
       const existingRaw = localStorage.getItem(STORAGE_KEYS.USER);
-      const existing = existingRaw ? JSON.parse(existingRaw) : null;
+      const existing = existingRaw ? JSON.parse(existingRaw) : {};
 
       const token = localStorage.getItem(STORAGE_KEYS.TOKEN) || "mock_token_" + Date.now();
       const user = {
-        id: existing?.id || "cust_" + Date.now(),
-        name: name.trim(),
-        phone,
-        address: address ? address.trim() : "",
+        ...existing,
+        id: existing.id || "cust_" + Date.now(),
+        ...updates,
       };
 
       localStorage.setItem(STORAGE_KEYS.TOKEN, token);

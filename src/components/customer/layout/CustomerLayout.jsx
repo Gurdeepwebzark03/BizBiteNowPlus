@@ -36,7 +36,7 @@ const CustomerLayout = () => {
   }, []);
 
   return (
-    <div className="min-h-screen overflow-x-hidden bg-slate-100">
+    <div className="min-h-screen overflow-x-hidden bg-slate-100 dark:bg-[#1E2021] transition-colors duration-300">
       {/* Sidebar */}
       <DesktopSidebar
         expanded={sidebarExpanded}

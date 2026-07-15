@@ -5,6 +5,7 @@ import {
   saveProfile,
   logoutCustomer,
 } from "../../api/customer/authApi";
+import { useTheme } from "../../context/ThemeContext";
 import {
   ChevronRight,
   ChevronDown,
@@ -77,6 +78,7 @@ const STEP_COUNT = 4;
 
 const Profile = () => {
   const navigate = useNavigate();
+  const { darkMode } = useTheme();
   const [user, setUser] = useState(null);
 
   const [paymentMethod, setPaymentMethod] = useState(
@@ -86,11 +88,6 @@ const Profile = () => {
     () => !!localStorage.getItem(PAYMENT_STORAGE_KEY),
   );
   const [showPayment, setShowPayment] = useState(false);
-
-  const [showPersonal, setShowPersonal] = useState(false);
-  const [personalForm, setPersonalForm] = useState({ name: "", phone: "" });
-  const [personalErrors, setPersonalErrors] = useState({});
-  const [savingPersonal, setSavingPersonal] = useState(false);
 
   const [showAddresses, setShowAddresses] = useState(false);
   const [editingAddress, setEditingAddress] = useState(false);
@@ -110,8 +107,6 @@ const Profile = () => {
       return defaultNotifSettings;
     }
   });
-  const [darkMode, setDarkMode] = useState(false);
-
   const [showHelp, setShowHelp] = useState(false);
   const [helpSearch, setHelpSearch] = useState("");
   const [openFaqIndex, setOpenFaqIndex] = useState(null);
@@ -127,51 +122,7 @@ const Profile = () => {
     navigate("/", { replace: true });
   };
 
-  // ---- Personal details ----
-  const openPersonalDetails = () => {
-    setPersonalForm({ name: user.name || "", phone: user.phone || "" });
-    setPersonalErrors({});
-    setShowPersonal(true);
-  };
-
-  const handlePersonalChange = (e) => {
-    const { name, value } = e.target;
-    setPersonalForm((prev) => ({ ...prev, [name]: value }));
-    if (personalErrors[name])
-      setPersonalErrors((prev) => ({ ...prev, [name]: "" }));
-  };
-
-  const validatePersonal = () => {
-    const errs = {};
-    if (!personalForm.name.trim()) errs.name = "Name is required";
-    if (
-      personalForm.phone.trim() &&
-      !/^[6-9]\d{9}$/.test(personalForm.phone.trim())
-    )
-      errs.phone = "Enter a valid 10-digit mobile number";
-    return errs;
-  };
-
-  const handleSavePersonal = async () => {
-    const errs = validatePersonal();
-    if (Object.keys(errs).length > 0) {
-      setPersonalErrors(errs);
-      return;
-    }
-    setSavingPersonal(true);
-    try {
-      const { user: updatedUser } = await saveProfile(
-        personalForm.name,
-        user.address || "",
-        personalForm.phone,
-      );
-      setUser(updatedUser);
-      setShowPersonal(false);
-    } catch (err) {
-      setPersonalErrors({ name: err.message || "Could not save details" });
-    }
-    setSavingPersonal(false);
-  };
+  const openPersonalDetails = () => navigate("/customer/profile/personal-details");
 
   // ---- Address ----
   const openAddresses = () => {
@@ -221,11 +172,9 @@ const Profile = () => {
     }
     setSavingAddress(true);
     try {
-      const { user: updatedUser } = await saveProfile(
-        user.name || "",
-        addressForm.address,
-        user.phone || "",
-      );
+      const { user: updatedUser } = await saveProfile({
+        address: addressForm.address,
+      });
       setUser(updatedUser);
       setEditingAddress(false);
     } catch (err) {
@@ -256,6 +205,12 @@ const Profile = () => {
       setShowHelp(true);
     } else if (id === "favorites") {
       navigate("/customer/menu");
+    } else if (id === "language") {
+      setShowAccountSettings(false);
+      navigate("/customer/profile/language");
+    } else if (id === "appearance") {
+      setShowAccountSettings(false);
+      navigate("/customer/profile/appearance");
     }
   };
 
@@ -313,17 +268,17 @@ const Profile = () => {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
       className="space-y-6">
-      <div className="min-h-screen bg-[#FAFAF5] px-4 py-5">
-        <div className="max-w-2xl mx-auto">
+      <div className="px-4 py-5">
+        <div className="w-full min-w-0 max-w-[1760px]">
           {/* Header */}
           <div className="flex items-start justify-between mb-6">
             <div>
               <h1
-                className="font-bold text-slate-900"
+                className="font-bold text-slate-900 dark:text-white"
                 style={{ fontSize: "26px" }}>
                 My Profile
               </h1>
-              <p className="text-slate-500 mt-1" style={{ fontSize: "14px" }}>
+              <p className="text-slate-500 dark:text-slate-400 mt-1" style={{ fontSize: "14px" }}>
                 Manage your account, addresses, and preferences.
               </p>
             </div>
@@ -336,7 +291,7 @@ const Profile = () => {
 
           {/* Complete your profile */}
           {percent < 100 ? (
-            <div className="bg-white rounded-2xl shadow-sm p-5 mb-5">
+            <div className="bg-white dark:bg-[#181A1B] rounded-2xl shadow-sm p-5 mb-5">
               {/* Stepper */}
               <div className="flex items-center mb-4">
                 {stepMarks.map((mark, i) => (
@@ -350,14 +305,14 @@ const Profile = () => {
                           width: "18px",
                           height: "18px",
                           backgroundColor:
-                            mark <= percent ? "var(--primary)" : "#E5E7EB",
+                            mark <= percent ? "var(--primary)" : darkMode ? "#374151" : "#E5E7EB",
                         }}>
                         {mark <= percent && mark > 0 && (
                           <Check size={11} color="#fff" strokeWidth={3} />
                         )}
                       </div>
                       <span
-                        className="text-gray-400 mt-1"
+                        className="text-gray-400 dark:text-slate-500 mt-1"
                         style={{ fontSize: "10px" }}>
                         {mark}%
                       </span>
@@ -369,7 +324,7 @@ const Profile = () => {
                           backgroundColor:
                             stepMarks[i + 1] <= percent
                               ? "var(--primary)"
-                              : "#E5E7EB",
+                              : darkMode ? "#374151" : "#E5E7EB",
                         }}
                       />
                     )}
@@ -380,12 +335,12 @@ const Profile = () => {
               <div className="flex items-center justify-between gap-4 flex-wrap">
                 <div>
                   <p
-                    className="font-bold text-slate-900"
+                    className="font-bold text-slate-900 dark:text-white"
                     style={{ fontSize: "15px" }}>
                     Complete your profile
                   </p>
                   <p
-                    className="text-gray-500 mt-0.5"
+                    className="text-gray-500 dark:text-slate-400 mt-0.5"
                     style={{ fontSize: "13px" }}>
                     {STEP_COUNT - completedCount} step
                     {STEP_COUNT - completedCount > 1 ? "s" : ""} left — unlock
@@ -418,85 +373,25 @@ const Profile = () => {
           )}
 
           {/* Menu list */}
-          <div className="bg-white rounded-2xl shadow-sm overflow-hidden mb-5">
+          <div className="bg-white dark:bg-[#181A1B] rounded-2xl shadow-sm overflow-hidden mb-5">
             {menuItems.map(({ icon: Icon, label, action }, i) => (
               <button
                 key={label}
                 onClick={action}
-                className={`w-full flex items-center gap-3 px-4 py-3.5 text-left hover:bg-gray-50 transition-colors cursor-pointer ${
-                  i < menuItems.length - 1 ? "border-b border-gray-100" : ""
+                className={`w-full flex items-center gap-3 px-4 py-3.5 text-left hover:bg-gray-50 dark:hover:bg-white/5 transition-colors cursor-pointer ${
+                  i < menuItems.length - 1 ? "border-b border-gray-100 dark:border-[#A9BDCF]/20" : ""
                 }`}>
-                <Icon size={19} className="text-gray-500 shrink-0" />
+                <Icon size={19} className="text-gray-500 dark:text-slate-400 shrink-0" />
                 <span
-                  className="flex-1 font-medium text-slate-900"
+                  className="flex-1 font-medium text-slate-900 dark:text-white"
                   style={{ fontSize: "15px" }}>
                   {label}
                 </span>
-                <ChevronRight size={18} className="text-gray-300 shrink-0" />
+                <ChevronRight size={18} className="text-gray-300 dark:text-slate-600 shrink-0" />
               </button>
             ))}
           </div>
         </div>
-
-        {/* Personal Details modal */}
-        <Modal
-          open={showPersonal}
-          onClose={() => setShowPersonal(false)}
-          title="Personal Details"
-          size="sm">
-          <div className="mb-3">
-            <label className="block text-[14px] font-semibold text-gray-500 mb-1">
-              Full Name *
-            </label>
-            <input
-              type="text"
-              name="name"
-              value={personalForm.name}
-              onChange={handlePersonalChange}
-              placeholder="Enter your full name"
-              className={`w-full border rounded-xl px-3 text-[15px] outline-none transition-colors ${
-                personalErrors.name ? "border-red-400" : "border-gray-200"
-              }`}
-              style={{ minHeight: "44px", color: "#0F172A" }}
-            />
-            {personalErrors.name && (
-              <p className="text-red-500 text-[13px] mt-1">
-                {personalErrors.name}
-              </p>
-            )}
-          </div>
-
-          <div>
-            <label className="block text-[14px] font-semibold text-gray-500 mb-1">
-              Phone Number
-            </label>
-            <input
-              type="tel"
-              name="phone"
-              value={personalForm.phone}
-              onChange={handlePersonalChange}
-              placeholder="10-digit mobile number"
-              maxLength={10}
-              className={`w-full border rounded-xl px-3 text-[15px] outline-none transition-colors ${
-                personalErrors.phone ? "border-red-400" : "border-gray-200"
-              }`}
-              style={{ minHeight: "44px", color: "#0F172A" }}
-            />
-            {personalErrors.phone && (
-              <p className="text-red-500 text-[13px] mt-1">
-                {personalErrors.phone}
-              </p>
-            )}
-          </div>
-
-          <PrimaryButton
-            fullWidth
-            className="mt-5"
-            onClick={handleSavePersonal}
-            loading={savingPersonal}>
-            Save
-          </PrimaryButton>
-        </Modal>
 
         {/* Address modal */}
         <Modal
@@ -520,12 +415,12 @@ const Profile = () => {
                   </div>
                   <div className="flex-1 min-w-0">
                     <p
-                      className="font-bold text-slate-900"
+                      className="font-bold text-slate-900 dark:text-white"
                       style={{ fontSize: "15px" }}>
                       {user.name}
                     </p>
                     <p
-                      className="text-gray-400 mt-0.5"
+                      className="text-gray-400 dark:text-slate-500 mt-0.5"
                       style={{ fontSize: "13px" }}>
                       {user.address}
                     </p>
@@ -542,8 +437,8 @@ const Profile = () => {
                 </div>
               ) : (
                 <div className="text-center py-6">
-                  <MapPin size={28} className="mx-auto text-gray-300 mb-2" />
-                  <p className="text-gray-400" style={{ fontSize: "14px" }}>
+                  <MapPin size={28} className="mx-auto text-gray-300 dark:text-slate-600 mb-2" />
+                  <p className="text-gray-400 dark:text-slate-500" style={{ fontSize: "14px" }}>
                     No address on file
                   </p>
                 </div>
@@ -558,7 +453,7 @@ const Profile = () => {
             </>
           ) : (
             <div>
-              <label className="block text-[14px] font-semibold text-gray-500 mb-1">
+              <label className="block text-[14px] font-semibold text-gray-500 dark:text-slate-400 mb-1">
                 Delivery Address *
               </label>
               <textarea
@@ -570,10 +465,9 @@ const Profile = () => {
                 }}
                 placeholder="Enter your full delivery address"
                 rows={3}
-                className={`w-full border rounded-xl px-3 py-3 text-[15px] outline-none resize-none transition-colors ${
-                  addressErrors.address ? "border-red-400" : "border-gray-200"
+                className={`w-full border rounded-xl px-3 py-3 text-[15px] outline-none resize-none transition-colors bg-transparent text-slate-900 dark:text-white ${
+                  addressErrors.address ? "border-red-400" : "border-gray-200 dark:border-[#A9BDCF]/40"
                 }`}
-                style={{ color: "#0F172A" }}
               />
               {addressErrors.address && (
                 <p className="text-red-500 text-[13px] mt-1">
@@ -643,28 +537,28 @@ const Profile = () => {
                   onClick={() => setPaymentMethod(key)}
                   className="w-full flex items-center gap-3 rounded-2xl p-4 text-left transition-colors cursor-pointer"
                   style={{
-                    border: `2px solid ${active ? "var(--primary)" : "#E5E7EB"}`,
+                    border: `2px solid ${active ? "var(--primary)" : darkMode ? "#374151" : "#E5E7EB"}`,
                     backgroundColor: active
                       ? "var(--primary-light)"
-                      : "#FFFFFF",
+                      : darkMode ? "#181A1B" : "#FFFFFF",
                   }}>
                   <div
                     className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
                     style={{
-                      backgroundColor: active ? "var(--primary)" : "#F3F4F6",
+                      backgroundColor: active ? "var(--primary)" : darkMode ? "#232627" : "#F3F4F6",
                     }}>
                     <Icon
                       size={18}
-                      style={{ color: active ? "#FFFFFF" : "#6B7280" }}
+                      style={{ color: active ? "#FFFFFF" : darkMode ? "#94A3B8" : "#6B7280" }}
                     />
                   </div>
                   <div className="flex-1 min-w-0">
                     <p
-                      className="font-bold text-slate-900"
+                      className="font-bold text-slate-900 dark:text-white"
                       style={{ fontSize: "15px" }}>
                       {label}
                     </p>
-                    <p className="text-gray-400" style={{ fontSize: "12px" }}>
+                    <p className="text-gray-400 dark:text-slate-500" style={{ fontSize: "12px" }}>
                       {desc}
                     </p>
                   </div>
@@ -693,10 +587,10 @@ const Profile = () => {
         <Modal
           open={showAccountSettings}
           onClose={() => setShowAccountSettings(false)}
+          title="Settings"
+          subtitle="Personalize your account and preferences."
           size="md">
           <SettingsCard
-            darkMode={darkMode}
-            onToggleDarkMode={() => setDarkMode((v) => !v)}
             onItemClick={handleSettingsItemClick}
             onLogout={handleLogout}
             onDeleteAccount={handleDeleteAccount}
@@ -707,6 +601,8 @@ const Profile = () => {
         <Modal
           open={showAppSettings}
           onClose={() => setShowAppSettings(false)}
+          title="Notification Settings"
+          subtitle="Choose which notifications you'd like to receive."
           size="md">
           <NotificationSettings
             settings={notifSettings}
@@ -723,10 +619,10 @@ const Profile = () => {
             />
             <div
               className="relative rounded-2xl shadow-2xl w-full max-w-sm p-5 max-h-[85vh] overflow-y-auto scrollbar-hide"
-              style={{ backgroundColor: "#FFFFFF" }}>
+              style={{ backgroundColor: darkMode ? "#181A1B" : "#FFFFFF" }}>
               <button
                 onClick={() => setShowHelp(false)}
-                className="absolute top-4 right-4 flex items-center justify-center rounded-full text-gray-500 hover:bg-gray-100 transition-colors cursor-pointer"
+                className="absolute top-4 right-4 flex items-center justify-center rounded-full text-gray-500 dark:text-slate-400 hover:bg-gray-100 dark:hover:bg-white/10 transition-colors cursor-pointer"
                 style={{ width: "32px", height: "32px" }}>
                 <X size={18} />
               </button>
@@ -738,11 +634,11 @@ const Profile = () => {
                   <Headphones size={22} style={{ color: "var(--primary)" }} />
                 </div>
                 <h2
-                  className="font-bold text-slate-900"
+                  className="font-bold text-slate-900 dark:text-white"
                   style={{ fontSize: "19px" }}>
                   Help and support
                 </h2>
-                <p className="text-gray-500 mt-1" style={{ fontSize: "13px" }}>
+                <p className="text-gray-500 dark:text-slate-400 mt-1" style={{ fontSize: "13px" }}>
                   We're here to help with your order, anytime.
                 </p>
               </div>
@@ -785,7 +681,7 @@ const Profile = () => {
                 ))}
               </div>
 
-              <p className="text-gray-500 mb-2" style={{ fontSize: "12px" }}>
+              <p className="text-gray-500 dark:text-slate-400 mb-2" style={{ fontSize: "12px" }}>
                 Frequently asked
               </p>
               <div className="space-y-2 mb-5">
@@ -824,14 +720,14 @@ const Profile = () => {
                 })}
                 {filteredFaqs.length === 0 && (
                   <p
-                    className="text-center text-gray-500 py-3"
+                    className="text-center text-gray-500 dark:text-slate-400 py-3"
                     style={{ fontSize: "13px" }}>
                     No results for "{helpSearch}"
                   </p>
                 )}
               </div>
 
-              <p className="text-gray-500 mb-2" style={{ fontSize: "12px" }}>
+              <p className="text-gray-500 dark:text-slate-400 mb-2" style={{ fontSize: "12px" }}>
                 Still need help
               </p>
               <div className="grid grid-cols-2 gap-2.5">
