@@ -42,8 +42,8 @@ const MobileCurrentCard = ({
             Current Order
           </h3>
 
-          <p className="mt-1 text-xs text-slate-500">
-            #{order.orderId}
+          <p className="text-[10px] font-bold text-slate-900 leading-none">
+            #{order?.id ?? "N/A"}
           </p>
         </div>
 
@@ -101,7 +101,7 @@ const MobileCurrentCard = ({
               </span>
             </div>
 
-            <p className="mt-3 text-lg font-bold text-slate-900">
+            <p className="-mt-4 text-sm text-right font-bold text-slate-900">
               ₹
               {order.summary?.total ??
                 order.total}

@@ -1,20 +1,28 @@
+import { motion } from "framer-motion";
+
 import {
-  CheckCircle2,
+  Check,
   Circle,
   PackageCheck,
   ChefHat,
   Bike,
   Home,
-} from "lucide-react";
+  CheckCircle2,
+} from "lucide-react"; 
 
 const getIcon = (title) => {
   switch (title.toLowerCase()) {
     case "order placed":
       return PackageCheck;
 
+    case "preparing":
     case "preparing food":
       return ChefHat;
 
+    case "ready":
+      return Check;
+
+    case "on the way":
     case "out for delivery":
       return Bike;
 
@@ -30,232 +38,243 @@ const OrderTimeline = ({
   currentStep = "placed",
   timeline = [],
 }) => {
- const currentIndex = Math.max(
-  0,
-  timeline.findIndex(
-    (step) => step.id === currentStep
-  )
-);
+  const steps =
+    timeline.length > 0
+      ? timeline
+      : defaultSteps;
 
+  const currentIndex = Math.max(
+    0,
+    steps.findIndex(
+      (step) => step.id === currentStep
+    )
+  );
+
+const progress =
+  steps.length > 1
+    ? (currentIndex / (steps.length - 0.5)) * 100
+    : 0;
   return (
-    <section
-      className="
-        rounded-[30px]
-        border
-        border-slate-200
-        bg-white
-        p-6
-      "
-    >
-      {/* Header */}
+    <div className="w-full overflow-x-auto py-6">
 
-      <div className="mb-8">
-        <h2 className="text-xl font-bold text-slate-900">
-          Order Tracking
-        </h2>
+      <div
+        className="
+          relative
+          mx-auto
+          flex
+          min-w-[760px]
+          items-start
+          justify-between
+          px-2
+        "
+      >
+                {/* Background Track */}
 
-        <p className="mt-1 text-sm text-slate-500">
-          Track your order in real time.
-        </p>
-      </div>
+<div
+  className="
+    absolute
+    left-[94px]
+    right-[94px]
+    top-[24px]
+    h-[3px]
+    rounded-full
+    bg-slate-200
+    z-0
+  "
+/>
 
-      {/* Timeline */}
 
-      <div className="relative">
+<motion.div
+  initial={{ width: 0 }}
+  animate={{
+    width:
+      currentIndex === 0
+        ? "0px"
+        : `calc(${progress}% - 2px)`,
+  }}
+  transition={{
+    duration: 0.5,
+    ease: "easeInOut",
+  }}
+  className="
+    absolute
+    left-[94px]
+    top-[24px]
+    h-[3px]
+    rounded-full
+    bg-green-600
+    z-0
+  "
+/>
+        {steps.map((step, index) => {
+          const completed =
+            index < currentIndex;
 
-        {/* Progress Line */}
+          const active =
+            index === currentIndex;
 
-        <div
-          className="
-            absolute
-            left-[23px]
-            top-0
+          const Icon = getIcon(step.title);
 
-            h-full
-            w-[3px]
+          return (
+            <div
+              key={step.id}
+              className="
+                relative
 
-            rounded-full
+                z-20
 
-            bg-slate-200
-          "
-        />
+                flex
 
-        {/* Active Progress */}
+                w-[155px]
 
-        <div
-          className="
-            absolute
-            left-[23px]
-            top-0
+                flex-col
 
-            w-[3px]
+                items-center
+              "
+            >
+                            {/* Circle */}
 
-            rounded-full
+              <div className="relative flex items-center justify-center">
 
-            transition-all
-            duration-700
-          "
-          style={{
-            background: "var(--primary)",
-            height:
-              timeline.length <= 1
-                ? "0%"
-                : `${(currentIndex /
-                    (timeline.length - 1)) *
-                    100}%`,
-          }}
-        />
+                {/* Active Outer Ring */}
 
-        <div className="space-y-8">
+                {active && (
+                  <motion.div
+                    initial={{
+                      scale: 0.9,
+                      opacity: 0,
+                    }}
+                    animate={{
+                      scale: 1,
+                      opacity: 1,
+                    }}
+                    transition={{
+                      duration: 0.35,
+                    }}
+                    className="
+                      absolute
 
-          {timeline.map((step, index) => {
-           const Icon = getIcon(step.title);
+                      h-[62px]
+                      w-[62px]
 
-            const completed =
-              index <= currentIndex;
+                      rounded-full
 
-            const active =
-              index === currentIndex;
+                      border-[3px]
 
-            return (
-              <div
-                key={step.id}
-                className="relative flex gap-5"
-              >
-                {/* Icon */}
+                      border-green-200
+                    "
+                  />
+                )}
 
-                <div
-                  className={`
+                {/* Circle */}
+
+                <motion.div
+                  whileHover={{
+                    scale: 1.04,
+                  }}
+                  className="
                     relative
-                    z-10
 
                     flex
-                    h-12
-                    w-12
-                    shrink-0
+
+                    h-[48px]
+                    w-[48px]
 
                     items-center
                     justify-center
-
+                    gap-10
                     rounded-full
 
                     border-2
 
+                    bg-white
+
                     transition-all
                     duration-300
-                  `}
+                  "
                   style={{
-                    background: completed
-                      ? "var(--primary)"
-                      : "#fff",
+                    borderColor:
+                      completed || active
+                        ? "#18864b"
+                        : "#d1d5db",
 
-                    borderColor: completed
-                      ? "var(--primary)"
-                      : "#CBD5E1",
-
-                    color: completed
-                      ? "#fff"
-                      : "#64748B",
-
-                    transform: active
-                      ? "scale(1.08)"
-                      : "scale(1)",
+                    boxShadow: active
+                      ? "0 4px 14px rgba(22,163,74,.18)"
+                      : "0 2px 8px rgba(0,0,0,.06)",
                   }}
                 >
-                  <Icon size={22} />
-                </div>
+                  <Icon
+                    size={20}
+                    strokeWidth={2.3}
+                    color={
+                      completed || active
+                        ? "#18864b"
+                        : "#9ca3af"
+                    }
+                  />
+                </motion.div>
 
-                {/* Content */}
-
-                <div className="flex-1 pt-1">
-
-                  <div className="flex flex-wrap items-center justify-between gap-3">
-
-                    <h3
-                      className={`
-                        text-lg
-                        font-semibold
-
-                        ${
-                          completed
-                            ? "text-slate-900"
-                            : "text-slate-500"
-                        }
-                      `}
-                    >
-                      {step.title}
-                    </h3>
-
-                    <span
-                      className={`
-                        text-sm
-
-                        ${
-                          completed
-                            ? "text-slate-700"
-                            : "text-slate-400"
-                        }
-                      `}
-                    >
-                      {step.time || "--"}
-                    </span>
-
-                  </div>
-
-                  {step.description && (
-                    <p
-                      className={`
-                        mt-2
-                        text-sm
-                        leading-6
-
-                        ${
-                          completed
-                            ? "text-slate-600"
-                            : "text-slate-400"
-                        }
-                      `}
-                    >
-                      {step.description}
-                    </p>
-                  )}
-
-                  {active && (
-                    <div
-                      className="
-                        mt-3
-
-                        inline-flex
-                        items-center
-
-                        rounded-full
-
-                        px-3
-                        py-1
-
-                        text-xs
-                        font-semibold
-
-                        text-white
-                      "
-                      style={{
-                        background:
-                          "var(--primary)",
-                      }}
-                    >
-                      Current Status
-                    </div>
-                  )}
-
-                </div>
               </div>
-            );
-          })}
 
-        </div>
+              {/* Title */}
 
+              <h4
+                className="
+                  mt-5
+
+                  text-center
+
+                  text-[14px]
+
+                  font-semibold
+
+                  text-slate-900
+                "
+              >
+                {step.title}
+              </h4>
+
+              {/* Time */}
+
+              <p
+                className={`
+                  mt-1
+
+                  text-xs
+
+                  ${
+                    completed || active
+                      ? "text-slate-500"
+                      : "text-slate-400"
+                  }
+                `}
+              >
+                {step.time || "Upcoming"}
+              </p>
+
+            </div>
+          );
+        })}
       </div>
-    </section>
+
+      {/* Mobile Scroll Hint */}
+
+      <div className="mt-5 flex justify-center lg:hidden">
+        <div
+          className="
+            rounded-full
+            bg-slate-100
+            px-3
+            py-1
+            text-[11px]
+            font-medium
+            text-slate-500
+          "
+        >
+          ← Swipe →
+        </div>
+      </div>
+    </div>
   );
 };
 

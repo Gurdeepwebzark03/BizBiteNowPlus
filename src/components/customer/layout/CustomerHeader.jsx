@@ -71,7 +71,7 @@ const CustomerHeader = ({ sidebarExpanded, isDesktop }) => {
     <header
       className="
     fixed
-    top-3
+    
     z-50
 
     transition-all
@@ -79,8 +79,8 @@ const CustomerHeader = ({ sidebarExpanded, isDesktop }) => {
     ease-in-out
 
     px-3
-    lg:px-5
     lg:pr-10
+    lg:px-2
   "
       style={
         isDesktop
@@ -135,6 +135,7 @@ ease-in-out
           onClick={() => navigate("/customer/store")}
           className="
           flex
+          ml-5
           min-w-0
           flex-1
           items-center

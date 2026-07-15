@@ -45,28 +45,26 @@ const Orders = () => {
     });
   };
 
-  useEffect(() => {
-    const loadOrders = async () => {
-      try {
-        const customerId = "CUSTOMER_001";
+useEffect(() => {
+  const customerId = "CUSTOMER_001";
 
-        const [currentRes, historyRes] = await Promise.all([
-          getCurrentOrders(customerId),
-          getOrderHistory(customerId),
-        ]);
+  const loadOrders = async () => {
+    const [currentRes, historyRes] =
+      await Promise.all([
+        getCurrentOrders(customerId),
+        getOrderHistory(customerId),
+      ]);
 
-        setCurrentOrders(currentRes.data?.data || []);
+    setCurrentOrders(currentRes.data.data || []);
+    setHistory(historyRes.data.data || []);
+  };
 
-        setHistory(historyRes.data?.data || []);
-      } catch (error) {
-        console.log("Orders API Error:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  loadOrders();
 
-    loadOrders();
-  }, []);
+  const interval = setInterval(loadOrders, 30000);
+
+  return () => clearInterval(interval);
+}, []);
 
 
   return (
@@ -103,7 +101,7 @@ const Orders = () => {
     lg:px-10
   "
       >
-      <div className="w-full flex items-center bg-white mt-5 z-50 shadow-sm rounded-xl p-2 justify-between">
+      <div className="w-full flex items-center bg-white  z-50 shadow-sm rounded-xl p-2 justify-between">
   <SectionHeader
     title="Your Orders"
     subtitle="Track your orders in real time"
@@ -209,11 +207,6 @@ const Orders = () => {
                       })
                     }
                     onView={() => handleViewOrder(order)}
-                  />
-
-                  <OrderTimeline
-                    timeline={order.tracking?.steps || []}
-                    currentStep={order.tracking?.currentStep}
                   />
                 </div>
               ))}

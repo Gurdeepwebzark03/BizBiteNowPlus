@@ -57,38 +57,33 @@ const MobileOrders = () => {
     }, 500);
   };
 
-  useEffect(() => {
-    const loadOrders = async () => {
-      try {
-        const customerId = "CUSTOMER_001";
+useEffect(() => {
+  const customerId = "CUSTOMER_001";
 
-        const [
-          currentRes,
-          historyRes,
-        ] = await Promise.all([
-          getCurrentOrders(customerId),
-          getOrderHistory(customerId),
-        ]);
+  const loadOrders = async () => {
+    try {
+      const [currentRes, historyRes] = await Promise.all([
+        getCurrentOrders(customerId),
+        getOrderHistory(customerId),
+      ]);
 
-        setCurrentOrders(
-          currentRes.data?.data || []
-        );
+      setCurrentOrders(currentRes.data?.data || []);
+      setHistory(historyRes.data?.data || []);
+    } catch (error) {
+      console.log("Orders API Error:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-        setHistory(
-          historyRes.data?.data || []
-        );
-      } catch (error) {
-        console.log(
-          "Orders API Error:",
-          error
-        );
-      } finally {
-        setLoading(false);
-      }
-    };
+  // Initial load
+  loadOrders();
 
-    loadOrders();
-  }, []);
+  // Refresh every 5 seconds
+  const interval = setInterval(loadOrders, 5000);
+
+  return () => clearInterval(interval);
+}, []);
 
 if (loading) {
   return <MobileOrdersSkeleton />;

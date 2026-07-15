@@ -109,13 +109,13 @@ const CustomerLayout = () => {
         {/* Main */}
 
         <main
-          className="min-h-screen transition-all duration-300 lg:mt-5"
+          className="min-h-screen transition-all duration-300"
           style={{
             paddingLeft:
               window.innerWidth >= 1024
                 ? sidebarExpanded
                   ? "17rem"
-                  : "8rem"
+                  : "7.5rem"
                 : "0rem",
           }}>
           {location.pathname === "/customer" && (

@@ -50,11 +50,11 @@ const ProductCard = ({
         "
       >
         <img
-          src={image || "https://via.placeholder.com/600x400?text=Food+Image"}
+          src={image}
           alt={name || "Food Item"}
           onError={(e) => {
             e.currentTarget.src =
-              "https://via.placeholder.com/600x400?text=Image+Not+Found";
+              "https://via.placeholder.com/600x400?text=Food+Image";
           }}
           className="
             h-full

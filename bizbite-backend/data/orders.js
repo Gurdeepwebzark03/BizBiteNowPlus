@@ -26,6 +26,7 @@ const getCurrentOrders = (customerId) => {
           "Placed",
           "Confirmed",
           "Preparing",
+          "Ready",
           "Out for Delivery",
         ].includes(order.status)
     )
@@ -83,7 +84,7 @@ const updateOrderStatus = (
 order.status = status;
 
 switch (status) {
-  case "Pending":
+  case "Placed":
     order.tracking.currentStep = "placed";
     break;
 
@@ -106,7 +107,7 @@ switch (status) {
     break;
 
   case "Out for Delivery":
-    order.tracking.currentStep = "out_for_delivery";
+    order.tracking.currentStep = "onway";
 
     order.tracking.steps[3].completed = true;
     order.tracking.steps[3].time =

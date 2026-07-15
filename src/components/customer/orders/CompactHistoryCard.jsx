@@ -47,14 +47,13 @@ const CompactHistoryCard = ({
           />
 
           <div>
-            <h3 className="text-[15px] font-bold text-slate-900 leading-none">
-              #{order.orderId || order.id}
-            </h3>
+          <h3 className="text-[15px] font-bold text-slate-900 leading-none">
+            #{order?.id ?? "N/A"}
+          </h3>
 
             <p className="mt-1 text-xs text-slate-500">
-              {order.restaurant ||
-                "BizBiteNow"}
-            </p>
+  {order.restaurant?.name || "BizBiteNow"}
+</p>
           </div>
         </div>
 

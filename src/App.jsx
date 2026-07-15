@@ -68,6 +68,7 @@ import CustomerProfile from "./pages/customer/Profile";
 import PersonalDetails from "./pages/customer/PersonalDetails";
 import Language from "./pages/customer/Language";
 import Appearance from "./pages/customer/Appearance";
+import Favourites from "./pages/customer/Favourites";
 
 
 
@@ -150,7 +151,9 @@ export default function App() {
             element={<Menu />}
           />
 
-
+          <Route 
+          path="favorites" 
+          element={<Favourites />} />
           <Route
             path="product/:id"
             element={<Product />}

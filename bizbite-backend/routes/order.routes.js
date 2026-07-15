@@ -104,37 +104,42 @@ router.post("/", (req, res) => {
       address: store.address,
     },
 
-    tracking: {
-      currentStep: 1,
+tracking: {
+  currentStep: "placed",
 
-      steps: [
-        {
-          id: 1,
-          title: "Order Placed",
-          completed: true,
-          time: new Date().toLocaleTimeString(),
-        },
-        {
-          id: 2,
-          title: "Preparing Food",
-          completed: false,
-          time: "",
-        },
-        {
-          id: 3,
-          title: "Out for Delivery",
-          completed: false,
-          time: "",
-        },
-        {
-          id: 4,
-          title: "Delivered",
-          completed: false,
-          time: "",
-        },
-      ],
+  steps: [
+    {
+      id: "placed",
+      title: "Order Placed",
+      completed: true,
+      time: new Date().toLocaleTimeString(),
     },
-
+    {
+      id: "preparing",
+      title: "Preparing Food",
+      completed: true,
+      time: "",
+    },
+    {
+      id: "ready",
+      title: "Ready",
+      completed: false,
+      time: "",
+    },
+    {
+      id: "onway",
+      title: "Out for Delivery",
+      completed: false,
+      time: "",
+    },
+    {
+      id: "delivered",
+      title: "Delivered",
+      completed: false,
+      time: "",
+    },
+  ],
+},
     items: cart.items,
 
     summary: cart.summary,
@@ -157,7 +162,13 @@ router.post("/", (req, res) => {
 
   addOrder(order);
 
-  clearCart();
+// Auto update for demo
+setTimeout(() => updateOrderStatus(order.id, "Preparing"), 30000);
+setTimeout(() => updateOrderStatus(order.id, "Ready"), 60000);
+setTimeout(() => updateOrderStatus(order.id, "Out for Delivery"), 90000);
+setTimeout(() => updateOrderStatus(order.id, "Delivered"), 120000);
+
+clearCart();
 
   res.status(201).json({
     success: true,

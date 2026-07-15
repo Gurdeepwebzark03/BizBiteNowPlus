@@ -1,3 +1,5 @@
+const { menu } = require("../data/menu");
+
 const favorites = [];
 
 // =======================================
@@ -5,9 +7,21 @@ const favorites = [];
 // =======================================
 
 const getFavorites = (customerId) => {
-  return favorites.filter(
-    (item) => item.customerId === customerId
-  );
+  return favorites
+    .filter(
+      (item) => item.customerId === customerId
+    )
+    .map((favorite) => {
+      const product = menu.find(
+        (p) => p.id === favorite.productId
+      );
+
+      return {
+        ...favorite,
+        product,
+      };
+    })
+    .filter((item) => item.product);
 };
 
 // =======================================
@@ -45,20 +59,23 @@ const addFavorite = ({
 
   const favorite = {
     id: `FAV_${Date.now()}`,
-
     customerId,
-
     productId,
-
     storeId,
-
     createdAt:
       new Date().toISOString(),
   };
 
   favorites.push(favorite);
 
-  return favorite;
+  const product = menu.find(
+    (p) => p.id === productId
+  );
+
+  return {
+    ...favorite,
+    product,
+  };
 };
 
 // =======================================
@@ -76,8 +93,9 @@ const removeFavorite = (
         item.productId === productId
     );
 
-  if (index === -1)
+  if (index === -1) {
     return false;
+  }
 
   favorites.splice(index, 1);
 
@@ -88,68 +106,49 @@ const removeFavorite = (
 // Toggle Favorite
 // =======================================
 
-const toggleFavorite = (data = {}) => {
-
-
-  const {
-    customerId,
-    productId,
-    storeId,
-  } = data;
-
-
-
+const toggleFavorite = ({
+  customerId,
+  productId,
+  storeId,
+}) => {
   if (!customerId || !productId) {
-  
     throw new Error(
       "customerId and productId are required."
     );
   }
 
-  const exists = isFavorite(
-    customerId,
-    productId
-  );
-
-
-
-  if (exists) {
- 
-
+  if (
+    isFavorite(
+      customerId,
+      productId
+    )
+  ) {
     removeFavorite(
       customerId,
       productId
     );
-
-
 
     return {
       favorite: false,
     };
   }
 
-
-
-  const added = addFavorite({
+  const favorite = addFavorite({
     customerId,
     productId,
     storeId,
   });
 
-
-
   return {
     favorite: true,
+    data: favorite,
   };
 };
+
 module.exports = {
   getFavorites,
-
   isFavorite,
-
   addFavorite,
-
   removeFavorite,
-
   toggleFavorite,
 };
