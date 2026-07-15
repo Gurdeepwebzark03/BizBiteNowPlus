@@ -29,7 +29,7 @@ const CustomerHeader = ({ sidebarExpanded, isDesktop }) => {
 
   const [locationOpen, setLocationOpen] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState({
-    title: "Home",
+    title: "Select your location",
     subtitle: "Tap to detect",
   });
   const wrapperRef = useRef(null);
@@ -260,7 +260,7 @@ ease-in-out
         >
           {/* Location Dropdown */}
 
-          <div className="relative">
+          <div className="relative hidden lg:block">
             <button
               onClick={() => setLocationOpen(!locationOpen)}
               className="
@@ -289,7 +289,7 @@ ease-in-out
                 <p className="max-w-[140px] truncate text-sm font-semibold text-slate-900">
                   {selectedLocation.title}
                 </p>
-                <p className="text-[10px] text-slate-500">
+                <p className="text-[13px] text-slate-1000">
                   {selectedLocation.subtitle}
                 </p>
               </div>
