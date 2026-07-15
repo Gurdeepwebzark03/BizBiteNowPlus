@@ -24,11 +24,7 @@ import {
 } from "../../api/customerApi";
 
 const Menu = () => {
-  const {
-  cartItems,
-  addItem,
-  updateItem,
-} = useCart();
+  const { cartItems, addItem, updateItem } = useCart();
   const navigate = useNavigate();
 
   const [categories, setCategories] = useState([]);
@@ -215,8 +211,6 @@ const Menu = () => {
       setFavorites((prev) =>
         exists ? prev.filter((id) => id !== product.id) : [...prev, product.id],
       );
-
-      
     } catch (err) {
       console.log(err);
     }
@@ -250,14 +244,15 @@ const Menu = () => {
     sm:px-2
 
   "
-      ><div className="w-full flex items-center bg-white mt-5 z-50 shadow-sm rounded-xl p-2 justify-between">
-  <SectionHeader
-    title="Our Menu"
-    subtitle="Freshly prepared dishes made just for you."
-  />
+      >
+        <div className="w-full flex items-center bg-white mt-5 z-50 shadow-sm rounded-xl p-2 justify-between">
+          <SectionHeader
+            title="Our Menu"
+            subtitle="Freshly prepared dishes made just for you."
+          />
 
-  <button
-    className="
+          <button
+            className="
       relative
       flex
       h-11
@@ -269,14 +264,11 @@ const Menu = () => {
       transition
       bg-slate-200
     "
-  >
-    <Bell
-      size={22}
-      className="text-slate-700 "
-    />
+          >
+            <Bell size={22} className="text-slate-700 " />
 
-    <span
-      className="
+            <span
+              className="
         absolute
         -right-1
         -top-1
@@ -291,32 +283,32 @@ const Menu = () => {
         font-bold
         text-white
       "
-    >
-      3
-    </span>
-  </button>
-</div>
+            >
+              3
+            </span>
+          </button>
+        </div>
         {/* Categories */}
 
-{/* Mobile Only */}
+        {/* Mobile Only */}
 
-<div className="lg:hidden">
-  <CompactCategoryTabs
-    categories={categories}
-    activeCategory={activeCategory}
-    onChange={setActiveCategory}
-  />
-</div>
+        <div className="lg:hidden">
+          <CompactCategoryTabs
+            categories={categories}
+            activeCategory={activeCategory}
+            onChange={setActiveCategory}
+          />
+        </div>
 
-{/* Desktop Only */}
+        {/* Desktop Only */}
 
-<div className="hidden lg:block">
-  <CategoryTabs
-    categories={categories}
-    activeCategory={activeCategory}
-    onChange={setActiveCategory}
-  />
-</div>
+        <div className="hidden lg:block">
+          <CategoryTabs
+            categories={categories}
+            activeCategory={activeCategory}
+            onChange={setActiveCategory}
+          />
+        </div>
 
         {/* Filters */}
 
@@ -342,49 +334,35 @@ const Menu = () => {
           "
           >
             <>
-  {/* Mobile */}
+              {/* Mobile */}
 
-<div className="relative lg:hidden">
-<div
-  className="
+              <div className="relative lg:hidden">
+                <div
+                  className="
     flex
     items-center
     justify-between
     w-full
   "
->
-  <CompactVegToggle
-    value={vegType}
-    onChange={setVegType}
-  />
+                >
+                  <CompactVegToggle value={vegType} onChange={setVegType} />
 
-  <CompactSortDropdown
-    value={sortBy}
-    onChange={setSortBy}
-  />
-</div>
-</div>
-  {/* Desktop */}
+                  <CompactSortDropdown value={sortBy} onChange={setSortBy} />
+                </div>
+              </div>
+              {/* Desktop */}
 
-  <div className="hidden lg:block">
-    <VegToggle
-      value={vegType}
-      onChange={setVegType}
-    />
+              <div className="hidden lg:block">
+                <VegToggle value={vegType} onChange={setVegType} />
+              </div>
+            </>
 
-  </div>
-</>
-
-<>
-  <div className="hidden lg:block">
-    <SortDropdown
-      value={sortBy}
-      onChange={setSortBy}
-    />
-  </div>
-</>
+            <>
+              <div className="hidden lg:block">
+                <SortDropdown value={sortBy} onChange={setSortBy} />
+              </div>
+            </>
           </div>
-
         </div>
 
         {/* Products */}
@@ -442,89 +420,61 @@ const Menu = () => {
             </div>
           ) : (
             <>
-<>
-  {/* Mobile */}
+              <>
+                {/* Mobile */}
 
-  <div className="space-y-3 lg:hidden">
-    {filteredProducts.map((product) => (
-      <MenuListCard
-        key={product.id}
-        product={product}
-        quantity={
-          getCartItem(product.id)?.quantity ?? 0
-        }
-        isFavourite={favorites.includes(product.id)}
-        onFavourite={() =>
-          handleFavorite(product)
-        }
-        onAdd={() =>
-          addItem(product, 1)
-        }
-        onIncrease={() =>
-          addItem(product, 1)
-        }
-        onDecrease={() => {
-          const item = getCartItem(product.id);
+                <div className="space-y-3 lg:hidden">
+                  {filteredProducts.map((product) => (
+                    <MenuListCard
+                      key={product.id}
+                      product={product}
+                      quantity={getCartItem(product.id)?.quantity ?? 0}
+                      isFavourite={favorites.includes(product.id)}
+                      onFavourite={() => handleFavorite(product)}
+                      onAdd={() => addItem(product, 1)}
+                      onIncrease={() => addItem(product, 1)}
+                      onDecrease={() => {
+                        const item = getCartItem(product.id);
 
-          if (item) {
-            updateItem(
-              item.id,
-              item.quantity - 1,
-            );
-          }
-        }}
-        onClick={() =>
-          navigate(
-            `/customer/product/${product.id}`,
-          )
-        }
-      />
-    ))}
-  </div>
+                        if (item) {
+                          updateItem(item.id, item.quantity - 1);
+                        }
+                      }}
+                      onClick={() =>
+                        navigate(`/customer/product/${product.id}`)
+                      }
+                    />
+                  ))}
+                </div>
 
-  {/* Desktop */}
+                {/* Desktop */}
 
-  <div className="hidden lg:block">
-    <MenuGrid>
-      {filteredProducts.map((product) => (
-        <ProductCard
-          key={product.id}
-          product={product}
-          quantity={
-            getCartItem(product.id)
-              ?.quantity ?? 0
-          }
-          isFavourite={favorites.includes(product.id)}
-          onFavourite={() =>
-            handleFavorite(product)
-          }
-          onAdd={() =>
-            addItem(product, 1)
-          }
-          onIncrease={() =>
-            addItem(product, 1)
-          }
-          onDecrease={() => {
-            const item =
-              getCartItem(product.id);
+                <div className="hidden lg:block">
+                  <MenuGrid>
+                    {filteredProducts.map((product) => (
+                      <ProductCard
+                        key={product.id}
+                        product={product}
+                        quantity={getCartItem(product.id)?.quantity ?? 0}
+                        isFavourite={favorites.includes(product.id)}
+                        onFavourite={() => handleFavorite(product)}
+                        onAdd={() => addItem(product, 1)}
+                        onIncrease={() => addItem(product, 1)}
+                        onDecrease={() => {
+                          const item = getCartItem(product.id);
 
-            if (item) {
-              updateItem(
-                item.id,
-                item.quantity - 1,
-              );
-            }
-          }}
-          onClick={() =>
-            navigate(
-              `/customer/product/${product.id}`,
-            )
-          }
-        />
-      ))}
-    </MenuGrid>
-  </div>
-</>
+                          if (item) {
+                            updateItem(item.id, item.quantity - 1);
+                          }
+                        }}
+                        onClick={() =>
+                          navigate(`/customer/product/${product.id}`)
+                        }
+                      />
+                    ))}
+                  </MenuGrid>
+                </div>
+              </>
 
               {/* Cursor Loader */}
 
