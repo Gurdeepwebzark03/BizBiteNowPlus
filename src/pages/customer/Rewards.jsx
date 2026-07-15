@@ -80,7 +80,7 @@ const Rewards = () => {
   "
       >
         {/* Header */}
-        <div className="w-full flex items-center justify-between bg-white mt-5 rounded-xl shadow-sm p-4">
+        <div className="w-full flex items-center justify-between bg-white  rounded-xl shadow-sm p-4">
           <SectionHeader
             title="Rewards & Loyalty"
             subtitle="Earn stamps, unlock rewards and save more"

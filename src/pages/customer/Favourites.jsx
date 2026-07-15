@@ -114,7 +114,7 @@ const Favourites = () => {
 
         <div
           className="
-            mt-5
+     
             flex
             items-center
             justify-between
