@@ -6,6 +6,7 @@ import {
   ReceiptText,
   Gift,
   User,
+  Heart,
 } from "lucide-react";
 
 
@@ -15,11 +16,11 @@ const navItems = [
     icon: House,
     path: "/customer",
   },
-  {
-    label: "Menu",
-    icon: UtensilsCrossed,
-    path: "/customer/menu",
-  },
+{
+  label: "Favourite",
+  path: "/customer/favorites",
+  icon: Heart,
+},
   {
     label: "Orders",
     icon: ReceiptText,
@@ -141,7 +142,7 @@ const BottomNavigation = () => {
 
                           justify-center
 
-                          rounded-full
+                          rounded-[10px]
 
                           transition-all
 

@@ -127,10 +127,10 @@ useEffect(() => {
   return (
     <header
       className="
-    fixed
-    
+    lg:fixed
+    relative
     z-50
-
+    
     transition-all
     duration-300
     ease-in-out
