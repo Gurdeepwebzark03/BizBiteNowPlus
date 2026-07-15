@@ -114,7 +114,7 @@ const Modal = ({
 
               rounded-[32px]
 
-              bg-white
+              bg-white dark:bg-[#181A1B]
 
               shadow-2xl
 
@@ -133,7 +133,7 @@ const Modal = ({
                   justify-between
 
                   border-b
-                  border-slate-200
+                  border-slate-200 dark:border-[#A9BDCF]/30
 
                   p-6
                 "
@@ -143,7 +143,7 @@ const Modal = ({
 
                   {title && (
 
-                    <h2 className="text-2xl font-bold text-slate-900">
+                    <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
                       {title}
                     </h2>
 
@@ -151,7 +151,7 @@ const Modal = ({
 
                   {subtitle && (
 
-                    <p className="mt-2 text-slate-500">
+                    <p className="mt-2 text-slate-500 dark:text-slate-400">
                       {subtitle}
                     </p>
 
@@ -175,7 +175,9 @@ const Modal = ({
 
                       transition
 
-                      hover:bg-slate-100
+                      text-slate-700 dark:text-slate-300
+
+                      hover:bg-slate-100 dark:hover:bg-white/10
                     "
                   >
                     <X size={22} />
@@ -212,7 +214,7 @@ const Modal = ({
               <div
                 className="
                   border-t
-                  border-slate-200
+                  border-slate-200 dark:border-[#A9BDCF]/30
 
                   p-6
                 "

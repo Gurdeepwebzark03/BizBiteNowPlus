@@ -47,11 +47,11 @@ const Card = ({
       className={`
         overflow-hidden
 
-        bg-white
+        bg-white dark:bg-[#181A1B]
 
         ${
           border
-            ? "border border-slate-200"
+            ? "border border-slate-200 dark:border-[#A9BDCF]/40"
             : ""
         }
 

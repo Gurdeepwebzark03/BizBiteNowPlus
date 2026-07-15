@@ -1,9 +1,8 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import SectionHeader from "../../components/customer/common/SectionHeader";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import CategoryTabs from "../../components/customer/menu/CategoryTabs";
-import ProductFilters from "../../components/customer/menu/ProductFilters";
 import VegToggle from "../../components/customer/menu/VegToggle";
 import SortDropdown from "../../components/customer/menu/SortDropdown";
 import MenuGrid from "../../components/customer/menu/MenuGrid";
@@ -14,7 +13,6 @@ import CompactSortDropdown from "../../components/customer/menu/CompactSortDropd
 import CompactVegToggle from "../../components/customer/menu/CompactVegToggle";
 import { useCart } from "../../context/CartContext";
 import { Bell } from "lucide-react";
-import MenuSkeleton from "../../components/customer/skeleton/MenuSkeleton";
 import MenuPageSkeleton from "../../components/customer/skeleton/MenuPageSkeleton";
 import {
   getMenu,
@@ -49,43 +47,46 @@ const Menu = () => {
 
   const [sortBy, setSortBy] = useState("featured");
 
-  const [filters, setFilters] = useState({
+  const [filters] = useState({
     bestseller: false,
     offers: false,
     rating: false,
     available: true,
   });
 
-  const loadMenu = async (reset = false) => {
-    try {
-      if (reset) {
-        setLoading(true);
-      } else {
-        setLoadingMore(true);
+  const loadMenu = useCallback(
+    async (reset = false) => {
+      try {
+        if (reset) {
+          setLoading(true);
+        } else {
+          setLoadingMore(true);
+        }
+
+        const response = await getMenu({
+          limit: 12,
+          cursor: reset ? "" : cursor,
+        });
+
+        const newProducts = response.data.data;
+
+        if (reset) {
+          setMenuData(newProducts);
+        } else {
+          setMenuData((prev) => [...prev, ...newProducts]);
+        }
+
+        setCursor(response.data.nextCursor);
+      } catch (error) {
+        console.log("Menu Loading Error:", error);
+      } finally {
+        setLoading(false);
+
+        setLoadingMore(false);
       }
-
-      const response = await getMenu({
-        limit: 12,
-        cursor: reset ? "" : cursor,
-      });
-
-      const newProducts = response.data.data;
-
-      if (reset) {
-        setMenuData(newProducts);
-      } else {
-        setMenuData((prev) => [...prev, ...newProducts]);
-      }
-
-      setCursor(response.data.nextCursor);
-    } catch (error) {
-      console.log("Menu Loading Error:", error);
-    } finally {
-      setLoading(false);
-
-      setLoadingMore(false);
-    }
-  };
+    },
+    [cursor],
+  );
 
   useEffect(() => {
     const loadInitial = async () => {
@@ -104,7 +105,7 @@ const Menu = () => {
     };
 
     loadInitial();
-  }, []);
+  }, [loadMenu]);
   useEffect(() => {
     if (!loadMoreRef.current) return;
 
@@ -124,7 +125,7 @@ const Menu = () => {
     return () => {
       observer.disconnect();
     };
-  }, [cursor, loadingMore]);
+  }, [cursor, loadMenu, loadingMore]);
 
   const filteredProducts = useMemo(() => {
     let products = [...menuData];
@@ -219,8 +220,8 @@ const Menu = () => {
     cartItems.find((item) => item.productId === productId);
 
   if (loading) {
-  return <MenuPageSkeleton />;
-}
+    return <MenuPageSkeleton />;
+  }
   return (
     <motion.div
       initial={{ opacity: 0, y: 15 }}
@@ -229,8 +230,7 @@ const Menu = () => {
         duration: 0.4,
         ease: [0.22, 1, 0.36, 1],
       }}
-      className="space-y-6"
-    >
+      className="space-y-6">
       <div
         className="
     w-full
@@ -245,7 +245,7 @@ const Menu = () => {
 
   "
       >
-        <div className="w-full flex items-center bg-white  z-50 shadow-sm rounded-xl p-2 justify-between">
+        <div className="w-full flex items-center bg-white z-50 shadow-sm rounded-xl p-2 justify-between">
           <SectionHeader
             title="Our Menu"
             subtitle="Freshly prepared dishes made just for you."
@@ -260,11 +260,10 @@ const Menu = () => {
       items-center
       justify-center
       rounded-[10px]
-      
+
       transition
       bg-slate-200
-    "
-          >
+    ">
             <Bell size={22} className="text-slate-700 " />
 
             <span
@@ -282,8 +281,7 @@ const Menu = () => {
         text-[10px]
         font-bold
         text-white
-      "
-            >
+      ">
               3
             </span>
           </button>
@@ -320,8 +318,7 @@ const Menu = () => {
           gap-5
           px-4
           lg:px-6
-        "
-        >
+        ">
           <div
             className="
             flex
@@ -331,8 +328,7 @@ const Menu = () => {
             lg:flex-row
             lg:items-center
             lg:justify-between
-          "
-          >
+          ">
             <>
               {/* Mobile */}
 
@@ -343,8 +339,7 @@ const Menu = () => {
     items-center
     justify-between
     w-full
-  "
-                >
+  ">
                   <CompactVegToggle value={vegType} onChange={setVegType} />
 
                   <CompactSortDropdown value={sortBy} onChange={setSortBy} />
@@ -373,21 +368,19 @@ const Menu = () => {
           space-y-6
           px-4
           lg:px-6
-        "
-        >
+        ">
           <div>
             <p
               className="
               mt-1
               text-slate-500
-            "
-            >
+            ">
               {filteredProducts.length} items available
             </p>
           </div>
 
-{ filteredProducts.length === 0 ? (
-              <div
+          {filteredProducts.length === 0 ? (
+            <div
               className="
                 rounded-[28px]
                 border-2
@@ -397,15 +390,13 @@ const Menu = () => {
                 px-6
                 py-16
                 text-center
-              "
-            >
+              ">
               <h3
                 className="
                   text-xl
                   font-bold
                   text-slate-900
-                "
-              >
+                ">
                 No Products Found
               </h3>
 
@@ -413,8 +404,7 @@ const Menu = () => {
                 className="
                   mt-2
                   text-slate-500
-                "
-              >
+                ">
                 Try changing your filters.
               </p>
             </div>
@@ -485,15 +475,13 @@ const Menu = () => {
                       flex
                       justify-center
                       py-8
-                    "
-                >
+                    ">
                   {loadingMore ? (
                     <p
                       className="
                             text-sm
                             text-slate-500
-                          "
-                    >
+                          ">
                       Loading more items...
                     </p>
                   ) : (

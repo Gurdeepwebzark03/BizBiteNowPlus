@@ -37,10 +37,9 @@ const CustomerLayout = () => {
     });
   };
 
-  const hideFloatingCart = [
-    "/customer/cart",
-    "/customer/checkout",
-  ].includes(location.pathname);
+  const hideFloatingCart = ["/customer/cart", "/customer/checkout"].includes(
+    location.pathname,
+  );
 
   useEffect(() => {
     const handleResize = () =>
@@ -87,90 +86,83 @@ const CustomerLayout = () => {
     };
   }, [isRestaurantOpen]);
   return (
-  <div className="relative min-h-screen overflow-x-hidden bg-slate-100">
-    {/* ========================= */}
-    {/* Blurred App */}
-    {/* ========================= */}
+    <div className="relative min-h-screen overflow-x-hidden bg-slate-100 dark:bg-[#1E2021] transition-colors duration-300">
+      {/* ========================= */}
+      {/* Blurred App */}
+      {/* ========================= */}
 
-    <div
-      className={`transition-all duration-300 ${
-        !isRestaurantOpen
-          ? "blur-[4px] pointer-events-none select-none"
-          : ""
-      }`}
-    >
-      {/* Sidebar */}
-
-      <DesktopSidebar
-        expanded={sidebarExpanded}
-        setExpanded={setSidebarExpanded}
-        onLogout={handleLogout}
-      />
-
-      {/* Main */}
-
-      <main
-        className="min-h-screen transition-all duration-300 "
-        style={{
-          paddingLeft:
-            window.innerWidth >= 1024
-              ? sidebarExpanded
-                ? "17rem"
-                : "7.5rem"
-              : "0rem",
-        }}
+      <div
+        className={`transition-all duration-300 ${
+          !isRestaurantOpen
+            ? "blur-[4px] pointer-events-none select-none"
+            : ""
+        }`}
       >
-        {location.pathname === "/customer" && (
-          <CustomerHeader
-            sidebarExpanded={sidebarExpanded}
-            isDesktop={isDesktop}
-          />
+        {/* Sidebar */}
+
+        <DesktopSidebar
+          expanded={sidebarExpanded}
+          setExpanded={setSidebarExpanded}
+          onLogout={handleLogout}
+        />
+
+        {/* Main */}
+
+        <main
+          className="min-h-screen transition-all duration-300"
+          style={{
+            paddingLeft:
+              window.innerWidth >= 1024
+                ? sidebarExpanded
+                  ? "17rem"
+                  : "7.5rem"
+                : "0rem",
+          }}>
+          {location.pathname === "/customer" && (
+            <CustomerHeader
+              sidebarExpanded={sidebarExpanded}
+              isDesktop={isDesktop}
+            />
+          )}
+
+          <div
+            className={`w-full ${
+              location.pathname === "/customer" ? "pt-22" : "pt-0"
+            }`}>
+            <Outlet />
+          </div>
+        </main>
+
+        {!hideFloatingCart && (
+          <FloatingCartButton totalItems={totalItems} totalPrice={totalPrice} />
         )}
 
-        <div
-          className={`w-full ${
-            location.pathname === "/customer"
-              ? "pt-22"
-              : "pt-0"
-          }`}
-        >
-          <Outlet />
-        </div>
-      </main>
-            {!hideFloatingCart && (
-        <FloatingCartButton
-          totalItems={totalItems}
-          totalPrice={totalPrice}
-        />
-      )}
-
-      <BottomNavigation />
-    </div>
-
-    {/* ========================= */}
-    {/* Store Closed Overlay */}
-    {/* ========================= */}
-
-    {!isRestaurantOpen && (
-      <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/40 backdrop-blur-sm">
-        <div className="mx-5 w-full max-w-md rounded-3xl bg-white p-8 text-center shadow-2xl">
-          <h2 className="text-3xl font-bold text-slate-900">
-            Store Closed
-          </h2>
-
-          <p className="mt-3 text-base text-slate-600">
-            We're currently not accepting orders.
-          </p>
-
-          <p className="mt-2 text-sm text-slate-400">
-            Please visit us again during our business hours.
-          </p>
-        </div>
+        <BottomNavigation />
       </div>
-    )}
-  </div>
-);
 
+      {/* ========================= */}
+      {/* Store Closed Overlay */}
+      {/* ========================= */}
+
+      {!isRestaurantOpen && (
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/40 backdrop-blur-sm">
+          <div className="mx-5 w-full max-w-md rounded-3xl bg-white dark:bg-[#181A1B] p-8 text-center shadow-2xl">
+            <h2 className="text-3xl font-bold text-slate-900 dark:text-white">
+              Store Closed
+            </h2>
+
+            <p className="mt-3 text-base text-slate-600 dark:text-slate-400">
+              We're currently not accepting orders.
+            </p>
+
+            <p className="mt-2 text-sm text-slate-400 dark:text-slate-500">
+              Please visit us again during our business hours.
+            </p>
+          </div>
+        </div>
+      )}
+    </div>
+  );
 };
 
 export default CustomerLayout;

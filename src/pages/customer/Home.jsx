@@ -121,6 +121,7 @@ const menu = menuRes.data?.data || [];
   };
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     loadData();
   }, []);
 
@@ -484,11 +485,11 @@ const menu = menuRes.data?.data || [];
             <section className="space-y-6 px-2 sm:px-4 lg:px-6 xl:px-8">
               <div className="flex items-center justify-between">
                 <div>
-                  <h2 className="text-2xl font-bold text-slate-900">
+                  <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
                     Today's Offers 🔥
                   </h2>
 
-                  <p className="mt-1 text-slate-500">
+                  <p className="mt-1 text-slate-500 dark:text-slate-400">
                     Save more with exclusive deals available today.
                   </p>
                 </div>

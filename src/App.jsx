@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Routes,
   Route,
@@ -66,6 +65,9 @@ import CustomerOrders from "./pages/customer/Orders";
 import OrderDetail from "./pages/customer/OrderDetails";
 import Rewards from "./pages/customer/Rewards";
 import CustomerProfile from "./pages/customer/Profile";
+import PersonalDetails from "./pages/customer/PersonalDetails";
+import Language from "./pages/customer/Language";
+import Appearance from "./pages/customer/Appearance";
 import Favourites from "./pages/customer/Favourites";
 
 
@@ -189,6 +191,21 @@ export default function App() {
           <Route
             path="profile"
             element={<CustomerProfile />}
+          />
+
+          <Route
+            path="profile/personal-details"
+            element={<PersonalDetails />}
+          />
+
+          <Route
+            path="profile/language"
+            element={<Language />}
+          />
+
+          <Route
+            path="profile/appearance"
+            element={<Appearance />}
           />
 
 
