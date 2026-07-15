@@ -13,10 +13,7 @@ import { useEffect, useRef, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 
-import {
-  getStore,
-  getNotifications,
-} from "../../../api/customerApi";
+import { getStore, getNotifications } from "../../../api/customerApi";
 
 const CustomerHeader = ({ sidebarExpanded, isDesktop }) => {
   const navigate = useNavigate();
@@ -30,7 +27,6 @@ const CustomerHeader = ({ sidebarExpanded, isDesktop }) => {
   const [locationOpen, setLocationOpen] = useState(false);
   const [selectedLocation, setSelectedLocation] = useState({
     title: "Select your location",
-    subtitle: "Tap to detect",
   });
   const wrapperRef = useRef(null);
 
@@ -54,29 +50,20 @@ const CustomerHeader = ({ sidebarExpanded, isDesktop }) => {
 
     loadData();
   }, []);
-useEffect(() => {
-  const handleClickOutside = (event) => {
-    if (
-      wrapperRef.current &&
-      !wrapperRef.current.contains(event.target)
-    ) {
-      setNotificationOpen(false);
-      setLocationOpen(false);
-    }
-  };
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
+        setNotificationOpen(false);
+        setLocationOpen(false);
+      }
+    };
 
-  document.addEventListener(
-    "mousedown",
-    handleClickOutside
-  );
+    document.addEventListener("mousedown", handleClickOutside);
 
-  return () => {
-    document.removeEventListener(
-      "mousedown",
-      handleClickOutside
-    );
-  };
-}, []);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const getNotificationIcon = (type) => {
     if (type === "reward") return Gift;
@@ -106,10 +93,7 @@ useEffect(() => {
           const address = data.address || {};
 
           setSelectedLocation({
-            title:
-              address.suburb ||
-              address.city ||
-              address.town,
+            title: address.suburb || address.city || address.town,
 
             subtitle: data.display_name,
           });
@@ -344,55 +328,44 @@ ease-in-out
                   </div>
 
                   <button
+                    onClick={detectLocation}
                     className="
-                    flex
-                    w-full
-                    items-center
-                    gap-4
-                    border-b
-                    border-slate-100
-                    p-4
-                    text-left
-                    transition
-                    hover:bg-slate-50
-                  "
+    flex
+    w-full
+    items-center
+    gap-4
+    p-4
+    text-left
+    transition
+    hover:bg-slate-50
+  "
                   >
                     <div className="rounded-xl bg-green-100 p-3">
                       <Navigation size={20} className="text-green-600" />
                     </div>
 
-                    <div>
-                      <button
-                        onClick={detectLocation}
-                        className="
-                          flex
-                          w-full
-                          text-left
-                          items-center
-                          transition
-                          hover:bg-slate-50
-                        "
-                      >
+                    <div className="flex-1">
+                      <p className="font-semibold text-slate-900">
                         Use Current Location
-                      </button>
+                      </p>
 
                       <p className="text-sm text-slate-500">
-                        Detect automatically
+                        Detect your current location
                       </p>
                     </div>
                   </button>
 
                   <button
                     className="
-          flex
-          w-full
-          items-center
-          gap-4
-          p-4
-          text-left
-          transition
-          hover:bg-slate-50
-        "
+    flex
+    w-full
+    items-center
+    gap-4
+    p-4
+    text-left
+    transition
+    hover:bg-slate-50
+  "
                   >
                     <div className="rounded-xl bg-slate-100 p-3">
                       <Plus size={20} className="text-slate-700" />
@@ -519,7 +492,10 @@ ease-in-out
             >
               {notifications.length === 0 ? (
                 <div className="p-8 text-center">
-                  <Bell size={34} className="mx-auto mb-3 text-slate-300 dark:text-slate-600" />
+                  <Bell
+                    size={34}
+                    className="mx-auto mb-3 text-slate-300 dark:text-slate-600"
+                  />
 
                   <p className="font-semibold text-slate-700 dark:text-slate-200">
                     No notifications
