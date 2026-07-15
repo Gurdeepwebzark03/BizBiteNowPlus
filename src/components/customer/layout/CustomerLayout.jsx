@@ -26,9 +26,9 @@ const CustomerLayout = () => {
   const [store, setStore] =
     useState(null);
 
-  const isRestaurantOpen =
-    store?.timings?.status?.toLowerCase() ===
-    "open";
+  const isRestaurantOpen = true
+    // store?.timings?.status?.toLowerCase() ===
+    // "open";
 
   const handleLogout = async () => {
     await logoutCustomer();
