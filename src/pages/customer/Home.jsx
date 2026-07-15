@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import { useCart } from "../../context/CartContext";
 
 import HeroBanner from "../../components/customer/hero/HeroBanner";
-import StoreCard from "../../components/customer/hero/StoreCard";
+
 
 import MenuGrid from "../../components/customer/menu/MenuGrid";
 import ProductCard from "../../components/customer/menu/ProductCard";
@@ -370,46 +370,7 @@ const menu = menuRes.data?.data || [];
             />
           )}
 
-          {loading ? (
-            <StoreCardSkeleton />
-          ) : (
-            <StoreCard
-              address={
-                store?.address
-                  ? `${store.address.line1}, ${store.address.city}, ${store.address.state}`
-                  : ""
-              }
-              phone={store?.phone || ""}
-              distance={store?.distance || "2.4 km"}
-              deliveryTime={store?.delivery?.averageTime || "25-35 mins"}
-              isOpen={store?.timings?.status === "Open"}
-              onCall={() => store?.phone && window.open(`tel:${store.phone}`)}
-              onDirections={() =>
-                window.open("https://maps.google.com", "_blank")
-              }
-              onShare={async () => {
-                const shareData = {
-                  title: store?.name || "Restaurant",
-                  text: store?.tagline || "Check out this restaurant!",
-                  url: window.location.origin,
-                };
-
-                try {
-                  if (navigator.share) {
-                    await navigator.share(shareData);
-                  } else {
-                    await navigator.clipboard.writeText(shareData.url);
-
-                    alert("Link copied to clipboard!");
-                  }
-                } catch (error) {
-                  console.log("Share cancelled:", error);
-                }
-              }}
-              onFavorite={() => navigate("/customer/favorites")}
-              onBookTable={() => navigate("/customer/book-table")}
-            />
-          )}
+          
 
           {/* Recently Ordered */}
 

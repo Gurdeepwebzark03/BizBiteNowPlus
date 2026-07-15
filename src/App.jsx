@@ -66,6 +66,7 @@ import CustomerOrders from "./pages/customer/Orders";
 import OrderDetail from "./pages/customer/OrderDetails";
 import Rewards from "./pages/customer/Rewards";
 import CustomerProfile from "./pages/customer/Profile";
+import Favourites from "./pages/customer/Favourites";
 
 
 
@@ -148,7 +149,9 @@ export default function App() {
             element={<Menu />}
           />
 
-
+          <Route 
+          path="favorites" 
+          element={<Favourites />} />
           <Route
             path="product/:id"
             element={<Product />}

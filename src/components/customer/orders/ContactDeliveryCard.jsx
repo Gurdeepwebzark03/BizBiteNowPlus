@@ -30,10 +30,11 @@ const ContactDeliveryCard = ({
       <div className="mt-5 ">
 
    {order?.status === "Out for Delivery" && (
+<div className="mt-5 flex justify-center">
   <button
     className="
       flex
-      w-1/2
+      w-60
       items-center
       justify-center
       gap-2
@@ -50,7 +51,9 @@ const ContactDeliveryCard = ({
     <Phone size={18} />
     Contact Delivery Partner
   </button>
-)}
+</div>
+   )}
+
 
 
       </div>

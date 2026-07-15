@@ -6,6 +6,8 @@ import {
   Gift,
   User,
   LogOut,
+  ShoppingBag,
+  Heart,
 } from "lucide-react";
 
 const navItems = [
@@ -18,6 +20,16 @@ const navItems = [
     label: "Menu",
     path: "/customer/menu",
     icon: UtensilsCrossed,
+  },    
+{
+  label: "Favourite",
+  path: "/customer/favorites",
+  icon: Heart,
+},
+    {
+    label: "Cart",
+    path: "/customer/cart",
+    icon: ShoppingBag,
   },
   {
     label: "Orders",
@@ -46,9 +58,8 @@ const DesktopSidebar = ({ store = {}, onLogout, expanded, setExpanded }) => {
         lg:flex
 
         fixed
-        left-5
-        top-5
-        bottom-5
+        mt-0
+        min-h-full
         z-50
 
         overflow-hidden
@@ -56,8 +67,8 @@ const DesktopSidebar = ({ store = {}, onLogout, expanded, setExpanded }) => {
         flex-col
         items-center
 
-        rounded-[14px]
-
+        
+        min-h-full
         border
         border-slate-200
 
@@ -65,7 +76,7 @@ const DesktopSidebar = ({ store = {}, onLogout, expanded, setExpanded }) => {
 
         backdrop-blur-xl
 
-        shadow-xl
+        
 
         transition-all
         duration-300

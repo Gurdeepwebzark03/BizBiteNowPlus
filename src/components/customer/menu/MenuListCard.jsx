@@ -72,8 +72,7 @@ const MenuListCard = ({
   >
     <img
       src={
-        image ||
-        "https://via.placeholder.com/300x300?text=Food"
+        image
       }
       alt={name}
       className="h-full w-full object-cover"
