@@ -70,9 +70,9 @@ const BottomNavigation = () => {
 
           border
 
-          border-slate-200
+          border-slate-200 dark:border-[#A9BDCF]/40
 
-          bg-white/90
+          bg-white/90 dark:bg-[#181A1B]
 
           px-2
 
@@ -112,14 +112,10 @@ const BottomNavigation = () => {
                   ({isActive}) => (
 
                     <div
-                      className={`
+                      className="
                         relative
 
                         flex
-
-                        h-12
-
-                        w-12
 
                         flex-col
 
@@ -127,73 +123,73 @@ const BottomNavigation = () => {
 
                         justify-center
 
-                        rounded-[10px]
+                        gap-0.5
 
-                        transition-all
-
-                        duration-300
-
-                        ${
-                          isActive
-                          ?
-                          "text-white shadow-lg"
-                          :
-                          "text-slate-500 hover:bg-slate-100"
-                        }
-                      `}
-
-                      style={{
-                        background:
-                          isActive
-                          ?
-                          "var(--primary)"
-                          :
-                          "transparent",
-                      }}
+                        py-1
+                      "
                     >
 
-                      <Icon
-                        size={20}
-                        strokeWidth={2.3}
-                      />
+                      <div
+                        className={`
+                          flex
 
+                          h-10
+
+                          w-10
+
+                          items-center
+
+                          justify-center
+
+                          rounded-full
+
+                          transition-all
+
+                          duration-300
+
+                          ${
+                            isActive
+                            ?
+                            "text-white shadow-lg"
+                            :
+                            "text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-white/5"
+                          }
+                        `}
+
+                        style={{
+                          background:
+                            isActive
+                            ?
+                            "var(--primary)"
+                            :
+                            "transparent",
+                        }}
+                      >
+
+                        <Icon
+                          size={20}
+                          strokeWidth={2.3}
+                        />
+
+                      </div>
 
                       <span
-                        className="
-                          mt-0.5
-
+                        className={`
                           text-[10px]
 
                           font-semibold
-                        "
+
+                          ${
+                            isActive
+                            ?
+                            "text-slate-900 dark:text-white"
+                            :
+                            "text-slate-500 dark:text-slate-400"
+                          }
+                        `}
                       >
                         {label}
                       </span>
-
-
-
-                      {
-                        isActive && (
-
-                          <span
-                            className="
-                              absolute
-
-                              -bottom-1
-
-                              h-1
-
-                              w-5
-
-                              rounded-[14px]
-
-                              bg-white
-                            "
-                          />
-
-                        )
-                      }
-
 
                     </div>
 

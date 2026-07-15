@@ -70,9 +70,9 @@ const DesktopSidebar = ({ store = {}, onLogout, expanded, setExpanded }) => {
         
         min-h-full
         border
-        border-slate-200
+        border-slate-200 dark:border-[#A9BDCF]/40
 
-        bg-white/90
+        bg-white/90 dark:bg-[#181A1B]
 
         backdrop-blur-xl
 
@@ -143,7 +143,7 @@ const DesktopSidebar = ({ store = {}, onLogout, expanded, setExpanded }) => {
               ${
                 isActive
                   ? "text-white shadow-lg"
-                  : "text-green-700 hover:bg-slate-100 hover:text-yellow-600"
+                  : "text-green-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-white/5 hover:text-yellow-600"
               }
             `}
                 style={{
@@ -209,7 +209,7 @@ const DesktopSidebar = ({ store = {}, onLogout, expanded, setExpanded }) => {
 
             transition
 
-            hover:bg-red-50
+            hover:bg-red-50 dark:hover:bg-red-500/10
             hover:text-red-700
           "
         >

@@ -7,7 +7,6 @@ import {
 } from "lucide-react";
 
 import Card from "../common/Card";
-import SectionHeader from "../common/SectionHeader";
 
 const notificationGroups = [
   {
@@ -59,7 +58,7 @@ const Toggle = ({
       transition-all
       duration-300
 
-      ${checked ? "" : "bg-slate-300"}
+      ${checked ? "" : "bg-slate-300 dark:bg-slate-600"}
     `}
     style={{
       background: checked
@@ -99,13 +98,6 @@ const NotificationSettings = ({
 }) => {
   return (
     <section className="space-y-6">
-      {/* Header */}
-
-      <SectionHeader
-        title="Notification Settings"
-        subtitle="Choose which notifications you'd like to receive."
-      />
-
       {/* Settings */}
 
       <div className="space-y-5">
@@ -147,11 +139,11 @@ const NotificationSettings = ({
                   {/* Content */}
 
                   <div className="flex-1">
-                    <h3 className="text-lg font-semibold text-slate-900">
+                    <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
                       {item.title}
                     </h3>
 
-                    <p className="mt-1 text-sm text-slate-500">
+                    <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
                       {
                         item.description
                       }
@@ -195,7 +187,7 @@ const NotificationSettings = ({
           Changes are saved automatically.
         </p>
 
-        <p className="mt-2 text-sm text-slate-600">
+        <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
           You can change these
           preferences anytime.
         </p>

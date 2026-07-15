@@ -27,7 +27,9 @@ const Coupons = ({
 
   const handleCopy = (code) => {
     navigator.clipboard.writeText(code);
+
     setCopiedCode(code);
+
     onCopy?.(code);
 
     setTimeout(() => {
@@ -45,26 +47,36 @@ const Coupons = ({
           : coupon.expired;
 
       const searchMatch =
-        coupon.code.toLowerCase().includes(search.toLowerCase()) ||
-        coupon.title.toLowerCase().includes(search.toLowerCase());
+        coupon.code
+          .toLowerCase()
+          .includes(search.toLowerCase()) ||
+        coupon.title
+          .toLowerCase()
+          .includes(search.toLowerCase());
 
       return tabMatch && searchMatch;
     });
-  }, [coupons, activeTab, search, appliedCoupon, usedCoupons]);
+  }, [
+    coupons,
+    activeTab,
+    search,
+    appliedCoupon,
+    usedCoupons,
+  ]);
 
   return (
     <div className="space-y-6">
-      {/* Header */}
 
       <SectionHeader
-        title="Coupons"
-        subtitle="Save more on every order."
+        title="Active Coupons"
+        subtitle="Available rewards ready to use."
       />
 
       {/* Search */}
 
       <Card shadow="none">
         <div className="relative">
+
           <Search
             size={18}
             className="
@@ -78,37 +90,37 @@ const Coupons = ({
 
           <input
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) =>
+              setSearch(e.target.value)
+            }
             placeholder="Search coupon..."
             className="
               w-full
-
               bg-transparent
-
-              py-3
               pl-12
               pr-2
-
               outline-none
-
-              text-slate-800
-              placeholder:text-slate-400
             "
           />
+
         </div>
       </Card>
 
       {/* Tabs */}
 
       <div className="flex gap-3 overflow-x-auto scrollbar-hide">
+
         {tabs.map((tab) => (
           <Chip
             key={tab.id}
             label={tab.label}
             selected={activeTab === tab.id}
-            onClick={() => setActiveTab(tab.id)}
+            onClick={() =>
+              setActiveTab(tab.id)
+            }
           />
         ))}
+
       </div>
 
       {/* Coupons */}
@@ -116,23 +128,42 @@ const Coupons = ({
       {filteredCoupons.length === 0 ? (
         <EmptyState
           icon="search"
-          title="No Coupons Found"
-          description="No coupons available in this category."
+          title="No Coupons"
+          description="Nothing available here."
         />
       ) : (
-        <div className="grid gap-6 lg:grid-cols-2">
+        <div
+          className="
+            flex
+            gap-5
+            overflow-x-auto
+            scrollbar-hide
+            pb-2
+            snap-x
+            snap-mandatory
+          "
+        >
           {filteredCoupons.map((coupon) => (
-            <CouponCard
+            <div
               key={coupon.code}
-              coupon={coupon}
-              copied={copiedCode === coupon.code}
-              used={usedCoupons.includes(coupon.code)}
-              onCopy={handleCopy}
-              onApply={onApply}
-            />
+              className="snap-start"
+            >
+              <CouponCard
+                coupon={coupon}
+                copied={
+                  copiedCode === coupon.code
+                }
+                used={usedCoupons.includes(
+                  coupon.code
+                )}
+                onCopy={handleCopy}
+                onApply={onApply}
+              />
+            </div>
           ))}
         </div>
       )}
+
     </div>
   );
 };

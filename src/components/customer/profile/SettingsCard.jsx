@@ -1,7 +1,6 @@
 import {
   ChevronRight,
   Globe,
-  Moon,
   Shield,
   CircleHelp,
   FileText,
@@ -51,26 +50,12 @@ const settings = [
 ];
 
 const SettingsCard = ({
-  darkMode = false,
-  onToggleDarkMode,
   onItemClick,
   onLogout,
   onDeleteAccount,
 }) => {
   return (
     <section className="space-y-6">
-      {/* Header */}
-
-      <div>
-        <h2 className="text-2xl font-bold text-slate-900">
-          Settings
-        </h2>
-
-        <p className="mt-2 text-slate-500">
-          Personalize your account and preferences.
-        </p>
-      </div>
-
       {/* Settings */}
 
       <div
@@ -80,9 +65,9 @@ const SettingsCard = ({
           rounded-[30px]
 
           border
-          border-slate-200
+          border-slate-200 dark:border-[#A9BDCF]/40
 
-          bg-white
+          bg-white dark:bg-[#181A1B]
 
           shadow-sm
         "
@@ -106,11 +91,11 @@ const SettingsCard = ({
 
                 transition
 
-                hover:bg-slate-50
+                hover:bg-slate-50 dark:hover:bg-white/5
 
                 ${
                   index !== settings.length - 1
-                    ? "border-b border-slate-100"
+                    ? "border-b border-slate-100 dark:border-[#A9BDCF]/20"
                     : ""
                 }
               `}
@@ -136,122 +121,22 @@ const SettingsCard = ({
               </div>
 
               <div className="flex-1">
-                <h3 className="font-semibold text-slate-900">
+                <h3 className="font-semibold text-slate-900 dark:text-white">
                   {item.title}
                 </h3>
 
-                <p className="mt-1 text-sm text-slate-500">
+                <p className="mt-1 text-sm text-slate-500 dark:text-slate-400">
                   {item.subtitle}
                 </p>
               </div>
 
               <ChevronRight
                 size={20}
-                className="text-slate-400"
+                className="text-slate-400 dark:text-slate-600"
               />
             </button>
           );
         })}
-      </div>
-
-      {/* Dark Mode */}
-
-      <div
-        className="
-          flex
-          items-center
-          gap-5
-
-          rounded-[30px]
-
-          border
-          border-slate-200
-
-          bg-white
-
-          p-6
-
-          shadow-sm
-        "
-      >
-        <div
-          className="
-            flex
-            h-12
-            w-12
-
-            items-center
-            justify-center
-
-            rounded-2xl
-
-            text-white
-          "
-          style={{
-            background: "var(--primary)",
-          }}
-        >
-          <Moon size={20} />
-        </div>
-
-        <div className="flex-1">
-          <h3 className="font-semibold text-slate-900">
-            Dark Mode
-          </h3>
-
-          <p className="mt-1 text-sm text-slate-500">
-            Reduce eye strain at night.
-          </p>
-        </div>
-
-        <button
-          onClick={onToggleDarkMode}
-          className={`
-            relative
-
-            h-7
-            w-14
-
-            rounded-full
-
-            transition-all
-
-            ${
-              darkMode
-                ? ""
-                : "bg-slate-300"
-            }
-          `}
-          style={{
-            background: darkMode
-              ? "var(--primary)"
-              : undefined,
-          }}
-        >
-          <span
-            className={`
-              absolute
-              top-1
-
-              h-5
-              w-5
-
-              rounded-full
-
-              bg-white
-
-              shadow
-
-              transition-all
-
-              ${
-                darkMode
-                  ? "left-8"
-                  : "left-1"
-              }
-            `}
-          />
-        </button>
       </div>
 
       {/* Logout */}
@@ -268,19 +153,19 @@ const SettingsCard = ({
           rounded-[24px]
 
           border
-          border-red-200
+          border-red-200 dark:border-red-500/30
 
-          bg-red-50
+          bg-red-50 dark:bg-red-500/10
 
           py-4
 
           font-semibold
 
-          text-red-600
+          text-red-600 dark:text-red-400
 
           transition
 
-          hover:bg-red-100
+          hover:bg-red-100 dark:hover:bg-red-500/20
         "
       >
         <LogOut size={20} />
