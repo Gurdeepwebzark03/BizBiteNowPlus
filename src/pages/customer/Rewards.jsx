@@ -11,6 +11,10 @@ import { getActiveOffers } from "../../api/offers";
 import { loyaltyData as DEMO_LOYALTY_DATA } from "../../data/customer/rewardsData";
 import { DEMO_ACTIVE_OFFERS } from "../../data/demoActiveOffers";
 
+import ActivityTimeline from "../../components/customer/rewards/ActivityTimeline";
+import { DEMO_ACTIVITY } from "../../data/customer/demoActivityData";
+import { Gift } from "lucide-react";
+
 import couponsData from "../../data/customer/couponsData";
 import { Bell } from "lucide-react";
 
@@ -52,6 +56,8 @@ const Rewards = () => {
     setAppliedCoupon(coupon);
     localStorage.setItem("appliedCoupon", JSON.stringify(coupon));
   };
+  const rewardReady =
+  loyalty.stampsCollected >= loyalty.threshold;
 
   const handleCopy = () => {
     // Coupons.jsx already copies to clipboard itself and calls this back —
@@ -130,6 +136,8 @@ const Rewards = () => {
 
             <RewardProgress data={loyalty} />
 
+            {rewardReady && <Reward Ready Banner />}
+
             <Coupons
               coupons={coupons}
               appliedCoupon={appliedCoupon}
@@ -137,6 +145,8 @@ const Rewards = () => {
               onApply={applyCoupon}
               onCopy={handleCopy}
             />
+
+            <ActivityTimeline activities={DEMO_ACTIVITY} />
           </section>
         </div>
       </div>
