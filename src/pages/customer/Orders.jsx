@@ -67,21 +67,7 @@ const Orders = () => {
 
     loadOrders();
   }, []);
-  if (loading) {
-    return (
-      <div
-        className="
-        flex
-        min-h-[400px]
-        items-center
-        justify-center
-        text-slate-500
-      "
-      >
-        Loading Orders...
-      </div>
-    );
-  }
+
 
   return (
       <>
@@ -117,10 +103,10 @@ const Orders = () => {
     lg:px-10
   "
       >
-      <div className="flex items-center justify-between">
+      <div className="w-full flex items-center bg-white mt-5 z-50 shadow-sm rounded-xl p-2 justify-between">
   <SectionHeader
-    title="MY ORDERS"
-    subtitle="Freshly prepared dishes made just for you."
+    title="Your Orders"
+    subtitle="Track your orders in real time"
   />
 
   <button

@@ -35,12 +35,28 @@ const categories = [
     sortOrder: 3,
   },
   {
+    id: "Wraps",
+    name: "Wraps",
+    icon: "🌯",
+    image: "",
+    available: true,
+    sortOrder: 4,
+  },
+  {
+    id: "Rice Bowls",
+    name: "Rice Bowls",
+    icon: "🍚",
+    image: "",
+    available: true,
+    sortOrder: 5,
+  },
+  {
     id: "Drinks",
     name: "Drinks",
     icon: "🥤",
     image: "",
     available: true,
-    sortOrder: 4,
+    sortOrder: 6,
   },
   {
     id: "Desserts",
@@ -48,7 +64,7 @@ const categories = [
     icon: "🍰",
     image: "",
     available: true,
-    sortOrder: 5,
+    sortOrder: 7,
   },
   {
     id: "Snacks",
@@ -56,13 +72,22 @@ const categories = [
     icon: "🍟",
     image: "",
     available: true,
-    sortOrder: 6,
+    sortOrder: 8,
+  },
+  {
+    id: "Combo Meals",
+    name: "Combo Meals",
+    icon: "🍱",
+    image: "",
+    available: true,
+    sortOrder: 9,
   },
 ];
 
 const menu = [
   {
     id: "ITEM_001",
+
     sku: "PIZ-001",
 
     storeId: STORE_ID,
@@ -71,14 +96,17 @@ const menu = [
     name: "Margherita Pizza",
 
     description:
-      "Fresh mozzarella cheese with rich tomato sauce and herbs.",
+      "Classic Italian pizza topped with fresh mozzarella cheese, rich tomato sauce, basil leaves, and aromatic herbs.",
 
     category: "Pizza",
 
     image:
       "https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?auto=format&fit=crop&w=900&q=80",
 
-    gallery: [],
+    gallery: [
+      "https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=900&q=80",
+    ],
 
     price: 299,
     originalPrice: 349,
@@ -97,6 +125,10 @@ const menu = [
     bestseller: true,
     recommended: true,
 
+    todaySpecial: false,
+    comboMeal: false,
+    recentlyOrdered: true,
+
     rating: {
       average: 4.8,
       count: 281,
@@ -106,8 +138,10 @@ const menu = [
 
     tags: [
       "Italian",
+      "Pizza",
       "Cheesy",
       "Popular",
+      "Veg",
     ],
 
     variants: [
@@ -139,10 +173,19 @@ const menu = [
         name: "Olives",
         price: 35,
       },
+      {
+        id: "ADD003",
+        name: "Jalapeños",
+        price: 40,
+      },
+      {
+        id: "ADD004",
+        name: "Cheese Burst Crust",
+        price: 99,
+      },
     ],
   },
-
-  {
+    {
     id: "ITEM_002",
 
     sku: "PIZ-002",
@@ -150,70 +193,99 @@ const menu = [
     storeId: STORE_ID,
     sellerId: SELLER_ID,
 
-    name: "Farmhouse Pizza",
+    name: "Chicken Tikka Pizza",
 
     description:
-      "Loaded with onion, capsicum, tomatoes, mushrooms and sweet corn.",
+      "Loaded with spicy chicken tikka, onions, capsicum, mozzarella cheese, and signature pizza sauce.",
 
     category: "Pizza",
 
     image:
       "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=900&q=80",
 
-    gallery: [],
+    gallery: [
+      "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?auto=format&fit=crop&w=900&q=80",
+    ],
 
-    price: 449,
-    originalPrice: 499,
+    price: 549,
+    originalPrice: 649,
 
     tax: 5,
 
-    stock: 90,
+    stock: 80,
 
     available: true,
 
-    preparationTime: 22,
+    preparationTime: 24,
 
-    isVeg: true,
+    isVeg: false,
 
     featured: true,
     bestseller: true,
-    recommended: false,
+    recommended: true,
+
+    todaySpecial: true,
+    comboMeal: false,
+    recentlyOrdered: false,
 
     rating: {
       average: 4.9,
-      count: 196,
+      count: 326,
     },
 
-    calories: 640,
+    calories: 735,
 
     tags: [
-      "Veg",
-      "Premium",
+      "Chicken",
+      "Pizza",
+      "Spicy",
+      "Best Seller",
+      "Non Veg",
     ],
 
     variants: [
       {
         id: "VAR004",
         name: "Regular",
-        price: 449,
+        price: 549,
       },
       {
         id: "VAR005",
-        name: "Large",
+        name: "Medium",
         price: 699,
+      },
+      {
+        id: "VAR006",
+        name: "Large",
+        price: 849,
       },
     ],
 
     addons: [
       {
-        id: "ADD003",
-        name: "Cheese Burst",
+        id: "ADD005",
+        name: "Extra Cheese",
+        price: 50,
+      },
+      {
+        id: "ADD006",
+        name: "Chicken Tikka",
         price: 99,
+      },
+      {
+        id: "ADD007",
+        name: "Cheese Burst Crust",
+        price: 99,
+      },
+      {
+        id: "ADD008",
+        name: "Black Olives",
+        price: 40,
       },
     ],
   },
-
-  {
+    {
     id: "ITEM_003",
 
     sku: "BUR-001",
@@ -224,17 +296,20 @@ const menu = [
     name: "Classic Chicken Burger",
 
     description:
-      "Grilled chicken patty with lettuce, tomato and mayo.",
+      "Juicy grilled chicken patty layered with fresh lettuce, tomatoes, cheddar cheese, caramelized onions, creamy mayo, and signature burger sauce.",
 
     category: "Burgers",
 
     image:
       "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=900&q=80",
 
-    gallery: [],
+    gallery: [
+      "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=900&q=80",
+    ],
 
     price: 249,
-    originalPrice: 279,
+    originalPrice: 299,
 
     tax: 5,
 
@@ -250,35 +325,62 @@ const menu = [
     bestseller: true,
     recommended: true,
 
+    todaySpecial: false,
+    comboMeal: false,
+    recentlyOrdered: true,
+
     rating: {
-      average: 4.7,
-      count: 158,
+      average: 4.8,
+      count: 218,
     },
 
-    calories: 560,
+    calories: 590,
 
     tags: [
-      "Chicken",
       "Burger",
+      "Chicken",
+      "Grilled",
+      "Popular",
+      "Non Veg",
     ],
 
-    variants: [],
+    variants: [
+      {
+        id: "VAR007",
+        name: "Regular",
+        price: 249,
+      },
+      {
+        id: "VAR008",
+        name: "Double Patty",
+        price: 369,
+      },
+    ],
 
     addons: [
       {
-        id: "ADD004",
+        id: "ADD009",
+        name: "Extra Cheese",
+        price: 35,
+      },
+      {
+        id: "ADD010",
         name: "French Fries",
         price: 99,
       },
       {
-        id: "ADD005",
-        name: "Cheese Slice",
-        price: 30,
+        id: "ADD011",
+        name: "Coke",
+        price: 59,
+      },
+      {
+        id: "ADD012",
+        name: "Chicken Patty",
+        price: 120,
       },
     ],
   },
-
-  {
+    {
     id: "ITEM_004",
 
     sku: "PAS-001",
@@ -289,21 +391,24 @@ const menu = [
     name: "Creamy Alfredo Pasta",
 
     description:
-      "Creamy white sauce pasta with herbs and parmesan cheese.",
+      "Perfectly cooked penne pasta tossed in a rich and creamy Alfredo sauce with parmesan cheese, herbs, garlic, and fresh parsley.",
 
     category: "Pasta",
 
     image:
       "https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?auto=format&fit=crop&w=900&q=80",
 
-    gallery: [],
+    gallery: [
+      "https://images.unsplash.com/photo-1621996346565-e3dbc646d9a9?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1555949258-eb67b1ef0ceb?auto=format&fit=crop&w=900&q=80",
+    ],
 
-    price: 279,
-    originalPrice: 329,
+    price: 289,
+    originalPrice: 349,
 
     tax: 5,
 
-    stock: 60,
+    stock: 70,
 
     available: true,
 
@@ -311,34 +416,66 @@ const menu = [
 
     isVeg: true,
 
-    featured: false,
+    featured: true,
     bestseller: true,
     recommended: true,
 
+    todaySpecial: true,
+    comboMeal: false,
+    recentlyOrdered: false,
+
     rating: {
-      average: 4.6,
-      count: 104,
+      average: 4.7,
+      count: 186,
     },
 
-    calories: 480,
+    calories: 520,
 
     tags: [
-      "Creamy",
+      "Pasta",
       "Italian",
+      "Creamy",
+      "Cheese",
+      "Veg",
     ],
 
-    variants: [],
+    variants: [
+      {
+        id: "VAR009",
+        name: "Regular",
+        price: 289,
+      },
+      {
+        id: "VAR010",
+        name: "Large",
+        price: 419,
+      },
+    ],
 
     addons: [
       {
-        id: "ADD006",
+        id: "ADD013",
         name: "Garlic Bread",
         price: 79,
       },
+      {
+        id: "ADD014",
+        name: "Extra Parmesan",
+        price: 45,
+      },
+      {
+        id: "ADD015",
+        name: "Mushrooms",
+        price: 60,
+      },
+      {
+        id: "ADD016",
+        name: "Jalapeños",
+        price: 35,
+      },
     ],
   },
-
-  {
+    {
     id: "ITEM_005",
 
     sku: "DRK-001",
@@ -349,18 +486,20 @@ const menu = [
     name: "Cold Coffee",
 
     description:
-      "Rich cold coffee blended with ice cream.",
+      "Smooth and refreshing cold coffee blended with premium vanilla ice cream, chocolate syrup, and crushed ice.",
 
     category: "Drinks",
 
     image:
       "https://images.unsplash.com/photo-1517701604599-bb29b565090c?auto=format&fit=crop&w=900&q=80",
 
-    gallery: [],
+    gallery: [
+      "https://images.unsplash.com/photo-1517701604599-bb29b565090c?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=900&q=80",
+    ],
 
     price: 149,
-
-    originalPrice: 179,
+    originalPrice: 189,
 
     tax: 5,
 
@@ -374,28 +513,35 @@ const menu = [
 
     featured: false,
     bestseller: true,
-    recommended: false,
+    recommended: true,
+
+    todaySpecial: false,
+    comboMeal: false,
+    recentlyOrdered: false,
 
     rating: {
       average: 4.8,
-      count: 317,
+      count: 348,
     },
 
-    calories: 260,
+    calories: 270,
 
     tags: [
-      "Cold",
       "Coffee",
+      "Cold",
+      "Beverage",
+      "Summer",
+      "Popular",
     ],
 
     variants: [
       {
-        id: "VAR006",
+        id: "VAR011",
         name: "Regular",
         price: 149,
       },
       {
-        id: "VAR007",
+        id: "VAR012",
         name: "Large",
         price: 199,
       },
@@ -403,14 +549,23 @@ const menu = [
 
     addons: [
       {
-        id: "ADD007",
+        id: "ADD017",
         name: "Whipped Cream",
         price: 20,
       },
+      {
+        id: "ADD018",
+        name: "Chocolate Syrup",
+        price: 25,
+      },
+      {
+        id: "ADD019",
+        name: "Vanilla Ice Cream",
+        price: 40,
+      },
     ],
   },
-
-  {
+    {
     id: "ITEM_006",
 
     sku: "DES-001",
@@ -421,22 +576,214 @@ const menu = [
     name: "Chocolate Lava Cake",
 
     description:
-      "Warm chocolate cake with a gooey molten chocolate center.",
+      "Warm chocolate sponge cake with a rich molten chocolate center, served fresh and topped with cocoa dust.",
 
     category: "Desserts",
 
     image:
-      "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?auto=format&fit=crop&w=900&q=80",
 
-    gallery: [],
+    gallery: [
+      "https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1551024601-bec78aea704b?auto=format&fit=crop&w=900&q=80",
+    ],
 
     price: 179,
-
-    originalPrice: 219,
+    originalPrice: 229,
 
     tax: 5,
 
-    stock: 80,
+    stock: 90,
+
+    available: true,
+
+    preparationTime: 10,
+
+    isVeg: true,
+
+    featured: true,
+    bestseller: true,
+    recommended: true,
+
+    todaySpecial: false,
+    comboMeal: false,
+    recentlyOrdered: true,
+
+    rating: {
+      average: 4.9,
+      count: 296,
+    },
+
+    calories: 410,
+
+    tags: [
+      "Dessert",
+      "Chocolate",
+      "Cake",
+      "Sweet",
+      "Popular",
+    ],
+
+    variants: [
+      {
+        id: "VAR013",
+        name: "Single",
+        price: 179,
+      },
+      {
+        id: "VAR014",
+        name: "Double",
+        price: 329,
+      },
+    ],
+
+    addons: [
+      {
+        id: "ADD020",
+        name: "Vanilla Ice Cream",
+        price: 49,
+      },
+      {
+        id: "ADD021",
+        name: "Chocolate Syrup",
+        price: 25,
+      },
+      {
+        id: "ADD022",
+        name: "Whipped Cream",
+        price: 30,
+      },
+      {
+        id: "ADD023",
+        name: "Brownie Crumble",
+        price: 40,
+      },
+    ],
+  },
+    {
+    id: "ITEM_007",
+
+    sku: "BUR-002",
+
+    storeId: STORE_ID,
+    sellerId: SELLER_ID,
+
+    name: "Veg Loaded Burger",
+
+    description:
+      "A crispy vegetable patty layered with lettuce, tomatoes, onions, cheddar cheese, pickles, and creamy burger sauce in a toasted sesame bun.",
+
+    category: "Burgers",
+
+    image:
+      "https://images.unsplash.com/photo-1550317138-10000687a72b?auto=format&fit=crop&w=900&q=80",
+
+    gallery: [
+      "https://images.unsplash.com/photo-1550317138-10000687a72b?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=900&q=80",
+    ],
+
+    price: 219,
+    originalPrice: 269,
+
+    tax: 5,
+
+    stock: 110,
+
+    available: true,
+
+    preparationTime: 14,
+
+    isVeg: true,
+
+    featured: true,
+    bestseller: false,
+    recommended: true,
+
+    todaySpecial: false,
+    comboMeal: false,
+    recentlyOrdered: false,
+
+    rating: {
+      average: 4.7,
+      count: 194,
+    },
+
+    calories: 485,
+
+    tags: [
+      "Burger",
+      "Veg",
+      "Cheesy",
+      "Fast Food",
+      "Fresh",
+    ],
+
+    variants: [
+      {
+        id: "VAR015",
+        name: "Regular",
+        price: 219,
+      },
+      {
+        id: "VAR016",
+        name: "Double Patty",
+        price: 319,
+      },
+    ],
+
+    addons: [
+      {
+        id: "ADD024",
+        name: "Extra Cheese",
+        price: 35,
+      },
+      {
+        id: "ADD025",
+        name: "French Fries",
+        price: 99,
+      },
+      {
+        id: "ADD026",
+        name: "Coke",
+        price: 59,
+      },
+      {
+        id: "ADD027",
+        name: "Veg Patty",
+        price: 70,
+      },
+    ],
+  },
+    {
+    id: "ITEM_008",
+
+    sku: "WRP-001",
+
+    storeId: STORE_ID,
+    sellerId: SELLER_ID,
+
+    name: "Paneer Tikka Wrap",
+
+    description:
+      "Soft tortilla stuffed with smoky paneer tikka, fresh vegetables, mint mayo, onions, and crunchy lettuce.",
+
+    category: "Wraps",
+
+    image:
+      "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=900&q=80",
+
+    gallery: [
+      "https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?auto=format&fit=crop&w=900&q=80",
+    ],
+
+    price: 229,
+    originalPrice: 279,
+
+    tax: 5,
+
+    stock: 95,
 
     available: true,
 
@@ -448,170 +795,94 @@ const menu = [
     bestseller: true,
     recommended: true,
 
-    rating: {
-      average: 4.9,
-      count: 214,
-    },
-
-    calories: 390,
-
-    tags: [
-      "Dessert",
-      "Chocolate",
-    ],
-
-    variants: [],
-
-    addons: [],
-  },
-
-  {
-    id: "ITEM_007",
-
-    sku: "DRK-002",
-
-    storeId: STORE_ID,
-    sellerId: SELLER_ID,
-
-    name: "Mango Shake",
-
-    description:
-      "Fresh Alphonso mango shake blended with premium vanilla ice cream.",
-
-    category: "Drinks",
-
-    image:
-      "https://images.unsplash.com/photo-1623065422902-30a2d299bbe4?auto=format&fit=crop&w=900&q=80",
-
-    gallery: [],
-
-    price: 199,
-
-    originalPrice: 229,
-
-    tax: 5,
-
-    stock: 150,
-
-    available: true,
-
-    preparationTime: 6,
-
-    isVeg: true,
-
-    featured: false,
-    bestseller: false,
-    recommended: true,
+    todaySpecial: false,
+    comboMeal: false,
+    recentlyOrdered: true,
 
     rating: {
-      average: 4.7,
-      count: 121,
+      average: 4.8,
+      count: 231,
     },
 
-    calories: 290,
+    calories: 455,
 
     tags: [
-      "Shake",
-      "Summer",
-    ],
-
-    variants: [],
-
-    addons: [],
-  },
-
-  {
-    id: "ITEM_008",
-
-    sku: "BUR-002",
-
-    storeId: STORE_ID,
-    sellerId: SELLER_ID,
-
-    name: "Veg Loaded Burger",
-
-    description:
-      "Crispy veg patty with fresh vegetables and signature sauce.",
-
-    category: "Burgers",
-
-    image:
-      "https://images.unsplash.com/photo-1520072959219-c595dc870360?auto=format&fit=crop&w=900&q=80",
-
-    gallery: [],
-
-    price: 199,
-
-    originalPrice: 249,
-
-    tax: 5,
-
-    stock: 95,
-
-    available: true,
-
-    preparationTime: 15,
-
-    isVeg: true,
-
-    featured: false,
-    bestseller: false,
-    recommended: false,
-
-    rating: {
-      average: 4.5,
-      count: 88,
-    },
-
-    calories: 430,
-
-    tags: [
+      "Wrap",
+      "Paneer",
       "Veg",
-      "Burger",
+      "Healthy",
+      "Fresh",
     ],
 
-    variants: [],
+    variants: [
+      {
+        id: "VAR017",
+        name: "Regular",
+        price: 229,
+      },
+      {
+        id: "VAR018",
+        name: "Double Paneer",
+        price: 319,
+      },
+    ],
 
     addons: [
       {
-        id: "ADD008",
-        name: "Extra Cheese",
+        id: "ADD028",
+        name: "Extra Paneer",
+        price: 60,
+      },
+      {
+        id: "ADD029",
+        name: "Cheese Slice",
         price: 35,
+      },
+      {
+        id: "ADD030",
+        name: "French Fries",
+        price: 99,
+      },
+      {
+        id: "ADD031",
+        name: "Mint Dip",
+        price: 25,
       },
     ],
   },
-
-  {
+    {
     id: "ITEM_009",
 
-    sku: "PIZ-003",
+    sku: "COM-001",
 
     storeId: STORE_ID,
     sellerId: SELLER_ID,
 
-    name: "Chicken Tikka Pizza",
+    name: "Burger Combo Meal",
 
     description:
-      "Loaded with spicy chicken tikka, onions and mozzarella cheese.",
+      "A complete meal with a crispy chicken burger, medium French fries, chilled Coke, and tomato ketchup.",
 
-    category: "Pizza",
+    category: "Combo Meals",
 
     image:
-      "https://images.unsplash.com/photo-1513104890138-7c749659a591?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1565299507177-b0ac66763828?auto=format&fit=crop&w=900&q=80",
 
-    gallery: [],
+    gallery: [
+      "https://images.unsplash.com/photo-1565299507177-b0ac66763828?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&w=900&q=80",
+    ],
 
-    price: 549,
-
-    originalPrice: 649,
+    price: 399,
+    originalPrice: 499,
 
     tax: 5,
 
-    stock: 70,
+    stock: 75,
 
     available: true,
 
-    preparationTime: 24,
+    preparationTime: 18,
 
     isVeg: false,
 
@@ -619,113 +890,153 @@ const menu = [
     bestseller: true,
     recommended: true,
 
+    todaySpecial: true,
+    comboMeal: true,
+    recentlyOrdered: true,
+
     rating: {
       average: 4.9,
-      count: 302,
+      count: 382,
     },
 
-    calories: 720,
+    calories: 980,
 
     tags: [
-      "Chicken",
-      "Spicy",
+      "Combo",
+      "Burger",
+      "Fries",
+      "Meal",
+      "Popular",
     ],
 
     variants: [
       {
-        id: "VAR008",
+        id: "VAR019",
         name: "Regular",
-        price: 549,
+        price: 399,
       },
       {
-        id: "VAR009",
-        name: "Large",
-        price: 799,
+        id: "VAR020",
+        name: "Large Combo",
+        price: 499,
       },
     ],
 
     addons: [
       {
-        id: "ADD009",
-        name: "Cheese Burst",
+        id: "ADD032",
+        name: "Extra Fries",
+        price: 79,
+      },
+      {
+        id: "ADD033",
+        name: "Chicken Nuggets (4 pcs)",
         price: 99,
+      },
+      {
+        id: "ADD034",
+        name: "Chocolate Brownie",
+        price: 89,
+      },
+      {
+        id: "ADD035",
+        name: "Large Coke",
+        price: 40,
       },
     ],
   },
-
-  {
+    {
     id: "ITEM_010",
 
-    sku: "SNK-001",
+    sku: "RCB-001",
 
     storeId: STORE_ID,
     sellerId: SELLER_ID,
 
-    name: "French Fries",
+    name: "Butter Chicken Rice Bowl",
 
     description:
-      "Golden crispy fries served with peri-peri seasoning.",
+      "Tender butter chicken served over fragrant basmati rice, topped with fresh coriander and creamy butter gravy.",
 
-    category: "Snacks",
+    category: "Rice Bowls",
 
     image:
-      "https://images.unsplash.com/photo-1576107232684-1279f390859f?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&w=900&q=80",
 
-    gallery: [],
+    gallery: [
+      "https://images.unsplash.com/photo-1585937421612-70a008356fbe?auto=format&fit=crop&w=900&q=80",
+      "https://images.unsplash.com/photo-1604908176997-431f3b3f88a2?auto=format&fit=crop&w=900&q=80",
+    ],
 
-    price: 129,
-
-    originalPrice: 159,
+    price: 349,
+    originalPrice: 419,
 
     tax: 5,
 
-    stock: 220,
+    stock: 85,
 
     available: true,
 
-    preparationTime: 8,
+    preparationTime: 20,
 
-    isVeg: true,
+    isVeg: false,
 
-    featured: false,
+    featured: true,
     bestseller: true,
-    recommended: false,
+    recommended: true,
+
+    todaySpecial: true,
+    comboMeal: false,
+    recentlyOrdered: true,
 
     rating: {
-      average: 4.6,
-      count: 173,
+      average: 4.9,
+      count: 312,
     },
 
-    calories: 340,
+    calories: 760,
 
     tags: [
-      "Fries",
-      "Snacks",
+      "Rice Bowl",
+      "Chicken",
+      "Indian",
+      "Butter Chicken",
+      "Popular",
     ],
 
     variants: [
       {
-        id: "VAR010",
+        id: "VAR021",
         name: "Regular",
-        price: 129,
+        price: 349,
       },
       {
-        id: "VAR011",
+        id: "VAR022",
         name: "Large",
-        price: 179,
+        price: 449,
       },
     ],
 
     addons: [
       {
-        id: "ADD010",
-        name: "Cheese Dip",
+        id: "ADD036",
+        name: "Extra Butter Chicken",
+        price: 120,
+      },
+      {
+        id: "ADD037",
+        name: "Boiled Egg",
         price: 30,
       },
       {
-        id: "ADD011",
-        name: "Peri Peri Seasoning",
-        price: 20,
+        id: "ADD038",
+        name: "Garlic Naan",
+        price: 60,
+      },
+      {
+        id: "ADD039",
+        name: "Cold Drink",
+        price: 50,
       },
     ],
   },
@@ -765,7 +1076,26 @@ const getRecommendedProducts = () =>
     (item) =>
       item.recommended && item.available
   );
+const getTodaySpecialProducts = () =>
+  menu.filter(
+    (item) =>
+      item.todaySpecial &&
+      item.available
+  );
 
+const getComboMealProducts = () =>
+  menu.filter(
+    (item) =>
+      item.comboMeal &&
+      item.available
+  );
+
+const getRecentlyOrderedProducts = () =>
+  menu.filter(
+    (item) =>
+      item.recentlyOrdered &&
+      item.available
+  );
 const searchMenu = (query = "") => {
   const keyword = query.toLowerCase();
 
@@ -783,13 +1113,21 @@ const searchMenu = (query = "") => {
 module.exports = {
   categories,
   menu,
+
   getMenu,
   getCategories,
+
   getProductById,
   getProductBySku,
   getProductsByCategory,
+
   getFeaturedProducts,
   getBestSellerProducts,
   getRecommendedProducts,
+
+  getTodaySpecialProducts,
+  getComboMealProducts,
+  getRecentlyOrderedProducts,
+
   searchMenu,
 };

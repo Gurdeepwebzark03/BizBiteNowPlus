@@ -25,7 +25,14 @@ export const getBestSellers = () =>
 
 export const getRecommendedProducts = () =>
   API.get("/menu/recommended");
+export const getTodaySpecialProducts = () =>
+  API.get("/menu/today-special");
 
+export const getComboMealProducts = () =>
+  API.get("/menu/combo-meals");
+
+export const getRecentlyOrderedProducts = () =>
+  API.get("/menu/recently-ordered");
 export const getProduct = (id) =>
   API.get(`/menu/${id}`);
 

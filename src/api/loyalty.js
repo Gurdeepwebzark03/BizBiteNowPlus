@@ -19,7 +19,7 @@ export const getStampLevelBreakdown = async () => {
 };
 
 // Customer
-export const getCustomerStampStatus = async (customerId) => {
+export const getCustomerLoyaltyStatus = async (customerId) => {
   const { data } = await API.get(
     `${BASE}/customers/${customerId}/status`
   );

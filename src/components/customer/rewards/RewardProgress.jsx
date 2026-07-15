@@ -1,275 +1,221 @@
 import { motion } from "framer-motion";
 import {
-  Lock,
   CheckCircle2,
-  Crown,
-  ChevronRight,
+  Lock,
+  Stamp,
+  Gift,
+  Percent,
+  Bike,
 } from "lucide-react";
 
-const RewardProgress = ({
-  currentTier = "Gold",
-  currentPoints = 2450,
-  tiers = [
-    {
-      name: "Bronze",
-      required: 0,
-      benefits: "5% Cashback",
-    },
-    {
-      name: "Silver",
-      required: 1000,
-      benefits: "Free Delivery",
-    },
-    {
-      name: "Gold",
-      required: 2000,
-      benefits: "Priority Support",
-    },
-    {
-      name: "Platinum",
-      required: 3000,
-      benefits: "VIP Exclusive Rewards",
-    },
-  ],
-}) => {
+const REWARD_ICONS = {
+  item: Gift,
+  discount: Percent,
+  delivery: Bike,
+};
+
+const RewardProgress = ({ data }) => {
+  const {
+    threshold = 5,
+    stampsCollected = 0,
+    rewardType = "item",
+    rewardDetail = "Free Reward",
+  } = data || {};
+
+  const RewardIcon = REWARD_ICONS[rewardType] || Gift;
+
   return (
-    <section
-      className="
-        rounded-[32px]
-        border
-        border-slate-200
-        bg-white
-        p-6
-        shadow-sm
-      "
+    <motion.section
+      initial={{ opacity: 0, y: 15 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      className="rounded-[32px] border border-slate-200 bg-white p-6 shadow-sm"
     >
       {/* Header */}
 
-      <div className="mb-8">
-        <h2 className="text-2xl font-bold text-slate-900">
-          Membership Journey
-        </h2>
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-2xl font-bold text-slate-900">
+            Stamp Journey
+          </h2>
 
-        <p className="mt-2 text-slate-500">
-          Unlock more rewards as you earn points.
-        </p>
-      </div>
-
-      {/* Timeline */}
-
-      <div className="relative">
+          <p className="mt-2 text-slate-500">
+            Collect {threshold} stamps to unlock{" "}
+            <span className="font-semibold text-slate-700">
+              {rewardDetail}
+            </span>
+          </p>
+        </div>
 
         <div
-          className="
-            absolute
-            left-6
-            top-0
-            bottom-0
+          className="rounded-2xl px-4 py-2 text-white"
+          style={{
+            background: "var(--primary)",
+          }}
+        >
+          <p className="text-sm opacity-80">Progress</p>
+          <p className="text-lg font-bold">
+            {stampsCollected}/{threshold}
+          </p>
+        </div>
+      </div>
 
-            w-1
+      {/* Stamp Journey */}
 
-            rounded-full
+      <div className="mt-10">
+        <div className="flex items-center justify-between relative">
+          {/* Line */}
 
-            bg-slate-200
-          "
-        />
+          <div className="absolute left-0 right-0 top-6 h-1 bg-slate-200 rounded-full" />
 
-        <div className="space-y-10">
+          <div
+            className="absolute left-0 top-6 h-1 rounded-full transition-all duration-500"
+            style={{
+              background: "var(--primary)",
+              width: `${(stampsCollected / threshold) * 100}%`,
+            }}
+          />
 
-          {tiers.map((tier, index) => {
-            const unlocked =
-              currentPoints >= tier.required;
+          {Array.from({ length: threshold }).map((_, index) => {
+            const stamp = index + 1;
 
-            const active =
-              tier.name === currentTier;
+            const completed = stamp <= stampsCollected;
+
+            const current = stamp === stampsCollected + 1;
 
             return (
-              <motion.div
-                key={tier.name}
-                initial={{
-                  opacity: 0,
-                  x: -20,
-                }}
-                whileInView={{
-                  opacity: 1,
-                  x: 0,
-                }}
-                viewport={{
-                  once: true,
-                }}
-                transition={{
-                  delay: index * 0.1,
-                }}
-                className="relative flex gap-6"
+              <div
+                key={stamp}
+                className="relative z-10 flex flex-col items-center"
               >
-                {/* Icon */}
-
                 <div
-                  className="
-                    relative
-                    z-10
-
-                    flex
-                    h-14
-                    w-14
-                    shrink-0
-
-                    items-center
-                    justify-center
-
-                    rounded-full
-
-                    border-4
-                    border-white
-
-                    shadow-lg
-                  "
+                  className={`flex h-12 w-12 items-center justify-center rounded-full border-4 border-white shadow-md transition-all ${
+                    current ? "scale-110" : ""
+                  }`}
                   style={{
-                    background: unlocked
+                    background: completed
                       ? "var(--primary)"
                       : "#E2E8F0",
                   }}
                 >
-                  {unlocked ? (
-                    <CheckCircle2
-                      size={26}
-                      color="#fff"
-                    />
+                  {completed ? (
+                    <CheckCircle2 size={22} color="#fff" />
                   ) : (
                     <Lock
-                      size={24}
+                      size={20}
                       className="text-slate-500"
                     />
                   )}
                 </div>
 
-                {/* Card */}
-
-                <div
-                  className={`
-                    flex-1
-
-                    rounded-3xl
-
-                    border
-
-                    p-6
-
-                    transition-all
-
-                    ${
-                      active
-                        ? "shadow-xl"
-                        : "shadow-sm"
-                    }
-                  `}
-                  style={{
-                    borderColor: active
-                      ? "var(--primary)"
-                      : "#E2E8F0",
-
-                    background: active
-                      ? "var(--primary-light)"
-                      : "#fff",
-                  }}
-                >
-                  <div className="flex items-center justify-between">
-
-                    <div>
-
-                      <div className="flex items-center gap-3">
-
-                        <Crown
-                          size={22}
-                          style={{
-                            color: unlocked
-                              ? "var(--primary)"
-                              : "#64748B",
-                          }}
-                        />
-
-                        <h3 className="text-xl font-bold text-slate-900">
-                          {tier.name}
-                        </h3>
-
-                      </div>
-
-                      <p className="mt-2 text-slate-500">
-                        Unlock at{" "}
-                        <strong>
-                          {tier.required}
-                        </strong>{" "}
-                        points
-                      </p>
-
-                    </div>
-
-                    {active && (
-                      <span
-                        className="
-                          rounded-full
-
-                          px-4
-                          py-2
-
-                          text-xs
-                          font-semibold
-
-                          text-white
-                        "
-                        style={{
-                          background:
-                            "var(--primary)",
-                        }}
-                      >
-                        Current Tier
-                      </span>
-                    )}
-
-                  </div>
-
-                  {/* Benefits */}
-
-                  <div
-                    className="
-                      mt-5
-
-                      rounded-2xl
-
-                      bg-slate-50
-
-                      p-4
-                    "
-                  >
-                    <p className="text-sm text-slate-500">
-                      Membership Benefit
-                    </p>
-
-                    <div className="mt-2 flex items-center justify-between">
-
-                      <h4 className="font-semibold text-slate-900">
-                        {tier.benefits}
-                      </h4>
-
-                      <ChevronRight
-                        size={18}
-                        className="text-slate-400"
-                      />
-
-                    </div>
-
-                  </div>
-
-                </div>
-
-              </motion.div>
+                <span className="mt-3 text-xs font-semibold text-slate-600">
+                  Stamp {stamp}
+                </span>
+              </div>
             );
           })}
 
-        </div>
+          {/* Reward */}
 
+          <div className="relative z-10 flex flex-col items-center">
+            <div
+              className="flex h-14 w-14 items-center justify-center rounded-full border-4 border-white shadow-lg"
+              style={{
+                background:
+                  stampsCollected >= threshold
+                    ? "var(--primary)"
+                    : "#F8FAFC",
+              }}
+            >
+              <RewardIcon
+                size={24}
+                style={{
+                  color:
+                    stampsCollected >= threshold
+                      ? "#fff"
+                      : "var(--primary)",
+                }}
+              />
+            </div>
+
+            <span className="mt-3 text-xs font-bold text-slate-700">
+              Reward
+            </span>
+          </div>
+        </div>
       </div>
-    </section>
+
+      {/* Bottom Card */}
+
+      <div
+        className="mt-10 rounded-3xl p-5"
+        style={{
+          background: "var(--primary-light)",
+        }}
+      >
+        {stampsCollected >= threshold ? (
+          <div className="flex items-center justify-between">
+            <div>
+              <p
+                className="text-sm font-medium"
+                style={{
+                  color: "var(--primary)",
+                }}
+              >
+                🎉 Congratulations!
+              </p>
+
+              <h3 className="mt-1 text-xl font-bold text-slate-900">
+                {rewardDetail}
+              </h3>
+
+              <p className="mt-1 text-slate-500">
+                Your reward is ready to redeem.
+              </p>
+            </div>
+
+            <RewardIcon
+              size={34}
+              style={{
+                color: "var(--primary)",
+              }}
+            />
+          </div>
+        ) : (
+          <div className="flex items-center justify-between">
+            <div>
+              <p
+                className="text-sm font-medium"
+                style={{
+                  color: "var(--primary)",
+                }}
+              >
+                Keep Going!
+              </p>
+
+              <h3 className="mt-1 text-xl font-bold text-slate-900">
+                {threshold - stampsCollected} more{" "}
+                {threshold - stampsCollected === 1
+                  ? "order"
+                  : "orders"}{" "}
+                left
+              </h3>
+
+              <p className="mt-1 text-slate-500">
+                Unlock <strong>{rewardDetail}</strong>
+              </p>
+            </div>
+
+            <Stamp
+              size={34}
+              style={{
+                color: "var(--primary)",
+              }}
+            />
+          </div>
+        )}
+      </div>
+    </motion.section>
   );
 };
 

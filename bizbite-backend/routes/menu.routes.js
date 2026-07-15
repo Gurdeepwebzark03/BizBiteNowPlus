@@ -1,14 +1,24 @@
 const router = require("express").Router();
 
 const {
+   categories,
+  menu,
+
   getMenu,
   getCategories,
+
   getProductById,
   getProductBySku,
   getProductsByCategory,
+
   getFeaturedProducts,
   getBestSellerProducts,
   getRecommendedProducts,
+
+  getTodaySpecialProducts,
+  getComboMealProducts,
+  getRecentlyOrderedProducts,
+
   searchMenu,
 } = require("../data/menu");
 
@@ -66,7 +76,38 @@ router.get("/recommended", (req, res) => {
     data: getRecommendedProducts(),
   });
 });
+// =======================================
+// Today's Special
+// =======================================
 
+router.get("/today-special", (req, res) => {
+  res.json({
+    success: true,
+    data: getTodaySpecialProducts(),
+  });
+});
+
+// =======================================
+// Combo Meals
+// =======================================
+
+router.get("/combo-meals", (req, res) => {
+  res.json({
+    success: true,
+    data: getComboMealProducts(),
+  });
+});
+
+// =======================================
+// Recently Ordered
+// =======================================
+
+router.get("/recently-ordered", (req, res) => {
+  res.json({
+    success: true,
+    data: getRecentlyOrderedProducts(),
+  });
+});
 // =======================================
 // Search
 // =======================================

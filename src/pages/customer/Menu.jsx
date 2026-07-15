@@ -13,6 +13,7 @@ import CompactSortDropdown from "../../components/customer/menu/CompactSortDropd
 import CompactVegToggle from "../../components/customer/menu/CompactVegToggle";
 import { useCart } from "../../context/CartContext";
 import { Bell } from "lucide-react";
+import MenuPageSkeleton from "../../components/customer/skeleton/MenuPageSkeleton";
 import {
   getMenu,
   getCategories,
@@ -217,6 +218,10 @@ const Menu = () => {
   };
   const getCartItem = (productId) =>
     cartItems.find((item) => item.productId === productId);
+
+  if (loading) {
+    return <MenuPageSkeleton />;
+  }
   return (
     <motion.div
       initial={{ opacity: 0, y: 15 }}
@@ -234,12 +239,12 @@ const Menu = () => {
 
     space-y-6
     pb-28
-
+    
     px-1
     sm:px-2
 
   ">
-        <div className="flex items-center justify-between">
+        <div className="w-full flex items-center bg-white mt-5 z-50 shadow-sm rounded-xl p-2 justify-between">
           <SectionHeader
             title="Our Menu"
             subtitle="Freshly prepared dishes made just for you."
@@ -254,7 +259,7 @@ const Menu = () => {
       items-center
       justify-center
       rounded-[10px]
-      
+
       transition
       bg-slate-200
     ">
@@ -373,16 +378,7 @@ const Menu = () => {
             </p>
           </div>
 
-          {loading ? (
-            <div
-              className="
-                py-20
-                text-center
-                text-slate-500
-              ">
-              Loading menu...
-            </div>
-          ) : filteredProducts.length === 0 ? (
+          {filteredProducts.length === 0 ? (
             <div
               className="
                 rounded-[28px]
