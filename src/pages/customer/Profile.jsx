@@ -171,6 +171,9 @@ const Profile = () => {
     } else if (id === "appearance") {
       setShowAccountSettings(false);
       navigate("/customer/profile/appearance");
+    } else if (id === "terms") {
+      setShowAccountSettings(false);
+      navigate("/customer/profile/terms-policy");
     }
   };
 
