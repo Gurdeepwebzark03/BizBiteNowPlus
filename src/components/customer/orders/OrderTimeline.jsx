@@ -1,3 +1,4 @@
+
 import { motion } from "framer-motion";
 
 import {
@@ -9,7 +10,33 @@ import {
   Home,
   CheckCircle2,
 } from "lucide-react"; 
-
+const defaultSteps = [
+  {
+    id: "placed",
+    title: "Order Placed",
+    time: "",
+  },
+  {
+    id: "preparing",
+    title: "Preparing",
+    time: "",
+  },
+  {
+    id: "ready",
+    title: "Ready",
+    time: "",
+  },
+  {
+    id: "delivery",
+    title: "Out for Delivery",
+    time: "",
+  },
+  {
+    id: "delivered",
+    title: "Delivered",
+    time: "",
+  },
+];
 const getIcon = (title) => {
   switch (title.toLowerCase()) {
     case "order placed":
@@ -42,7 +69,8 @@ const OrderTimeline = ({
     timeline.length > 0
       ? timeline
       : defaultSteps;
-
+console.log("timeline", timeline);
+console.log("currentStep", currentStep);
   const currentIndex = Math.max(
     0,
     steps.findIndex(

@@ -11,6 +11,14 @@ const categories = [
     sortOrder: 0,
   },
   {
+  id: "favorites",
+  name: "Favorites",
+  icon: "❤️",
+  image: "",
+  available: true,
+  sortOrder: 0,
+},
+  {
     id: "Pizza",
     name: "Pizza",
     icon: "🍕",

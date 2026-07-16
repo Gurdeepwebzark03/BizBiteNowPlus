@@ -52,10 +52,10 @@ setCartItems(
     setLoading(true);
 
     try {
-      await addToCart({
-        productId: product.id,
-        quantity,
-      });
+await addToCart({
+  productId: product.productId,
+  quantity,
+});
 
       await refreshCart();
     } finally {

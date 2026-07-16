@@ -1,8 +1,29 @@
 import { Clock3 } from "lucide-react";
-
+import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import ReorderButton from "./ReorderButton";
+import { useCart } from "../../../context/CartContext";
 const OrderHistoryCard = ({ order, onView }) => {
+  const navigate = useNavigate();
   if (!order) return null;
+    const [reordering, setReordering] = useState(null);
+  
+const { addItem } = useCart();
 
+const handleReorder = async (order) => {
+  setReordering(order.id);
+
+  for (const item of order.items) {
+    await addItem({
+      ...item,
+      quantity: item.quantity,
+    });
+  }
+
+  setReordering(null);
+
+  navigate("/customer/cart");
+};
   return (
     <div
       onClick={() => onView?.(order)}
@@ -42,129 +63,127 @@ const OrderHistoryCard = ({ order, onView }) => {
           "
         />
 
-        {/* Content */}
+{/* Content */}
 
-        <div
-          className="
-            flex-1
-          "
-        >
-          <div
-            className="
-              flex
+<div className="flex-1">
+  <div className="flex items-start justify-between gap-3">
+<div>
+  <h3 className="text-lg font-bold text-slate-900">
+    {order.items?.[0]?.name}
+  </h3>
 
-              items-start
+  <div
+    className="
+      mt-2
+      flex
+      flex-wrap
+      items-center
+      gap-2
+      text-xs
+      text-slate-500
+    "
+  >
+    <span>
+      {order.createdAt
+        ? new Date(order.createdAt).toLocaleDateString(
+            "en-IN",
+            {
+              day: "numeric",
+              month: "short",
+              year: "numeric",
+            }
+          )
+        : order.date}
+    </span>
 
-              justify-between
+    <span>•</span>
 
-              gap-3
-            "
-          >
-            <div>
-              <h3
-                className="
-                  font-bold
+    <span>
+      {order.createdAt
+        ? new Date(order.createdAt).toLocaleTimeString(
+            "en-IN",
+            {
+              hour: "2-digit",
+              minute: "2-digit",
+            }
+          )
+        : "--:--"}
+    </span>
 
-                  text-slate-900
-                "
-              >
-                {order.items?.[0]?.name}
-              </h3>
+    {order.items?.length > 1 && (
+      <>
+        <span>•</span>
 
-              <p
-                className="
-                  mt-1
+        <span>
+          +{order.items.length - 1} more{" "}
+          {order.items.length - 1 === 1
+            ? "item"
+            : "items"}
+        </span>
+      </>
+    )}
+  </div>
+</div>
 
-                  text-sm
+    <span
+      className="
+        rounded-full
+        bg-slate-100
+        px-3
+        py-1.5
+        text-xs
+        font-semibold
+        text-slate-700
+      "
+    >
+      {order.status}
+    </span>
+  </div>
 
-                  text-slate-500
-                "
-              >
-                {order.date}
-              </p>
-            </div>
+  <div className="mt-1 flex items-center justify-between">
+    <div className="flex items-center gap-2 text-sm text-slate-500">
 
-            <span
-              className="
-                rounded-full
+      {order.items?.reduce(
+        (sum, item) => sum + item.quantity,
+        0
+      )}{" "}
+      Items
+    </div>
 
-                bg-slate-100
+    <p className="text-lg font-bold text-slate-900">
+      ₹{order.summary?.total || order.total}
+    </p>
+  </div>
 
-                px-3
+<div className="mt-5 flex items-center justify-between">
+  <button
+    onClick={(e) => {
+      e.stopPropagation();
+      onView?.(order);
+    }}
+    className="
+      text-sm
+      font-semibold
+      text-green-700
+      transition
+      hover:underline
+    "
+  >
+    View Order
+  </button>
 
-                py-1.5
-
-                text-xs
-
-                font-semibold
-
-                text-slate-700
-
-                whitespace-nowrap
-              "
-            >
-              {order.status}
-            </span>
-          </div>
-
-          <div
-            className="
-              mt-4
-
-              flex
-
-              items-center
-
-              justify-between
-            "
-          >
-            <div
-              className="
-                flex
-
-                items-center
-
-                gap-2
-
-                text-sm
-
-                text-slate-500
-              "
-            >
-              <Clock3 size={15} />
-              {order.items?.length || 0} items
-            </div>
-
-            <p
-              className="
-                font-bold
-
-                text-slate-900
-              "
-            >
-              ₹{order.summary?.total || order.total}
-            </p>
-          </div>
-
-          <button
-            onClick={() => onView?.(order)}
-            className="
-              mt-4
-
-              text-sm
-
-              font-semibold
-
-              text-green-700
-
-              transition
-
-              hover:underline
-            "
-          >
-            View Order
-          </button>
-        </div>
+<div
+  onClick={(e) => e.stopPropagation()}
+>
+  <ReorderButton
+    order={order}
+    loading={reordering === order.id}
+    onReorder={() => handleReorder(order)}
+  />
+</div>
+</div>
+   
+</div>
       </div>
     </div>
   );

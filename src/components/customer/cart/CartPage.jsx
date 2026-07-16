@@ -34,6 +34,7 @@ const CartPage = ({
               onIncrease={onIncrease}
               onDecrease={onDecrease}
               onRemove={onRemove}
+              onContinueShopping={onContinueShopping}
             />
 
             <CouponSection
