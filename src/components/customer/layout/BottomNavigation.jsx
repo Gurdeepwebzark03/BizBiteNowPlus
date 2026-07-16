@@ -17,9 +17,9 @@ const navItems = [
     path: "/customer",
   },
 {
-  label: "Favourite",
-  path: "/customer/favorites",
-  icon: Heart,
+  label: "Menu",
+  path: "/customer/menu",
+  icon: UtensilsCrossed,
 },
   {
     label: "Orders",
