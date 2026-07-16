@@ -181,28 +181,7 @@ const CouponCard = ({
 
           </div>
 
-          {!expired && (
-            <button
-              disabled={used}
-              onClick={() => !used && onApply?.(coupon)}
-              className="
-                rounded-xl
-                px-4
-                py-2
-                text-sm
-                font-semibold
-                text-white
-                disabled:bg-slate-300
-              "
-              style={{
-                background: used
-                  ? "#CBD5E1"
-                  : "var(--primary)",
-              }}
-            >
-              {used ? "Used" : "Apply"}
-            </button>
-          )}
+          
 
         </div>
 

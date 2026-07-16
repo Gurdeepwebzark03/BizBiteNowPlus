@@ -76,6 +76,7 @@ const Rewards = () => {
     >
       <div
         className="
+        pt-4
     w-full
     min-w-0
     max-w-[1760px]
@@ -86,13 +87,14 @@ const Rewards = () => {
   "
       >
         {/* Header */}
-        <div className="w-full flex items-center justify-between bg-white  rounded-xl shadow-sm p-4">
-          <SectionHeader
-            title="Rewards & Loyalty"
-            subtitle="Earn stamps, unlock rewards and save more"
-          />
-          <button
-            className="
+        <div className="w-full flex items-center z-50  rounded-xl p-2 justify-between">
+              <SectionHeader
+                title="Rewards & Loyalty"
+                subtitle="Track your orders in real time"
+              />
+
+              <button
+                className="
       relative
       flex
       h-11
@@ -100,14 +102,15 @@ const Rewards = () => {
       items-center
       justify-center
       rounded-[10px]
-      bg-slate-200
+      
       transition
+      bg-slate-200
     "
-          >
-            <Bell size={22} className="text-slate-700" />
+              >
+                <Bell size={22} className="text-slate-700 " />
 
-            <span
-              className="
+                <span
+                  className="
         absolute
         -right-1
         -top-1
@@ -122,11 +125,11 @@ const Rewards = () => {
         font-bold
         text-white
       "
-            >
-              3
-            </span>
-          </button>
-        </div>
+                >
+                  3
+                </span>
+              </button>
+            </div>
 
         {/* Loyalty */}
 

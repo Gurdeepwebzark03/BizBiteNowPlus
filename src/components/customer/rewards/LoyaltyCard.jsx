@@ -198,45 +198,6 @@ const LoyaltyCard = ({ data, onViewBenefits, onRedeem }) => {
 
         {/* Quick Stats */}
 
-        <div className="mt-6 grid gap-4 sm:grid-cols-2">
-          <div
-            className="
-              rounded-2xl
-
-              bg-white/10
-
-              p-5
-
-              backdrop-blur
-            "
-          >
-            <Stamp size={22} />
-
-            <h4 className="mt-3 text-2xl font-bold">{remaining}</h4>
-
-            <p className="text-sm text-white/70">Stamps to go</p>
-          </div>
-
-          <div
-            className="
-              rounded-2xl
-
-              bg-white/10
-
-              p-5
-
-              backdrop-blur
-            "
-          >
-            <RewardIcon size={22} />
-
-            <h4 className="mt-3 text-2xl font-bold">
-              {REWARD_LABELS[rewardType] || "Reward"}
-            </h4>
-
-            <p className="text-sm text-white/70">Your reward type</p>
-          </div>
-        </div>
 
         {/* Buttons */}
 
