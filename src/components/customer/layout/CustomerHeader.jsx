@@ -1,13 +1,19 @@
-import { Bell, ShoppingBag, Gift } from "lucide-react";
-
+import {
+  Bell,
+  User,
+  ShoppingBag,
+  Gift,
+  MapPin,
+  ChevronDown,
+  Plus,
+  Navigation,
+} from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 
-import {
-  getStore,
-  getNotifications,
-} from "../../../api/customerApi";
+import { getStore, getNotifications } from "../../../api/customerApi";
 
 const CustomerHeader = ({ sidebarExpanded, isDesktop }) => {
   const navigate = useNavigate();
@@ -18,6 +24,10 @@ const CustomerHeader = ({ sidebarExpanded, isDesktop }) => {
 
   const [notificationOpen, setNotificationOpen] = useState(false);
 
+  const [locationOpen, setLocationOpen] = useState(false);
+  const [selectedLocation, setSelectedLocation] = useState({
+    title: "Select your location",
+  });
   const wrapperRef = useRef(null);
 
   useEffect(() => {
@@ -40,11 +50,11 @@ const CustomerHeader = ({ sidebarExpanded, isDesktop }) => {
 
     loadData();
   }, []);
-
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (wrapperRef.current && !wrapperRef.current.contains(event.target)) {
         setNotificationOpen(false);
+        setLocationOpen(false);
       }
     };
 
@@ -65,15 +75,46 @@ const CustomerHeader = ({ sidebarExpanded, isDesktop }) => {
     ? `${store.address.line1 ?? ""}, ${store.address.city ?? ""}`
     : "Tap to view restaurant";
 
-  const storeLogo = store?.logo  ;
+  const storeLogo = store?.logo;
+  const detectLocation = () => {
+    if (!navigator.geolocation) return;
 
+    navigator.geolocation.getCurrentPosition(
+      async ({ coords }) => {
+        const { latitude, longitude } = coords;
+
+        try {
+          const res = await fetch(
+            `https://nominatim.openstreetmap.org/reverse?format=jsonv2&lat=${latitude}&lon=${longitude}`,
+          );
+
+          const data = await res.json();
+
+          const address = data.address || {};
+
+          setSelectedLocation({
+            title: address.suburb || address.city || address.town,
+
+            subtitle: data.display_name,
+          });
+
+          setLocationOpen(false);
+        } catch (err) {
+          console.log(err);
+        }
+      },
+      (err) => {
+        alert("Location permission denied.");
+      },
+    );
+  };
   return (
     <header
       className="
-    fixed
-    
+    lg:fixed
+    relative
     z-50
-
+    
     transition-all
     duration-300
     ease-in-out
@@ -132,7 +173,6 @@ ease-in-out
         {/* Store */}
 
         <button
-          onClick={() => navigate("/customer/store")}
           className="
           flex
           ml-5
@@ -197,12 +237,154 @@ ease-in-out
         <div
           className="
           ml-3
-
           flex
           items-center
-          gap-2
+          gap-3
         "
         >
+          {/* Location Dropdown */}
+
+          <div className="relative hidden lg:block">
+            <button
+              onClick={() => setLocationOpen(!locationOpen)}
+              className="
+              flex
+              items-center
+              gap-3
+              rounded-xl
+              border
+              border-slate-200
+              bg-white
+              px-4
+              py-2
+              shadow-sm
+              transition-all
+              hover:border-green-300
+              hover:shadow-md
+            "
+            >
+              <div className="rounded-lg bg-green-50 p-2">
+                <MapPin size={18} className="text-green-600" />
+              </div>
+
+              <div className="text-left">
+                <p className="text-[10px] text-slate-500">Deliver to</p>
+
+                <p className="max-w-[140px] truncate text-sm font-semibold text-slate-900">
+                  {selectedLocation.title}
+                </p>
+                <p className="text-[13px] text-slate-1000">
+                  {selectedLocation.subtitle}
+                </p>
+              </div>
+
+              <ChevronDown size={18} className="text-slate-500" />
+            </button>
+
+            <AnimatePresence>
+              {locationOpen && (
+                <motion.div
+                  initial={{
+                    opacity: 0,
+                    y: -15,
+                    scale: 0.96,
+                  }}
+                  animate={{
+                    opacity: 1,
+                    y: 0,
+                    scale: 1,
+                  }}
+                  exit={{
+                    opacity: 0,
+                    y: -15,
+                    scale: 0.96,
+                  }}
+                  transition={{
+                    duration: 0.22,
+                    ease: [0.22, 1, 0.36, 1],
+                  }}
+                  className="
+                  absolute
+                  right-0
+                  top-[64px]
+                  z-[999]
+                  w-[360px]
+                  overflow-hidden
+                  rounded-3xl
+                  border
+                  border-slate-200
+                  bg-white
+                  shadow-2xl
+                "
+                >
+                  <div className="border-b border-slate-100 p-5">
+                    <h3 className="text-lg font-bold text-slate-900">
+                      Delivery Location
+                    </h3>
+
+                    <p className="mt-1 text-sm text-slate-500">
+                      Choose where you'd like your order delivered.
+                    </p>
+                  </div>
+
+                  <button
+                    onClick={detectLocation}
+                    className="
+    flex
+    w-full
+    items-center
+    gap-4
+    p-4
+    text-left
+    transition
+    hover:bg-slate-50
+  "
+                  >
+                    <div className="rounded-xl bg-green-100 p-3">
+                      <Navigation size={20} className="text-green-600" />
+                    </div>
+
+                    <div className="flex-1">
+                      <p className="font-semibold text-slate-900">
+                        Use Current Location
+                      </p>
+
+                      <p className="text-sm text-slate-500">
+                        Detect your current location
+                      </p>
+                    </div>
+                  </button>
+
+                  <button
+                    className="
+    flex
+    w-full
+    items-center
+    gap-4
+    p-4
+    text-left
+    transition
+    hover:bg-slate-50
+  "
+                  >
+                    <div className="rounded-xl bg-slate-100 p-3">
+                      <Plus size={20} className="text-slate-700" />
+                    </div>
+
+                    <div>
+                      <p className="font-semibold text-slate-900">
+                        Add New Address
+                      </p>
+
+                      <p className="text-sm text-slate-500">
+                        Home, Work or Other
+                      </p>
+                    </div>
+                  </button>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
           {/* Notification */}
 
           <button
@@ -265,8 +447,6 @@ ease-in-out
           {/* Profile
             Hidden on Mobile
         */}
-
-
         </div>
 
         {/* Notification Panel */}
@@ -312,7 +492,10 @@ ease-in-out
             >
               {notifications.length === 0 ? (
                 <div className="p-8 text-center">
-                  <Bell size={34} className="mx-auto mb-3 text-slate-300 dark:text-slate-600" />
+                  <Bell
+                    size={34}
+                    className="mx-auto mb-3 text-slate-300 dark:text-slate-600"
+                  />
 
                   <p className="font-semibold text-slate-700 dark:text-slate-200">
                     No notifications

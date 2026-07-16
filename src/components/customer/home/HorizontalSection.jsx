@@ -17,7 +17,7 @@ const HorizontalSection = ({
   if (!products.length) return null;
 
   return (
-    <section className="space-y-4">
+    <section className="space-y-4 pl-3 pr-3">
       {/* Header */}
 
       <div className="flex items-end justify-between">
@@ -58,7 +58,6 @@ const HorizontalSection = ({
           gap-4
           overflow-x-auto
           pb-2
-
           scrollbar-hide
 
           snap-x

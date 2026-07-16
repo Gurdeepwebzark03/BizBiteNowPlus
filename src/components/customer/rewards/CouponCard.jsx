@@ -1,10 +1,18 @@
 import { motion } from "framer-motion";
 import {
   TicketPercent,
+  Truck,
+  BadgePercent,
   Copy,
   CheckCircle2,
   Clock3,
 } from "lucide-react";
+
+const ICONS = {
+  percentage: BadgePercent,
+  flat: TicketPercent,
+  delivery: Truck,
+};
 
 const CouponCard = ({
   coupon,
@@ -17,6 +25,8 @@ const CouponCard = ({
 
   const expired = coupon.expired;
 
+  const Icon = ICONS[coupon.discountType] || TicketPercent;
+
   const discountLabel =
     coupon.discountType === "percentage"
       ? `${coupon.discount}% OFF`
@@ -26,108 +36,112 @@ const CouponCard = ({
 
   return (
     <motion.div
-      whileHover={{ y: -4 }}
+      whileHover={{ y: -3 }}
       transition={{ duration: 0.25 }}
       className={`
-        relative
-        overflow-hidden
-        rounded-[30px]
+        min-w-65
+        max-w-65
+        rounded-3xl
         border
         bg-white
         shadow-sm
+        overflow-hidden
+        shrink-0
         ${
           expired
-            ? "border-red-200 opacity-70"
-            : "border-slate-200 hover:shadow-xl"
+            ? "opacity-60 border-red-200"
+            : "border-slate-200 hover:shadow-lg"
         }
       `}
     >
-      {/* Decorative Circles */}
-      <div className="absolute -left-5 top-1/2 h-10 w-10 -translate-y-1/2 rounded-full bg-slate-100" />
-      <div className="absolute -right-5 top-1/2 h-10 w-10 -translate-y-1/2 rounded-full bg-slate-100" />
+      {/* Top */}
 
-      {/* Header */}
       <div
-        className="p-6"
+        className="p-5"
         style={{
           background: "var(--primary-light)",
         }}
       >
-        <div className="flex items-start justify-between">
-          <div className="flex items-center gap-3">
-            <TicketPercent
-              size={28}
-              style={{
-                color: "var(--primary)",
-              }}
-            />
+        <div className="flex justify-between items-start">
 
-            <div>
-              <h2
-                className="text-3xl font-bold"
+          <div className="flex gap-3">
+
+            <div
+              className="h-12 w-12 rounded-2xl flex items-center justify-center"
+              style={{
+                background: "var(--primary)",
+              }}
+            >
+              <Icon
+                size={22}
+                color="#fff"
+              />
+            </div>
+
+            <div >
+
+              <h3
+                className="text-xl font-bold"
                 style={{
                   color: "var(--primary)",
                 }}
               >
                 {discountLabel}
-              </h2>
+              </h3>
 
-              <p className="mt-1 text-lg font-semibold text-slate-800">
+              <p className="text-sm font-medium text-slate-700">
                 {coupon.title}
               </p>
+
             </div>
+
           </div>
 
-          {expired ? (
-            <span className="rounded-full bg-red-100 px-3 py-1 text-xs font-semibold text-red-600">
-              Expired
-            </span>
-          ) : (
-            <span
-              className="rounded-full px-3 py-1 text-xs font-semibold text-white"
-              style={{
-                background: "var(--primary)",
-              }}
-            >
-              Active
-            </span>
-          )}
+          <span
+            className={`text-xs px-3 py-1 rounded-full font-semibold ${
+              expired
+                ? "bg-red-100 text-red-600"
+                : "bg-green-100 text-green-700"
+            }`}
+          >
+            {expired ? "Expired" : "Active"}
+          </span>
+
         </div>
       </div>
 
-      {/* Details */}
-      <div className="space-y-5 p-6">
-        <p className="leading-6 text-slate-600">
-          {coupon.description}
-        </p>
+      {/* Body */}
 
-        <div className="flex flex-wrap gap-3">
-          <span className="rounded-full bg-slate-100 px-3 py-2 text-sm">
-            Min Order ₹{coupon.minOrder}
+      <div className="p-5 space-y-4">
+
+        <div className="flex justify-between text-sm">
+
+          <span className="text-slate-500">
+            Min ₹{coupon.minOrder}
           </span>
 
-          <span className="rounded-full bg-slate-100 px-3 py-2 text-sm">
-            Max Saving ₹{coupon.maxDiscount}
+          <span className="font-semibold text-slate-700">
+            Save ₹{coupon.maxDiscount}
           </span>
+
         </div>
 
-        {/* Coupon Code */}
         <div
           className="
-            flex
-            items-center
-            justify-between
             rounded-2xl
             border-2
             border-dashed
-            p-4
+            p-3
+            flex
+            justify-between
+            items-center
           "
           style={{
             borderColor: "var(--primary)",
           }}
         >
           <code
-            className="text-lg font-bold tracking-wider"
+            className="font-bold tracking-wider"
             style={{
               color: "var(--primary)",
             }}
@@ -137,40 +151,34 @@ const CouponCard = ({
 
           <button
             onClick={() => onCopy?.(coupon.code)}
-            className="
-              flex
-              items-center
-              gap-2
-              rounded-xl
-              bg-slate-100
-              px-4
-              py-2
-              transition
-              hover:bg-slate-200
-            "
+            className="text-sm flex items-center gap-2"
           >
             {copied ? (
               <>
                 <CheckCircle2
-                  size={18}
+                  size={16}
                   className="text-green-600"
                 />
                 Copied
               </>
             ) : (
               <>
-                <Copy size={18} />
+                <Copy size={16} />
                 Copy
               </>
             )}
           </button>
+
         </div>
 
-        {/* Footer */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2 text-sm text-slate-500">
-            <Clock3 size={16} />
-            Expires {coupon.expiry}
+        <div className="flex justify-between items-center">
+
+          <div className="flex gap-2 items-center text-xs text-slate-500">
+
+            <Clock3 size={14} />
+
+            {coupon.expiry}
+
           </div>
 
           {!expired && (
@@ -179,22 +187,25 @@ const CouponCard = ({
               onClick={() => !used && onApply?.(coupon)}
               className="
                 rounded-xl
-                px-5
-                py-3
+                px-4
+                py-2
+                text-sm
                 font-semibold
                 text-white
-                transition
-                disabled:cursor-not-allowed
                 disabled:bg-slate-300
               "
               style={{
-                background: used ? "#CBD5E1" : "var(--primary)",
+                background: used
+                  ? "#CBD5E1"
+                  : "var(--primary)",
               }}
             >
-              {used ? "Used" : "Apply Coupon"}
+              {used ? "Used" : "Apply"}
             </button>
           )}
+
         </div>
+
       </div>
     </motion.div>
   );

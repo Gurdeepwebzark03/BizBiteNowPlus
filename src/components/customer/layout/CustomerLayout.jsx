@@ -26,9 +26,9 @@ const CustomerLayout = () => {
   const [store, setStore] =
     useState(null);
 
-  const isRestaurantOpen =
-    store?.timings?.status?.toLowerCase() ===
-    "open";
+  const isRestaurantOpen = true
+    // store?.timings?.status?.toLowerCase() ===
+    // "open";
 
   const handleLogout = async () => {
     await logoutCustomer();
@@ -125,10 +125,11 @@ const CustomerLayout = () => {
             />
           )}
 
-          <div
-            className={`w-full ${
-              location.pathname === "/customer" ? "pt-22" : "pt-0"
-            }`}>
+         <div
+  className={`w-full ${
+    location.pathname === "/customer" ? "lg:pt-22" : "lg:pt-0"
+  }`}
+>
             <Outlet />
           </div>
         </main>
