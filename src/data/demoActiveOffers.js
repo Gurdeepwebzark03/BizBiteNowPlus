@@ -50,7 +50,7 @@ export const DEMO_ACTIVE_OFFERS = [
   },
   {
     id: "free-delivery",
-    label: "Free Delivery Days",
+    label: "Free Delivery",
     description: "No delivery fee, no minimum fuss.",
     discount: {
       type: "delivery",
