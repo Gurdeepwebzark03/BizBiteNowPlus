@@ -244,7 +244,7 @@ const Menu = () => {
     sm:px-2
 
   ">
-        <div className="w-full flex items-center bg-white dark:bg-[#181A1B] border border-transparent dark:border-[#A9BDCF]/40 z-50 mt-5 lg:mt-0 shadow-sm rounded-xl p-2 justify-between">
+        <div className="w-full flex items-center  dark:bg-[#181A1B] border border-transparent dark:border-[#A9BDCF]/40 z-50 mt-5 lg:mt-0  rounded-xl p-2 justify-between">
           <SectionHeader
             title="Our Menu"
             subtitle="Freshly prepared dishes made just for you."
