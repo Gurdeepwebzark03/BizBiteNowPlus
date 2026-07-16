@@ -68,6 +68,8 @@ import CustomerProfile from "./pages/customer/Profile";
 import PersonalDetails from "./pages/customer/PersonalDetails";
 import Language from "./pages/customer/Language";
 import Appearance from "./pages/customer/Appearance";
+import HelpSupport from "./pages/customer/HelpSupport";
+import TermsPolicy from "./pages/customer/TermsPolicy";
 import Favourites from "./pages/customer/Favourites";
 
 
@@ -206,6 +208,16 @@ export default function App() {
           <Route
             path="profile/appearance"
             element={<Appearance />}
+          />
+
+          <Route
+            path="profile/help-support"
+            element={<HelpSupport />}
+          />
+
+          <Route
+            path="profile/terms-policy"
+            element={<TermsPolicy />}
           />
 
 

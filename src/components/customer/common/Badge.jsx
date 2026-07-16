@@ -81,7 +81,7 @@ const Badge = ({
 
         ${
           variant === "premium"
-            ? ""
+            ? current.text
             : `${current.bg} ${current.text}`
         }
 

@@ -153,7 +153,7 @@ const CompactProductCard = ({
 
         <div className="mt-2 flex h-5 items-center gap-1 text-xs">
           <Star size={14} fill="#FACC15" color="#FACC15" />
-          <span className="font-medium">{rating?.average ?? 0}</span>
+          <span className="font-medium" style={{ color: "#FACC15" }}>{rating?.average ?? 0}</span>
           <span className="text-slate-400">({rating?.count ?? 0})</span>
         </div>
 

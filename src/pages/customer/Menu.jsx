@@ -243,9 +243,8 @@ const Menu = () => {
     px-1
     sm:px-2
 
-  "
-      >
-        <div className="w-full flex items-center  z-50 mt-5 lg:mt-0 rounded-xl p-2 justify-between">
+  ">
+        <div className="w-full flex items-center bg-white dark:bg-[#181A1B] border border-transparent dark:border-[#A9BDCF]/40 z-50 mt-5 lg:mt-0 shadow-sm rounded-xl p-2 justify-between">
           <SectionHeader
             title="Our Menu"
             subtitle="Freshly prepared dishes made just for you."
@@ -262,9 +261,9 @@ const Menu = () => {
       rounded-[10px]
 
       transition
-      bg-slate-200
+      bg-slate-200 dark:bg-[#232627]
     ">
-            <Bell size={22} className="text-slate-700 " />
+            <Bell size={22} className="text-slate-700 dark:text-slate-300" />
 
             <span
               className="
@@ -385,8 +384,8 @@ const Menu = () => {
                 rounded-[28px]
                 border-2
                 border-dashed
-                border-slate-300
-                bg-white
+                border-slate-300 dark:border-[#A9BDCF]/40
+                bg-white dark:bg-[#181A1B]
                 px-6
                 py-16
                 text-center
@@ -395,7 +394,7 @@ const Menu = () => {
                 className="
                   text-xl
                   font-bold
-                  text-slate-900
+                  text-slate-900 dark:text-white
                 ">
                 No Products Found
               </h3>
@@ -403,7 +402,7 @@ const Menu = () => {
               <p
                 className="
                   mt-2
-                  text-slate-500
+                  text-slate-500 dark:text-slate-400
                 ">
                 Try changing your filters.
               </p>

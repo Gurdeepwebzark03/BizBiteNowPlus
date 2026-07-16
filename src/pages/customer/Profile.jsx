@@ -8,8 +8,6 @@ import {
 import { useTheme } from "../../context/ThemeContext";
 import {
   ChevronRight,
-  ChevronDown,
-  X,
   Check,
   Loader2,
   User,
@@ -20,14 +18,6 @@ import {
   Home,
   Banknote,
   Smartphone,
-  Search,
-  Truck,
-  ReceiptText,
-  Utensils,
-  MessageCircle,
-  Phone,
-  Mail,
-  Headphones,
 } from "lucide-react";
 import { motion } from "framer-motion";
 import Modal from "../../components/customer/common/Modal";
@@ -47,32 +37,6 @@ const defaultNotifSettings = {
   email: false,
   security: true,
 };
-
-const helpQuickActions = [
-  { icon: Truck, label: "Delivery and tracking" },
-  { icon: ReceiptText, label: "Refunds and cancellations" },
-  { icon: Utensils, label: "Menu and orders" },
-  { icon: CreditCard, label: "Payments and billing" },
-];
-
-const faqItems = [
-  {
-    q: "Where is my order?",
-    a: "Track your order in real time from the My Orders tab.",
-  },
-  {
-    q: "How do I get a refund?",
-    a: "Refunds are processed within 3-5 business days after approval.",
-  },
-  {
-    q: "Can I edit my order after placing it?",
-    a: "You can edit an order within 2 minutes of placing it, from My Orders.",
-  },
-  {
-    q: "Do you offer table reservations?",
-    a: "Table reservations aren't available yet — we're working on it!",
-  },
-];
 
 const STEP_COUNT = 4;
 
@@ -107,10 +71,6 @@ const Profile = () => {
       return defaultNotifSettings;
     }
   });
-  const [showHelp, setShowHelp] = useState(false);
-  const [helpSearch, setHelpSearch] = useState("");
-  const [openFaqIndex, setOpenFaqIndex] = useState(null);
-
   useEffect(() => {
     getMyProfile()
       .then(setUser)
@@ -202,7 +162,7 @@ const Profile = () => {
   const handleSettingsItemClick = (id) => {
     if (id === "support") {
       setShowAccountSettings(false);
-      setShowHelp(true);
+      navigate("/customer/profile/help-support");
     } else if (id === "favorites") {
       navigate("/customer/menu");
     } else if (id === "language") {
@@ -211,6 +171,9 @@ const Profile = () => {
     } else if (id === "appearance") {
       setShowAccountSettings(false);
       navigate("/customer/profile/appearance");
+    } else if (id === "terms") {
+      setShowAccountSettings(false);
+      navigate("/customer/profile/terms-policy");
     }
   };
 
@@ -223,10 +186,6 @@ const Profile = () => {
       alert("Account deletion isn't available yet.");
     }
   };
-
-  const filteredFaqs = faqItems.filter((item) =>
-    item.q.toLowerCase().includes(helpSearch.trim().toLowerCase()),
-  );
 
   if (!user) return null;
 
@@ -610,161 +569,6 @@ const Profile = () => {
           />
         </Modal>
 
-        {/* Help & Support modal */}
-        {showHelp && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
-            <div
-              className="absolute inset-0 bg-black/40"
-              onClick={() => setShowHelp(false)}
-            />
-            <div
-              className="relative rounded-2xl shadow-2xl w-full max-w-sm p-5 max-h-[85vh] overflow-y-auto scrollbar-hide"
-              style={{ backgroundColor: darkMode ? "#181A1B" : "#FFFFFF" }}>
-              <button
-                onClick={() => setShowHelp(false)}
-                className="absolute top-4 right-4 flex items-center justify-center rounded-full text-gray-500 dark:text-slate-400 hover:bg-gray-100 dark:hover:bg-white/10 transition-colors cursor-pointer"
-                style={{ width: "32px", height: "32px" }}>
-                <X size={18} />
-              </button>
-
-              <div className="flex flex-col items-center text-center mb-4">
-                <div
-                  className="w-14 h-14 rounded-full flex items-center justify-center mb-3"
-                  style={{ backgroundColor: "var(--primary-light)" }}>
-                  <Headphones size={22} style={{ color: "var(--primary)" }} />
-                </div>
-                <h2
-                  className="font-bold text-slate-900 dark:text-white"
-                  style={{ fontSize: "19px" }}>
-                  Help and support
-                </h2>
-                <p className="text-gray-500 dark:text-slate-400 mt-1" style={{ fontSize: "13px" }}>
-                  We're here to help with your order, anytime.
-                </p>
-              </div>
-
-              <div className="relative mb-4">
-                <Search
-                  size={16}
-                  className="absolute top-1/2 -translate-y-1/2 left-3 text-white/70"
-                />
-                <input
-                  type="text"
-                  value={helpSearch}
-                  onChange={(e) => setHelpSearch(e.target.value)}
-                  placeholder="Search for help, e.g. refund, delivery time"
-                  className="w-full rounded-xl pl-9 pr-3 text-[13px] outline-none transition-colors text-white placeholder-white/70"
-                  style={{
-                    minHeight: "42px",
-                    backgroundColor: "var(--primary)",
-                    border: "1px solid transparent",
-                  }}
-                />
-              </div>
-
-              <div className="grid grid-cols-2 gap-2.5 mb-5">
-                {helpQuickActions.map(({ icon: Icon, label }) => (
-                  <div
-                    key={label}
-                    className="rounded-xl p-3 flex flex-col items-center justify-center text-center gap-1.5"
-                    style={{
-                      backgroundColor: "var(--primary)",
-                      minHeight: "80px",
-                    }}>
-                    <Icon size={17} style={{ color: "#FFFFFF" }} />
-                    <p
-                      className="font-bold text-white"
-                      style={{ fontSize: "12px" }}>
-                      {label}
-                    </p>
-                  </div>
-                ))}
-              </div>
-
-              <p className="text-gray-500 dark:text-slate-400 mb-2" style={{ fontSize: "12px" }}>
-                Frequently asked
-              </p>
-              <div className="space-y-2 mb-5">
-                {filteredFaqs.map((item, i) => {
-                  const open = openFaqIndex === i;
-                  return (
-                    <div
-                      key={item.q}
-                      className="rounded-xl overflow-hidden"
-                      style={{ backgroundColor: "var(--primary)" }}>
-                      <button
-                        onClick={() => setOpenFaqIndex(open ? null : i)}
-                        className="w-full flex items-center justify-between px-3.5 py-3 text-left cursor-pointer">
-                        <span
-                          className="font-bold text-white"
-                          style={{ fontSize: "13px" }}>
-                          {item.q}
-                        </span>
-                        <ChevronDown
-                          size={16}
-                          className="text-white/80 shrink-0 transition-transform"
-                          style={{
-                            transform: open ? "rotate(180deg)" : "none",
-                          }}
-                        />
-                      </button>
-                      {open && (
-                        <p
-                          className="px-3.5 pb-3 text-white/80"
-                          style={{ fontSize: "12px" }}>
-                          {item.a}
-                        </p>
-                      )}
-                    </div>
-                  );
-                })}
-                {filteredFaqs.length === 0 && (
-                  <p
-                    className="text-center text-gray-500 dark:text-slate-400 py-3"
-                    style={{ fontSize: "13px" }}>
-                    No results for "{helpSearch}"
-                  </p>
-                )}
-              </div>
-
-              <p className="text-gray-500 dark:text-slate-400 mb-2" style={{ fontSize: "12px" }}>
-                Still need help
-              </p>
-              <div className="grid grid-cols-2 gap-2.5">
-                <button
-                  className="flex items-center justify-center gap-1.5 rounded-xl font-semibold text-white cursor-pointer"
-                  style={{
-                    minHeight: "44px",
-                    fontSize: "12.5px",
-                    backgroundColor: "var(--primary)",
-                  }}>
-                  <MessageCircle size={15} />
-                  Live chat
-                </button>
-                <button
-                  className="flex items-center justify-center gap-1.5 rounded-xl font-semibold text-white cursor-pointer"
-                  style={{
-                    minHeight: "44px",
-                    fontSize: "12.5px",
-                    backgroundColor: "var(--primary)",
-                  }}>
-                  <Phone size={15} />
-                  Call us
-                </button>
-                <button
-                  className="col-span-2 flex items-center justify-center gap-1.5 rounded-xl font-semibold text-white transition-opacity hover:opacity-90 cursor-pointer"
-                  style={{
-                    minHeight: "44px",
-                    fontSize: "12.5px",
-                    backgroundColor: "var(--primary)",
-                  }}>
-                  <Mail size={15} />
-                  Email support
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </motion.div>
   );
