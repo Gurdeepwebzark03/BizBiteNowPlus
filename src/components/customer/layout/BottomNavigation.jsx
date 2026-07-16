@@ -5,6 +5,7 @@ import {
   UtensilsCrossed,
   ReceiptText,
   Gift,
+  ShoppingBag,
   User,
   Heart,
 } from "lucide-react";
@@ -21,6 +22,11 @@ const navItems = [
   path: "/customer/menu",
   icon: UtensilsCrossed,
 },
+    {
+    label: "Cart",
+    path: "/customer/cart",
+    icon: ShoppingBag,
+  },
   {
     label: "Orders",
     icon: ReceiptText,
@@ -47,11 +53,11 @@ const BottomNavigation = () => {
       className="
         fixed
 
-        bottom-2
+        bottom-0
 
-        left-4
+        left-0
 
-        right-4
+        right-0
 
         z-50
 

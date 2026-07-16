@@ -6,6 +6,7 @@ import {
   Clock3,
   Receipt,
   Phone,
+  FileText,
 } from "lucide-react";
 
 import Card from "../common/Card";
@@ -19,6 +20,7 @@ const OrderCard = ({
   onBack,
   onViewBill,
   onHelp,
+  onView,
   onShare,
 }) => {
   if (!order) return null;
@@ -396,19 +398,48 @@ const OrderCard = ({
   </button>
 
   <button
-    onClick={() => onViewBill?.(order)}
+    onClick={onView}
+    className="
+      flex
+      items-center
+      justify-center
+      gap-2
+
+      rounded-2xl
+
+      border
+      border-slate-300
+
+      px-6
+      py-3
+
+      font-semibold
+
+      transition
+      hover:bg-slate-50
+    "
+  >
+    <FileText size={18} />
+    Order Details
+  </button>
+
+  <button
+    onClick={() => onShare?.(order)}
     className="
       flex
       w-60
       items-center
       justify-center
       gap-2
+
       rounded-xl
-      bg-green-900
+
       py-3
+
       text-sm
       font-semibold
       text-white
+
       transition
       hover:bg-green-800
     "
@@ -416,12 +447,11 @@ const OrderCard = ({
       background: "var(--primary)",
     }}
   >
-       <Phone size={18} />
+    <Phone size={18} />
     Contact Delivery Partner
   </button>
 
 </div>
-
 </div>
 );
 };

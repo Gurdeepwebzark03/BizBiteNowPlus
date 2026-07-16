@@ -8,7 +8,7 @@ import CompactHistoryCard from "../../components/customer/orders/CompactHistoryC
 import CurrentOrderCard from "../../components/customer/orders/OrderCard";
 import OrderHistoryCard from "../../components/customer/orders/OrderHistory";
 import OrderTimeline from "../../components/customer/orders/OrderTimeline";
-import ReorderButton from "../../components/customer/orders/ReorderButton";
+
 import { Bell } from "lucide-react";
 import { getCurrentOrders, getOrderHistory } from "../../api/customerApi";
 
@@ -257,13 +257,7 @@ useEffect(() => {
                       onView={() => handleViewOrder(order)}
                     />
 
-                    <div className="mt-3 flex justify-end">
-                      <ReorderButton
-                        order={order}
-                        loading={reordering === order.id}
-                        onReorder={() => handleReorder(order)}
-                      />
-                    </div>
+
                   </div>
 
                   {/* Mobile */}

@@ -7,10 +7,12 @@ const CartItems = ({
   items = [],
   onIncrease,
   onDecrease,
+  onContinueShopping,
   onRemove,
 }) => {
   if (!items.length) {
-    return <EmptyCart />;
+    return <EmptyCart 
+     onContinueShopping={onContinueShopping}/>;
   }
 
   return (

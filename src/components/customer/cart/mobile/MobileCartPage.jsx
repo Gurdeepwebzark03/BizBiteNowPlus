@@ -18,7 +18,7 @@ const MobileCartPage = ({
   onIncrease,
   onDecrease,
   onRemove,
-
+onContinueShopping,
   onCouponChange,
   onApplyCoupon,
 
@@ -37,7 +37,8 @@ const MobileCartPage = ({
         />
 
         {isEmpty ? (
-          <MobileEmptyCart />
+          <MobileEmptyCart 
+           onContinueShopping={onContinueShopping}/>
         ) : (
           <>
             <div className="space-y-3 px-3 pb-3">

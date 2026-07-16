@@ -178,11 +178,11 @@ const Cart = () => {
       setSelectedCoupon(coupon);
     },
 
-    onCheckout: () =>
-      navigate("/customer/checkout"),
+onCheckout: () =>
+  navigate("/customer/checkout"),
 
-    onContinueShopping: () =>
-      navigate("/customer/menu"),
+onContinueShopping: () =>
+  navigate("/customer/menu"),
 
     onAddressClick: () => {},
 
