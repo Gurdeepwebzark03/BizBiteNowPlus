@@ -37,17 +37,40 @@ const MobileCartItemCard = ({
         {/* Left */}
         <div className="min-w-0 flex-1">
           <div className="mb-1 flex items-center gap-1">
-            {veg ? (
-              <Leaf
-                size={12}
-                className="text-green-600"
-              />
-            ) : (
-              <Drumstick
-                size={12}
-                className="text-red-500"
-              />
-            )}
+<div
+  className={`
+    flex
+    h-4
+    w-4
+    items-center
+    justify-center
+    rounded-[2px]
+    border
+
+    ${
+      veg
+        ? "border-green-600"
+        : "border-red-600"
+    }
+  `}
+>
+  {veg ? (
+    <div className="h-2 w-2 rounded-full bg-green-600" />
+  ) : (
+    <div
+      className="
+        h-0
+        w-0
+        border-l-[4px]
+        border-r-[4px]
+        border-b-[7px]
+        border-l-transparent
+        border-r-transparent
+        border-b-red-600
+      "
+    />
+  )}
+</div>
 
             <span className="text-[10px] font-semibold uppercase tracking-wide text-slate-500">
               {veg ? "Veg" : "Non Veg"}

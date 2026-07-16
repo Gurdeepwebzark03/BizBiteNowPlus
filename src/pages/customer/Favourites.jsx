@@ -120,12 +120,13 @@ const Favourites = () => {
             justify-between
 
             rounded-xl
-
-            bg-white
+            mt-5
+            lg:mt-0
+            
 
             p-2
 
-            shadow-sm
+            
           "
         >
           <SectionHeader
