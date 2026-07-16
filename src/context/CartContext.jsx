@@ -53,7 +53,7 @@ setCartItems(
 
     try {
 await addToCart({
-  productId: product.productId,
+  productId: product.productId || product.id,
   quantity,
 });
 
