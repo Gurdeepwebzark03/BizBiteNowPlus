@@ -4,11 +4,11 @@ import { motion } from "framer-motion";
 
 import { useCart } from "../../context/CartContext";
 
-import CartPage from "../../components/cart/CartPage";
-import CartSkeleton from "../../components/cart/CartSkeleton";
+import CartPage from "../../components/customer/cart/CartPage";
+import CartSkeleton from "../../components/customer/cart/CartSkeleton";
 
-import MobileCartPage from "../../components/cart/mobile/MobileCartPage";
-import MobileCartSkeleton from "../../components/cart/mobile/MobileCartSkeleton";
+import MobileCartPage from "../../components/customer/cart/mobile/MobileCartPage";
+import MobileCartSkeleton from "../../components/customer/cart/mobile/MobileCartSkeleton";
 
 import couponsData from "../../data/customer/couponsData";
 

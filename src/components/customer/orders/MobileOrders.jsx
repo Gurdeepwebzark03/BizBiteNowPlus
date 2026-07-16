@@ -99,7 +99,7 @@ if (loading) {
     >
       <div className="px-1">
 
-<div className="w-full flex items-center bg-white mt-5 z-50 shadow-sm rounded-xl p-2 justify-between">
+<div className="w-full flex items-center  mt-5 z-50 rounded-xl p-2 justify-between">
   <SectionHeader
     title="Your Orders"
     subtitle="Track your orders in real time"

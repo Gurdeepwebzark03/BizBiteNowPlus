@@ -114,7 +114,7 @@ const CustomerHeader = ({ sidebarExpanded, isDesktop }) => {
     lg:fixed
     relative
     z-50
-    
+    w-full
     transition-all
     duration-300
     ease-in-out
@@ -146,24 +146,24 @@ const CustomerHeader = ({ sidebarExpanded, isDesktop }) => {
     flex
 
     h-20
-
-    w-full
+    
+    lg:w-full
 
     items-center
     justify-between
 
     rounded-[10px]
 
-    border
-    border-slate-200 dark:border-[#A9BDCF]/40
+    lg:border
+    lg:border-slate-200 dark:border-[#A9BDCF]/40
 
-    bg-white/90 dark:bg-[#181A1B]
+    lg:bg-white/90 dark:bg-[#181A1B]
 
     px-5
 
-    shadow-xl
+    lg:shadow-xl
 
-    backdrop-blur-xl
+    lg:backdrop-blur-xl
 
     transition-all
 duration-300
@@ -175,7 +175,7 @@ ease-in-out
         <button
           className="
           flex
-          ml-5
+          lg:ml-5
           min-w-0
           flex-1
           items-center
