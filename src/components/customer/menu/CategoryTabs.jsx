@@ -4,9 +4,6 @@ import {
   Check,
 } from "lucide-react";
 
-import Chip from "../common/Chip";
-
-
 const CategoryTabs = ({
   categories = [],
   activeCategory = "",
@@ -52,9 +49,9 @@ const CategoryTabs = ({
 
           border
 
-          border-slate-200
+          border-slate-200 dark:border-[#A9BDCF]/40
 
-          bg-white/90
+          bg-white/90 dark:bg-[#181A1B]
 
           backdrop-blur-xl
 
@@ -83,7 +80,7 @@ const CategoryTabs = ({
             rounded-2xl
 
             px-4
-            bg-slate-200
+            bg-slate-200 dark:bg-[#232627]
             py-2
 
             transition
@@ -103,8 +100,7 @@ const CategoryTabs = ({
               text-sm
 
               font-bold
-              
-              
+              dark:text-white
             "
           >
             {selectedCategory?.name}
@@ -139,7 +135,7 @@ const CategoryTabs = ({
 
             text-sm
 
-            text-slate-500
+            text-slate-500 dark:text-slate-400
           "
         >
           {categories.length} categories
@@ -168,9 +164,9 @@ const CategoryTabs = ({
 
                 border
 
-                border-slate-200
+                border-slate-200 dark:border-[#A9BDCF]/40
 
-                bg-white
+                bg-white dark:bg-[#181A1B]
 
                 p-3
 

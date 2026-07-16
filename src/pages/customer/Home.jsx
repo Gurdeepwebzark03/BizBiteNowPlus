@@ -14,7 +14,6 @@ import ProductCard from "../../components/customer/menu/ProductCard";
 import QROrderCardSkeleton from "../../components/customer/skeleton/QROrderCardSkeleton";
 import BannerSkeleton from "../../components/customer/skeleton/BannerSkeleton";
 import HeroSkeleton from "../../components/customer/skeleton/HeroSkeleton";
-import StoreCardSkeleton from "../../components/customer/skeleton/StoreCardSkeleton";
 import HorizontalSectionSkeleton from "../../components/customer/skeleton/HorizontalSectionSkeleton";
 import BannerCarousel from "../../components/customer/home/BannerCarousel";
 import QROrderCard from "../../components/customer/home/QROrderCard";
@@ -25,7 +24,6 @@ import {
   getStore,
   getMenu,
   getFavorites,
-  getCurrentOrders,
   toggleFavorite,
   getTodaySpecialProducts,
   getComboMealProducts,
@@ -156,8 +154,6 @@ const menu = menuRes.data?.data || [];
       console.error(err);
     }
   };
-  const isRestaurantOpen = store?.timings?.status?.toLowerCase() === "open";
-
   const mobileBanners =
     store?.banners?.map((image, index) => ({
       id: index + 1,
@@ -379,11 +375,11 @@ const menu = menuRes.data?.data || [];
             <section className="space-y-6 px-2 sm:px-4 lg:px-6 xl:px-8">
               <div className="flex items-center justify-between">
                 <div>
-                  <h2 className="text-2xl font-bold text-slate-900">
+                  <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
                     Recently Ordered
                   </h2>
 
-                  <p className="mt-1 text-slate-500">
+                  <p className="mt-1 text-slate-500 dark:text-slate-400">
                     Order your favourites again in one tap.
                   </p>
                 </div>
@@ -395,10 +391,9 @@ const menu = menuRes.data?.data || [];
                 font-semibold
                 transition
                 hover:opacity-80
+                text-[var(--primary)]
+                dark:text-white
               "
-                  style={{
-                    color: "var(--primary)",
-                  }}
                 >
                   View Orders
                 </button>
@@ -448,10 +443,9 @@ const menu = menuRes.data?.data || [];
                 font-semibold
                 transition
                 hover:opacity-80
+                text-[var(--primary)]
+                dark:text-white
               "
-                  style={{
-                    color: "var(--primary)",
-                  }}
                 >
                   View All
                 </button>
@@ -501,10 +495,9 @@ const menu = menuRes.data?.data || [];
                 font-semibold
                 transition
                 hover:opacity-80
+                text-[var(--primary)]
+                dark:text-white
               "
-                  style={{
-                    color: "var(--primary)",
-                  }}
                 >
                   View All Offers
                 </button>
@@ -540,18 +533,18 @@ const menu = menuRes.data?.data || [];
               className="
             rounded-[32px]
             border
-            border-slate-200
-            bg-white
+            border-slate-200 dark:border-[#A9BDCF]/40
+            bg-white dark:bg-[#181A1B]
             p-8
             text-center
             shadow-sm
           "
             >
-              <h2 className="text-3xl font-bold text-slate-900">
+              <h2 className="text-3xl font-bold text-slate-900 dark:text-white">
                 Looking for something else?
               </h2>
 
-              <p className="mt-3 text-slate-500">
+              <p className="mt-3 text-slate-500 dark:text-slate-400">
                 Explore our complete menu with all categories, latest dishes,
                 combos and beverages.
               </p>

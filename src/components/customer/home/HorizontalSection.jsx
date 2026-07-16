@@ -41,10 +41,9 @@ const HorizontalSection = ({
               font-semibold
               transition
               hover:opacity-80
+              text-[var(--primary)]
+              dark:text-white
             "
-            style={{
-              color: "var(--primary)",
-            }}
           >
             {buttonText}
           </button>

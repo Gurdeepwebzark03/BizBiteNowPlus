@@ -1,4 +1,3 @@
-import { motion } from "framer-motion";
 import { Star, Clock3, Heart, Plus, Minus } from "lucide-react";
 
 import Card from "../common/Card";
@@ -162,7 +161,7 @@ const ProductCard = ({
             text-lg
             font-bold
             leading-6
-            text-slate-900
+            text-slate-900 dark:text-white
             transition-colors
             hover:text-[var(--primary)]
           "
@@ -176,7 +175,7 @@ const ProductCard = ({
             line-clamp-2
             text-xs
             leading-5
-            text-slate-500
+            text-slate-500 dark:text-slate-400
           "
         >
           {description}
@@ -187,16 +186,16 @@ const ProductCard = ({
           <div className="flex items-center gap-1">
             <Star size={14} fill="#FACC15" color="#FACC15" />
 
-            <span className="font-semibold text-sm">
+            <span className="font-semibold text-sm" style={{ color: "#FACC15" }}>
               {rating?.average ?? 0}
             </span>
 
-            <span className="text-xs text-slate-500">
+            <span className="text-xs text-slate-500 dark:text-slate-400">
               ({rating?.count ?? 0})
             </span>
           </div>
 
-          <div className="flex items-center gap-1 text-xs text-slate-500">
+          <div className="flex items-center gap-1 text-xs text-slate-500 dark:text-slate-400">
             <Clock3 size={13} />
             <span>{preparationTime}</span>
           </div>
@@ -210,19 +209,19 @@ const ProductCard = ({
             justify-between
             gap-3
             border-t
-            border-slate-100
+            border-slate-100 dark:border-[#A9BDCF]/20
             pt-3
           "
         >
           {/* Price */}
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-xl font-bold text-slate-900">
+              <span className="text-xl font-bold text-slate-900 dark:text-white">
                 ₹{price}
               </span>
 
               {originalPrice && originalPrice > price && (
-                <span className="text-xs text-slate-400 line-through">
+                <span className="text-xs text-slate-400 dark:text-slate-500 line-through">
                   ₹{originalPrice}
                 </span>
               )}
