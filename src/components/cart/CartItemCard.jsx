@@ -1,0 +1,129 @@
+import {
+  Drumstick,
+  Leaf,
+  Trash2,
+} from "lucide-react";
+
+import QuantitySelector from "./QuantitySelector";
+
+const CartItemCard = ({
+  item,
+  onIncrease,
+  onDecrease,
+  onRemove,
+}) => {
+  const {
+    image,
+    name,
+    restaurant,
+    description,
+    price,
+    originalPrice,
+    quantity,
+    veg = true,
+  } = item;
+
+  return (
+    <article className="flex gap-3 p-4 transition-all duration-200 hover:bg-slate-50">
+      {/* Product Image */}
+      <div className="h-20 w-20 flex-shrink-0 overflow-hidden rounded-xl border border-slate-200 bg-slate-100">
+        <img
+          src={image}
+          alt={name}
+          className="h-full w-full object-cover"
+        />
+      </div>
+
+      {/* Details */}
+      <div className="flex min-w-0 flex-1 flex-col justify-between">
+        <div className="flex items-start justify-between gap-3">
+          <div className="min-w-0 flex-1">
+            {/* Veg / Non Veg */}
+            <div className="mb-1 flex items-center gap-1.5">
+              {veg ? (
+                <Leaf
+                  size={13}
+                  className="text-green-600"
+                />
+              ) : (
+                <Drumstick
+                  size={13}
+                  className="text-red-500"
+                />
+              )}
+
+              <span className="text-[10px] font-semibold uppercase tracking-wide text-slate-500">
+                {veg ? "Veg" : "Non Veg"}
+              </span>
+            </div>
+
+            {/* Name */}
+            <h3 className="truncate text-[15px] font-semibold text-slate-900">
+              {name}
+            </h3>
+
+            {/* Restaurant */}
+            {restaurant && (
+              <p className="mt-0.5 text-xs text-slate-500">
+                {restaurant}
+              </p>
+            )}
+
+            {/* Description */}
+            {description && (
+              <p className="mt-1 line-clamp-2 text-[11px] leading-4 text-slate-500">
+                {description}
+              </p>
+            )}
+          </div>
+
+          {/* Delete */}
+          <button
+            onClick={onRemove}
+            className="
+              rounded-lg
+              p-1.5
+              text-slate-400
+              transition
+              hover:bg-red-50
+              hover:text-red-500
+            "
+          >
+            <Trash2 size={30} />
+          </button>
+        </div>
+
+        {/* Bottom */}
+        <div className="mt-3 flex items-center justify-between gap-3">
+          <QuantitySelector
+            quantity={quantity}
+            onIncrease={onIncrease}
+            onDecrease={onDecrease}
+          />
+
+          <div className="text-right">
+            <div className="flex items-center justify-end gap-1.5">
+              <span className="text-lg font-bold text-slate-900">
+                ₹{price}
+              </span>
+
+              {originalPrice > price && (
+                <span className="text-[11px] text-slate-400 line-through">
+                  ₹{originalPrice}
+                </span>
+              )}
+            </div>
+
+            {originalPrice > price && (
+              <p className="text-[10px] font-medium text-green-600">
+                Save ₹{originalPrice - price}
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
+    </article>
+  );
+};
+
+export default CartItemCard;
