@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-
+import { Link } from "react-router-dom";
 import {
   ShoppingBag,
   CheckCircle2,
@@ -105,45 +105,43 @@ if (loading) {
     subtitle="Track your orders in real time"
   />
 
-  <button
-    className="
-      relative
+  <Link
+            to="/customer/notifications"
+            className="
+    relative
+    flex
+    h-11
+    w-11
+    items-center
+    justify-center
+    rounded-xl
+    bg-slate-200
+    transition
+    hover:bg-slate-300
+  "
+          >
+            <Bell size={22} className="text-slate-700" />
+
+            <span
+              className="
+      absolute
+      -right-1
+      -top-1
       flex
-      h-11
-      w-11
+      h-5
+      w-5
       items-center
       justify-center
-      rounded-[10px]
-      
-      transition
-      bg-slate-200
+      rounded-full
+      bg-red-500
+      text-[10px]
+      font-bold
+      text-white
     "
-  >
-    <Bell
-      size={22}
-      className="text-slate-700 "
-    />
-
-    <span
-      className="
-        absolute
-        -right-1
-        -top-1
-        flex
-        h-5
-        w-5
-        items-center
-        justify-center
-        rounded-full
-        bg-red-500
-        text-[10px]
-        font-bold
-        text-white
-      "
-    >
-      3
-    </span>
-  </button>
+            >
+              3
+            </span>
+          </Link>
 </div>
 
         {/* Current Order */}

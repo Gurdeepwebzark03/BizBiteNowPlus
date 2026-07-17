@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import SectionHeader from "../../components/customer/common/SectionHeader";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import CategoryTabs from "../../components/customer/menu/CategoryTabs";
 import VegToggle from "../../components/customer/menu/VegToggle";
@@ -250,40 +251,43 @@ const Menu = () => {
             subtitle="Freshly prepared dishes made just for you."
           />
 
-          <button
+          <Link
+            to="/customer/notifications"
             className="
-      relative
-      flex
-      h-11
-      w-11
-      items-center
-      justify-center
-      rounded-[10px]
-
-      transition
-      bg-slate-200 dark:bg-[#232627]
-    ">
-            <Bell size={22} className="text-slate-700 dark:text-slate-300" />
+    relative
+    flex
+    h-11
+    w-11
+    items-center
+    justify-center
+    rounded-xl
+    bg-slate-200
+    transition
+    hover:bg-slate-300
+  "
+          >
+            <Bell size={22} className="text-slate-700" />
 
             <span
               className="
-        absolute
-        -right-1
-        -top-1
-        flex
-        h-5
-        w-5
-        items-center
-        justify-center
-        rounded-full
-        bg-red-500
-        text-[10px]
-        font-bold
-        text-white
-      ">
+      absolute
+      -right-1
+      -top-1
+      flex
+      h-5
+      w-5
+      items-center
+      justify-center
+      rounded-full
+      bg-red-500
+      text-[10px]
+      font-bold
+      text-white
+    "
+            >
               3
             </span>
-          </button>
+          </Link>
         </div>
         {/* Categories */}
 
