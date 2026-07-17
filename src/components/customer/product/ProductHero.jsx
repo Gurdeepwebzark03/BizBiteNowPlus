@@ -40,10 +40,10 @@ const ProductHero = ({
       <div
         className="
           relative
-
+          lg:mt-5
           h-[320px]
           sm:h-[420px]
-          lg:h-[520px]
+          lg:h-[400px]
         "
       >
         <img
