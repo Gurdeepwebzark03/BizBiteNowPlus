@@ -7,13 +7,14 @@ import {
   CheckCircle2,
   Bell,
 } from "lucide-react";
-
+import HorizontalSection from "../home/HorizontalSection";
 import SectionHeader from "../common/SectionHeader";
 import MobileOrdersSkeleton from "../../../components/customer/skeleton/MobileOrdersSkeleton";
 import MobileCurrentCard from "./MobileCurrentCard";
 import MobileTimeline from "./MobileTimeline";
 import ContactDeliveryCard from "./ContactDeliveryCard";
 import CompactHistoryCard from "./CompactHistoryCard";
+import CurrentOrderSection from "./CurrentOrderSection";
 
 import {
   getCurrentOrders,
@@ -149,66 +150,48 @@ if (loading) {
         {currentOrders.length > 0 && (
           <section className="mt-6">
 
-            <div className="mb-3 flex items-center justify-between">
 
-              <h2 className="text-lg font-bold text-slate-900">
-                Current Order
-              </h2>
-
-              <div
-                className="
-                  flex
-                  items-center
-                  gap-1.5
-                  rounded-full
-                  bg-green-50
-                  px-3
-                  py-1
-                  text-xs
-                  font-semibold
-                  text-green-700
-                "
-              >
-                <CheckCircle2 size={14} />
-                Active
-              </div>
-
-            </div>
 
             <div className="space-y-5">
+<CurrentOrderSection
+  title="Current Orders"
+  subtitle={`${currentOrders.length} Active Orders`}
+>
+  {currentOrders.map((order) => (
+    <div
+      key={order.id}
+        className="
+    snap-center
+    shrink-0
 
-              {currentOrders.map((order) => (
-                <div
-                  key={order.id}
-                  className="space-y-4 bg-white shadow-sm rounded-[14px]"
-                >
+    w-full
+    max-w-full
 
-                  <MobileCurrentCard
-                    order={order}
-                    onView={() =>
-                      handleViewOrder(order)
-                    }
-                    onReorder={() =>
-                      handleReorder(order)
-                    }
-                  />
-                   <div className="my-4 border-t border-slate-200" />
-                  <MobileTimeline
-                    timeline={
-                      order.tracking?.steps || []
-                    }
-                    currentStep={
-                      order.tracking?.currentStep
-                    }
-                  />
+    space-y-4
 
-                  <ContactDeliveryCard
-                    order={order}
-                  />
+    rounded-[14px]
+    bg-white
+    shadow-sm
+  "
+    >
+      <MobileCurrentCard
+        order={order}
+        onView={() => handleViewOrder(order)}
+        onReorder={() => handleReorder(order)}
+      />
 
-                </div>
-              ))}
+      <div className="my-4 border-t border-slate-200" />
 
+      <MobileTimeline
+        timeline={order.tracking?.steps || []}
+        currentStep={order.tracking?.currentStep}
+      />
+
+      <ContactDeliveryCard order={order} />
+    </div>
+  ))}
+</CurrentOrderSection>
+            
             </div>
 
           </section>
