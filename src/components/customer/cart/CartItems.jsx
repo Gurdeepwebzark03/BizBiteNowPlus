@@ -16,7 +16,7 @@ const CartItems = ({
   }
 
   return (
-    <section className="rounded-2xl border border-gray-200 bg-white shadow-sm">
+    <section className="rounded-2xl border w-full border-gray-200 bg-white shadow-sm">
       <div className="flex items-center justify-between border-b border-gray-100 px-6 py-5">
         <div className="flex items-center gap-3">
           <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-50 text-green-600">
