@@ -31,8 +31,8 @@ const CouponCard = ({
     coupon.discountType === "percentage"
       ? `${coupon.discount}% OFF`
       : coupon.discountType === "flat"
-      ? `₹${coupon.discount} OFF`
-      : "FREE DELIVERY";
+        ? `₹${coupon.discount} OFF`
+        : "FREE DELIVERY";
 
   return (
     <motion.div
@@ -63,25 +63,21 @@ const CouponCard = ({
         }}
       >
         <div className="flex justify-between items-start">
-
           <div className="flex gap-3">
-
             <div
               className="h-12 w-12 rounded-2xl flex items-center justify-center"
               style={{
                 background: "var(--primary)",
               }}
             >
-              <Icon
-                size={22}
-                color="#fff"
-              />
+              <Icon size={22} color="#fff" />
             </div>
 
-            <div >
-
+            <div>
               <h3
-                className="text-xl font-bold"
+                className={`font-bold ${
+                  coupon.discountType === "delivery" ? "" : "text-xl"
+                }`}
                 style={{
                   color: "var(--primary)",
                 }}
@@ -92,9 +88,7 @@ const CouponCard = ({
               <p className="text-sm font-medium text-slate-700">
                 {coupon.title}
               </p>
-
             </div>
-
           </div>
 
           <span
@@ -106,24 +100,18 @@ const CouponCard = ({
           >
             {expired ? "Expired" : "Active"}
           </span>
-
         </div>
       </div>
 
       {/* Body */}
 
       <div className="p-5 space-y-4">
-
         <div className="flex justify-between text-sm">
-
-          <span className="text-slate-500">
-            Min ₹{coupon.minOrder}
-          </span>
+          <span className="text-slate-500">Min ₹{coupon.minOrder}</span>
 
           <span className="font-semibold text-slate-700">
             Save ₹{coupon.maxDiscount}
           </span>
-
         </div>
 
         <div
@@ -155,10 +143,7 @@ const CouponCard = ({
           >
             {copied ? (
               <>
-                <CheckCircle2
-                  size={16}
-                  className="text-green-600"
-                />
+                <CheckCircle2 size={16} className="text-green-600" />
                 Copied
               </>
             ) : (
@@ -168,23 +153,15 @@ const CouponCard = ({
               </>
             )}
           </button>
-
         </div>
 
         <div className="flex justify-between items-center">
-
           <div className="flex gap-2 items-center text-xs text-slate-500">
-
             <Clock3 size={14} />
 
             {coupon.expiry}
-
           </div>
-
-          
-
         </div>
-
       </div>
     </motion.div>
   );
