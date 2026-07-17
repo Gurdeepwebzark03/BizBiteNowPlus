@@ -3,7 +3,7 @@ import { MoreVertical, PackageOpen } from "lucide-react";
 
 import OrderStatusBadge from "./OrderStatusBadge";
 import OrderActionModal from "./OrderActionModal";
-
+import { useNavigate } from "react-router-dom";
 export default function OrdersTable({
   orders,
   deliveryBoys = [],
@@ -21,6 +21,7 @@ export default function OrdersTable({
   onCancel,
   onAssign,
 }) {
+  const navigate = useNavigate();
   const [actionModalOpen, setActionModalOpen] =
     useState(false);
 
@@ -110,6 +111,7 @@ export default function OrdersTable({
               {orders.map((order) => (
                 <tr
                   key={order.id}
+                  onClick={() => navigate(`/seller/orders/${order.id}`)}
                   className="border-t transition hover:bg-slate-50"
                 >
                   <td className="px-5 py-4">
