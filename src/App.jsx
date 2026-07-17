@@ -70,6 +70,8 @@ import Language from "./pages/customer/Language";
 import Appearance from "./pages/customer/Appearance";
 import HelpSupport from "./pages/customer/HelpSupport";
 import TermsPolicy from "./pages/customer/TermsPolicy";
+import PolicyDetail from "./pages/customer/PolicyDetail";
+import PrivacySecurity from "./pages/customer/PrivacySecurity";
 import Favourites from "./pages/customer/Favourites";
 
 
@@ -218,6 +220,16 @@ export default function App() {
           <Route
             path="profile/terms-policy"
             element={<TermsPolicy />}
+          />
+
+          <Route
+            path="profile/terms-policy/:policyId"
+            element={<PolicyDetail />}
+          />
+
+          <Route
+            path="profile/privacy-security"
+            element={<PrivacySecurity />}
           />
 
 
