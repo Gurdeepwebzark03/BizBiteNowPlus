@@ -9,8 +9,8 @@ import AddonSelector from "../../components/customer/product/AddonSelector";
 import QuantitySelector from "../../components/customer/product/QuantitySelector";
 import PriceSummary from "../../components/customer/product/PriceSummary";
 import ProductSkeleton from "../../components/customer/product/ProductSkeleton";
-
-import { getProduct } from "../../api/customerApi";
+import ProductNote from "../../components/customer/product/ProductNote";
+import { getProduct  } from "../../api/customerApi";
 import { useFavourite } from "../../context/FavouriteContext";
 
 export default function ProductDetails() {
@@ -20,6 +20,7 @@ export default function ProductDetails() {
     favouriteProducts,
     toggleFavourite,
   } = useFavourite();
+  const [note, setNote] = useState("");
 
   const [loading, setLoading] = useState(true);
 
@@ -147,8 +148,13 @@ export default function ProductDetails() {
                 setSelectedAddons
               }
             />
+
           </section>
         </div>
+                    <ProductNote
+  note={note}
+  setNote={setNote}
+/>
 
         <div
           className="

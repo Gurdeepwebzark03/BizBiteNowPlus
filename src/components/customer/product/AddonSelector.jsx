@@ -24,7 +24,7 @@ const toggleAddon = (addon) => {
   return (
     <>
     {addons.length > 0 && (
-    <section className="space-y-4" w-full>
+    <section className="space-y-4" >
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-bold text-slate-900">
           Add Extras
@@ -52,7 +52,7 @@ const toggleAddon = (addon) => {
                 flex
                 items-center
                 justify-between
-                rounded-2xl
+                rounded-xl
                 border
                 p-4
                 text-left
@@ -115,7 +115,7 @@ const toggleAddon = (addon) => {
         })}
       </div>
 
-      <div className="rounded-2xl border border-dashed border-[#16522d]/30 bg-[#16522d]/5 p-4">
+      <div className="rounded-xl border border-dashed border-[#16522d]/30 bg-[#16522d]/5 p-4">
         <p className="text-sm leading-6 text-gray-600">
           Selected Extras:
           <span className="ml-2 font-semibold text-[#16522d]">

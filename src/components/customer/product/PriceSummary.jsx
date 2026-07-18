@@ -54,7 +54,7 @@ const handleAddToCart = () => {
 };
 
   return (
-    <div className="rounded-3xl border border-gray-200 bg-white p-6 shadow-sm">
+    <div className="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
       {/* Header */}
 
       <div className="flex items-center gap-3">
